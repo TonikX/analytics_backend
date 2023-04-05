@@ -35,7 +35,7 @@ export default () => {
     const classes = useStyles();
     const userData = useSelector(getUserData);
     const dispatch = useDispatch();
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(userProfileActions.changeCurrentPage(1));
@@ -45,7 +45,7 @@ export default () => {
     const handleLogout = () => {
         userService.logout();
         dispatch(layoutActions.setAuthFalse());
-        history.push(appRouter.getSignInRoute());
+        navigate(appRouter.getSignInRoute());
     };
 
     const composeUserName = () => `${userData.first_name} ${userData.last_name}`;

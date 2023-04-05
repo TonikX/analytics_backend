@@ -8,6 +8,7 @@ import {fields, ProfessionalStandardFields} from './enum';
 
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {professionalStandardsState, ProfessionalStandardsType} from "./types";
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): professionalStandardsState => get(state, GENERAL_PATH);
 export const getProfessionalStandards = (state: rootState): Array<ProfessionalStandardsType> => get(getStateData(state), fields.PROFESSIONAL_STANDARD_LIST, []);
@@ -36,7 +37,7 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);
 
 export const getProfStandard = (state: rootState) => get(getStateData(state), fields.PROFESSIONAL_STANDARD, {});
 

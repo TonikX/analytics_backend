@@ -49,14 +49,14 @@ const SelectEducationalProgram: React.FC = () => {
             </Typography>
             <ButtonGroup>
               <Button onClick={handleChangeQualification(BACHELOR_QUALIFICATION)}
-                      color={qualification === BACHELOR_QUALIFICATION ? 'primary' : 'default'}
+                      color={qualification === BACHELOR_QUALIFICATION ? 'primary' : 'info'}
                       variant="contained"
                       className={className({[classes.whiteButton]: qualification !== BACHELOR_QUALIFICATION})}
               >
                 Бакалавр
               </Button>
               <Button onClick={handleChangeQualification(MASTER_QUALIFICATION)}
-                      color={qualification === MASTER_QUALIFICATION ? 'primary' : 'default'}
+                      color={qualification === MASTER_QUALIFICATION ? 'primary' : 'info'}
                       variant="contained"
                       className={className({[classes.whiteButton]: qualification !== MASTER_QUALIFICATION})}
               >

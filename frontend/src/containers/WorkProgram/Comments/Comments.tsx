@@ -85,7 +85,7 @@ class Comments extends React.Component<CommentsProps> {
                                value={commentText}
                                multiline
                                rows={2}
-                               rowsMax={5}
+                               maxRows={5}
                     />
                     <div className={classes.commentTextFieldButtons}>
                         <Button onClick={this.clearTextInput}>Отменить</Button>

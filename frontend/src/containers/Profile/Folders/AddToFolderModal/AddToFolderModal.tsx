@@ -56,7 +56,7 @@ class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
         });
     }
 
-    changeFolder = (e: React.ChangeEvent<any>) => {
+    changeFolder = (e: any) => {
         this.setState({
             folder: get(e, 'target.value')
         });

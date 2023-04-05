@@ -124,7 +124,7 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
                                    shrink: true,
                                }}
                                rows={5}
-                               rowsMax={5}
+                               maxRows={5}
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

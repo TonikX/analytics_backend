@@ -22,7 +22,6 @@ import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
-import TablePagination from "@mui/material/TablePagination";
 import FormLabel from "@mui/material/FormLabel";
 // import ExpansionPanelSummary from "@mui/material/ExpansionPanelSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -66,11 +65,11 @@ class Records extends Component<RecordsProops> {
         this.props.actions.changeQualification(event.target.value);
     }
 
-    сhangeStatus = (event: any): void => {
+    changeStatus = (event: any): void => {
         this.props.actions.ChangeStatus(event.target.value);
     }
 
-    сhangeSemester = (event: any): void => {
+    changeSemester = (event: any): void => {
         this.props.actions.ChangeSemester(event.target.value);
     }
 
@@ -140,11 +139,11 @@ class Records extends Component<RecordsProops> {
         this.setState({SU:changeSU});
     }
 
-    сhangeAP = (value: string|number): void => {
+    changeAp = (value: string|number): void => {
         this.props.actions.ChangeAP(value);
     }
 
-    сhangeSU = (value: string|number): void => {
+    changeSU = (value: string|number): void => {
         this.props.actions.ChangeSU(value);
     }
 
@@ -190,7 +189,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}>
                         <MenuItem value="1">Отчёт о качестве РПД</MenuItem>
                         <MenuItem value="2">Отчёт о количестве РПД (по квалификации)</MenuItem>
@@ -240,7 +238,6 @@ class Records extends Component<RecordsProops> {
                                         vertical: "top",
                                         horizontal: "left"
                                     },
-                                    getContentAnchorEl: null
                                 }}
                         >
                             <MenuItem value="bachelor">Бакалавриат</MenuItem>
@@ -300,7 +297,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}
                         >
                             <MenuItem value="2021">2021</MenuItem>
@@ -387,7 +383,7 @@ class Records extends Component<RecordsProops> {
                 <>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
+                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.changeStatus}
                                     className={classes.field}>
                             <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
                             <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
@@ -482,7 +478,7 @@ class Records extends Component<RecordsProops> {
                         label='Выберите структурное подразделение'
                         changeSearchText={this.handleChangeSearchQuerySU}
                         list={this.state.SU}
-                        changeItem={(value: string) => this.сhangeSU(value)}
+                        changeItem={(value: string) => this.changeSU(value)}
                         value={SUuse}
                         valueLabel={''}
                         className={classes.field}
@@ -506,7 +502,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}>
                             <MenuItem value="all">Все</MenuItem>
                             <MenuItem value="2021">2021</MenuItem>
@@ -519,7 +514,7 @@ class Records extends Component<RecordsProops> {
                         <Select
                             label="Выберите семестр"
                             value={SEMESTER}
-                            onChange={this.сhangeSemester}
+                            onChange={this.changeSemester}
                             className={classes.field}
                             MenuProps={{
                                 anchorOrigin: {
@@ -530,7 +525,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}>
                             <MenuItem value="all">Все</MenuItem>
                             <MenuItem value="1">Первый семестр</MenuItem>
@@ -545,7 +539,7 @@ class Records extends Component<RecordsProops> {
                     </FormControl>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
+                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.changeStatus}
                                     className={classes.field}>
                             <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
                             <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
@@ -621,7 +615,7 @@ class Records extends Component<RecordsProops> {
                     label='Выберите учебный план'
                     changeSearchText={this.handleChangeSearchQuery}
                     list={this.state.AP}
-                    changeItem={(value: string) => this.сhangeAP(value)}
+                    changeItem={(value: string) => this.changeAp(value)}
                     value={APuse}
                     valueLabel={''}
                     className={classes.field}

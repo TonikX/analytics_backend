@@ -122,7 +122,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     saveMinMaxField = (field: string) => (e: React.ChangeEvent) => {
         const {evaluationTool} = this.state;
-        const value = get(e, 'target.value')
+        const value = get(e, 'target.value', '')
 
         this.setState({
             evaluationTool: {
@@ -170,7 +170,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         return showErrors && get(evaluationTool, [field, 'length'], 0) === 0
     }
 
-    changeSemesterCount = (e: React.ChangeEvent<{}>, value: number | number[]) => {
+    changeSemesterCount = (e: any, value: number | number[]) => {
         const {evaluationTool} = this.state;
 
         this.setState({
@@ -218,7 +218,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <>
                             <div className={classes.leftSide}>
                                 <AutoSizer style={{width: '100%'}}>
-                                    {({width}) => (
+                                    {({width}: any) => (
                                         <>
                                             <TextField label="Название оценочного средства *"
                                                        onChange={this.saveField(EvaluationToolFields.NAME)}

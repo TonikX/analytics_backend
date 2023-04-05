@@ -8,6 +8,7 @@ import {fields, EducationalStandardFields} from './enum';
 
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {educationalStandardsState, EducationalStandardType} from "./types";
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): educationalStandardsState => get(state, GENERAL_PATH);
 export const getEducationalStandards = (state: rootState): Array<EducationalStandardType> => get(getStateData(state), fields.EDUCATIONAL_STANDARD_LIST, []);
@@ -29,7 +30,7 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);
 
 export const getEducationalStandard = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_STANDARD, {});
 export const getEducationalStandardId = (state: rootState) => get(getStateData(state), [fields.EDUCATIONAL_STANDARD, EducationalStandardFields.ID], {});

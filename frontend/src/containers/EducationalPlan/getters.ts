@@ -11,6 +11,7 @@ import {SelectorListType} from "../../components/SearchSelector/types";
 import {UserType} from "../../layout/types";
 import {DirectionType} from "../Direction/types";
 import {getTrainingModule} from "./TrainingModules/getters";
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): educationalPlanState => get(state, GENERAL_PATH);
 export const getEducationalPlan = (state: rootState): Array<EducationalPlanListType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
@@ -86,7 +87,7 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);
 
 export const getAvailableButtons = (state: rootState) => {
   const module = getTrainingModule(state)
