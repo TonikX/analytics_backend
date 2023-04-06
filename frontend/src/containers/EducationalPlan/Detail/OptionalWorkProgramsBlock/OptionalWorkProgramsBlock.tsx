@@ -32,6 +32,7 @@ export default ({module, handleDownloadFile, isMultiSelect, saveWorkPrograms}: S
     const blockType = module[BlocksOfWorkProgramsFields.TYPE];
     const moduleId = module[BlocksOfWorkProgramsFields.ID];
 
+    // @ts-ignore
     const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const semesterHour = mappedSemesterHours.slice(0, 10) as Array<string|number>;
 

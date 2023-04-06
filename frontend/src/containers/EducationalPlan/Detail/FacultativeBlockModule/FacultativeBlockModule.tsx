@@ -29,11 +29,11 @@ export default ({blocks, handleDownloadFile, saveWorkPrograms}: SelectWorkProgra
     const semesterHours: string = get(module, BlocksOfWorkProgramsFields.SEMESTER_UNIT, '');
 
     const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    const semesterHour = mappedSemesterHours.slice(0, 10) as Array<string|number>;
+    const semesterHour = mappedSemesterHours.slice(0, 10);
 
     const goToWorkProgramPage = (id: number) => () => {
         navigate(appRouter.getWorkProgramLink(id));
-    }
+    };
 
     const selectOptionalProgram = (workProgramId: number) => (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
         setFacultativeWorkProgram({

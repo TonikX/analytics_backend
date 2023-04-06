@@ -78,7 +78,7 @@ export const Course: React.FC = () => {
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(1)}
               style={{textAlign: 'left'}}
             >
@@ -86,7 +86,7 @@ export const Course: React.FC = () => {
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(2)}
               style={{textAlign: 'left'}}
             >
@@ -94,7 +94,7 @@ export const Course: React.FC = () => {
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(3)}
               style={{textAlign: 'left'}}
             >
@@ -102,7 +102,7 @@ export const Course: React.FC = () => {
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(4)}
               style={{textAlign: 'left'}}
             >
@@ -110,7 +110,7 @@ export const Course: React.FC = () => {
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(5)}
               style={{textAlign: 'left'}}
             >
@@ -118,7 +118,7 @@ export const Course: React.FC = () => {
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(6)}
               style={{textAlign: 'left'}}
             >
@@ -126,7 +126,7 @@ export const Course: React.FC = () => {
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(7)}
               style={{textAlign: 'left'}}
             >
