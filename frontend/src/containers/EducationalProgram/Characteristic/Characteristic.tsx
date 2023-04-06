@@ -25,7 +25,6 @@ import EducationPlanInDirectionSelector
   from "../../EduationPlanInDirection/EducationPlanInDirectionSelector/EducationPlanInDirectionSelector";
 import {CompetenceTableType, EducationProgramCharacteristicFields, EducationProgramFields} from "../enum";
 import {getUserFullName, YEAR_DATE_FORMAT} from "../../../common/utils";
-import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -68,7 +67,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
     this.setState({activeStep: number})
   };
 
-  handleChangeEducationProgramYear = (value: MaterialUiPickersDate) => {
+  handleChangeEducationProgramYear = (value: any) => {
     this.props.actions.changeEducationalProgram({
       id: this.getEducationalProgramId(),
       payload: {

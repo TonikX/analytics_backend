@@ -24,7 +24,7 @@ import Select from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormLabel from "@mui/material/FormLabel";
 import RadioGroup from "@mui/material/RadioGroup";
-import {DatePicker} from '@material-ui/pickers';
++import DatePicker from '@mui/lab/DatePicker';
 
 import {EducationalPlanFields} from '../enum';
 import {FULL_DATE_FORMAT} from "../../../common/utils";

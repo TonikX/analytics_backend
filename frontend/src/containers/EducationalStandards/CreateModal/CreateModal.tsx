@@ -18,7 +18,6 @@ import {EducationalStandardFields} from '../enum';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import {YEAR_DATE_FORMAT} from "../../../common/utils";
 
 class CreateModal extends React.PureComponent<EducationalStandardCreateModalProps> {
@@ -69,7 +68,7 @@ class CreateModal extends React.PureComponent<EducationalStandardCreateModalProp
         })
     }
 
-    changeYear = (value: MaterialUiPickersDate) => {
+    changeYear = (value: any) => {
         const {educationalStandard} = this.state;
 
         this.setState({

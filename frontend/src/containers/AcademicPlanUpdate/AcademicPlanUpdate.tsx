@@ -17,9 +17,7 @@ import {
     InputLabel,
     MenuItem
 } from "@mui/material";
-import {
-    KeyboardTimePicker
-} from '@material-ui/pickers';
+import TimePicker from '@mui/lab/TimePicker';
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -156,7 +154,7 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                 <div className={classes.titleWrap}>
                     <Typography className={classes.title}>Обновления учебных планов</Typography>
                     <div className={classes.additionalFunctionsWrap}>
-                        <KeyboardTimePicker
+                        <TimePicker
                             margin="normal"
                             id="time-picker"
                             label="Время обновления"

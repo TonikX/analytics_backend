@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
 import {withStyles} from '@mui/styles';
-import {DatePicker} from "@material-ui/pickers";
++import DatePicker from '@mui/lab/DatePicker';
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import DateIcon from "@mui/icons-material/DateRange";

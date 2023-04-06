@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import className from 'classnames';
 import {shallowEqualObjects} from "shallow-equal";
 
-import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
 import "moment/locale/ru";
 
 import {ThemeProvider} from '@mui/material/styles';
 import {withStyles} from '@mui/styles';
-import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import AdapterDateMoment from '@mui/lab/AdapterMoment';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import UserService from '../service/user-service';
 
@@ -91,7 +91,7 @@ class Layout extends React.Component {
         if (isLandingPage) return this.props.children
 
         return (
-            <MuiPickersUtilsProvider utils={MomentUtils}>
+          <LocalizationProvider dateAdapter={AdapterDateMoment}>
                 <SnackbarProvider maxSnack={3}>
                     <ThemeProvider theme={theme}>
                         <AbsoluteLoader isFetching={fetching} />

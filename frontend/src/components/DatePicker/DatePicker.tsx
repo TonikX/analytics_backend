@@ -2,8 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 
-import {DatePicker} from "@material-ui/pickers";
-import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
+import DatePicker from '@mui/lab/DatePicker';
 import IconButton from "@mui/material/IconButton";
 import {withStyles} from '@mui/styles';
 import DateIcon from "@mui/icons-material/DateRange";
@@ -14,7 +13,7 @@ import {FULL_DATE_FORMAT} from "../../common/utils";
 import styles from './DatePicker.styles';
 
 const DatePickerComponent = ({label, format, onChange, classes, value, noMargin, views, minDate, maxDate}: DatePickerProps) => {
-    const handleChange = (date: MaterialUiPickersDate) => {
+    const handleChange = (date: any) => {
         onChange(date);
     };
 
