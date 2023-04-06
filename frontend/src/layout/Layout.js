@@ -121,7 +121,7 @@ class Layout extends React.Component {
                         {isAuth && <AddToFolderModal />}
                     </ThemeProvider>
                 </SnackbarProvider>
-            </MuiPickersUtilsProvider>
+            </LocalizationProvider>
         );
     }
 }
