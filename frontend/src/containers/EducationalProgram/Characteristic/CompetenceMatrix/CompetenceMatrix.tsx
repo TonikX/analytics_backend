@@ -295,7 +295,7 @@ export default () => {
     const classes = useStyles();
     const competenceMatrixId = useSelector(getEducationalProgramCharacteristicId);
     const [isOpen, setIsOpen] = useState(false);
-    const [defaultCompetence, setDefaultCompetence] = useState();
+    const [defaultCompetence, setDefaultCompetence] = useState<{value: number; label: string;}|undefined>();
     const [indicators, setIndicators] = useState([] as { label: string; value: number } []);
     const [workProgramId, setWorkProgramId] = useState(-1);
 

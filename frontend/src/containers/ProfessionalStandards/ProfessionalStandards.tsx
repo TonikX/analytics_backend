@@ -205,7 +205,8 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                         <AddIcon/>
                     </Fab> */}
         </div>
-
+        {/*
+// @ts-ignore */}
         <ProfessionalStandardCreateModal/>
 
         <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}

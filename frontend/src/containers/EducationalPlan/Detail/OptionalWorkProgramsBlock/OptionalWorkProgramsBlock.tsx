@@ -1,5 +1,5 @@
 import React, {  useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import get from "lodash/get";
 import classNames from "classnames";
 
@@ -23,20 +23,20 @@ import { SelectWorkProgramBlockProps } from './types';
 import useStyles from './OptionalWorkProgramsBlock.styles';
 
 export default ({module, handleDownloadFile, isMultiSelect, saveWorkPrograms}: SelectWorkProgramBlockProps) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const classes = useStyles();
     const [optionalModules, setOptionalModules] = useState({});
 
-    const semesterHours = get(module, BlocksOfWorkProgramsFields.SEMESTER_UNIT);
+    const semesterHours: string = get(module, BlocksOfWorkProgramsFields.SEMESTER_UNIT, '');
     const workPrograms = get(module, BlocksOfWorkProgramsFields.WORK_PROGRAMS);
     const blockType = module[BlocksOfWorkProgramsFields.TYPE];
     const moduleId = module[BlocksOfWorkProgramsFields.ID];
 
     const mappedSemesterHours = semesterHours && semesterHours.split ? semesterHours.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    const semesterHour = mappedSemesterHours.slice(0, 10);
+    const semesterHour = mappedSemesterHours.slice(0, 10) as Array<string|number>;
 
     const goToWorkProgramPage = (id: number) => () => {
-        history.push(appRouter.getWorkProgramLink(id));
+        navigate(appRouter.getWorkProgramLink(id));
     }
 
     const selectOptionalProgram = (workProgramId: number) => (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
@@ -90,7 +90,7 @@ export default ({module, handleDownloadFile, isMultiSelect, saveWorkPrograms}: S
                     </div>
                 )}
             </TableCell>
-            {semesterHour.map((semesterHour: string, index: number) =>
+            {semesterHour.map((semesterHour: string|number, index: number) =>
                 <TableCell key={'hour' + index} align="center" className={classes.hourCell} > {semesterHour} </TableCell>
             )}
             <TableCell>

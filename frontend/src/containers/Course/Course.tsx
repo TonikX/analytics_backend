@@ -72,7 +72,6 @@ export const Course: React.FC = () => {
           <Step>
             <StepButton
               onClick={() => setActiveStep(0)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.GENERAL}
@@ -81,7 +80,6 @@ export const Course: React.FC = () => {
           <Step>
             <StepButton 
               onClick={() => setActiveStep(1)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.CONTENT}
@@ -90,7 +88,6 @@ export const Course: React.FC = () => {
           <Step>
             <StepButton 
               onClick={() => setActiveStep(2)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.CURRENT_SESSION}
@@ -99,7 +96,6 @@ export const Course: React.FC = () => {
           <Step>
             <StepButton 
               onClick={() => setActiveStep(3)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.PREP_DIRECTION}
@@ -108,7 +104,6 @@ export const Course: React.FC = () => {
           <Step>
             <StepButton 
               onClick={() => setActiveStep(4)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.REQUIREMENTS}
@@ -117,7 +112,6 @@ export const Course: React.FC = () => {
           <Step>
             <StepButton 
               onClick={() => setActiveStep(5)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.COMPETENCES}
@@ -126,7 +120,6 @@ export const Course: React.FC = () => {
           <Step>
             <StepButton 
               onClick={() => setActiveStep(6)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.RESULTS}
@@ -135,7 +128,6 @@ export const Course: React.FC = () => {
           <Step>
             <StepButton 
               onClick={() => setActiveStep(7)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.WORK_PROGRAMS}

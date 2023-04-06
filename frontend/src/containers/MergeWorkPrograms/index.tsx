@@ -62,7 +62,7 @@ const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
                 onChange={handleChange}
                 onInputChange={changeSearch}
                 getOptionLabel={option => option.label}
-                getOptionSelected={(option, value) => option.id === value.id}
+                // getOptionSelected={(option, value) => option.id === value.id} такого пропса больше нету
                 renderInput={(params) => <TextField {...params} label={labelText}/>}
             />
         </FormControl>

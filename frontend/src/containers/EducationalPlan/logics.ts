@@ -198,9 +198,8 @@ const createBlockOfWorkPrograms = createLogic({
         service.createBlockOfWorkPrograms(moduleId)
             .then((res) => {
                 dispatch(actions.fetchingSuccess());
-                dispatch(planActions.openDetailDialog({
-                    ...get(res, 'data')
-                }));
+                // @ts-ignore
+                dispatch(planActions.openDetailDialog({...get(res, 'data')}));
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));

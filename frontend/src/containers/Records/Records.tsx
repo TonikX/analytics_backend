@@ -273,7 +273,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}
                         >
                             <MenuItem value="bachelor">Бакалавриат</MenuItem>

@@ -177,7 +177,8 @@ class Competences extends React.Component<CompetenceProps> {
                         <AddIcon/>
                     </Fab>
                 </div>
-				
+                {/*
+// @ts-ignore */}
 				        <CourseCreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}

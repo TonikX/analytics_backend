@@ -10,7 +10,7 @@ import { useStyles } from './FirstStep.styles'
 import { checkUrl } from '../../../../common/utils';
 
 import { CourseFields } from '../../enum'
-import { FirstStepProps } from './types.d'
+import { FirstStepProps } from './types'
 
 export const FirstStep: React.FC<FirstStepProps> = ({ saveField, course }) => {
   const classes = useStyles()

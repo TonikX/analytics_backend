@@ -122,7 +122,9 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
     }
 
     render() {
-        const {isOpen, classes, directions} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {isOpen, directions} = this.props;
         const {dialogData, isFetching} = this.state;
         const disableButton = dialogData[DownloadFileModalFields.DIRECTION_ID] === null;
 
