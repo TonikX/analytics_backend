@@ -71,7 +71,7 @@ class SignIn extends React.PureComponent{
                         <Typography className={classes.activeTab}>
                             Вход
                         </Typography>
-                        <Link to={appRouter.getSignUpRoute}>
+                        <Link to={appRouter.getSignUpRoute()}>
                             <Typography>
                                 Регистрация
                             </Typography>

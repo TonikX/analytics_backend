@@ -15,7 +15,7 @@ export default (theme) => ({
         padding: '50px'
     },
     textField: {
-        marginBottom: '15px'
+        marginBottom: '15px !important'
     },
     button: {
         marginTop: '15px'
