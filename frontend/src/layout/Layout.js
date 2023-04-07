@@ -91,7 +91,7 @@ class Layout extends React.Component {
         if (isLandingPage) return this.props.children
 
         return (
-          <LocalizationProvider dateAdapter={AdapterDateMoment}>
+          // <LocalizationProvider dateAdapter={AdapterDateMoment}>
                 <SnackbarProvider maxSnack={3}>
                     <ThemeProvider theme={theme}>
                         <AbsoluteLoader isFetching={fetching} />
@@ -121,7 +121,7 @@ class Layout extends React.Component {
                         {isAuth && <AddToFolderModal />}
                     </ThemeProvider>
                 </SnackbarProvider>
-            </LocalizationProvider>
+            // </LocalizationProvider>
         );
     }
 }
