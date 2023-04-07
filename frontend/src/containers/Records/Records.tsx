@@ -5,7 +5,6 @@ import {appRouter} from "../../service/router-service";
 import styles from './Records.styles';
 import {
     Button,
-    // ExpansionPanelDetails,
     FormControl,
     FormControlLabel,
     InputLabel, MenuItem,
@@ -14,6 +13,7 @@ import {
     RadioGroup,
     TableCell
 } from "@mui/material";
+import Pagination from "@mui/lab/Pagination";
 import Select from '@mui/material/Select';
 import {RecordsProops} from "./types";
 import connect from "./Records.connect";
@@ -23,12 +23,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import FormLabel from "@mui/material/FormLabel";
-// import ExpansionPanelSummary from "@mui/material/ExpansionPanelSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-// import ExpansionPanel from '@mui/material/ExpansionPanel';
 import SearchSelector from "../../components/SearchSelector";
-import Pagination from "@mui/lab/Pagination";
-
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 
 class Records extends Component<RecordsProops> {
     state = {
@@ -44,9 +43,12 @@ class Records extends Component<RecordsProops> {
 
     componentDidMount() {
         this.props.actions.GetAP();
-        this.state.AP = this.props.AP
         this.props.actions.GetSU();
-        this.state.SU = this.props.SU;
+        // кажется что тут пустые значения
+        this.setState({
+            AP: this.props.AP,
+            SU: this.props.SU,
+        })
     }
 
     handleChange = (event: any): void => {
@@ -75,12 +77,6 @@ class Records extends Component<RecordsProops> {
 
     changeYear = (event: any): void => {
         this.props.actions.changeYear(event.target.value);
-    }
-
-    changeYearForAP = (event: any): void => {
-        this.props.actions.changeYear(event.target.value);
-        this.props.actions.GetAP();
-        this.state.AP = this.props.AP
     }
 
     handleChangePage = (event: any, page: number): void => {
@@ -159,8 +155,6 @@ class Records extends Component<RecordsProops> {
             STATUS,
             RPD_IN_SU,
             SEMESTER,
-            SU,
-            AP,
             APuse,
             RPD_IN_AP,
             SUuse,
@@ -199,7 +193,7 @@ class Records extends Component<RecordsProops> {
                         <MenuItem value="7">Отчёт о РПД и по учебному плану</MenuItem>
                     </Select>
                 </FormControl>
-                {this.state.value == 1 &&
+                {this.state.value === 1 &&
                 <Button
                     onClick={this.getSimpleStat}
                     variant="contained"
@@ -210,7 +204,7 @@ class Records extends Component<RecordsProops> {
                     Получить отчёт
                 </Button>
                 }
-                {this.state.isVisible && this.state.value == 1 &&
+                {this.state.isVisible && this.state.value === 1 &&
                 <Typography>
                     <p>Зарегестрированных пользователей: {SIMPLE_STATE['registered_users']}</p>
                     <p>Пользователей РПД: {SIMPLE_STATE['users_in_rpd']}</p>
@@ -221,7 +215,7 @@ class Records extends Component<RecordsProops> {
                 </Typography>
 
                 }
-                {this.state.value == 2 &&
+                {this.state.value === 2 &&
                 <>
                     <FormControl variant="outlined">
                         <InputLabel>Выберите квалификацию</InputLabel>
@@ -249,13 +243,13 @@ class Records extends Component<RecordsProops> {
                             className={classes.Btn}>Получить отчёт</Button>
                 </>
                 }
-                {this.state.isVisible && this.state.value == 2 &&
+                {this.state.isVisible && this.state.value === 2 &&
                 <>
                     <Typography>Количество РПД по заданной квалификации: {QUANTITY_RPD['quantity']}</Typography>
                 </>
 
                 }
-                {this.state.value == 3 &&
+                {this.state.value === 3 &&
                 <>
                     <FormControl variant="outlined">
                         <InputLabel>Выберите квалификацию</InputLabel>
@@ -312,12 +306,12 @@ class Records extends Component<RecordsProops> {
                     </Button>
                 </>
                 }
-                {this.state.isVisible && this.state.value == 3 &&
+                {this.state.isVisible && this.state.value === 3 &&
                 <>
                     <Typography>Количество ОП по заданной квалификации и году: {QUANTITY_OP['quantity']}</Typography>
                 </>
                 }
-                {this.state.value == 4 &&
+                {this.state.value === 4 &&
                 <Button
                     onClick={this.getRPDwithoutSU}
                     variant="contained"
@@ -326,7 +320,7 @@ class Records extends Component<RecordsProops> {
                     Получить отчёт
                 </Button>
                 }
-                {this.state.isVisible && this.state.value == 4 &&
+                {this.state.isVisible && this.state.value === 4 &&
                 <>
 
                     <div className={classes.tableWrap}>
@@ -378,7 +372,7 @@ class Records extends Component<RecordsProops> {
                         />
                     </div>
                 </>}
-                {this.state.value == 5 &&
+                {this.state.value === 5 &&
                 <>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Выберите статус РПД</FormLabel>
@@ -399,79 +393,73 @@ class Records extends Component<RecordsProops> {
                     </Button>
                 </>
                 }
-                {this.state.isVisible && this.state.value == 5 &&
+                {this.state.isVisible && this.state.value === 5 &&
                 <div>
                     {RPD_IN_SU.filter((SU: any) => SU.work_programs.length > 0).map((SU: any) =>
-                      <></>
-                        // <ExpansionPanel expanded={this.state.expandend === SU.id}
-                        //                 onChange={this.handleChangePanel(SU.id)} style={{width: "100%"}}>
-                        //     <ExpansionPanelSummary
-                        //         className={classes.accordionSummary}
-                        //         expandIcon={<ExpandMoreIcon/>}
-                        //     >
-                        //         <Typography>{SU.title} </Typography>
-                        //     </ExpansionPanelSummary>
-                        //     <ExpansionPanelDetails>
-                        //         <>
-                        //             <div className={classes.tableWrap} style={{width: "100%"}}>
-                        //                 <Table>
-                        //                     <TableHead className={classes.header}>
-                        //                         <TableRow>
-                        //                             <TableCell style={{width: "25%"}}>
-                        //                                 Код
-                        //                             </TableCell>
-                        //                             <TableCell style={{width: "50%"}}>
-                        //                                 Название
-                        //                             </TableCell>
-                        //                             <TableCell style={{width: "25%"}}>
-                        //                                 Авторский состав
-                        //                             </TableCell>
-                        //                             <TableCell/>
-                        //                         </TableRow>
-                        //                     </TableHead>
-                        //
-                        //                     <TableBody>
-                        //                         {SU.work_programs.slice(this.state.page * this.state.rowsPerPage,
-                        //                             this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>
-                        //                             <TableRow key={workProgram.id}>
-                        //                                 <TableCell>
-                        //                                     {workProgram.discipline_code}
-                        //                                 </TableCell>
-                        //                                 <TableCell className={classes.link}>
-                        //                                     <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
-                        //                                         {workProgram.title}
-                        //                                     </Link>
-                        //                                 </TableCell>
-                        //                                 <TableCell>
-                        //                                     {workProgram.editors.map((editors: any) =>
-                        //                                         <>{editors.first_name} {editors.last_name}; </>
-                        //                                     )}
-                        //                                 </TableCell>
-                        //
-                        //                             </TableRow>
-                        //                         )}
-                        //                     </TableBody>
-                        //
-                        //                 </Table>
-                        //                 <div className={classes.footer}>
-                        //                     <TablePagination count={SU.work_programs.length}
-                        //                                      component="div"
-                        //                                      page={this.state.page}
-                        //                                      rowsPerPageOptions={[]}
-                        //                                      onChangePage={this.handleChangePage}
-                        //                                      rowsPerPage={this.state.rowsPerPage}
-                        //                                      onChangeRowsPerPage={() => {
-                        //                                      }}
-                        //                     />
-                        //                 </div>
-                        //             </div>
-                        //         </>
-                        //     </ExpansionPanelDetails>
-                        // </ExpansionPanel>
+                        <Accordion expanded={this.state.expandend === SU.id}
+                                        onChange={this.handleChangePanel(SU.id)} style={{width: "100%"}}>
+                            <AccordionSummary
+                                className={classes.accordionSummary}
+                                expandIcon={<ExpandMoreIcon/>}
+                            >
+                                <Typography>{SU.title} </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <>
+                                    <div className={classes.tableWrap} style={{width: "100%"}}>
+                                        <Table>
+                                            <TableHead className={classes.header}>
+                                                <TableRow>
+                                                    <TableCell style={{width: "25%"}}>
+                                                        Код
+                                                    </TableCell>
+                                                    <TableCell style={{width: "50%"}}>
+                                                        Название
+                                                    </TableCell>
+                                                    <TableCell style={{width: "25%"}}>
+                                                        Авторский состав
+                                                    </TableCell>
+                                                    <TableCell/>
+                                                </TableRow>
+                                            </TableHead>
+
+                                            <TableBody>
+                                                {SU.work_programs.slice(this.state.page * this.state.rowsPerPage,
+                                                    this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((workProgram: any) =>
+                                                    <TableRow key={workProgram.id}>
+                                                        <TableCell>
+                                                            {workProgram.discipline_code}
+                                                        </TableCell>
+                                                        <TableCell className={classes.link}>
+                                                            <Link target="_blank" to={appRouter.getWorkProgramLink(workProgram.id)}>
+                                                                {workProgram.title}
+                                                            </Link>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {workProgram.editors.map((editors: any) =>
+                                                                <>{editors.first_name} {editors.last_name}; </>
+                                                            )}
+                                                        </TableCell>
+
+                                                    </TableRow>
+                                                )}
+                                            </TableBody>
+
+                                        </Table>
+                                        <div className={classes.footer}>
+                                            <Pagination count={SU.work_programs.length}
+                                                        page={this.state.page}
+                                                        onChange={this.handleChangePage}
+                                            />
+                                        </div>
+                                    </div>
+                                </>
+                            </AccordionDetails>
+                        </Accordion>
                     )}
                 </div>
                 }
-                {this.state.value == 6 &&
+                {this.state.value === 6 &&
                 <>
                     <SearchSelector
                         label='Выберите структурное подразделение'
@@ -481,9 +469,6 @@ class Records extends Component<RecordsProops> {
                         value={SUuse}
                         valueLabel={''}
                         className={classes.field}
-
-
-
                     />
                     <FormControl variant="outlined">
                         <InputLabel>Выберите год учебного плана</InputLabel>
@@ -555,7 +540,7 @@ class Records extends Component<RecordsProops> {
                     </Button>
                 </>
                 }
-                {this.state.value == 6 && this.state.isVisible &&
+                {this.state.value === 6 && this.state.isVisible &&
                 <>
 
                 <div className={classes.tableWrap}>
@@ -608,7 +593,7 @@ class Records extends Component<RecordsProops> {
                 </div>
                 </>
                 }
-                {this.state.value == 7 &&
+                {this.state.value === 7 &&
                     <>
                 <SearchSelector
                     label='Выберите учебный план'
@@ -631,7 +616,7 @@ class Records extends Component<RecordsProops> {
                     </Button>
                     </>
                 }
-                {this.state.value == 7 && this.state.isVisible && RPD_IN_AP.length > 0 &&
+                {this.state.value === 7 && this.state.isVisible && RPD_IN_AP.length > 0 &&
                 <>
 
                     <div className={classes.tableWrap}>
