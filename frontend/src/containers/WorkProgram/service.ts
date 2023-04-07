@@ -339,11 +339,20 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
+    updateZUN({knowledge, skills, attainments, zunId}: any, wpId: any){
+        return this.patch(`/api/zun/many_create_for_all_gh/${zunId}/`,{
+            workprogram_id: wpId,
+            knowledge,
+            skills,
+            attainments,
+        });
+    }
+
     deleteZUN(compentenceId: number){
         return this.delete(`/api/zun/many_create/${compentenceId}`);
     }
 
-    updateZUN({indicator, plans, results}: any){
+    updateZUNFull({indicator, plans, results}: any){
         return this.post(`/api/zun/many_create/`,{
             wpa_in_fss: plans,
             zun: {

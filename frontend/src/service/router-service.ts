@@ -269,7 +269,7 @@ export default class RouterService {
     };
 
     getWorkProgramRoute = () => {
-        return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':id';
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':id' + SEPARATOR + '*';
     };
 
     getEducationPlanDetailRoute = () => {

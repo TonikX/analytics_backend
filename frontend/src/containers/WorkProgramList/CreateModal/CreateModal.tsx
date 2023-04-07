@@ -259,7 +259,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const {title_en, ...rest} = workProgram;
         const disableButton = !Object.values(rest).every(Boolean);
-        console.log('workProgramworkProgram', workProgram)
+
         return (
             <Dialog
                 open={isOpen}

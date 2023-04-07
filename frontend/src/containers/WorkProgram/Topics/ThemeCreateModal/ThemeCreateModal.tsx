@@ -113,7 +113,7 @@ class ThemeCreateModal extends React.PureComponent<ThemeCreateModalProps> {
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} тему</DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <FormControl className={classes.sectionSelector}>
                         <InputLabel shrink id="section-label">
                             Раздел *

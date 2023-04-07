@@ -13,8 +13,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     width: '25%'
   },
   header: {
-    background: theme.palette.primary.main,
-    color: '#fff',
+    background: `${theme.palette.primary.main} !important`,
+    color: '#fff !important',
     fontWeight: 400,
     height: '45px'
   },
@@ -27,10 +27,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   addZUNButton: {
-    marginLeft: 'auto'
+    marginLeft: 'auto !important'
   },
   subTitle: {
-    marginBottom: '6px',
+    marginBottom: '6px !important',
     fontSize: '20px',
     display: 'flex',
     alignItems: 'center'

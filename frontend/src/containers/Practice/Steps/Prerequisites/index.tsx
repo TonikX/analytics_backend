@@ -93,12 +93,12 @@ class Prerequisites extends React.Component<PrerequisitesProps> {
                     </Scrollbars>
 
                     {isCanEdit &&
-                    <Button color="secondary"
-                            className={classes.addIcon}
-                            onClick={this.handleCreateNew}
-                    >
-                        <AddIcon/> Добавить пререквизит
-                    </Button>
+                        <Button color="secondary"
+                                className={classes.addIcon}
+                                onClick={this.handleCreateNew}
+                        >
+                            <AddIcon/> Добавить пререквизит
+                        </Button>
                     }
 
                     {isCanEdit && <CreateModal />}

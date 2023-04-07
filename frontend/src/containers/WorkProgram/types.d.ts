@@ -20,6 +20,7 @@ export interface WorkProgramActions {
 
     saveZUN: any;
     deleteZUN: any;
+    updateZUNFull: any;
     updateZUN: any;
 
     sendWorkProgramToArchive: any;

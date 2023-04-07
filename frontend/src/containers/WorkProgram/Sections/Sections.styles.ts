@@ -48,7 +48,7 @@ export default (theme: Theme) => createStyles({
         marginLeft: 'auto'
     },
     lastInfo: {
-        marginTop: '20px',
-        marginBottom: '10px',
+        marginTop: '20px !important',
+        marginBottom: '10px !important',
     }
 });
