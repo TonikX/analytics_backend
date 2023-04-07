@@ -83,8 +83,9 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
     # block_dict["modules_in_discipline_block"].append(block_module_dict)
     if block_module.childs.all().exists():
         for child in block_module.childs.all():
-            block_module_dict["childs"].append(
-                recursion_module_matrix(child, unique_wp, unique_gia, unique_practice, first_ap_iter))
+            lower_module = recursion_module_matrix(child, unique_wp, unique_gia, unique_practice, first_ap_iter)
+            if lower_module["change_blocks_of_work_programs_in_modules"] or lower_module["childs"]:
+                block_module_dict["childs"].append(lower_module)
     for change_block in WorkProgramChangeInDisciplineBlockModule.objects.filter(
             discipline_block_module=block_module):
         change_block_dict = {"change_type": change_block.change_type,
