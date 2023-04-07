@@ -1,3 +1,6 @@
+import html
+import re
+
 from docxtpl import DocxTemplate
 from xml.etree import ElementTree
 
@@ -16,7 +19,16 @@ from workprogramsapp.models import GeneralCharacteristics, FieldOfStudy, General
 
 
 def remove_tags(text):
-    return ''.join(ElementTree.fromstring(text).itertext())
+    tag_re = re.compile(r'(<!--.*?-->|<[^>]*>)')
+
+    # Remove well-formed tags, fixing mistakes by legitimate users
+    no_tags = tag_re.sub('', text)
+
+    # Clean up anything else by escaping
+    ready_for_web = html.escape(no_tags)
+    ready_for_web = ready_for_web.replace('&amp;laquo;', '"')
+    ready_for_web = ready_for_web.replace('&amp;raquo;', '"')
+    return ready_for_web
 
 
 def generate_context(gh):
