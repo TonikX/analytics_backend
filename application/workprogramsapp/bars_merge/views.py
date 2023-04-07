@@ -257,19 +257,23 @@ def SendCheckpointsForAcceptedWP(request):
                     academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zuns_for_wp__ze_v_sem__iregex=many_term_regex).distinct()
                 implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
                     year=int(year_of_sending) - now_semester // 2)
-                isu_wp_id = None
+                # id isu
+                try:
+                    isu_wp_id = int(work_program.discipline_code)
+                except ValueError:
+                    isu_wp_id = None
                 for imp in implementation_of_academic_plan:
                     # создаем список направлений + уп с айдишниками ИСУ для БАРСа
                     field_of_studies = FieldOfStudy.objects.filter(
                         implementation_academic_plan_in_field_of_study=imp)
                     for fos in field_of_studies:
                         imp_list.append(generate_fos(imp.ns_id, fos.number, imp.title))
-                    isu_wp = \
+                    """isu_wp = \
                         list(WorkProgramIdStrUpForIsu.objects.filter(
                             work_program_in_field_of_study__work_program=work_program,
                             work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
                             0]
-                    isu_wp_id = isu_wp.dis_id
+                    isu_wp_id = isu_wp.dis_id"""
                 imp_list_for_many_term.extend(imp_list)
                 imp_list_for_many_term = list({v['id']: v for v in imp_list_for_many_term}.values())
                 # imp_list = list({v['id']: v for v in imp_list}.values())
@@ -296,7 +300,11 @@ def SendCheckpointsForAcceptedWP(request):
 
                 implementation_of_academic_plan = implementation_of_academic_plan_all.filter(
                     year=int(year_of_sending) - current_term // 2)
-                isu_wp_id = None
+                # id isu
+                try:
+                    isu_wp_id = int(work_program.discipline_code)
+                except ValueError:
+                    isu_wp_id = None
                 for imp in implementation_of_academic_plan:
                     # создаем список направлений + уп с айдишниками ИСУ для БАРСа
                     try:
@@ -304,12 +312,12 @@ def SendCheckpointsForAcceptedWP(request):
                             implementation_academic_plan_in_field_of_study=imp)
                         for fos in field_of_studies:
                             imp_list.append(generate_fos(imp.ns_id, fos.number, imp.title))
-                        isu_wp = \
+                        """isu_wp = \
                             list(WorkProgramIdStrUpForIsu.objects.filter(
                                 work_program_in_field_of_study__work_program=work_program,
                                 work_program_in_field_of_study__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=imp))[
                                 0]
-                        isu_wp_id = isu_wp.dis_id
+                        isu_wp_id = isu_wp.dis_id"""
                     except FieldOfStudy.DoesNotExist:
                         pass
 
@@ -384,6 +392,7 @@ def SendCheckpointsForAcceptedWP(request):
             all_sends.append(
                 {"status": request_status_code, "request": request_text, "response": request_response})
     return Response(all_sends)
+
 
 
 @api_view(['POST'])
