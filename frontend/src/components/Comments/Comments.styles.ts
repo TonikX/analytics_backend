@@ -36,11 +36,12 @@ export default () => createStyles({
     commentTextFieldButtons: {
         marginLeft: 'auto',
         marginTop: '10px',
-        display: 'flex',
+        display: 'flex !important',
         justifyContent: 'flex-end'
     },
     commentButton: {
-        position: "fixed",
+        // @ts-ignore
+        position: "fixed !important",
         right: '80px',
         bottom: '54px'
     },

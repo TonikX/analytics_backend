@@ -89,13 +89,13 @@ export default () => createStyles({
         flexWrap: 'wrap'
     },
     editorItem: {
-        marginRight: '5px',
-        marginBottom: '10px'
+        marginRight: '5px !important',
+        marginBottom: '10px !important'
     },
     editorTitle: {
         fontSize: '14px',
         fontWeight: 'bold',
-        marginBottom: 10
+        marginBottom: '10px !important'
     },
     dialog: {
         padding: 40,
