@@ -154,7 +154,7 @@ class Indicators extends React.Component<IndicatorProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <Pagination count={allCount}
+                    <Pagination count={Math.ceil(allCount / 10)}
                                 page={currentPage}
                                 onChange={this.handleChangePage}
                                 color="primary"
