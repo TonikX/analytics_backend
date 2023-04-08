@@ -20,9 +20,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   menuButton: {
-    display: 'none',
+    display: 'none !important',
     "@media (max-width: 600px)": {
-      display: 'block'
+      display: 'block !important',
+      marginLeft: 'initial !important',
     }
   },
   drawerLink: {
@@ -41,12 +42,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   logo: {
     fontSize: '25px',
-    marginRight: '70px'
+    marginRight: '70px !important'
   },
   header: {
-    boxShadow: 'none',
+    boxShadow: 'initial !important',
     padding: '10px',
-    background: "rgba(7, 21, 43, 0.4)",
+    background: "rgba(7, 21, 43, 0.4) !important",
   },
   link: {
     cursor: 'pointer',
@@ -64,7 +65,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     '-webkit-tap-highlight-color': 'transparent',
     marginRight: '10px',
     "@media (max-width: 480px)": {
-      marginRight: '0px'
+      marginRight: '0px',
+      marginLeft: 'initial !important',
     }
   },
   headerRight: {
@@ -83,20 +85,20 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     padding: '0 10px'
   },
   h1: {
-    fontSize: '50px',
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: '30px',
+    fontSize: '50px !important',
+    fontWeight: 'bold !important',
+    color: '#fff !important',
+    marginBottom: '30px !important',
     "@media (max-width: 600px)": {
-      fontSize: '30px'
+      fontSize: '30px !important'
     }
   },
   subTitle: {
-    fontSize: '20px',
+    fontSize: '20px !important',
     color: '#fff',
-    marginBottom: '30px',
+    marginBottom: '30px !important',
     "@media (max-width: 600px)": {
-      fontSize: '15px'
+      fontSize: '15px !important'
     }
   },
   mainScreenButtons: {
@@ -111,11 +113,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   mainButton: {
     color: '#fff',
-    padding: '14px 25px',
-    textTransform: 'initial',
-    background: '#1d51a3',
-    fontWeight: 'bold',
-    borderRadius: '10px',
+    padding: '14px 25px !important',
+    // @ts-ignore
+    textTransform: 'initial !important',
+    background: '#1d51a3 !important',
+    fontWeight: 'bold !important',
+    borderRadius: '10px !important',
     '& a': {
       textDecoration: 'none',
       color: '#fff',
@@ -125,12 +128,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   headerSignUpBtn: {
-    color: '#fff',
-    padding: '14px 25px',
-    textTransform: 'initial',
-    background: '#1d51a3',
-    fontWeight: 'bold',
-    borderRadius: '10px',
+    color: '#fff !important',
+    padding: '14px 25px !important',
+    // @ts-ignore
+    textTransform: 'initial !important',
+    background: '#1d51a3 !important',
+    fontWeight: 'bold !important',
+    borderRadius: '10px !important',
     '& a': {
       textDecoration: 'none',
       color: '#fff',
@@ -139,18 +143,19 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
       background: '#163ea4'
     },
     "@media (max-width: 480px)": {
-      display: 'none'
+      display: 'none !important'
     }
   },
   signUpIconBtn: {
     display: 'none',
     textDecoration: 'none',
-    color: '#fff',
-    border: 'none',
+    color: '#fff !important',
+    border: 'none !important',
     outline: 'none',
     '-webkit-tap-highlight-color': 'transparent',
     "@media (max-width: 480px)": {
-      display: 'block'
+      display: 'block',
+      marginLeft: 'initial !important'
     }
   },
   signInLink: {
@@ -159,12 +164,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   secondaryButton: {
-    color: '#fff',
-    padding: '14px 25px',
-    textTransform: 'initial',
-    border: '2px solid #fff',
-    fontWeight: 'bold',
-    borderRadius: '10px',
+    color: '#fff !important',
+    padding: '14px 25px !important',
+    // @ts-ignore
+    textTransform: 'initial !important',
+    border: '2px solid #fff !important',
+    fontWeight: 'bold !important',
+    borderRadius: '10px !important',
     '& a': {
       textDecoration: 'none',
       color: '#fff',
@@ -219,12 +225,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   processesListContentTitle: {
-    fontSize: '30px',
-    fontWeight: 'bold',
-    marginBottom: '20px'
+    fontSize: '30px !important',
+    fontWeight: 'bold !important',
+    marginBottom: '20px !important'
   },
   processesListContentText: {
-    lineHeight: '30px'
+    lineHeight: '30px !important'
   },
   videoWrapper: {
     width: '100%',
@@ -250,11 +256,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   sectionTitle: {
-    fontWeight: 'bold',
+    fontWeight: 'bold !important',
     color: '#fff',
-    textAlign: 'center',
-    fontSize: '20px',
-    marginBottom: '50px'
+    // @ts-ignore
+    textAlign: 'center !important',
+    fontSize: '20px !important',
+    marginBottom: '50px !important'
   },
   usersList: {
     display: 'flex',
@@ -273,9 +280,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     minWidth: '250px',
   },
   usersListItemTitle: {
-    marginLeft: '20px',
+    marginLeft: '20px !important',
     color: '#1f1f24',
-    fontWeight: 'bold'
+    fontWeight: 'bold !important'
   },
   usersListItemImg: {
     width: '40px'
@@ -305,7 +312,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   teamItemTitle: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontWeight: 'bold !important',
     textAlign: 'center'
   },
   teamItemRole: {
@@ -319,7 +326,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     align: 'center',
     cursor: 'pointer',
-    fontWeight: 'bold'
+    fontWeight: 'bold !important'
   },
   footer: {
     background: '#1f1f24',
@@ -340,10 +347,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   footerText: {
     color: '#dfdfdf',
     "@media (max-width: 480px)": {
-      fontSize: '12px'
+      fontSize: '12px !important'
     },
     "@media (max-width: 350px)": {
-      fontSize: '10px'
+      fontSize: '10px !important'
     }
   },
   mailIcon: {
@@ -354,10 +361,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     alignItems: 'center',
     "@media (max-width: 480px)": {
-      fontSize: '12px'
+      fontSize: '12px !important'
     },
     "@media (max-width: 350px)": {
-      fontSize: '10px'
+      fontSize: '10px !important'
     }
   }
 }));
