@@ -7,23 +7,23 @@ module.exports = function override(config, env) {
         config.plugins = [];
     }
 
-    const fallback = config.resolve.fallback || {};
-    Object.assign(fallback, {
-        crypto: require.resolve('crypto-browserify'),
-        stream: require.resolve('stream-browserify'),
-        assert: require.resolve('assert'),
-        http: require.resolve('stream-http'),
-        https: require.resolve('https-browserify'),
-        os: require.resolve("os-browserify"),
-        url: require.resolve('url'),
-        vm: require.resolve('vm-browserify')
-    });
-    config.resolve.fallback = fallback;
+    // const fallback = config.resolve.fallback || {};
+    // Object.assign(fallback, {
+    //     crypto: require.resolve('crypto-browserify'),
+    //     stream: require.resolve('stream-browserify'),
+    //     assert: require.resolve('assert'),
+    //     http: require.resolve('stream-http'),
+    //     https: require.resolve('https-browserify'),
+    //     os: require.resolve("os-browserify"),
+    //     url: require.resolve('url'),
+    //     vm: require.resolve('vm-browserify')
+    // });
+    // config.resolve.fallback = fallback;
 
     config.plugins.push(
         new CopyWebpackPlugin({
             patterns: [
-                {from: 'src/ckeditor_plugins/openlink', to: 'openlink'}
+                { from: 'src/ckeditor_plugins/openlink', to: 'openlink' }
             ]
         }),
         new webpack.ProvidePlugin({

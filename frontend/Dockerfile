@@ -12,7 +12,7 @@ COPY package.json ./
 COPY package-lock.json ./
 #RUN rm package-lock.json
 #RUN rm -rf node_modules
-RUN npm install  --legacy-peer-deps
+RUN npm install
 RUN npm install react-app-rewired -g
 
 # add app
