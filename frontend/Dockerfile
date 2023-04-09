@@ -12,6 +12,7 @@ COPY package.json ./
 COPY package-lock.json ./
 #RUN rm package-lock.json
 #RUN rm -rf node_modules
+#RUN npm cache clean -f
 RUN npm install
 RUN npm install react-scripts -g
 
