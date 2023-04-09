@@ -1,4 +1,4 @@
-FROM node:13.12.0-alpine as build
+FROM node:16.10.0-alpine as build
 
 WORKDIR /frontend
 
@@ -7,7 +7,7 @@ ENV PATH /frontend/node_modules/.bin:$PATH
 COPY . /frontend
 
 RUN npm ci --silent
-RUN npm install react-scripts@3.4.1 -g --silent
+RUN npm install react-app-rewired -g --silent
 RUN npm run build
 
 CMD ["npm", "start"]
