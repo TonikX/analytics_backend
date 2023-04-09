@@ -8,8 +8,8 @@ export default (theme: Theme) => createStyles({
         flexDirection: 'column',
     },
     addIcon: {
-        marginTop: '10px',
-        marginLeft: 'auto',
+        marginTop: '10px !important',
+        marginLeft: 'auto !important',
         flex: 'none',
         marginBottom: '20px',
     },

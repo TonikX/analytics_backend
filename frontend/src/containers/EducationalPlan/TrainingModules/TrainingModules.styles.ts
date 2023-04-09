@@ -17,17 +17,17 @@ export default (theme: Theme) => createStyles({
         flexWrap: 'wrap',
     },
     title: {
-        fontSize: '24px',
-        marginRight: '10px',
+        fontSize: '24px !important',
+        marginRight: '10px !important',
     },
     switch: {
-        marginRight: 'auto',
+        marginRight: 'auto !important',
     },
     tableWrap: {
         height: 'calc(100% - 60px)'
     },
     addIcon: {
-        marginLeft: 'auto',
+        marginLeft: 'auto !important',
     },
     footer: {
         display: 'flex',
@@ -35,9 +35,9 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center',
         marginTop: '10px'
     },
-    header: {
-        background: theme.palette.primary.main,
-        color: '#fff'
+    headerCell: {
+        background: `${theme.palette.primary.main} !important`,
+        color: '#fff !important'
     },
     actions: {
         width: '100px'

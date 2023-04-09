@@ -212,31 +212,31 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                 <Scrollbars>
                     <div className={classes.tableWrap}>
                         <Table stickyHeader size='small'>
-                            <TableHead className={classes.header}>
+                            <TableHead>
                                 <TableRow>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         Название
                                         <SortingButton changeMode={this.changeSorting(TrainingModuleFields.NAME)}
                                                        mode={sortingField === TrainingModuleFields.NAME ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         Тип
                                         <SortingButton changeMode={this.changeSorting(TrainingModuleFields.TYPE)}
                                                        mode={sortingField === TrainingModuleFields.TYPE ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         КОП ИД
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         ИСУ ИД
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         Редакторы
                                     </TableCell>
 
-                                    {canEdit && <TableCell />}
+                                    {canEdit && <TableCell className={classes.headerCell} />}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
