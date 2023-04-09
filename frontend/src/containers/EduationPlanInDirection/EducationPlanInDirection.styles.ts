@@ -18,7 +18,7 @@ export default (theme: Theme) => createStyles({
     title: {
         fontSize: '24px !important',
         lineHeight: '39px !important',
-        marginBottom: '20px',
+        marginBottom: '20px !important',
         display: 'flex',
         justifyContent: 'space-between'
     },
