@@ -97,7 +97,7 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} учебный модуль </DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Название *"
                                onChange={this.saveField(TrainingModuleFields.NAME)}
                                variant="outlined"

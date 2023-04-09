@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import {BlocksOfWorkProgramsFields, ModuleFields} from "../../enum";
 import {DetailTrainingModuleProps} from './types';
+import {withRouter} from "../../../../hoc/WithRouter";
 
 import connect from './DetailTrainingModule.connect';
 import WPBlockCreateModal from "../../Detail/WPBlockCreateModal";
@@ -114,7 +115,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     })
   }
 
-  getModuleId = () => get(this.props.match.params, 'id');
+  getModuleId = () => get(this.props.params, 'id');
 
   handleConfirmBlockDeleteDialog = () => {
     const {deleteBlockConfirmId} = this.state;
@@ -330,7 +331,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     return(
       <>
         <TableRow>
-          <TableCell  style={{ height: '40px'}} rowSpan={2} colSpan={canEdit ? 3 : 2} className={classes.moduleNameWrap}>
+          <TableCell style={{ height: '40px'}} className={classes.moduleNameWrap}>
             <Link className={classes.workProgramLink}
                   to={appRouter.getTrainingModuleDetailLink(item?.[WorkProgramGeneralFields.ID])}
                   target="_blank"
@@ -600,7 +601,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 <TableCell className={classes.header}>Уровень</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>
                 <TableCell className={classes.header}>Включен в эту ОП</TableCell>
-                <TableCell />
+                <TableCell className={classes.header} />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -733,4 +734,4 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 }
 
 //@ts-ignore
-export default connect(withStyles(styles)(DetailTrainingModule));
+export default connect(withStyles(styles)(withRouter(DetailTrainingModule)));
