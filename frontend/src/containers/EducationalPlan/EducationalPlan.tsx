@@ -163,31 +163,39 @@ class EducationalPlan extends React.Component<EducationalPlanProps> {
         <Scrollbars>
           <div className={classes.tableWrap}>
             <Table stickyHeader size='small'>
-              <TableHead>
+              <TableHead className={classes.header}>
                 <TableRow>
                   <TableCell>
-                    Образовательная программа
-                    <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__title')}
-                                   mode={sortingField === 'academic_plan_in_field_of_study__title' ? sortingMode : ''}
-                    />
+                    <div className={classes.headerCell}>
+                      Образовательная программа
+                      <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__title')}
+                                     mode={sortingField === 'academic_plan_in_field_of_study__title' ? sortingMode : ''}
+                      />
+                    </div>
                   </TableCell>
                   <TableCell>
-                    Год набора
-                    <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__year')}
-                                   mode={sortingField === 'academic_plan_in_field_of_study__year' ? sortingMode : ''}
-                    />
+                    <div className={classes.headerCell}>
+                      Год набора
+                      <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__year')}
+                                     mode={sortingField === 'academic_plan_in_field_of_study__year' ? sortingMode : ''}
+                      />
+                    </div>
                   </TableCell>
                   <TableCell>
-                    Уровень образования
-                    <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__qualification')}
-                                   mode={sortingField === 'academic_plan_in_field_of_study__qualification' ? sortingMode : ''}
-                    />
+                    <div className={classes.headerCell}>
+                      Уровень образования
+                      <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__qualification')}
+                                     mode={sortingField === 'academic_plan_in_field_of_study__qualification' ? sortingMode : ''}
+                      />
+                    </div>
                   </TableCell>
                   <TableCell>
-                    Направления
-                    <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__field_of_study__title')}
-                                   mode={sortingField === 'academic_plan_in_field_of_study__field_of_study__title' ? sortingMode : ''}
-                    />
+                    <div className={classes.headerCell}>
+                      Направления
+                      <SortingButton changeMode={this.changeSorting('academic_plan_in_field_of_study__field_of_study__title')}
+                                     mode={sortingField === 'academic_plan_in_field_of_study__field_of_study__title' ? sortingMode : ''}
+                      />
+                    </div>
                   </TableCell>
 
                   <TableCell />

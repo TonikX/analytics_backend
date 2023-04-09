@@ -161,58 +161,9 @@ export default () => (
               <Route path={routerService.getFinalCertificationRoute()} element={<AuthRoute><FinalCertification /></AuthRoute>} />
               <Route path={routerService.getFinalCertificationListRoute()} element={<AuthRoute><FinalCertificationList /></AuthRoute>} />
               <Route path={routerService.getRolesSkillsRoute()} element={<AuthRoute><RolesSkills /></AuthRoute>} />
-
-              {/*<Route path={routerService.getCourseRoute()} element={<AuthRoute>*/}
-              {/*  /!*<EducationPlanDetail match={match} trajectoryRoute /> // TODO match + откомментировать ?? *!/*/}
-              {/*  <EducationPlanDetail trajectoryRoute />*/}
-              {/*</AuthRoute>} />*/}
-              {/*    <AuthRoute path={routerService.getEducationPlanDetailRoute()}*/}
-              {/*               children={() => (*/}
-              {/*                   <Route*/}
-              {/*                       render={({match}) => (*/}
-              {/*                           <EducationPlanDetail match={match}/>*/}
-              {/*                       )}*/}
-              {/*                   />*/}
-              {/*               )}*/}
-              {/*    />*/}
-              {/*    <AuthRoute path={routerService.getProfessionSkillsRoute()}*/}
-              {/*               children={() => (*/}
-              {/*                   <Route*/}
-              {/*                       render={({match}) => (*/}
-              {/*                           <ProfessionSkills match={match}/>*/}
-              {/*                       )}*/}
-              {/*                   />*/}
-              {/*               )}*/}
-              {/*    />*/}
-              {/*<AuthRoute path={routerService.getEducationPlanDetailRoute()}*/}
-              {/*           children={() => (*/}
-              {/*               <Route*/}
-              {/*                   render={({match}) => (*/}
-              {/*                       <EducationPlanDetail match={match}/>*/}
-              {/*                   )}*/}
-              {/*               />*/}
-              {/*           )}*/}
-              {/*/>*/}
-              {/*<AuthRoute path={routerService.getProfessionSkillsRoute()}*/}
-              {/*           children={() => (*/}
-              {/*               <Route*/}
-              {/*                   render={({match}) => (*/}
-              {/*                       <ProfessionSkills match={match}/>*/}
-              {/*                   )}*/}
-              {/*               />*/}
-              {/*           )}*/}
-              {/*/>*/}
-
-              {/*    <AuthRoute path={routerService.getRolesSkillsRoute()}*/}
-              {/*               children={() => (*/}
-              {/*                   <Route*/}
-              {/*                       render={({match}) => (*/}
-              {/*                           <RolesSkills match={match}/>*/}
-              {/*                       )}*/}
-              {/*                   />*/}
-              {/*               )}*/}
-              {/*    />*/}
-              {/*<Route exact element={<NotFoundPage/>} />*/}
+              <Route path={routerService.getTrajectoryPlanDetailRoute()} element={<AuthRoute><EducationPlanDetail trajectoryRoute /></AuthRoute>} />
+              <Route path={routerService.getEducationPlanDetailRoute()} element={<AuthRoute><EducationPlanDetail /></AuthRoute>} />
+              <Route path={routerService.getProfessionSkillsRoute()} element={<AuthRoute><ProfessionSkills trajectoryRoute /></AuthRoute>} />
               <Route path={routerService.getEmailConfirmFail()} element={<EmailFailPage/>} />
               <Route path={routerService.getEmailConfirmSuccess()} element={<EmailSuccessPage/>} />
               {/*<Route path={routerService.getForbiddenPage()} element={<ForbiddenPage/>} />*/}

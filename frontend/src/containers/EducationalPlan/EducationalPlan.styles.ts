@@ -1,6 +1,18 @@
 import createStyles from "@mui/styles/createStyles";
+import {Theme} from "@mui/material";
 
-export default () => createStyles({
+export default (theme: Theme) => createStyles({
+    header: {
+        background: theme.palette.primary.main,
+        '& th': {
+            color: '#fff',
+            background: theme.palette.primary.main,
+        }
+    },
+    headerCell: {
+        display: 'flex',
+        alignItems: 'center'
+    },
     tableWrap: {
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
@@ -63,7 +75,7 @@ export default () => createStyles({
         fill: 'rgba(0, 0, 0, 0.54)'
     },
     menuLinkItem: {
-        padding: 0,
+        padding: '0px !important',
         '&>a': {
             padding: '6px 16px',
             display: 'flex',
