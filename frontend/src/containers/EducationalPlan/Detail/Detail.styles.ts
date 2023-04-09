@@ -125,10 +125,10 @@ export default (theme: Theme) => createStyles({
     color: theme.palette.primary.main,
   },
   likeIcon: {
-    marginLeft: '20px'
+    marginLeft: '20px !important'
   },
   trajectoryOwner: {
-    marginBottom: '10px'
+    marginBottom: '10px !important'
   },
   wpStatus: {
     margin: '0 6px',
@@ -138,18 +138,18 @@ export default (theme: Theme) => createStyles({
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    margin: '20px 0px 10px',
+    margin: '20px 0px 10px !important',
   },
   editorsTitle: {
     lineHeight: '32px',
-    marginRight: '10px',
+    marginRight: '10px !important',
   },
   editorsItem: {
-    marginLeft: '5px',
+    marginLeft: '5px !important',
   },
   editorsAdd: {
     height: '32px',
-    marginLeft: 'auto',
+    marginLeft: 'auto !important',
   },
   dialog: {
     padding: '40px',
