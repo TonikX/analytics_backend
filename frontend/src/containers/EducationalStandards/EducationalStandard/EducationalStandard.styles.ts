@@ -22,8 +22,8 @@ export default makeStyles((theme: Theme) => createStyles({
         paddingLeft: '50px',
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
+        fontSize: '24px !important',
+        marginBottom: '20px !important',
         display: 'flex',
         alignItems: 'center'
     },

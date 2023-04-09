@@ -107,28 +107,30 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps, an
           paper: classes.dialog,
           root: classes.root,
         }}
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
       >
-        <DialogTitle style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-          Добавить компетенцию
-          {createCompetence ? (
-            <Button color="primary"
-                    variant="text"
-                    size="small"
-                    onClick={() => this.setState({ createCompetence: false })}
-            >
-              <AddIcon/> Добавить из существующих
-            </Button>
-          ) : (
-            <Button color="primary"
-              variant="text"
-              size="small"
-              onClick={() => this.setState({ createCompetence: true })}
-            >
-              <AddIcon/> Создать компетенцию
-            </Button>
-          )}
+        <DialogTitle>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap' }}>
+            Добавить компетенцию
+            {createCompetence ? (
+              <Button color="primary"
+                      variant="text"
+                      size="small"
+                      onClick={() => this.setState({ createCompetence: false })}
+              >
+                <AddIcon/> Добавить из существующих
+              </Button>
+            ) : (
+              <Button color="primary"
+                variant="text"
+                size="small"
+                onClick={() => this.setState({ createCompetence: true })}
+              >
+                <AddIcon/> Создать компетенцию
+              </Button>
+            )}
+          </div>
 
           <div className={classes.searchRow}>
             <TextField label="Код"
