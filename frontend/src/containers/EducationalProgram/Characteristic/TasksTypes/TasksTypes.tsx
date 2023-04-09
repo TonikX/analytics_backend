@@ -18,6 +18,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
+import DialogContent from "@mui/material/DialogContent";
 
 import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
@@ -126,29 +127,31 @@ export default ({ characteristic }: any) => {
         }}
       >
         <DialogTitle className={classes.title}>Добавить тип профессиональной задачи</DialogTitle>
-        <FormControl className={classes.wrapSelector}>
-          <InputLabel shrink id="selected-object">
-            Тип профессиональной задачи *
-          </InputLabel>
-          <Select
-            variant="outlined"
-            onChange={(e) => setSelectedObject(e.target.value)}
-            value={selectedObject}
-            fullWidth
-            input={
-              <OutlinedInput
-                notched
-                id="selected-object"
-              />
-            }
-          >
-            {tasksList.map((item: any) =>
-              <MenuItem value={item.value} key={`type-${item.value}`}>
-                {item.label}
-              </MenuItem>
-            )}
-          </Select>
-        </FormControl>
+        <DialogContent className={classes.dialogContent}>
+          <FormControl className={classes.wrapSelector}>
+            <InputLabel shrink id="selected-object">
+              Тип профессиональной задачи *
+            </InputLabel>
+            <Select
+              variant="outlined"
+              onChange={(e) => setSelectedObject(e.target.value)}
+              value={selectedObject}
+              fullWidth
+              input={
+                <OutlinedInput
+                  notched
+                  id="selected-object"
+                />
+              }
+            >
+              {tasksList.map((item: any) =>
+                <MenuItem value={item.value} key={`type-${item.value}`}>
+                  {item.label}
+                </MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </DialogContent>
         <DialogActions className={classes.actions}>
           <Button onClick={() => setOpenModal(false)}
                   variant="text">

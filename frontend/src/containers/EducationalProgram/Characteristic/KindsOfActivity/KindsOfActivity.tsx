@@ -14,6 +14,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
+import DialogContent from "@mui/material/DialogContent";
 
 import KindOfActivitySelector from '../KindOfActivitySelector'
 
@@ -127,25 +128,27 @@ export default ({ characteristic }: any) => {
         }}
       >
         <DialogTitle className={classes.title}>Добавить сферу профессиональной деятельности</DialogTitle>
-        <Typography className={classes.marginBottom30}>
-          Выберите существующий сферу профессиональной деятельности или введите название нового
-        </Typography>
-        <KindOfActivitySelector
-          onChange={setSelectedObject}
-          label="Выберите сферу профессиональной деятельности"
-          value={selectedObject}
-          className={classes.marginBottom30}
-        />
-        <TextField
-          value={newObject}
-          onChange={(e) => setNewObject(e.target.value)}
-          label="Новая сфера профессиональной деятельности"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-          fullWidth
-        />
+        <DialogContent className={classes.dialogContent}>
+          <Typography className={classes.marginBottom30}>
+            Выберите существующую сферу профессиональной деятельности или введите название новой
+          </Typography>
+          <KindOfActivitySelector
+            onChange={setSelectedObject}
+            label="Выберите сферу профессиональной деятельности"
+            value={selectedObject}
+            className={classes.marginBottom30}
+          />
+          <TextField
+            value={newObject}
+            onChange={(e) => setNewObject(e.target.value)}
+            label="Новая сфера профессиональной деятельности"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+            fullWidth
+          />
+        </DialogContent>
         <DialogActions className={classes.actions}>
           <Button onClick={() => setOpenModal(false)}
                   variant="text">

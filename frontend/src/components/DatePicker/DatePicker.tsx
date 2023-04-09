@@ -23,8 +23,8 @@ const DatePickerComponent = ({label, format, onChange, classes, value, noMargin,
             label={label}
             views={views ? views : ["date"]}
             className={classNames(classes.datePicker, {[classes.marginBottom30]: !noMargin})}
-            minDate={moment(minDate)}
-            maxDate={moment(maxDate)}
+            minDate={minDate ? moment(minDate) : undefined}
+            maxDate={maxDate ? moment(maxDate) : undefined}
         />
     );
 }

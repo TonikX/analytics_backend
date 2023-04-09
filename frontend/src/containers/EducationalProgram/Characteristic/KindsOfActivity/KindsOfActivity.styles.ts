@@ -4,7 +4,7 @@ import {Theme} from "@mui/material";
 export default makeStyles((theme: Theme) => createStyles({
   label: {
     fontSize: '14px',
-    marginBottom: '10px',
+    marginBottom: '10px !important',
     color: 'rgba(0, 0, 0, 0.54)',
     display: 'flex',
     alignItems: 'center',
@@ -14,6 +14,9 @@ export default makeStyles((theme: Theme) => createStyles({
     '& svg': {
       marginLeft: '10px',
     }
+  },
+  dialogContent: {
+    padding: '10px 24px 20px 24px !important',
   },
   link: {
     color: '#fff'
@@ -39,7 +42,7 @@ export default makeStyles((theme: Theme) => createStyles({
     padding: 20,
   },
   marginBottom30: {
-    marginBottom: '30px'
+    marginBottom: '30px !important'
   },
   actions: {
     marginTop: '10px'

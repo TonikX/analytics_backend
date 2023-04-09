@@ -12,6 +12,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import IconButton from "@mui/material/IconButton";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 import Dialog from "@mui/material/Dialog";
 
 import ProfessionalStandardSelector from '../../../ProfessionalStandards/ProfessionalStandardSelector'
@@ -145,11 +146,13 @@ export default ({ characteristic, tableType, tableTitle }: Props) => {
         }}
       >
         <DialogTitle className={classes.title}>Добавить область</DialogTitle>
-        <ProfessionalStandardSelector
-          onChange={setProfStandard}
-          label="Профессиональный стандарт"
-          value={profStandard}
-        />
+        <DialogContent className={classes.dialogContent}>
+          <ProfessionalStandardSelector
+            onChange={setProfStandard}
+            label="Профессиональный стандарт"
+            value={profStandard}
+          />
+        </DialogContent>
         <DialogActions className={classes.actions}>
           <Button onClick={() => setOpenAddProfStandardModal(false)}
                   variant="text">

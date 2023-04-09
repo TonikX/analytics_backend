@@ -12,12 +12,12 @@ export default (theme: Theme) => createStyles({
         flexDirection: 'column'
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
+        fontSize: '24px !important',
         display: 'flex',
         justifyContent: 'space-between'
     },
     tableWrap: {
+        marginTop: '10px !important',
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
         '& td': {

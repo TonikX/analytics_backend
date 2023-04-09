@@ -4,13 +4,16 @@ import {Theme} from "@mui/material";
 export default makeStyles((theme: Theme) => createStyles({
   label: {
     fontSize: '14px',
-    marginBottom: '10px',
+    marginBottom: '10px !important',
     color: 'rgba(0, 0, 0, 0.54)',
     display: 'flex',
     alignItems: 'center',
     '& svg': {
       marginLeft: '10px',
     }
+  },
+  dialogContent: {
+    padding: '10px 24px 20px 24px !important',
   },
   tooltip: {
     fontSize: 14,
@@ -49,11 +52,12 @@ export default makeStyles((theme: Theme) => createStyles({
     textAlign: 'right',
   },
   wrapSelector: {
+    width: '100%',
     '& .MuiInputLabel-shrink': {
       transform: 'translate(13px, -6.5px) scale(0.75) !important',
     },
     '& .MuiOutlinedInput-notchedOutline legend': {
-      width: '170px !important'
+      width: '180px !important'
     },
   }
 }));

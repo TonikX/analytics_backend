@@ -10,6 +10,9 @@ export default (theme: Theme) => createStyles({
     dialog: {
         boxSizing: 'border-box',
     },
+    dialogContent: {
+        padding: '10px 24px 20px 24px !important',
+    },
     actions: {
         padding: '15px 24px 20px'
     },
