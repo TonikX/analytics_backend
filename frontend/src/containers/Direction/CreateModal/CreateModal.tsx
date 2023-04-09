@@ -108,7 +108,7 @@ class CreateModal extends React.PureComponent<CourseCreateModalProps> {
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} направление</DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Название *"
                                onChange={this.saveField(DirectionFields.TITLE)}
                                variant="outlined"
