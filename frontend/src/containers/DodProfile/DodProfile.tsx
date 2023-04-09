@@ -87,7 +87,7 @@ export default () => {
 
                     <div className={classes.tableWrap}>
                         <Table stickyHeader size='small'>
-                            <TableHead>
+                            <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell>
                                         Код
