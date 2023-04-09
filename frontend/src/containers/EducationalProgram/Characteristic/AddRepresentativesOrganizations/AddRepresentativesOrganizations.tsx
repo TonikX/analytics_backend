@@ -42,7 +42,7 @@ export const AddRepresentativesOrganizations = ({
       fullWidth
     >
       <DialogTitle>{defaultValues?.id ? 'Изменить' : 'Добавить'} представителя организации</DialogTitle>
-      <DialogContent>
+      <DialogContent className={classes.dialogContent}>
         <TextField
           label="Наименование организации"
           onChange={setOrganization}
@@ -57,6 +57,7 @@ export const AddRepresentativesOrganizations = ({
           label="ФИО представителя"
           onChange={setFio}
           defaultValue={fio}
+          noMargin
         />
       </DialogContent>
       <DialogActions

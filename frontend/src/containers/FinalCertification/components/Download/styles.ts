@@ -6,6 +6,6 @@ export default () => createStyles({
         display: 'flex',
     },
     marginRight: {
-        marginRight: '20px'
+        marginRight: '20px !important'
     }
 });

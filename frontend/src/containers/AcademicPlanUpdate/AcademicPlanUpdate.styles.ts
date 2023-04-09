@@ -10,6 +10,10 @@ export default () => createStyles({
         },
         '& p': {
             fontSize: '14px'
+        },
+        '& th': {
+            backgroundColor: '#1d51a3',
+            color: '#fff'
         }
     },
     additionalFunctionsWrap: {
@@ -85,6 +89,7 @@ export default () => createStyles({
             textDecoration: 'none'
         }
     },
+
     displayFlex: {
         display: 'flex',
     },

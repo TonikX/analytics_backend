@@ -127,7 +127,7 @@ class Roles extends React.Component<RolesProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <Pagination count={allCount}
+                    <Pagination count={Math.ceil(allCount / 10)}
                                 page={currentPage}
                                 //@ts-ignore
                                 onChange={this.handleChangePage}

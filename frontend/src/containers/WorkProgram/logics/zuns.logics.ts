@@ -57,15 +57,34 @@ const deleteZUN = createLogic({
     }
 });
 
+const updateZUNFull = createLogic({
+    type: workProgramActions.updateZUNFull.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ZUN}));
+
+        service.updateZUNFull(action.payload)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_ZUN}));
+                return done();
+            });
+    }
+});
+
 const updateZUN = createLogic({
     type: workProgramActions.updateZUN.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const state = getState()
-
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ZUN}));
 
-        service.updateZUN(action.payload)
+        service.updateZUN(action.payload, getWorkProgramId(getState()))
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgram());
                 dispatch(actions.fetchingSuccess());
@@ -83,5 +102,6 @@ const updateZUN = createLogic({
 export default [
     saveZUN,
     deleteZUN,
+    updateZUNFull,
     updateZUN,
 ];

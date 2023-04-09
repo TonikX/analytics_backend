@@ -2,7 +2,6 @@ import React from 'react';
 import get from 'lodash/get';
 import {withRouter} from "../../hoc/WithRouter";
 
-import {Link} from "react-router-dom";
 import Typography from '@mui/material/Typography';
 import CopyIcon from "@mui/icons-material/FileCopyOutlined";
 import CommentIcon from "@mui/icons-material/CommentOutlined";
@@ -122,7 +121,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.cloneWorkProgram(this.getWorkProgramId());
     }
 
-    getWorkProgramId = () => get(this, 'props.match.params.id') as number;
+    getWorkProgramId = () => get(this, 'props.params.id') as number;
 
     renderContent = () => {
         const {classes} = this.props;

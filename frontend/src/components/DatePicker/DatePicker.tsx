@@ -2,10 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 
-import DatePicker from '@mui/lab/DatePicker';
-import IconButton from "@mui/material/IconButton";
 import {withStyles} from '@mui/styles';
-import DateIcon from "@mui/icons-material/DateRange";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import {DatePickerProps} from './types';
 import {FULL_DATE_FORMAT} from "../../common/utils";
@@ -19,22 +17,14 @@ const DatePickerComponent = ({label, format, onChange, classes, value, noMargin,
 
     return (
         <DatePicker
-            value={value.length ? value : moment()}
+            value={moment(value)}
             onChange={handleChange}
-            InputProps={{
-                endAdornment: (
-                    <IconButton>
-                        <DateIcon />
-                    </IconButton>
-                ),
-            }}
-            inputVariant="outlined"
             format={format || FULL_DATE_FORMAT}
             label={label}
             views={views ? views : ["date"]}
             className={classNames(classes.datePicker, {[classes.marginBottom30]: !noMargin})}
-            minDate={minDate}
-            maxDate={maxDate}
+            minDate={minDate ? moment(minDate) : undefined}
+            maxDate={maxDate ? moment(maxDate) : undefined}
         />
     );
 }

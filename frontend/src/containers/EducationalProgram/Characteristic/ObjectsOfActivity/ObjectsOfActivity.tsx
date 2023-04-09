@@ -14,16 +14,17 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
+import DialogContent from "@mui/material/DialogContent";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
+import Tooltip from "@mui/material/Tooltip";
 
 import ObjectOfActivitySelector from '../ObjectOfActivitySelector'
 
 import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
+import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 import useStyles from './ObjectsOfActivity.styles'
-import QuestionIcon from "@mui/icons-material/HelpOutline";
-import Tooltip from "@mui/material/Tooltip";
-import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 export default ({ characteristic }: any) => {
   const classes = useStyles()
@@ -124,25 +125,27 @@ export default ({ characteristic }: any) => {
         }}
       >
         <DialogTitle className={classes.title}>Добавить объект профессиональной деятельности</DialogTitle>
-        <Typography className={classes.marginBottom30}>
-          Выберите существующий объект профессиональной деятельности или введите название нового
-        </Typography>
-        <ObjectOfActivitySelector
-          onChange={(value) => setSelectedObject(value)}
-          label="Выберите объект профессиональной деятельности"
-          value={selectedObject}
-          className={classes.marginBottom30}
-        />
-        <TextField
-          value={newObject}
-          onChange={(e) => setNewObject(e.target.value)}
-          label="Новый объект профессиональной деятельности"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-          fullWidth
-        />
+        <DialogContent className={classes.dialogContent}>
+          <Typography className={classes.marginBottom30}>
+            Выберите существующий объект профессиональной деятельности или введите название нового
+          </Typography>
+          <ObjectOfActivitySelector
+            onChange={(value) => setSelectedObject(value)}
+            label="Выберите объект профессиональной деятельности"
+            value={selectedObject}
+            className={classes.marginBottom30}
+          />
+          <TextField
+            value={newObject}
+            onChange={(e) => setNewObject(e.target.value)}
+            label="Новый объект профессиональной деятельности"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+            fullWidth
+          />
+        </DialogContent>
         <DialogActions className={classes.actions}>
           <Button onClick={() => setOpenModal(false)}
                   variant="text">

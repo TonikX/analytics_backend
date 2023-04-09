@@ -87,7 +87,7 @@ export default () => {
 
                     <div className={classes.tableWrap}>
                         <Table stickyHeader size='small'>
-                            <TableHead>
+                            <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell>
                                         Код
@@ -133,7 +133,7 @@ export default () => {
                     </div>
 
                     <div className={classes.footer}>
-                        <Pagination count={allCount}
+                        <Pagination count={Math.ceil(allCount / 10)}
                                     page={currentPage}
                                     onChange={handleChangePage}
                                     color="primary"

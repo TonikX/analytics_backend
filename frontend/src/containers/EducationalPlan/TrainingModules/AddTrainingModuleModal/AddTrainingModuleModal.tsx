@@ -197,7 +197,7 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                 })}
                             </>
                         </Scrollbars>
-                        <Pagination count={allCount}
+                        <Pagination count={Math.ceil(allCount / 10)}
                                     page={currentPage}
                                     onChange={this.handleChangePage}
                                     color="primary"

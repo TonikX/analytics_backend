@@ -23,12 +23,12 @@ export default (theme: Theme) => createStyles({
     },
     searchInputCode: {
         maxWidth: '110px',
-        marginRight: '20px'
+        marginRight: '20px !important'
     },
     searchInputText: {
         flex: 1,
     },
     searchButton: {
-        marginLeft: '20px'
+        marginLeft: '20px !important'
     }
 });

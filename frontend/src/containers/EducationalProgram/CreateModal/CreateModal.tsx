@@ -156,6 +156,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const disableSelector = !get(educationalProgram, [EducationProgramFields.YEAR]) || get(educationalProgram, [EducationProgramFields.QUALIFICATION, 'length']) === 0
         const isEditMode = Boolean(educationalProgram[EducationProgramFields.ID]);
+        const currentDate = new Date();
 
         return (
             <Dialog
@@ -168,12 +169,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 fullWidth
             >
                 <DialogTitle> {isEditMode ? 'Редактирование' : 'Создание'} общей характеристики образовательной программы</DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <DatePickerComponent label="Год *"
                                          views={["year"]}
                                          value={educationalProgram[EducationProgramFields.YEAR]}
                                          onChange={this.handleChangeYear}
                                          format={YEAR_DATE_FORMAT}
+                                         minDate={'1984'}
+                                         maxDate={(currentDate.getFullYear() + 3).toString()}
                     />
                     <QualificationSelector onChange={this.changeQualification}
                                            value={educationalProgram[EducationProgramFields.QUALIFICATION]}

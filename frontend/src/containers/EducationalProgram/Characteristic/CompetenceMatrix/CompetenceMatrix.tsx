@@ -259,7 +259,7 @@ const ContentByAcademicPlan = (
             <React.Fragment key={itemIndex}>
                 {/*Учебный план*/}
                 <TableRow className={classes.tableHeading}>
-                    <TableCell align="center" colSpan={7}>{item.name}</TableCell>
+                    <TableCell align="center" colSpan={7} style={{color: '#fff'}}>{item.name}</TableCell>
                 </TableRow>
                 {/*Модули учебного плана*/}
                 {item.modules_in_discipline_block.map((moduleBlock: DisciplineModule, blockIndex: number) =>

@@ -21,6 +21,7 @@ import Button from "@mui/material/Button";
 import {appRouter} from "../../service/router-service";
 import Comments from "../../components/Comments/Comments";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import {withRouter} from '../../hoc/WithRouter';
 
 export interface FinalCertificationProps extends WithStyles<typeof styles> {
   actions: CertificationActions,
@@ -40,7 +41,7 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
   stepList = STEPS.map(step => step.component);
   stepNameList = STEPS.map(step => step.name);
 
-  getCertificationId = () => get(this, 'props.match.params.id');
+  getCertificationId = () => get(this, 'props.params.id');
 
   componentDidMount() {
     this.getCertification();
@@ -208,4 +209,4 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
   }
 }
 // @ts-ignore
-export default connect(withStyles(styles)(FinalCertification));
+export default connect(withStyles(styles)(withRouter(FinalCertification)));

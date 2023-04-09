@@ -16,6 +16,7 @@ import {steps} from './constants';
 import {appRouter} from "../../../service/router-service";
 import LinkIcon from "@mui/icons-material/Link";
 import Tooltip from "@mui/material/Tooltip";
+import {withRouter} from '../../../hoc/WithRouter'
 
 import connect from './Characteristic.connect';
 import styles from './Characteristic.styles';
@@ -60,7 +61,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
   };
 
   componentDidMount() {
-    this.props.actions.getEducationalProgramCharacteristic(get(this.props, 'match.params.id'));
+    this.props.actions.getEducationalProgramCharacteristic(get(this.props, 'params.id'));
   }
 
   handleStep = (number: number) => () => {
@@ -516,7 +517,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             </>:
             <Button variant="outlined" size="small" onClick={() => this.setState({ addNewOP: true })}>Добавить образовательную программу</Button>
           ) : null}
-          <br /><br /><br />
+          <br /><br />
           <EducationalStandardSelector
             label="Образовательный стандарт"
             onChange={this.handleChangeEducationalStandard}
@@ -740,4 +741,4 @@ class Characteristic extends React.Component<CharacteristicProps> {
 }
 
 //@ts-ignore
-export default connect(withStyles(styles)(Characteristic));
+export default connect(withStyles(styles)(withRouter(Characteristic)));

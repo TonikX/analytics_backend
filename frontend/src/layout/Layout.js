@@ -8,8 +8,10 @@ import "moment/locale/ru";
 
 import {ThemeProvider} from '@mui/material/styles';
 import {withStyles} from '@mui/styles';
-import AdapterDateMoment from '@mui/lab/AdapterMoment';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+// import AdapterDateMoment from '@mui/lab/AdapterMoment';
+// import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 
 import UserService from '../service/user-service';
 
@@ -91,7 +93,7 @@ class Layout extends React.Component {
         if (isLandingPage) return this.props.children
 
         return (
-          <LocalizationProvider dateAdapter={AdapterDateMoment}>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
                 <SnackbarProvider maxSnack={3}>
                     <ThemeProvider theme={theme}>
                         <AbsoluteLoader isFetching={fetching} />

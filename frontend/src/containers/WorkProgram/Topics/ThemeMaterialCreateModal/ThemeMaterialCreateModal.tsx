@@ -37,6 +37,12 @@ class ThemeMaterialCreateModal extends React.PureComponent<ThemeCreateModalProps
 
     handleClose = () => {
         this.props.actions.closeDialog(fields.ADD_NEW_MATERIAL_TO_TOPIC);
+        this.setState({
+            id: null,
+            topicId: null,
+            title: '',
+            url: ''
+        })
     }
 
     handleSave = () => {
@@ -70,7 +76,7 @@ class ThemeMaterialCreateModal extends React.PureComponent<ThemeCreateModalProps
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} материал</DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Название материала *"
                                onChange={this.saveField('title')}
                                variant="outlined"
@@ -84,7 +90,6 @@ class ThemeMaterialCreateModal extends React.PureComponent<ThemeCreateModalProps
                     <TextField label="URL материала *"
                                onChange={this.saveField('url')}
                                variant="outlined"
-                               className={classes.input}
                                fullWidth
                                value={url}
                                InputLabelProps={{

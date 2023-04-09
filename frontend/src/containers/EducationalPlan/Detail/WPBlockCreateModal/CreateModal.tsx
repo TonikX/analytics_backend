@@ -12,7 +12,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import TextField from "@mui/material/TextField";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -29,9 +28,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
-// import ExpansionPanel from '@mui/material/ExpansionPanel';
-// import ExpansionPanelDetails from '@mui/material/ExpansionPanelDetails';
-// import ExpansionPanelSummary from '@mui/material/ExpansionPanelSummary';
+
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import AddIcon from "@mui/icons-material/Add";
@@ -789,121 +789,121 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     }
                                     {this.renderGia()}
                                     {this.renderPractice()}
-                                    {/*{blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((workProgram: any, wpIndex) =>*/}
-                                    {/*    <ExpansionPanel expanded={disableZUN ? false : expandedWorkProgram === wpIndex}*/}
-                                    {/*                    onChange={this.handleChangeExpandedWorkProgram(wpIndex)}*/}
-                                    {/*                    key={wpIndex}*/}
-                                    {/*    >*/}
-                                    {/*        <ExpansionPanelSummary*/}
-                                    {/*            expandIcon={disableZUN ? <></> : <ExpandMoreIcon />}*/}
-                                    {/*            aria-controls="panel1bh-content"*/}
-                                    {/*            id="panel1bh-header"*/}
-                                    {/*        >*/}
-                                    {/*            <Typography className={classes.workProgramItem}>{workProgram.label} <DeleteIcon onClick={this.handleRemoveWorkProgram(workProgram.value, workProgram.id)}/></Typography>*/}
-                                    {/*        </ExpansionPanelSummary>*/}
-                                    {/*        <ExpansionPanelDetails>*/}
-                                    {/*            <Table>*/}
-                                    {/*                <TableHead>*/}
-                                    {/*                    <TableRow>*/}
-                                    {/*                        <TableCell>Код компетенции</TableCell>*/}
-                                    {/*                        <TableCell>Код индикаторов</TableCell>*/}
-                                    {/*                        <TableCell>Результаты обучения</TableCell>*/}
-                                    {/*                        <TableCell />*/}
-                                    {/*                    </TableRow>*/}
-                                    {/*                </TableHead>*/}
-                                    {/*                <TableBody>*/}
-                                    {/*                    {workProgram[BlocksOfWorkProgramsFields.COMPETENCES] &&*/}
-                                    {/*                    workProgram[BlocksOfWorkProgramsFields.COMPETENCES].map((competence: any, index: number) => {*/}
+                                    {blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((workProgram: any, wpIndex) =>
+                                        <Accordion expanded={disableZUN ? false : expandedWorkProgram === wpIndex}
+                                                        onChange={this.handleChangeExpandedWorkProgram(wpIndex)}
+                                                        key={wpIndex}
+                                        >
+                                            <AccordionSummary
+                                                expandIcon={disableZUN ? <></> : <ExpandMoreIcon />}
+                                                aria-controls="panel1bh-content"
+                                                id="panel1bh-header"
+                                            >
+                                                <Typography className={classes.workProgramItem}>{workProgram.label} <DeleteIcon onClick={this.handleRemoveWorkProgram(workProgram.value, workProgram.id)}/></Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Table>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell>Код компетенции</TableCell>
+                                                            <TableCell>Код индикаторов</TableCell>
+                                                            <TableCell>Результаты обучения</TableCell>
+                                                            <TableCell />
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {workProgram[BlocksOfWorkProgramsFields.COMPETENCES] &&
+                                                        workProgram[BlocksOfWorkProgramsFields.COMPETENCES].map((competence: any, index: number) => {
 
-                                    {/*                        if (competence[BlocksOfWorkProgramsFields.INDICATORS].length === 0){*/}
-                                    {/*                            return <TableRow key={'indicator' + index}>*/}
-                                    {/*                                <TableCell className={classes.competenceCell}>{index + 1}. {competence.label}</TableCell>*/}
-                                    {/*                                <TableCell>*/}
-                                    {/*                                    <div className={classes.smallButton}*/}
-                                    {/*                                         onClick={this.handleOpenAddIndicatorsModal(workProgram.value, competence.value)}*/}
-                                    {/*                                    >*/}
-                                    {/*                                        <AddIcon/> Добавить индикатор*/}
-                                    {/*                                    </div>*/}
-                                    {/*                                </TableCell>*/}
-                                    {/*                                <TableCell />*/}
-                                    {/*                                <TableCell>*/}
-                                    {/*                                    <div className={classes.competenceButtons}>*/}
-                                    {/*                                        <DeleteIcon className={classes.iconButton}*/}
-                                    {/*                                                    onClick={this.deleteCompetence(workProgram.value, competence.value, competence.zunId, workProgram.id)}*/}
-                                    {/*                                        />*/}
-                                    {/*                                        <Tooltip title="Добавьте индикатор, чтобы сохранить"*/}
-                                    {/*                                                 classes={{popper: classes.tooltip}}*/}
-                                    {/*                                        >*/}
-                                    {/*                                            <SaveIcon className={classNames(classes.iconButton, classes.disableIcon)} />*/}
-                                    {/*                                        </Tooltip>*/}
-                                    {/*                                    </div>*/}
-                                    {/*                                </TableCell>*/}
-                                    {/*                            </TableRow>*/}
-                                    {/*                        }*/}
-                                    {/*                        return competence[BlocksOfWorkProgramsFields.INDICATORS].map((indicator: any, indicatorIndex: number) =>*/}
-                                    {/*                            <TableRow key={`indicator-${indicatorIndex}`}>*/}
-                                    {/*                                {indicatorIndex === 0 ?*/}
-                                    {/*                                    <TableCell*/}
-                                    {/*                                        className={classes.competenceCell}*/}
-                                    {/*                                        rowSpan={competence[BlocksOfWorkProgramsFields.INDICATORS].length}>*/}
-                                    {/*                                        {index + 1}. {competence.label}*/}
-                                    {/*                                    </TableCell>*/}
-                                    {/*                                    : <></>*/}
-                                    {/*                                }*/}
-                                    {/*                                <TableCell>*/}
-                                    {/*                                    {index + 1}.{indicatorIndex + 1} {indicator.label}*/}
-                                    {/*                                    <DeleteIcon className={classes.deleteIndicatorIcon}*/}
-                                    {/*                                                onClick={this.deleteIndicator(workProgram.value, competence.value, indicator.value)}*/}
-                                    {/*                                    />*/}
-                                    {/*                                    {indicatorIndex === competence[BlocksOfWorkProgramsFields.INDICATORS].length - 1 ?*/}
-                                    {/*                                        <div className={classes.smallButton}*/}
-                                    {/*                                             onClick={this.handleOpenAddIndicatorsModal(workProgram.value, competence.value)}*/}
-                                    {/*                                             style={{margin: '20px 0px 0px'}}*/}
-                                    {/*                                        >*/}
-                                    {/*                                            <AddIcon/> Добавить индикатор*/}
-                                    {/*                                        </div>*/}
-                                    {/*                                    :*/}
-                                    {/*                                        <></>*/}
-                                    {/*                                    }*/}
-                                    {/*                                </TableCell>*/}
-                                    {/*                                <TableCell className={classes.resultsCell}>*/}
-                                    {/*                                    {indicator[BlocksOfWorkProgramsFields.RESULTS].map((result: any, resultIndex: number) => (*/}
-                                    {/*                                            <div key={`result-${indicatorIndex}-${resultIndex}`}>*/}
-                                    {/*                                                {index + 1}.{indicatorIndex + 1}.{resultIndex + 1} {result.label}*/}
-                                    {/*                                                <DeleteIcon className={classes.deleteIndicatorIcon}*/}
-                                    {/*                                                            onClick={this.deleteResult(workProgram.value, competence.value, indicator.value, result.value)}*/}
-                                    {/*                                                />*/}
-                                    {/*                                            </div>*/}
-                                    {/*                                        ))*/}
-                                    {/*                                    }*/}
-                                    {/*                                    <div className={classes.smallButton} onClick={this.handleOpenAddResultsModal(workProgram.value, competence.value, indicator.value)}><AddIcon/> Связать результат</div>*/}
-                                    {/*                                </TableCell>*/}
-                                    {/*                                {indicatorIndex === 0 ?*/}
-                                    {/*                                    <TableCell rowSpan={competence[BlocksOfWorkProgramsFields.INDICATORS].length}>*/}
-                                    {/*                                        <div className={classes.competenceButtons}>*/}
-                                    {/*                                            <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value, competence.zunId, workProgram.value)} />*/}
-                                    {/*                                            <SaveIcon className={classes.iconButton}*/}
-                                    {/*                                                      onClick={this.saveToBeCompetence(workProgram.value, competence, workProgram.id)}*/}
-                                    {/*                                            />*/}
-                                    {/*                                        </div>*/}
-                                    {/*                                    </TableCell>*/}
-                                    {/*                                    : <></>*/}
-                                    {/*                                }*/}
-                                    {/*                            </TableRow>*/}
-                                    {/*                        )*/}
-                                    {/*                    })}*/}
-                                    {/*                    <TableRow>*/}
-                                    {/*                        <TableCell colSpan={4}>*/}
-                                    {/*                            <div className={classes.smallButton}*/}
-                                    {/*                                 onClick={this.handleOpenAddCompetenceModal(workProgram.value)}*/}
-                                    {/*                            ><AddIcon/> Добавить компетенцию</div>*/}
-                                    {/*                        </TableCell>*/}
-                                    {/*                    </TableRow>*/}
-                                    {/*                </TableBody>*/}
-                                    {/*            </Table>*/}
-                                    {/*        </ExpansionPanelDetails>*/}
-                                    {/*    </ExpansionPanel>*/}
-                                    {/*)}*/}
+                                                            if (competence[BlocksOfWorkProgramsFields.INDICATORS].length === 0){
+                                                                return <TableRow key={'indicator' + index}>
+                                                                    <TableCell className={classes.competenceCell}>{index + 1}. {competence.label}</TableCell>
+                                                                    <TableCell>
+                                                                        <div className={classes.smallButton}
+                                                                             onClick={this.handleOpenAddIndicatorsModal(workProgram.value, competence.value)}
+                                                                        >
+                                                                            <AddIcon/> Добавить индикатор
+                                                                        </div>
+                                                                    </TableCell>
+                                                                    <TableCell />
+                                                                    <TableCell>
+                                                                        <div className={classes.competenceButtons}>
+                                                                            <DeleteIcon className={classes.iconButton}
+                                                                                        onClick={this.deleteCompetence(workProgram.value, competence.value, competence.zunId, workProgram.id)}
+                                                                            />
+                                                                            <Tooltip title="Добавьте индикатор, чтобы сохранить"
+                                                                                     classes={{popper: classes.tooltip}}
+                                                                            >
+                                                                                <SaveIcon className={classNames(classes.iconButton, classes.disableIcon)} />
+                                                                            </Tooltip>
+                                                                        </div>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            }
+                                                            return competence[BlocksOfWorkProgramsFields.INDICATORS].map((indicator: any, indicatorIndex: number) =>
+                                                                <TableRow key={`indicator-${indicatorIndex}`}>
+                                                                    {indicatorIndex === 0 ?
+                                                                        <TableCell
+                                                                            className={classes.competenceCell}
+                                                                            rowSpan={competence[BlocksOfWorkProgramsFields.INDICATORS].length}>
+                                                                            {index + 1}. {competence.label}
+                                                                        </TableCell>
+                                                                        : <></>
+                                                                    }
+                                                                    <TableCell>
+                                                                        {index + 1}.{indicatorIndex + 1} {indicator.label}
+                                                                        <DeleteIcon className={classes.deleteIndicatorIcon}
+                                                                                    onClick={this.deleteIndicator(workProgram.value, competence.value, indicator.value)}
+                                                                        />
+                                                                        {indicatorIndex === competence[BlocksOfWorkProgramsFields.INDICATORS].length - 1 ?
+                                                                            <div className={classes.smallButton}
+                                                                                 onClick={this.handleOpenAddIndicatorsModal(workProgram.value, competence.value)}
+                                                                                 style={{margin: '20px 0px 0px'}}
+                                                                            >
+                                                                                <AddIcon/> Добавить индикатор
+                                                                            </div>
+                                                                        :
+                                                                            <></>
+                                                                        }
+                                                                    </TableCell>
+                                                                    <TableCell className={classes.resultsCell}>
+                                                                        {indicator[BlocksOfWorkProgramsFields.RESULTS].map((result: any, resultIndex: number) => (
+                                                                                <div key={`result-${indicatorIndex}-${resultIndex}`}>
+                                                                                    {index + 1}.{indicatorIndex + 1}.{resultIndex + 1} {result.label}
+                                                                                    <DeleteIcon className={classes.deleteIndicatorIcon}
+                                                                                                onClick={this.deleteResult(workProgram.value, competence.value, indicator.value, result.value)}
+                                                                                    />
+                                                                                </div>
+                                                                            ))
+                                                                        }
+                                                                        <div className={classes.smallButton} onClick={this.handleOpenAddResultsModal(workProgram.value, competence.value, indicator.value)}><AddIcon/> Связать результат</div>
+                                                                    </TableCell>
+                                                                    {indicatorIndex === 0 ?
+                                                                        <TableCell rowSpan={competence[BlocksOfWorkProgramsFields.INDICATORS].length}>
+                                                                            <div className={classes.competenceButtons}>
+                                                                                <DeleteIcon className={classes.iconButton} onClick={this.deleteCompetence(workProgram.value, competence.value, competence.zunId, workProgram.value)} />
+                                                                                <SaveIcon className={classes.iconButton}
+                                                                                          onClick={this.saveToBeCompetence(workProgram.value, competence, workProgram.id)}
+                                                                                />
+                                                                            </div>
+                                                                        </TableCell>
+                                                                        : <></>
+                                                                    }
+                                                                </TableRow>
+                                                            )
+                                                        })}
+                                                        <TableRow>
+                                                            <TableCell colSpan={4}>
+                                                                <div className={classes.smallButton}
+                                                                     onClick={this.handleOpenAddCompetenceModal(workProgram.value)}
+                                                                ><AddIcon/> Добавить компетенцию</div>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                    )}
                                     {get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 && gia.length === 0 && practice.length === 0 ?
                                         <Typography> Рабочих программ, ГИА или практик пока не добавлено</Typography>
                                         : <></>

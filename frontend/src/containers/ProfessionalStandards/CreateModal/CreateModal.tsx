@@ -88,7 +88,7 @@ class CreateModal extends React.PureComponent<ProfessionalStandardsCreateModalPr
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'}  профессиональный стандарт </DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Название профессионального стандарта *"
                                onChange={this.saveField(ProfessionalStandardFields.TITLE)}
                                variant="outlined"

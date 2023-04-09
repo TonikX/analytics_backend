@@ -14,7 +14,7 @@ export default (theme: Theme) => createStyles({
     rootHeader: {
         marginBottom: '20px',
         display: 'flex',
-        flexWrap: 'wrap'
+        justifyContent: 'space-between'
     },
     title: {
         fontSize: '24px !important',

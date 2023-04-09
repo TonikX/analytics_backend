@@ -66,7 +66,7 @@ class AddProfStandardsModal extends React.PureComponent<AddProfStandardsModalPro
             >
                 <DialogTitle>Добавить профессиональный стандарт</DialogTitle>
 
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <SearchSelector label="Профессиональный стандарт * "
                                     changeSearchText={this.handleChangeSearchText}
                                     list={profStandardsList}

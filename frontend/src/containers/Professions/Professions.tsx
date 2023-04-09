@@ -128,7 +128,7 @@ class Professions extends React.Component<ProfessionsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <Pagination count={allCount}
+                    <Pagination count={Math.ceil(allCount / 10)}
                                 page={currentPage}
                                 //@ts-ignore
                                 onChange={this.handleChangePage}

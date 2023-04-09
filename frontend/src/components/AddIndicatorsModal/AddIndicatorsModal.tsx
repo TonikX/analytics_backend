@@ -69,7 +69,7 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
             >
                 <DialogTitle>Добавить индикаторы</DialogTitle>
 
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <FormControl className={classes.selectorWrap}>
                         <InputLabel shrink id="section-label">
                             Индикаторы *

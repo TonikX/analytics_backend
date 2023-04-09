@@ -20,6 +20,7 @@ import SendToExpertise from "./components/SendToExpertise";
 import Button from "@mui/material/Button";
 import Comments from "../../components/Comments";
 import {appRouter} from "../../service/router-service";
+import {withRouter} from '../../hoc/WithRouter';
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -31,7 +32,7 @@ class Practice extends React.Component<PracticeProps> {
   stepList = STEPS.map(step => step.component);
   stepNameList = STEPS.map(step => step.name);
 
-  getPracticeId = () => get(this, 'props.match.params.id');
+  getPracticeId = () => get(this, 'props.params.id');
 
   componentDidMount() {
     this.getPractice();
@@ -196,4 +197,4 @@ class Practice extends React.Component<PracticeProps> {
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(Practice));
+export default connect(withStyles(styles)(withRouter(Practice)));

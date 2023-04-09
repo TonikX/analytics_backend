@@ -48,10 +48,11 @@ export default (theme: Theme) => createStyles({
     },
     dialogContent: {
         display: 'flex',
-        padding: '20px 48px',
+        padding: '90px 48px 20px 48px !important',
         justifyContent: 'space-between',
         overflowX: 'hidden',
-        height: 'calc(100% - 100px)'
+        height: 'calc(100% - 50px) !important',
+        boxSizing: "border-box",
     },
     leftSide: {
         width: '40%',
@@ -62,10 +63,10 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between'
     },
     numberInput: {
-        marginRight: '20px'
+        marginRight: '20px !important'
     },
     marginBottom30: {
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     weekTitle: {
         marginBottom: '20px'
@@ -80,7 +81,7 @@ export default (theme: Theme) => createStyles({
         '& .MuiOutlinedInput-notchedOutline legend': {
             width: '58px !important'
         },
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     typeSelector: {
         '& .MuiInputLabel-shrink': {
@@ -89,7 +90,7 @@ export default (theme: Theme) => createStyles({
         '& .MuiOutlinedInput-notchedOutline legend': {
             width: '38px !important'
         },
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     selector: {
         width: '500px'

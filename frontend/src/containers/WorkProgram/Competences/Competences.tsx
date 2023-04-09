@@ -9,7 +9,9 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
+import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add'
+import EditIcon from "@mui/icons-material/EditOutlined";
 
 import { rootState } from '../../../store/reducers'
 
@@ -17,11 +19,14 @@ import actions from '../actions'
 import {getWorkProgramCompetences, getWorkProgramId} from '../getters'
 
 import IndicatorsDialog from './IndicatorDialog'
+import {UpdateZunDialog} from './UpdateZunDialog'
+
 import { useStyles } from './Competences.styles'
 
 export default React.memo(() => {
   const dispatch = useDispatch()
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
+  const [isOpenUpdateZunDialog, setIsOpenUpdateZunDialog] = useState<any>(false)
   const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
 
   const competences = useSelector((state: rootState) => getWorkProgramCompetences(state))
@@ -43,8 +48,8 @@ export default React.memo(() => {
     }
   }, [workProgramId]);
 
-  const deleteCompetence = (competenceId: number) => {
-    dispatch(actions.deleteZUN(competenceId))
+  const deleteZun = (zunId: number) => {
+    dispatch(actions.deleteZUN(zunId))
   }
 
   return (
@@ -83,7 +88,7 @@ export default React.memo(() => {
         </TableHead>
         <TableBody>
           {competences.map((competence: any) => {
-            const zuns = get(competence, 'zuns', [])
+            const zuns = competence?.zuns ?? []
             const addIndicatorButton = (
               <div className={classes.smallButton}
                    onClick={() => {
@@ -97,19 +102,11 @@ export default React.memo(() => {
                 <AddIcon/> Добавить индикатор
               </div>
             )
-            const deleteCompetenceButton = (
-              <div className={classes.smallButton}
-                   onClick={() => deleteCompetence(competence.id)}
-              >
-                Удалить компетенцию
-              </div>
-            )
             if (zuns.length === 0){
               return (
                 <TableRow>
                   <TableCell className={classes.cell}>
                     {competence.number} {competence.name}
-                    {deleteCompetenceButton}
                   </TableCell>
                   <TableCell className={classes.cell}>
                     {addIndicatorButton}
@@ -124,12 +121,16 @@ export default React.memo(() => {
                   <TableCell rowSpan={zuns.length} className={classes.cell}>
                     {competence.number} {competence.name}
                     {addIndicatorButton}
-                    {deleteCompetenceButton}
                   </TableCell>
                   : <></>
                 }
                 <TableCell>
                   {zun?.indicator?.number} {zun?.indicator?.name}
+                  <div className={classes.smallButton}
+                       onClick={() => deleteZun(zun.id)}
+                  >
+                    Удалить индикатор
+                  </div>
                 </TableCell>
                 <TableCell className={classes.cell}>
                   {get(zun, 'items', []).map((item: any) => (
@@ -148,7 +149,10 @@ export default React.memo(() => {
                   )}
                 </TableCell>
                 <TableCell className={classes.cell}>
-                  {[get(zun, 'knowledge'), get(zun, 'skills'), get(zun, 'attainments')].filter(item => Boolean(item)).join(' / ')}
+                  {[zun?.knowledge, zun?.skills, zun?.attainments].filter(item => Boolean(item)).join(' / ')}
+                  <IconButton onClick={() => setIsOpenUpdateZunDialog(zun)}>
+                    <EditIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))
@@ -162,6 +166,16 @@ export default React.memo(() => {
         defaultCompetence={dialogCompetence}
         workProgramId={workProgramId}
       />
+      {isOpenUpdateZunDialog ?
+        <UpdateZunDialog
+          isOpen
+          handleClose={() => setIsOpenUpdateZunDialog(false)}
+          zunId={isOpenUpdateZunDialog.id}
+          defaultAttainments={isOpenUpdateZunDialog?.attainments}
+          defaultSkills={isOpenUpdateZunDialog?.skills}
+          defaultKnowledge={isOpenUpdateZunDialog?.knowledge}
+        /> : null
+      }
     </>
   )
 })

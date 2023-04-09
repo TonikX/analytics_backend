@@ -65,12 +65,14 @@ const updateUnreadCommentStatus = createAction('WORK_PROGRAM_UPDATE_UNREAD_COMME
 const saveZUN = createAction('WORK_PROGRAM_SAVE_ZUN');
 const deleteZUN = createAction('WORK_PROGRAM_DELETE_ZUN');
 const updateZUN = createAction('WORK_PROGRAM_UPDATE_ZUN');
+const updateZUNFull = createAction('WORK_PROGRAM_UPDATE_ZUN_FULL');
 
 const pageDown = createAction('WORK_PROGRAM_PAGE_DOWN');
 
 const actions: WorkProgramActions = {
     saveZUN,
     deleteZUN,
+    updateZUNFull,
     updateZUN,
 
     pageDown,

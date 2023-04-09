@@ -190,7 +190,7 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
         </div>
 
         <div className={classes.footer}>
-          <Pagination count={allCount }
+          <Pagination count={allCount / 10}
                       page={currentPage}
                       onChange={this.handleChangePage}
                       color="primary"

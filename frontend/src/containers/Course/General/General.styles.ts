@@ -4,17 +4,17 @@ import {Theme} from "@mui/material";
 export const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {},
   title: {
-    width: '80%',
-    fontSize: '24px',
+    width: '80% !important',
+    fontSize: '24px !important',
   },
   courseName: {
     fontWeight: 500,
   },
   textItem: {
-    marginBottom: '10px'
+    marginBottom: '10px !important'
   },
   description: {
-    marginBottom: '10px',
+    marginBottom: '10px !important',
   },
   content: {
     display: 'flex',
@@ -25,9 +25,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     width: '80%',
   },
   btn: {
-    minWidth: '120px',
+    minWidth: '120px !important',
     background: theme.palette.primary.main,
-    marginBottom: '20px',
+    marginBottom: '20px !important',
   },
   link: {
     minWidth: '120px',
@@ -36,7 +36,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   btnLink: {
     width: '100%',
     background: theme.palette.primary.main,
-    marginBottom: '20px',
+    marginBottom: '20px !important',
   },
   options: {
     width: '20%',

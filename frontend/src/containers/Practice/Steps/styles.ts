@@ -48,10 +48,10 @@ export default (theme: Theme) => createStyles({
         marginTop: '37px',
     },
     addIcon: {
-        marginTop: '10px',
-        marginLeft: 'auto',
-        flex: 'none',
-        marginBottom: '20px',
+        marginTop: '10px !important',
+        marginLeft: 'auto !important',
+        flex: 'none !important',
+        marginBottom: '20px !important',
     },
     list: {
         height: '100%',
@@ -112,13 +112,14 @@ export default (theme: Theme) => createStyles({
     editorTitle: {
         fontSize: '14px',
         fontWeight: 'bold',
-        marginBottom: 10
+        marginBottom: '10px !important'
     },
     dialog: {
         padding: 40,
     },
     addEditorButton: {
-        padding: '0px !important'
+        padding: '0px !important',
+        marginTop: '10px !important'
     },
 
     editorTitleRow: {

@@ -14,10 +14,13 @@ export default (theme: Theme) => createStyles({
     actions: {
         padding: '15px 24px 20px'
     },
+    dialogContent: {
+        padding: '10px 24px 20px 24px !important',
+    },
     dialog: {
         padding: 20,
     },
     marginBottom30: {
-        marginBottom: '30px'
+        marginBottom: '30px !important'
     },
 });

@@ -5,7 +5,7 @@ import {makeStyles} from "@mui/styles";
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     tableHeading: {
         background: theme.palette.primary.main,
-        color: 'white',
+        color: 'white !important',
     },
     tableHeight: {
         height: '1px', // dirty hack for td > div 100% height

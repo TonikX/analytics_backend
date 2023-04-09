@@ -55,7 +55,7 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                 <TableCell className={classes.header}>Образовательные программы</TableCell>
                 <TableCell className={classes.header}>Направления</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>
-                <TableCell />
+                <TableCell className={classes.header} />
               </TableRow>
             </TableHead>
             <TableBody>

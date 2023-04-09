@@ -30,8 +30,8 @@ export default (theme: Theme) => createStyles({
         marginRight: '20px'
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
+        fontSize: '24px !important',
+        marginBottom: '20px !important',
         display: 'flex',
         alignItems: 'center',
     },

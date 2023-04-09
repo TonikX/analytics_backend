@@ -79,7 +79,7 @@ export default (theme: Theme) => createStyles({
         fill: 'rgba(0, 0, 0, 0.54)'
     },
     menuLinkItem: {
-        padding: 0,
+        padding: '0px !important',
         '&>a': {
             padding: '6px 16px',
             display: 'flex',

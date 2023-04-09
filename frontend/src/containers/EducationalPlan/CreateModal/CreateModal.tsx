@@ -120,7 +120,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} учебный план</DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Образовательная программа *"
                                onChange={this.saveField(EducationalPlanFields.PROFILE)}
                                variant="outlined"

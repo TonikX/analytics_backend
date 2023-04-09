@@ -12,20 +12,20 @@ export const useStyles = makeStyles(() => createStyles({
         margin: '0px auto',
     },
     field: {
-        marginBottom: '20px'
+        marginBottom: '20px !important'
     },
     structuralUnitItem: {
         marginTop: '5px',
         marginRight: '5px',
     },
     structuralUnitsAddButton: {
-        marginTop: '10px',
+        marginTop: '10px !important',
     },
     dialog: {
         padding: '40px',
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
         textAlign: 'center',
     },
     emailHolder: {

@@ -20,6 +20,7 @@ import ConfirmDialog from "../../../components/ConfirmDialog";
 import SortingButton from "../../../components/SortingButton";
 import CreateModal from "./CreateModal";
 import {SortingType} from "../../../components/SortingButton/types";
+import {withRouter} from '../../../hoc/WithRouter'
 
 import {SkillsProps, SkillType} from '../types';
 import {ProfessionsFields} from '../enum';
@@ -40,7 +41,7 @@ class Skills extends React.Component<SkillsProps> {
         this.props.actions.getProfession(this.getProfessionId());
     }
 
-    getProfessionId = () => get(this, 'props.match.params.id', 0);
+    getProfessionId = () => get(this, 'props.params.id', 0);
 
     handleClickDelete = (id: number) => () => {
         this.setState({
@@ -145,7 +146,7 @@ class Skills extends React.Component<SkillsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <Pagination count={allCount}
+                    <Pagination count={Math.ceil(allCount / 10)}
                                 page={currentPage}
                                 onChange={this.handleChangePage}
                                 color="primary"
@@ -175,4 +176,4 @@ class Skills extends React.Component<SkillsProps> {
 }
 
 //@ts-ignore
-export default connect(withStyles(styles)(Skills));
+export default connect(withStyles(styles)(withRouter(Skills)));

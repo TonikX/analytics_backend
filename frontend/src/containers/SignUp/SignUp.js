@@ -59,9 +59,9 @@ class SignUp extends React.PureComponent{
             <div className={classes.root}>
                 <div className={classes.form}>
                     <div className={classes.tabs}>
-                        <Link to={appRouter.getSignInRoute}>
+                        <Link to={appRouter.getSignInRoute()}>
                             <Typography>
-                                    Вход
+                                Вход
                             </Typography>
                         </Link>
                         <Typography className={classes.activeTab}>

@@ -23,7 +23,7 @@ module.exports = function override(config, env) {
     config.plugins.push(
         new CopyWebpackPlugin({
             patterns: [
-                {from: 'src/ckeditor_plugins/openlink', to: 'openlink'}
+                { from: 'src/ckeditor_plugins/openlink', to: 'openlink' }
             ]
         }),
         new webpack.ProvidePlugin({

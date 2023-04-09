@@ -13,7 +13,7 @@ export default ({
   isOpen, closeDialog, saveDialog
 }: any) => {
   const [laborFunction, setLaborFunction] = useState<number|undefined>()
-  const classes = useStyles();
+  const classes = useStyles() as any;
 
   const handleSave = () => {
     saveDialog(laborFunction)
@@ -35,7 +35,7 @@ export default ({
       fullWidth
     >
       <DialogTitle>Добавить трудовую функцию</DialogTitle>
-      <DialogContent>
+      <DialogContent className={classes.dialogContent}>
         <LaborFunctionSelector
           onChange={(value, label) => setLaborFunction(value)}
           label="Трудовая функция"

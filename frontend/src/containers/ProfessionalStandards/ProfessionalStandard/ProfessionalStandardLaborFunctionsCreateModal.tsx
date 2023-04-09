@@ -46,7 +46,7 @@ export default ({ isOpen, handleCloseModal, laborFunction }: any,) => {
     return (
         <Dialog open={isOpen}>
             <DialogTitle> {laborFunction?.id ? 'Редактировать трудовую функцию' : 'Создать трудовую функцию'} </DialogTitle>
-            <DialogContent>
+            <DialogContent className={classes.dialogContent}>
                 <TextField
                     label="Код"
                     onChange={e => setCode(e.target.value)}

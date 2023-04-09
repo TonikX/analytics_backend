@@ -29,6 +29,7 @@ import ChangePlanModal from '../CreateModal';
 import ModuleModal from "./ModuleModal";
 import DownloadFileModal from "./DownloadFileModal";
 import AddTrainingModuleModal from "../TrainingModules/AddTrainingModuleModal";
+import {withRouter} from "../../../hoc/WithRouter";
 
 import DetailHeader from './DetailHeader/DetailHeader';
 import actions from "../actions";
@@ -72,12 +73,12 @@ import UserSelector from "../../Profile/UserSelector/UserSelector";
 const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
 
 const SortableItem = SortableElement((props:any) => {
-  const {detailPlan, canEdit, blockId, handleDisconnectModule, module} = props;
+  const {detailPlan, canEdit, blockId, handleDisconnectModule, module, classes} = props;
 
   const renderModule = (module:any, level:number):any => {
     const selectionRule = selectRulesArray.find(type => type.value === module?.selection_rule)?.label
     const selectionParameter = module?.selection_parametr
-    console.log('module?.childs', module?.childs)
+
     return (
       <>
         <TableRow tabIndex={0}>
@@ -314,7 +315,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     this.props.actions.pageDown();
   }
 
-  getPlanId = () => get(this, 'props.match.params.id');
+  getPlanId = () => get(this, 'props.params.id');
 
   handleClickBlockDelete = (id: number, length: number) => () => {
     this.setState({
@@ -466,7 +467,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                 </TableRow>
               </TableHead>
             </Table>
-                {blocks.map(block => {
+            {blocks.map(block => {
                   return (
                     <>
                       <Table stickyHeader size='small'>
@@ -500,7 +501,6 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     </>
                   )
                 })}
-              
           </div>
         </Scrollbars>
 
@@ -753,4 +753,4 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(EducationalPlan));
+export default connect(withStyles(styles)(withRouter(EducationalPlan)));

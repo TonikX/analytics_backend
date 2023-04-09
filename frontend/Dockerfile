@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:13.12.0-alpine
+FROM node:16.10.0-alpine
 
 # set working directory
 WORKDIR /app
@@ -14,7 +14,7 @@ COPY package-lock.json ./
 #RUN rm -rf node_modules
 #RUN npm cache clean -f
 RUN npm install
-RUN npm install react-scripts -g
+RUN npm install react-app-rewired -g
 
 # add app
 COPY . ./

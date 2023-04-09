@@ -1,7 +1,6 @@
-import {Theme} from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 
-export default (theme: Theme) => createStyles({
+export default () => createStyles({
     bars: {
         '& .Mui-checked': {
             color: '#950020',
@@ -19,7 +18,7 @@ export default (theme: Theme) => createStyles({
     },
     input: {
         width: '100%',
-        marginBottom: '20px'
+        marginBottom: '20px !important'
     },
     marginRight: {
         marginRight: '20px'
@@ -51,12 +50,12 @@ export default (theme: Theme) => createStyles({
     },
     editorItem: {
         marginRight: '5px',
-        marginBottom: '10px'
+        marginBottom: '10px !important'
     },
     editorTitle: {
         fontSize: '14px',
         fontWeight: 'bold',
-        marginBottom: 10
+        marginBottom: '10px !important'
     },
     dialog: {
         padding: 40,
@@ -65,6 +64,7 @@ export default (theme: Theme) => createStyles({
         padding: '0px !important'
     },
     radioGroup: {
-        flexDirection: 'row'
+        // @ts-ignore
+        flexDirection: 'row !important'
     }
 });

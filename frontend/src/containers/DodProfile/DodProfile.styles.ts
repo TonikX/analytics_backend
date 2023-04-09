@@ -12,7 +12,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
-
     },
     title: {
         fontSize: '24px !important',
@@ -21,10 +20,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         display: 'flex',
     },
     header: {
-        background: theme.palette.primary.main,
+        background: `${theme.palette.primary.main} !important`,
         '& th': {
-            color: '#fff',
-            background: theme.palette.primary.main,
+            color: '#fff !important',
+            background: `${theme.palette.primary.main} !important`,
             fontWeight: '400',
             fontSize: '14px',
             padding: '0px 10px !important',

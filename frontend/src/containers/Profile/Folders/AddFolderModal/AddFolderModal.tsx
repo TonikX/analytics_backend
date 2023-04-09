@@ -56,7 +56,7 @@ class AddFolderModal extends React.PureComponent<AddFolderModalProps> {
                 }}
             >
                 <DialogTitle> Создать папку </DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextFieldComponent onChange={this.changeName}
                                         label="Название"
                     />
