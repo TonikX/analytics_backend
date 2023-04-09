@@ -179,7 +179,7 @@ export default (theme: Theme) => createStyles({
   },
   tableHeader: {
     position: 'fixed',
-    width: 'Calc(100% - 100px)',
+    width: 'Calc(100% - 100px) !important',
     marginTop: '-23px'
   }
 });

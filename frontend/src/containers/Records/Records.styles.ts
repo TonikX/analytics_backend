@@ -54,13 +54,13 @@ export default (theme: Theme) =>createStyles({
     },
     Btn: {
         width: '250px',
-        height: '30px',
-        marginRight: '20px',
+        height: '30px !important',
+        marginRight: '20px !important',
         backgroundColor: theme.palette.primary.main,
-        color: '#fff',
-        textDecoration: 'uppercase',
-        fontSize: '15px',
-        marginBottom: '20px'
+        color: '#fff !important',
+        textDecoration: 'uppercase !important',
+        fontSize: '15px !important',
+        marginBottom: '20px !important'
     },
     accordionSummary: {
         backgroundColor: 'rgba(0, 0, 0, .03)',
@@ -76,10 +76,10 @@ export default (theme: Theme) =>createStyles({
         flexDirection: 'column'
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
-        display: 'flex',
-        justifyContent: 'space-between'
+        fontSize: '24px !important',
+        marginBottom: '20px !important',
+        display: 'flex !important',
+        justifyContent: 'space-between !important'
     },
     actions: {
         display: 'flex',

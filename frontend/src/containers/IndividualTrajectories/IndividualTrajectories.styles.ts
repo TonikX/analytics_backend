@@ -75,6 +75,6 @@ export default (theme: Theme) => createStyles({
         }
     },
     searchWrap: {
-        marginLeft: 'auto'
+        marginLeft: 'auto !important'
     }
 });
