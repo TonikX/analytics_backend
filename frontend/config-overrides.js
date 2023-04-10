@@ -21,11 +21,11 @@ module.exports = function override(config, env) {
     config.resolve.fallback = fallback;
 
     config.plugins.push(
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: 'src/ckeditor_plugins/openlink', to: 'openlink' }
-            ]
-        }),
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         { from: 'src/ckeditor_plugins/openlink', to: 'openlink' }
+        //     ]
+        // }),
         new webpack.ProvidePlugin({
             process: 'process/browser',
             Buffer: ['buffer', 'Buffer']

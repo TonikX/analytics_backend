@@ -40,10 +40,11 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
         },
       }
 
-      return <>Текстовый редактор временно недоступен</>
+      // return <>Текстовый редактор временно недоступен</>
 
     return (
-      <>
+      <div style={{position: 'relative'}}>
+        {readOnly ? <div style={{width: '100%', height: 'calc(100% - 30px)', position: 'absolute', zIndex: 1}} /> : null}
         <CKEditor
             config={config}
             editor={ClassicEditor}
@@ -51,12 +52,19 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            disabled={readOnly}
-            // onBeforeLoad={(CKEDITOR: any) => {
-            //     CKEDITOR.plugins.addExternal( 'openlink', '/openlink/plugin.js');
-            //     // fix play video from Media Embed
-            //     CKEDITOR.addCss('.cke_widget_wrapper iframe{z-index:9999;}');
-            // }}
+            // disabled={Boolean(readOnly)}
+            onReady={(editor: any) => {
+                // CKEDITOR.plugins.addExternal( 'openlink', '/openlink/plugin.js');
+                // fix play video from Media Embed
+                // CKEDITOR.addCss('.cke_widget_wrapper iframe{z-index:9999;}');
+                // editor.editing.view.change((writer: any) => {
+                //   writer.setStyle(
+                //     "height",
+                //     "400px",
+                //     editor.editing.view.document.getRoot()
+                //   );
+                // });
+            }}
             // style={style}
         />
         <div style={{marginTop: '10px'}}>
@@ -68,7 +76,7 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
             <ErrorOutlineIcon style={{ color: '#ec1946' }} />
           </Tooltip>
         </div>
-      </>
+      </div>
     )
 }
 

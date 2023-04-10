@@ -163,8 +163,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
     })
   }
 
-  handleChangeSKEEditorField = (field: string) => (event: any) => {
-    const data: string = event.editor.getData()
+  handleChangeSKEEditorField = (field: string) => (event: any, editor: any) => {
+    const data: string = editor.getData()
     this.props.actions.changeEducationalProgramCharacteristic({
       id: this.getEducationalProgramCharacteristicId(),
       educationalProgramId: this.getEducationalProgramId(),

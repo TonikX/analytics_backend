@@ -48,7 +48,7 @@ export default (theme: Theme) => createStyles({
     },
     dialogContent: {
         display: 'flex',
-        padding: '20px 48px 20px 48px !important',
+        padding: '70px 48px 20px 48px !important',
         justifyContent: 'space-between',
         overflowX: 'hidden',
         height: 'calc(100% - 50px) !important',
