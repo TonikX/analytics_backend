@@ -8,16 +8,12 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 
 # install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-#RUN rm package-lock.json
-#RUN rm -rf node_modules
-#RUN npm cache clean -f
+COPY package.json .
+RUN npm cache clean
 RUN npm install
-RUN npm install react-app-rewired -g
 
 # add app
-COPY . ./
+COPY . .
 
 # start app
 CMD ["npm", "start"]
