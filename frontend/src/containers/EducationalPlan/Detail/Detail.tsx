@@ -459,7 +459,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
             <Table stickyHeader size='small' className={classes.tableHeader}>
               <TableHead className={classes.header}>
                 <TableRow>
-                  <TableCell style={{ width: '74%'}}> Название </TableCell>
+                  <TableCell style={{ width: '54%'}}> Название </TableCell>
                   <TableCell style={{ width: '7%', minWidth: '125px'}}> Зачетные единицы </TableCell>
                   <TableCell style={{ width: '7%', minWidth: '90px'}}> Семестр начала </TableCell>
                   <TableCell style={{ width: '7%', minWidth: '90px'}}> Обязательность </TableCell>

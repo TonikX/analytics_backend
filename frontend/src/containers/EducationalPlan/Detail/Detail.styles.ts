@@ -73,8 +73,8 @@ export default (theme: Theme) => createStyles({
     '& th': {
       color: '#fff',
       background: theme.palette.primary.main,
-      fontWeight: '400',
-      fontSize: '14px',
+      fontWeight: '400 !important',
+      fontSize: '14px !important',
       padding: '0px 10px !important',
     }
   },
@@ -180,6 +180,9 @@ export default (theme: Theme) => createStyles({
   tableHeader: {
     position: 'fixed',
     width: 'Calc(100% - 100px) !important',
-    marginTop: '-23px'
+    marginTop: '-23px',
+    '& th': {
+        fontSize: '12px !important',
+    }
   }
 });

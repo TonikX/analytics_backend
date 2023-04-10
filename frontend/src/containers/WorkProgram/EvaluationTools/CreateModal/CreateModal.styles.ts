@@ -74,6 +74,10 @@ export default (theme: Theme) => createStyles({
     },
     rightSide: {
         width: '55%',
+        height: "calc(100vh - 280px) !important",
+        '& .ck-content': {
+            height: "calc(100vh - 280px) !important",
+        }
     },
     sectionSelector: {
         '& .MuiInputLabel-shrink': {
@@ -104,5 +108,5 @@ export default (theme: Theme) => createStyles({
         position: 'relative',
         top: '5px',
         left: '5px'
-    }
+    },
 });
