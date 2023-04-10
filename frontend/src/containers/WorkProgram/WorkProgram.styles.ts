@@ -73,17 +73,21 @@ export default (theme: Theme) => createStyles({
         }
     },
     commentButton: {
-        position: "fixed",
+        //@ts-ignore
+        position: "fixed !important",
         right: '80px',
         bottom: '54px'
     },
     comments: {
-        position: "fixed",
+        //@ts-ignore
+        position: "fixed !important",
         right: '80px',
-        bottom: '100px',
+        bottom: '140px',
         width: '350px',
-        height: '500px',
-        boxShadow: '0px 0px 36px 1px rgb(143 143 143 / 30%)'
+        height: '35%',
+        minHeight: '300px',
+        boxShadow: '0px 0px 36px 1px rgb(143 143 143 / 30%)',
+        zIndex: 1,
     },
     rotateIcon: {
         transform: 'rotate(360deg)',

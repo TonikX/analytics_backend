@@ -2,9 +2,9 @@ export interface CKEditorProps {
     value: string;
     // label: string;
     toolbarContainerId?: string;
-    onChange?: Function;
-    onFocus?: Function;
-    onBlur?: Function;
+    onChange?: any;
+    onFocus?: any;
+    onBlur?: any;
     noMargin?: boolean;
     useFormulas?: boolean;
     toolbarIcons?: Array;
