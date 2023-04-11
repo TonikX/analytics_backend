@@ -73,6 +73,13 @@ def post_gia_to_isu(token, gia, ap_id):
         practice_dict["lang_id"] = 1
     else:
         practice_dict["lang_id"] = 4
+
+    if practice_dict["name_ru"] == "preparation":
+        practice_dict["name_ru"] = "Подготовка к защите и защита ВКР"
+    elif practice_dict["name_ru"] == "preparation-en":
+        practice_dict["name_ru"] = "Подготовка к защите и защита ВКР"
+        practice_dict["name_en"] = "Preparation for Thesis Defense and Thesis Defense"
+
     practice_dict["type_id"] = 3
     practice_dict["format_id"] = 1
     practice_dict["rpd_url"] = "https://op.itmo.ru/gia/" + str(gia.id)
