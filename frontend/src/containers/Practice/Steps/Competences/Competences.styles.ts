@@ -1,4 +1,5 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
   smallButton: {
@@ -12,10 +13,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     width: '25%'
   },
   header: {
-    background: theme.palette.primary.main,
-    color: '#fff',
-    fontWeight: 400,
-    height: '45px'
+    background: `${theme.palette.primary.main} !important`,
+    color: '#fff !important',
+    fontWeight: '400 !important',
+    height: '45px !important',
+    padding: '0 10px !important',
   },
   deleteIcon: {
     position: 'relative',
@@ -26,10 +28,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   addZUNButton: {
-    marginLeft: 'auto'
+    marginLeft: 'auto !important'
   },
   subTitle: {
-    marginBottom: '6px',
+    marginBottom: '6px !important',
     fontSize: '20px',
     display: 'flex',
     alignItems: 'center'

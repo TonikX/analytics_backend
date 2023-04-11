@@ -1,25 +1,26 @@
 import React from 'react';
 import get from 'lodash/get';
-import Scrollbars from "react-custom-scrollbars";
-import {AutoSizer} from 'react-virtualized';
+import Scrollbars from "react-custom-scrollbars-2";
+// @ts-ignore
+import {AutoSizer} from 'react-virtualized-reactv17';
 import classNames from "classnames";
 
 import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
 
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
-import AddIcon from '@material-ui/icons/Add';
-import withStyles from '@material-ui/core/styles/withStyles';
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import AddIcon from '@mui/icons-material/Add';
+import {withStyles} from '@mui/styles';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 import EditedRow from "./EditedRow";
 
@@ -134,7 +135,9 @@ class Sections extends React.PureComponent<SectionsProps> {
   }
 
   render() {
-    const {classes, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat, contactHours, consultationHours} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat, contactHours, consultationHours} = this.props;
     const {createNewSectionMode} = this.state;
 
     const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
@@ -166,7 +169,7 @@ class Sections extends React.PureComponent<SectionsProps> {
       <div className={classes.secondStep}>
         <TableContainer className={classes.table}>
           <AutoSizer disableHeight>
-            {({ width, height }) => (
+            {({ width, height }: any) => (
               <Scrollbars style={{width, height}}  ref={(el) => {this.scrollBar = el}} autoHeight autoHeightMax={Number.MAX_VALUE}>
                 <Table>
                   <TableHead>

@@ -1,30 +1,30 @@
 import React from "react";
-import Paper from '@material-ui/core/Paper';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Paper from '@mui/material/Paper';
+import {withStyles} from '@mui/styles';
 
 import styles from "./PracticeList.styles";
 import connect from './PracticeList.connect';
 import {PracticeListProps} from "./types";
-import AddIcon from "@material-ui/icons/Add";
-import Fab from "@material-ui/core/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import Fab from "@mui/material/Fab";
 import CreateModal from "./CreateModal";
 import {appRouter} from "../../../service/router-service";
 import {Link} from "react-router-dom";
 import {PracticeFields} from "../enum";
-import Scrollbars from "react-custom-scrollbars";
-import {Table} from "@material-ui/core";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableBody from "@material-ui/core/TableBody";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import Scrollbars from "react-custom-scrollbars-2";
+import {Table} from "@mui/material";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import get from "lodash/get";
 import debounce from "lodash/debounce";
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 import classNames from "classnames";
-import ArrowDown from "@material-ui/icons/ArrowDropDown";
+import ArrowDown from "@mui/icons-material/ArrowDropDown";
 import {RussianPracticeFields} from "../constants";
 
 class PracticeList extends React.Component<PracticeListProps> {
@@ -64,7 +64,9 @@ class PracticeList extends React.Component<PracticeListProps> {
 
 
     render() {
-        const {classes, practiceList, sortingField, practiceCount, currentPage} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {practiceList, sortingField, practiceCount, currentPage} = this.props;
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
@@ -166,4 +168,5 @@ class PracticeList extends React.Component<PracticeListProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(PracticeList));

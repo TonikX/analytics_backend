@@ -4,12 +4,12 @@ import {Moment} from "moment";
 
 import {CreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
 
 import DatePickerComponent from "../../../components/DatePicker";
 import EducationPlanInDirectionSelector from "../../EduationPlanInDirection/EducationPlanInDirectionSelector";
@@ -24,7 +24,7 @@ import styles from './CreateModal.styles';
 import QualificationSelector from "../../../components/QualificationSelector";
 import UserSelector from "../../Profile/UserSelector";
 import {filterFields} from "../../EduationPlanInDirection/enum";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -156,6 +156,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
         const disableSelector = !get(educationalProgram, [EducationProgramFields.YEAR]) || get(educationalProgram, [EducationProgramFields.QUALIFICATION, 'length']) === 0
         const isEditMode = Boolean(educationalProgram[EducationProgramFields.ID]);
+        const currentDate = new Date();
 
         return (
             <Dialog
@@ -168,12 +169,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 fullWidth
             >
                 <DialogTitle> {isEditMode ? 'Редактирование' : 'Создание'} общей характеристики образовательной программы</DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <DatePickerComponent label="Год *"
                                          views={["year"]}
                                          value={educationalProgram[EducationProgramFields.YEAR]}
                                          onChange={this.handleChangeYear}
                                          format={YEAR_DATE_FORMAT}
+                                         minDate={'1984'}
+                                         maxDate={(currentDate.getFullYear() + 3).toString()}
                     />
                     <QualificationSelector onChange={this.changeQualification}
                                            value={educationalProgram[EducationProgramFields.QUALIFICATION]}
@@ -208,4 +211,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

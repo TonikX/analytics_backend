@@ -24,7 +24,8 @@ const getRolesList = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_ROLES}));
 
-        service.getRoles(currentPage, searchQuery, sortingField, sortingMode)
+        // @ts-ignore
+      service.getRoles(currentPage, searchQuery, sortingField, sortingMode)
             .then((res) => {
                 const courses = get(res, 'data.results', []);
                 const allPages = Math.ceil(get(res, 'data.count', 0));

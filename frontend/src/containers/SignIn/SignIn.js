@@ -1,15 +1,14 @@
 import React from 'react';
-import {Redirect} from "react-router";
-import {Link} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 import PropTypes from "prop-types";
 import get from 'lodash/get';
-import {withRouter} from 'react-router-dom';
+import {withRouter} from '../../hoc/WithRouter';
 
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Typography  from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Tooltip from "@material-ui/core/Tooltip";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography  from '@mui/material/Typography';
+import {withStyles} from '@mui/styles';
+import Tooltip from "@mui/material/Tooltip";
 
 import {appRouter} from '../../service/router-service';
 
@@ -57,9 +56,11 @@ class SignIn extends React.PureComponent{
     }
 
     render() {
-        const {classes, disableButton, auth} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {disableButton, auth} = this.props;
 
-        if (auth) return <Redirect to={appRouter.getEducationPlanRoute()} />;
+        if (auth) return <Navigate to={appRouter.getEducationPlanRoute()} />;
 
         return(
             <div className={classes.root}
@@ -70,7 +71,7 @@ class SignIn extends React.PureComponent{
                         <Typography className={classes.activeTab}>
                             Вход
                         </Typography>
-                        <Link to={appRouter.getSignUpRoute}>
+                        <Link to={appRouter.getSignUpRoute()}>
                             <Typography>
                                 Регистрация
                             </Typography>

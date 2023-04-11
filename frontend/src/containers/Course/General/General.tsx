@@ -1,9 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import { Scrollbars } from 'react-custom-scrollbars'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useStyles } from './General.styles'
 
 import { getCourse } from '../getters'

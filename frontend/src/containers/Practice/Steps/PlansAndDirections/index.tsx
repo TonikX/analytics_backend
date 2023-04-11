@@ -1,17 +1,17 @@
 import React from "react";
 import {PracticeSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from './PlansAndDirections.styles';
-import {Typography, WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {PracticeActions, PracticeState} from "../../types";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import {Link} from "react-router-dom";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableBody from "@material-ui/core/TableBody";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
+import TableBody from "@mui/material/TableBody";
 
 import {appRouter} from '../../../../service/router-service';
 
@@ -22,7 +22,9 @@ interface GeneralInfoProps extends WithStyles<typeof styles> {
 
 class PlansAndDirections extends React.Component<GeneralInfoProps> {
   render() {
-    const {classes, fields} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {fields} = this.props;
 
     return (
       <div>
@@ -117,4 +119,5 @@ class PlansAndDirections extends React.Component<GeneralInfoProps> {
   }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(PlansAndDirections));

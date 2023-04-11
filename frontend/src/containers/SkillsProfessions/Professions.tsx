@@ -1,18 +1,18 @@
 import React from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import get from "lodash/get";
 import debounce from "lodash/debounce";
 import classNames from 'classnames';
 
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Typography from "@material-ui/core/Typography";
-import Chip from "@material-ui/core/Chip";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import TextField from "@material-ui/core/TextField";
+import Paper from '@mui/material/Paper';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import TextField from "@mui/material/TextField";
+
+import {withStyles} from '@mui/styles';
 
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
@@ -22,14 +22,15 @@ import {ProfessionsFields} from './enum';
 
 import connect from './Professions.connect';
 import styles from './Professions.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class Professions extends React.Component<ProfessionsProps> {
     componentDidMount() {
         this.props.actions.getProfessionsList();
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getProfessionsList();
     }
 
@@ -49,7 +50,9 @@ class Professions extends React.Component<ProfessionsProps> {
     }, 300);
 
     render() {
-        const {classes, professionsList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {professionsList, allCount, currentPage, sortingField, sortingMode} = this.props;
 
         return (
             <Paper className={classes.root}>
@@ -102,14 +105,10 @@ class Professions extends React.Component<ProfessionsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
                 </div>
             </Paper>
@@ -117,4 +116,5 @@ class Professions extends React.Component<ProfessionsProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Professions));

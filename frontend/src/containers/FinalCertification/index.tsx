@@ -1,14 +1,14 @@
 import React from "react";
-import {Paper, WithStyles} from "@material-ui/core";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {Paper} from "@mui/material";
+import {WithStyles, withStyles} from "@mui/styles";
 import styles from "./styles";
-import {Link, RouteComponentProps, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {CertificationActions, CertificationState, PermissionsInfoState} from "./types";
 import connect from "./connect";
 import get from "lodash/get";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepButton from "@material-ui/core/StepButton";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
 import {CertificationFields} from "./enum";
 import ErrorPage from "../../components/ErrorPage";
 import Download from "./components/Download";
@@ -17,12 +17,13 @@ import {STEPS} from "./constants";
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import {ExpertiseStatus, PermissionsInfoFields} from "./enum";
 import {CommentType} from "./types";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import {appRouter} from "../../service/router-service";
 import Comments from "../../components/Comments/Comments";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import {withRouter} from '../../hoc/WithRouter';
 
-export interface FinalCertificationProps extends WithStyles<typeof styles>, RouteComponentProps {
+export interface FinalCertificationProps extends WithStyles<typeof styles> {
   actions: CertificationActions,
   certification: CertificationState,
   isError: boolean,
@@ -40,7 +41,7 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
   stepList = STEPS.map(step => step.component);
   stepNameList = STEPS.map(step => step.name);
 
-  getCertificationId = () => get(this, 'props.match.params.id');
+  getCertificationId = () => get(this, 'props.params.id');
 
   componentDidMount() {
     this.getCertification();
@@ -97,7 +98,9 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
   }
 
   render() {
-    const {classes, isError, permissionsInfo} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {isError, permissionsInfo} = this.props;
     const {activeStep} = this.state;
 
     const workProgramStatus = permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] ?? ExpertiseStatus.WORK;
@@ -179,9 +182,7 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
             {Object.values(this.stepNameList).map((label, index) => {
               return (
                 <Step key={index} onClick={this.handleOpenStep(index)}>
-                  <StepButton completed={false}
-                              style={{textAlign: 'left',}}
-                  >
+                  <StepButton style={{textAlign: 'left',}}>
                     {label}
                   </StepButton>
                 </Step>
@@ -207,5 +208,5 @@ class FinalCertification extends React.Component<FinalCertificationProps> {
     )
   }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(withRouter(FinalCertification)));

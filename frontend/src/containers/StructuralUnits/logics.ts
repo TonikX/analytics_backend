@@ -24,6 +24,7 @@ const getStructuralUnits = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_STRUCTURAL_UNITS}));
 
+        // @ts-ignore
         service.getStructuralUnits(currentPage, searchQuery, sortingField, sortingMode)
             .then((res) => {
                 const courses = get(res, 'data.results', []);

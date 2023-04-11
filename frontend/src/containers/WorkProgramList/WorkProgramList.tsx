@@ -2,33 +2,34 @@ import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import moment from 'moment';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import {Link, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
+import {withRouter} from '../../hoc/WithRouter'
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import Tooltip from "@material-ui/core/Tooltip";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Switch from "@material-ui/core/Switch";
-import Pagination from '@material-ui/lab/Pagination';
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import Tooltip from "@mui/material/Tooltip";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import {withStyles} from '@mui/styles';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Switch from "@mui/material/Switch";
+import Pagination from '@mui/lab/Pagination';
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import SettingsIcon from "@material-ui/icons/MoreVert";
-import CopyIcon from "@material-ui/icons/FileCopyOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import SettingsIcon from "@mui/icons-material/MoreVert";
+import CopyIcon from "@mui/icons-material/FileCopyOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -73,9 +74,9 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
 
     navigateToWorkProgram = () => {
         // @ts-ignore
-        const {history, workProgramIdForRedirect} = this.props;
+        const {navigate, workProgramIdForRedirect} = this.props;
         this.props.actions.setWorkProgramIdForRedirect(null);
-        history.push(appRouter.getWorkProgramLink(workProgramIdForRedirect!));
+        navigate(appRouter.getWorkProgramLink(workProgramIdForRedirect!));
     }
 
     handleClickDelete = (id: number) => () => {
@@ -172,7 +173,9 @@ class WorkProgramList extends React.Component<WorkProgramListProps> {
     }
 
     render() {
-        const {classes, workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy, showArchive, status} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {workProgramList, allCount, currentPage, sortingField, sortingMode, showOnlyMy, showArchive, status} = this.props;
         const {deleteConfirmId, duplicateConfirmId, anchorsEl} = this.state;
 
         return (

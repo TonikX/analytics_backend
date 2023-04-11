@@ -1,15 +1,15 @@
 import {useDispatch} from "react-redux";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import TextField from "@material-ui/core/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import TextField from "@mui/material/TextField";
 import React, {useState} from "react";
-import {Button, FormControl, InputLabel, MenuItem} from "@material-ui/core";
+import {Button, FormControl, InputLabel, MenuItem} from "@mui/material";
 import actions from "../actions";
 import {useParams} from "react-router-dom";
-import Select from "@material-ui/core/Select";
+import Select from "@mui/material/Select";
 import {useStyles} from "./ProfessionalStandard.styles"
-import DialogActions from "@material-ui/core/DialogActions";
+import DialogActions from "@mui/material/DialogActions";
 
 export default ({ isOpen, handleCloseModal, laborFunction }: any,) => {
     const dispatch = useDispatch()
@@ -46,7 +46,7 @@ export default ({ isOpen, handleCloseModal, laborFunction }: any,) => {
     return (
         <Dialog open={isOpen}>
             <DialogTitle> {laborFunction?.id ? 'Редактировать трудовую функцию' : 'Создать трудовую функцию'} </DialogTitle>
-            <DialogContent>
+            <DialogContent className={classes.dialogContent}>
                 <TextField
                     label="Код"
                     onChange={e => setCode(e.target.value)}
@@ -81,7 +81,6 @@ export default ({ isOpen, handleCloseModal, laborFunction }: any,) => {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}
                     >
                         <MenuItem value="3">3</MenuItem>

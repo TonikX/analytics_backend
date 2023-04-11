@@ -1,1 +1,1 @@
-export {default} from './ProfessionalCompetences';
+export {ProfessionalCompetences} from './ProfessionalCompetences';

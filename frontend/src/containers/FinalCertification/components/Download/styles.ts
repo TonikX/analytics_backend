@@ -1,4 +1,4 @@
-import {createStyles} from "@material-ui/core";
+import createStyles from "@mui/styles/createStyles";
 
 export default () => createStyles({
     input: {
@@ -6,6 +6,6 @@ export default () => createStyles({
         display: 'flex',
     },
     marginRight: {
-        marginRight: '20px'
+        marginRight: '20px !important'
     }
 });

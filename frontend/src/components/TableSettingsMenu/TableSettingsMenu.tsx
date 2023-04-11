@@ -2,20 +2,19 @@ import React from 'react';
 import isFunction from "lodash/isFunction";
 
 import {Link} from "react-router-dom";
-
-import withStyles from '@material-ui/core/styles/withStyles';
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import SettingsIcon from "@material-ui/icons/MoreVert";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import SettingsIcon from "@mui/icons-material/MoreVert";
 
 import {TableSettingsMenuProps} from './types';
 
-import styles from './TableSettingsMenu.styles';
+import {useStyles} from './TableSettingsMenu.styles';
 
-const TableSettingsMenu = ({handleOpenMenu, anchorEl, classes, handleCloseMenu, menuItems} : TableSettingsMenuProps) => {
-    return (
-        <div className={classes.actions}>
+const TableSettingsMenu = ({handleOpenMenu, anchorEl, handleCloseMenu, menuItems} : TableSettingsMenuProps) => {
+  const classes = useStyles()
+  return (
+        <div>
             <IconButton
                 aria-haspopup="true"
                 onClick={(e) => handleOpenMenu(e)}
@@ -60,4 +59,4 @@ const TableSettingsMenu = ({handleOpenMenu, anchorEl, classes, handleCloseMenu, 
         </div>
     )
 }
-export default withStyles(styles)(TableSettingsMenu);
+export default TableSettingsMenu;

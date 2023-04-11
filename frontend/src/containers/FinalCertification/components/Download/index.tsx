@@ -1,12 +1,12 @@
 import createReport from 'docx-templates';
 
-import {WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
 import styles from "./styles";
 import {CertificationActions, CertificationState} from "../../types";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "@material-ui/core/Button";
+import {WithStyles} from "@mui/styles";
+import Button from "@mui/material/Button";
 
 
 // @ts-ignore
@@ -93,7 +93,9 @@ class Download extends React.Component<DownloadProps> {
     }
 
     render() {
-        const {classes, fields} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {fields} = this.props;
         const canSendToIsu = fields.can_send_to_isu;
 
         return (
@@ -111,5 +113,5 @@ class Download extends React.Component<DownloadProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(Download));

@@ -1,6 +1,6 @@
 export interface SelectorProps {
   onChange: (value: number, label: string) => void;
-  value: number;
+  value?: number;
   label: string;
   isReset?: boolean;
   className?: any;

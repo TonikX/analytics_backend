@@ -2,23 +2,23 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 // @ts-ignore
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import classNames from 'classnames';
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import EyeIcon from '@material-ui/icons/VisibilityOutlined';
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import EyeIcon from '@mui/icons-material/VisibilityOutlined';
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -31,10 +31,9 @@ import {ProfessionalStandardsProps} from "./types";
 
 import connect from './ProfessionalStandards.connect';
 import styles from './ProfessionalStandarts.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 import {Link} from "react-router-dom";
 import {appRouter} from "../../service/router-service";
-import {withRouter} from "react-router-dom";
 
 class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> {
   state = {
@@ -94,11 +93,13 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
 
   changeRoute = (id: any) => () => {
     //@ts-ignore
-    this.props.history.push(appRouter.getProfessionalStandardRoute(id))
+    this.props.navigate(appRouter.getProfessionalStandardRoute(id))
   }
 
   render() {
-    const {classes, professionalStandards, allCount, currentPage, sortingField, sortingMode} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {professionalStandards, allCount, currentPage, sortingField, sortingMode} = this.props;
     const {deleteConfirmId} = this.state;
 
     return (
@@ -189,7 +190,7 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
         </div>
 
         <div className={classes.footer}>
-          <Pagination count={Math.ceil(allCount / 10) }
+          <Pagination count={allCount / 10}
                       page={currentPage}
                       onChange={this.handleChangePage}
                       color="primary"
@@ -204,7 +205,8 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
                         <AddIcon/>
                     </Fab> */}
         </div>
-
+        {/*
+// @ts-ignore */}
         <ProfessionalStandardCreateModal/>
 
         <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
@@ -220,4 +222,4 @@ class ProfessionalStandards extends React.Component<ProfessionalStandardsProps> 
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(withRouter(ProfessionalStandards)));
+export default connect(withStyles(styles)(ProfessionalStandards));

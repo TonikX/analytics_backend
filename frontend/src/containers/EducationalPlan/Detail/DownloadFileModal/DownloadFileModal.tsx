@@ -1,22 +1,22 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import {Moment} from "moment";
 
 import {DownloadFileModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import CircularProgress from '@mui/material/CircularProgress';
 
 import {DownloadFileModalFields} from '../../enum';
 import {DirectionFields} from "../../../Direction/enum";
@@ -40,7 +40,7 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
     componentDidUpdate(prevProps: Readonly<DownloadFileModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {dialogData} = this.state;
 
-        if (!shallowEqual(this.props.downloadDialogData, prevProps.downloadDialogData)){
+        if (!shallowEqualObjects(this.props.downloadDialogData, prevProps.downloadDialogData)){
             this.setState({
                 dialogData: {
                     ...dialogData,
@@ -122,7 +122,9 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
     }
 
     render() {
-        const {isOpen, classes, directions} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {isOpen, directions} = this.props;
         const {dialogData, isFetching} = this.state;
         const disableButton = dialogData[DownloadFileModalFields.DIRECTION_ID] === null;
 
@@ -151,7 +153,6 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     name="course"
                                     id="section-label"
                                 />
@@ -182,5 +183,5 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(DownloadFileModal));

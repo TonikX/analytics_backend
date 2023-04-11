@@ -2,9 +2,9 @@ import React from "react";
 import cn from 'classnames';
 import {CertificationSteps, TemplateTextCertificationFields} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {TemplateTextState} from "../../types";
 
 interface DisabledPeopleInfoProps extends WithStyles<typeof styles> {
@@ -15,7 +15,9 @@ class DisabledPeopleInfo extends React.Component<DisabledPeopleInfoProps> {
 
     render() {
 
-        const {classes, templateText} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {templateText} = this.props;
 
         return (
             <div className={classes.content}>
@@ -32,4 +34,5 @@ class DisabledPeopleInfo extends React.Component<DisabledPeopleInfoProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(DisabledPeopleInfo));

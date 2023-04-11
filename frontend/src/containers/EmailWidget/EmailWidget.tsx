@@ -3,7 +3,7 @@ import {ChangeEvent, useState} from "react";
 import {useDispatch} from "react-redux";
 import {
     Dialog, Button, Chip, DialogTitle, DialogContent, TextField, Box, Checkbox, FormControlLabel
-} from "@material-ui/core";
+} from "@mui/material";
 import actions from "./actions";
 import UserSelector from "./UserSelector";
 import {useStyles} from "./EmailWidget.styles";

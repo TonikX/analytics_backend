@@ -2,24 +2,23 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Typography from "@material-ui/core/Typography";
-import Tooltip from '@material-ui/core/Tooltip';
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import Typography from "@mui/material/Typography";
+import Tooltip from '@mui/material/Tooltip';
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import CustomizeExpansionPanel from "../../components/CustomizeExpansionPanel";
 import { CoursesTable } from './CoursesTable/CoursesTable'
 import { Filters } from './Filters/Filters'
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
 import {CoursesProps} from './types';
 
 import connect from './Courses.connect';
 import styles from './Courses.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class OnlineCourses extends React.Component<CoursesProps> {
   componentDidMount() {      
@@ -50,7 +49,9 @@ class OnlineCourses extends React.Component<CoursesProps> {
   }
 
   render() {
-    const {classes, courses, allCount, currentPage, sortingField, sortingMode } = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {courses, allCount, currentPage, sortingField, sortingMode } = this.props;
 
     return (
       <Paper className={classes.root}>
@@ -114,4 +115,5 @@ class OnlineCourses extends React.Component<CoursesProps> {
   }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(OnlineCourses));

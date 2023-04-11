@@ -2,10 +2,10 @@ import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import className from "classnames";
 
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography';
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography';
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 import {rootState} from '../../store/reducers'
 import {BACHELOR_QUALIFICATION, MASTER_QUALIFICATION} from "../WorkProgram/constants";
@@ -49,14 +49,14 @@ const SelectEducationalProgram: React.FC = () => {
             </Typography>
             <ButtonGroup>
               <Button onClick={handleChangeQualification(BACHELOR_QUALIFICATION)}
-                      color={qualification === BACHELOR_QUALIFICATION ? 'primary' : 'default'}
+                      color={qualification === BACHELOR_QUALIFICATION ? 'primary' : 'info'}
                       variant="contained"
                       className={className({[classes.whiteButton]: qualification !== BACHELOR_QUALIFICATION})}
               >
                 Бакалавр
               </Button>
               <Button onClick={handleChangeQualification(MASTER_QUALIFICATION)}
-                      color={qualification === MASTER_QUALIFICATION ? 'primary' : 'default'}
+                      color={qualification === MASTER_QUALIFICATION ? 'primary' : 'info'}
                       variant="contained"
                       className={className({[classes.whiteButton]: qualification !== MASTER_QUALIFICATION})}
               >

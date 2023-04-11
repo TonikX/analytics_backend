@@ -6,6 +6,7 @@ const SIGN_IN = 'sign-in';
 const SIGN_UP = 'sign-up';
 const COURSES = 'courses';
 const COURSE = 'course'
+const OVERVIEW = 'overview'
 const LITERATURE = 'literature';
 const SUBJECT_AREA = 'subject-area';
 const WORK_PROGRAM = 'work-program';
@@ -115,6 +116,10 @@ export default class RouterService {
 
     getCourseRoute = () => {
         return SEPARATOR + COURSE + SEPARATOR + ':id';
+    };
+
+    getOverviewRoute = () => {
+        return SEPARATOR + OVERVIEW;
     };
 
     getLiteratureRoute = () => {
@@ -264,7 +269,7 @@ export default class RouterService {
     };
 
     getWorkProgramRoute = () => {
-        return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':id';
+        return SEPARATOR + WORK_PROGRAM + SEPARATOR + ':id' + SEPARATOR + '*';
     };
 
     getEducationPlanDetailRoute = () => {

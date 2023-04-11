@@ -312,6 +312,7 @@ export const getMockMenu = (menuArr: Array<number>): Array<any> => {
             selectedIcon: CoursesSelectedIcon,
         },
     ])
+    // @ts-ignore
     return uniqBy(selectedMenus, 'title')
 }
 

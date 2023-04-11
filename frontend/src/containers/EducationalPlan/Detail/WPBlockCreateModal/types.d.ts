@@ -1,8 +1,8 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import {BlocksOfWorkProgramsType, EducationalPlanActions} from '../../types';
 import {WorkProgramListActions} from "../../../WorkProgramList/types";
 
-import styles from "./AddWorkProgramModal/AddWorkProgramModal.styles";
+import styles from "./CreateModal.styles";
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 import {TrainingModulesActions} from "../../TrainingModules/types";
 

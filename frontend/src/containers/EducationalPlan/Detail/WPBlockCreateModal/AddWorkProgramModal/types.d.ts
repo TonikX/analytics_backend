@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import {WorkProgramListActions} from "../../../../WorkProgramList/types";
 
 import styles from "../CreateModal.styles";

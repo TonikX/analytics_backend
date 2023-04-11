@@ -3,11 +3,11 @@ import get from "lodash/get";
 
 import {CourseCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
 import { FirstStep } from './FirstStep/FirstStep'
 import { SecondStep } from './SecondStep/SecondStep'
 
@@ -110,4 +110,5 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CourseCreateModal));

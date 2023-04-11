@@ -1,16 +1,16 @@
-import {WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
 import styles from "./styles";
 import {CertificationActions, CertificationState} from "../../types";
 import {CertificationFields} from "../../enum";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from "@material-ui/core/TextField";
+import {WithStyles} from "@mui/styles";
+import TextField from "@mui/material/TextField";
 import get from "lodash/get";
 import {RussianCertificationFields} from "../../constants";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 interface InputListProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -131,5 +131,5 @@ class InputList extends React.Component<InputListProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(InputList));

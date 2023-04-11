@@ -1,16 +1,16 @@
 import React from 'react';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Slide from "@material-ui/core/Slide";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
-import AppBar from "@material-ui/core/AppBar";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
+import Slide from "@mui/material/Slide";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
+import AppBar from "@mui/material/AppBar";
 import {DescriptionModalProps} from './types';
 import {EvaluationToolFields} from "../../enum"
 
@@ -19,7 +19,7 @@ import CKEditor from '../../../../components/CKEditor';
 import {
     fields,
 } from '../../enum';
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../../../hoc/WithRouter";
 import {appRouter} from "../../../../service/router-service";
 
 import connect from './DescriptionModal.connect';
@@ -31,9 +31,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
-
     handleClose = () => {
-        this.props.history.push(appRouter.getWorkProgramEvaluationToolsLink(this.props.workProgramId))
+        //@ts-ignore
+        this.props.navigate(appRouter.getWorkProgramEvaluationToolsLink(this.props.workProgramId))
         this.props.actions.closeDialog(fields.SHOW_EVALUATION_TOOLS_DESCRIPTION);
     }
 

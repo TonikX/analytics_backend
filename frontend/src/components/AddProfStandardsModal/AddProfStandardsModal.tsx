@@ -2,12 +2,12 @@ import React from 'react';
 
 import {AddProfStandardsModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import {withStyles} from '@mui/styles';
 
 import SearchSelector from "../SearchSelector/SearchSelector";
 
@@ -66,7 +66,7 @@ class AddProfStandardsModal extends React.PureComponent<AddProfStandardsModalPro
             >
                 <DialogTitle>Добавить профессиональный стандарт</DialogTitle>
 
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <SearchSelector label="Профессиональный стандарт * "
                                     changeSearchText={this.handleChangeSearchText}
                                     list={profStandardsList}

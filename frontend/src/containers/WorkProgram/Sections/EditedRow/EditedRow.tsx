@@ -1,14 +1,14 @@
 import React from 'react';
 
-import TableCell from "@material-ui/core/TableCell";
-import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import TableCell from "@mui/material/TableCell";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
 
-import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-import EditIcon from '@material-ui/icons/EditOutlined';
-import CancelIcon from '@material-ui/icons/CloseOutlined';
-import SuccessIcon from '@material-ui/icons/CheckOutlined';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import CancelIcon from '@mui/icons-material/CloseOutlined';
+import SuccessIcon from '@mui/icons-material/CheckOutlined';
 
 import {EditedRowProps, EditedRowState} from './types';
 
@@ -16,7 +16,7 @@ import {ImplementationFormatsEnum, workProgramSectionFields} from '../../enum';
 
 import connect from './EditedRow.connect';
 import styles from './EditedRow.styles';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
 class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     constructor(props: EditedRowProps) {
@@ -31,7 +31,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     componentDidUpdate(prevProps: Readonly<EditedRowProps>, prevState: Readonly<EditedRowState>, snapshot?: any) {
         const { section } = this.props
 
-        if (!shallowEqual(prevProps.section, this.props.section)){
+        if (!shallowEqualObjects(prevProps.section, this.props.section)){
             this.setState({
                 section: section,
             })
@@ -127,7 +127,9 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     isMixed = () => this.props.implementationFormat === ImplementationFormatsEnum.MIXED
 
     render() {
-        const {classes, isCanEdit} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {isCanEdit} = this.props;
         const {isEditMode, section} = this.state;
         const canEditConsultation = this.canEditConsultation()
         const canEditOfflineHours = this.canEditOfflineHours()

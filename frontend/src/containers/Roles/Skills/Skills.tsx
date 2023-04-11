@@ -1,20 +1,19 @@
 import React from 'react';
 import get from 'lodash/get';
 
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import classNames from 'classnames';
 
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
+import Paper from '@mui/material/Paper';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
 
 import ConfirmDialog from "../../../components/ConfirmDialog";
 import SortingButton from "../../../components/SortingButton";
@@ -25,9 +24,11 @@ import {SkillsProps, SkillType} from '../types';
 import {RolesFields} from '../enum';
 
 import {levels} from '../constants';
+import {withRouter} from '../../../hoc/WithRouter'
 
 import connect from './Skills.connect';
 import styles from './Skills.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class Skills extends React.Component<SkillsProps> {
     state = {
@@ -39,7 +40,7 @@ class Skills extends React.Component<SkillsProps> {
         this.props.actions.getRole(this.getRoleId());
     }
 
-    getRoleId = () => get(this, 'props.match.params.id', 0);
+    getRoleId = () => get(this, 'props.params.id', 0);
 
     handleClickDelete = (id: number) => () => {
         this.setState({
@@ -81,8 +82,8 @@ class Skills extends React.Component<SkillsProps> {
         this.props.actions.getSkills(this.getRoleId());
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getSkills(this.getRoleId());
     }
 
@@ -92,7 +93,9 @@ class Skills extends React.Component<SkillsProps> {
     }
 
     render() {
-        const {classes, skillList, allCount, currentPage, sortingField, sortingMode, role} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {skillList, allCount, currentPage, sortingField, sortingMode, role} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -142,14 +145,11 @@ class Skills extends React.Component<SkillsProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                //@ts-ignore
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"
@@ -175,5 +175,5 @@ class Skills extends React.Component<SkillsProps> {
         );
     }
 }
-
-export default connect(withStyles(styles)(Skills));
+// @ts-ignore
+export default connect(withStyles(styles)(withRouter(Skills)));

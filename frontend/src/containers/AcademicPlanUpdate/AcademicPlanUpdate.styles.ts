@@ -1,6 +1,6 @@
-import {createStyles, Theme} from "@material-ui/core";
+import createStyles from "@mui/styles/createStyles";
 
-export default (theme: Theme) => createStyles({
+export default () => createStyles({
     tableWrap: {
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
@@ -10,6 +10,10 @@ export default (theme: Theme) => createStyles({
         },
         '& p': {
             fontSize: '14px'
+        },
+        '& th': {
+            backgroundColor: '#1d51a3',
+            color: '#fff'
         }
     },
     additionalFunctionsWrap: {
@@ -33,7 +37,8 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
     },
     actions: {
         display: 'flex',
@@ -84,6 +89,7 @@ export default (theme: Theme) => createStyles({
             textDecoration: 'none'
         }
     },
+
     displayFlex: {
         display: 'flex',
     },

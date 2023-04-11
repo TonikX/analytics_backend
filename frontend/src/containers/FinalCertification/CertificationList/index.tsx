@@ -1,6 +1,6 @@
 import React from "react";
-import Paper from '@material-ui/core/Paper';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Paper from '@mui/material/Paper';
+import {withStyles} from '@mui/styles';
 
 import styles from "./styles";
 import connect from './connect';
@@ -8,22 +8,22 @@ import {CertificationListProps} from "./types";
 import {appRouter} from "../../../service/router-service";
 import {Link} from "react-router-dom";
 import {CertificationFields} from "../enum";
-import Scrollbars from "react-custom-scrollbars";
-import {Table} from "@material-ui/core";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableBody from "@material-ui/core/TableBody";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import Scrollbars from "react-custom-scrollbars-2";
+import {Table} from "@mui/material";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 import get from "lodash/get";
 import debounce from "lodash/debounce";
-import Pagination from "@material-ui/lab/Pagination";
-import ArrowDown from "@material-ui/icons/ArrowDropDown";
+import Pagination from "@mui/lab/Pagination";
+import ArrowDown from "@mui/icons-material/ArrowDropDown";
 import classNames from "classnames";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 import CreateModal from "./CreateModal";
 import {RussianCertificationFields} from "../constants";
 
@@ -64,7 +64,9 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
 
 
     render() {
-        const {classes, certificationList, sortingField, certificationCount, currentPage} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {certificationList, sortingField, certificationCount, currentPage} = this.props;
         return (
             <Paper className={classes.root}>
                 <Typography className={classes.title}>
@@ -164,5 +166,5 @@ class FinalCertificationList extends React.Component<CertificationListProps> {
         )
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(FinalCertificationList));

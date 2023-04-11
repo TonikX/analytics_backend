@@ -1,22 +1,22 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
 import get from 'lodash/get';
 import {Link} from "react-router-dom";
 
-import Paper from '@material-ui/core/Paper';
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepButton from "@material-ui/core/StepButton";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
+import Paper from '@mui/material/Paper';
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
+import {withStyles} from '@mui/styles';
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 
 import {CharacteristicProps,} from '../types';
 import {steps} from './constants';
 import {appRouter} from "../../../service/router-service";
-import LinkIcon from "@material-ui/icons/Link";
-import Tooltip from "@material-ui/core/Tooltip";
+import LinkIcon from "@mui/icons-material/Link";
+import Tooltip from "@mui/material/Tooltip";
+import {withRouter} from '../../../hoc/WithRouter'
 
 import connect from './Characteristic.connect';
 import styles from './Characteristic.styles';
@@ -26,12 +26,11 @@ import EducationPlanInDirectionSelector
   from "../../EduationPlanInDirection/EducationPlanInDirectionSelector/EducationPlanInDirectionSelector";
 import {CompetenceTableType, EducationProgramCharacteristicFields, EducationProgramFields} from "../enum";
 import {getUserFullName, YEAR_DATE_FORMAT} from "../../../common/utils";
-import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
 import {CompetenceType} from "../../Competences/types";
 import {CompetenceFields} from "../../Competences/enum";
 import {IndicatorType} from "../../Indicators/types";
@@ -46,12 +45,12 @@ import ObjectsOfActivity from "./ObjectsOfActivity";
 import TasksTypes from "./TasksTypes";
 import CompetenceMatrix from "./CompetenceMatrix";
 import {RepresentativesOrganizations} from "./RepresentativesOrganizations";
-import InputLabel from '@material-ui/core/InputLabel'
+import InputLabel from '@mui/material/InputLabel'
 import {getEducationalProgramFullNameForSelect} from "../../EduationPlanInDirection/getters";
 import EducationalStandardSelector from "../../EducationalStandards/EducationalStandardSelector";
 import {languageArray} from "../../WorkProgram/constants";
 import SimpleSelector from "../../../components/SimpleSelector";
-import Checkbox from "@material-ui/core/Checkbox";
+import Checkbox from "@mui/material/Checkbox";
 import TextField from "../../../components/TextField";
 import {StatusPoint} from "../../../components/StatusPoint";
 
@@ -62,14 +61,14 @@ class Characteristic extends React.Component<CharacteristicProps> {
   };
 
   componentDidMount() {
-    this.props.actions.getEducationalProgramCharacteristic(get(this.props, 'match.params.id'));
+    this.props.actions.getEducationalProgramCharacteristic(get(this.props, 'params.id'));
   }
 
   handleStep = (number: number) => () => {
     this.setState({activeStep: number})
   };
 
-  handleChangeEducationProgramYear = (value: MaterialUiPickersDate) => {
+  handleChangeEducationProgramYear = (value: any) => {
     this.props.actions.changeEducationalProgram({
       id: this.getEducationalProgramId(),
       payload: {
@@ -164,8 +163,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
     })
   }
 
-  handleChangeSKEEditorField = (field: string) => (event: any) => {
-    const data: string = event.editor.getData()
+  handleChangeSKEEditorField = (field: string) => (event: any, editor: any) => {
+    const data: string = editor.getData()
     this.props.actions.changeEducationalProgramCharacteristic({
       id: this.getEducationalProgramCharacteristicId(),
       educationalProgramId: this.getEducationalProgramId(),
@@ -180,6 +179,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
   getEducationalProgramCharacteristicId = () => get(this.props.educationalProgramCharacteristic, EducationProgramCharacteristicFields.ID, '');
 
   returnCompetences = (competences: Array<CompetenceType>) => {
+    // @ts-ignore
     const {classes} = this.props;
     return <>
       <Table stickyHeader size='small'>
@@ -240,6 +240,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   returnProfessionalCompetences = (competences: Array<CompetenceType>) => {
+    // @ts-ignore
     const {classes} = this.props;
     return <>
       <Table stickyHeader size='small'>
@@ -346,7 +347,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   renderRealizationTypeSelect = () => {
-    const {classes, educationalProgramCharacteristic, canEdit} = this.props
+    //@ts-ignore
+    const {classes} = this.props;
+    const {educationalProgramCharacteristic, canEdit} = this.props
     return (
       <>
         <Typography>
@@ -416,7 +419,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   renderTypeOP = () => {
-    const {classes, educationalProgramCharacteristic, canEdit} = this.props
+    //@ts-ignore
+    const {classes} = this.props;
+    const {educationalProgramCharacteristic, canEdit} = this.props
     return (
       <>
         <Typography>
@@ -471,7 +476,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 
   renderContent = () => {
-    const {educationalProgramCharacteristic, classes, canEdit} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {educationalProgramCharacteristic, canEdit} = this.props;
     const {activeStep, addNewOP} = this.state;
     const educationalProgramId = get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0', 'id'], '')
 
@@ -510,7 +517,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             </>:
             <Button variant="outlined" size="small" onClick={() => this.setState({ addNewOP: true })}>Добавить образовательную программу</Button>
           ) : null}
-          <br /><br /><br />
+          <br /><br />
           <EducationalStandardSelector
             label="Образовательный стандарт"
             onChange={this.handleChangeEducationalStandard}
@@ -655,7 +662,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
   sendToCheck = () => this.props.actions.sendToCheck()
 
   render() {
-    const {classes, educationalProgramCharacteristic, canEdit, statusInfo} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {educationalProgramCharacteristic, canEdit, statusInfo} = this.props;
     const {activeStep} = this.state;
     const names = get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
       .reduce((items: any, item:any) => {
@@ -690,7 +699,6 @@ class Characteristic extends React.Component<CharacteristicProps> {
               return (
                 <Step key={index}>
                   <StepButton onClick={this.handleStep(index)}
-                              completed={false}
                               style={{textAlign: 'left'}}
                   >
                     {value}
@@ -732,4 +740,5 @@ class Characteristic extends React.Component<CharacteristicProps> {
   }
 }
 
-export default withRouter(connect(withStyles(styles)(Characteristic)));
+//@ts-ignore
+export default connect(withStyles(styles)(withRouter(Characteristic)));

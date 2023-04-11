@@ -1,24 +1,23 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import classNames from "classnames";
 
 import {EducationalStandardCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
 import DatePickerComponent from "../../../components/DatePicker";
 
 import {EducationalStandardFields} from '../enum';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import {YEAR_DATE_FORMAT} from "../../../common/utils";
 
 class CreateModal extends React.PureComponent<EducationalStandardCreateModalProps> {
@@ -33,7 +32,7 @@ class CreateModal extends React.PureComponent<EducationalStandardCreateModalProp
     componentDidUpdate(prevProps: Readonly<EducationalStandardCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {educationalStandard} = this.props;
 
-        if (!shallowEqual(educationalStandard, prevProps.educationalStandard)){
+        if (!shallowEqualObjects(educationalStandard, prevProps.educationalStandard)){
             this.setState({
                 educationalStandard: {
                     [EducationalStandardFields.ID]: get(educationalStandard, EducationalStandardFields.ID),
@@ -69,7 +68,7 @@ class CreateModal extends React.PureComponent<EducationalStandardCreateModalProp
         })
     }
 
-    changeYear = (value: MaterialUiPickersDate) => {
+    changeYear = (value: any) => {
         const {educationalStandard} = this.state;
 
         this.setState({

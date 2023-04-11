@@ -1,30 +1,30 @@
 import React, {ReactText} from 'react';
 import get from 'lodash/get';
-import {withRouter} from "react-router-dom";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import {Link} from "react-router-dom";
 
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 import {BlocksOfWorkProgramsFields, ModuleFields} from "../../enum";
 import {DetailTrainingModuleProps} from './types';
+import {withRouter} from "../../../../hoc/WithRouter";
 
 import connect from './DetailTrainingModule.connect';
 import WPBlockCreateModal from "../../Detail/WPBlockCreateModal";
-import TextField from "@material-ui/core/TextField";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Button from "@material-ui/core/Button";
-import withStyles from '@material-ui/core/styles/withStyles';
-import TableBody from "@material-ui/core/TableBody";
-import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import Paper from "@material-ui/core/Paper";
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
+import TextField from "@mui/material/TextField";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
+import {withStyles} from '@mui/styles';
+import TableBody from "@mui/material/TableBody";
+import Tooltip from "@mui/material/Tooltip";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import Paper from "@mui/material/Paper";
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
 
 import ConfirmDialog from "../../../../components/ConfirmDialog/ConfirmDialog";
 
@@ -36,15 +36,15 @@ import {BlocksOfWorkProgramsType} from "../../types";
 import styles from './DetailTrainingModule.styles';
 import LikeButton from "../../../../components/LikeButton/LikeButton";
 import {FavoriteType} from "../../../Profile/Folders/enum";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 import {getUserFullName} from "../../../../common/utils";
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 import {UserType} from "../../../../layout/types";
 import UserSelector from "../../../Profile/UserSelector/UserSelector";
-import Dialog from "@material-ui/core/Dialog";
+import Dialog from "@mui/material/Dialog";
 import {fields, StepsEnum, TrainingModuleFields} from "../enum";
 import {selectRulesArray, steps} from "../constants";
-import StepButton from "@material-ui/core/StepButton";
+import StepButton from "@mui/material/StepButton";
 import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
 import EvaluationTools from '../EvaluationTools'
@@ -52,7 +52,7 @@ import AddEducationalProgramModal from "../AddEducationalProgramModal/AddEducati
 import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleModal";
 import {TrainingModuleType} from "../types";
 import {BACHELOR_QUALIFICATION, specializationObject} from "../../../WorkProgram/constants";
-import {Checkbox, FormControlLabel} from "@material-ui/core";
+import {Checkbox, FormControlLabel} from "@mui/material";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -115,7 +115,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     })
   }
 
-  getModuleId = () => get(this.props.match.params, 'id');
+  getModuleId = () => get(this.props.params, 'id');
 
   handleConfirmBlockDeleteDialog = () => {
     const {deleteBlockConfirmId} = this.state;
@@ -196,7 +196,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   renderBlockOfWP = (blockOfWorkPrograms: any, level: number) => {
-    const {classes, canEdit} = this.props
+
+    //@ts-ignore
+    const {classes} = this.props;
+    const {canEdit} = this.props
 
       return (
         <>
@@ -319,13 +322,16 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   renderModule = (item: any, level: number, allChild: any, fatherId: number): any => {
-    const {classes, canEdit} = this.props
+
+    //@ts-ignore
+    const {classes} = this.props;
+    const {canEdit} = this.props
     const blockOfWorkPrograms = item?.change_blocks_of_work_programs_in_modules
 
     return(
       <>
         <TableRow>
-          <TableCell  style={{ height: '40px'}} rowSpan={2} colSpan={canEdit ? 3 : 2} className={classes.moduleNameWrap}>
+          <TableCell style={{ height: '40px'}} className={classes.moduleNameWrap}>
             <Link className={classes.workProgramLink}
                   to={appRouter.getTrainingModuleDetailLink(item?.[WorkProgramGeneralFields.ID])}
                   target="_blank"
@@ -409,7 +415,9 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   renderModules = () => {
-    const {classes, module, canEdit} = this.props
+    //@ts-ignore
+    const {classes} = this.props;
+    const {module, canEdit} = this.props
     return (
       <>
         <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
@@ -573,7 +581,9 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 
   renderPlans = () => {
-    const {classes, module, canEdit} = this.props
+    //@ts-ignore
+    const {classes} = this.props;
+    const {module, canEdit} = this.props
 
     return (
       <>
@@ -591,7 +601,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                 <TableCell className={classes.header}>Уровень</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>
                 <TableCell className={classes.header}>Включен в эту ОП</TableCell>
-                <TableCell />
+                <TableCell className={classes.header} />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -663,8 +673,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           >
             {Object.keys(steps).map((key) => (
               <Step key={key} onClick={() => this.setState({activeStep: parseInt(key)})}>
-                <StepButton completed={false}
-                            style={{textAlign: 'left',}}
+                <StepButton style={{textAlign: 'left',}}
                             key={key}
                 >{/*
                                                 // @ts-ignore*/}
@@ -724,4 +733,5 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(withRouter(DetailTrainingModule)));

@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     secondStep: {
@@ -47,7 +48,7 @@ export default (theme: Theme) => createStyles({
         marginLeft: 'auto'
     },
     lastInfo: {
-        marginTop: '20px',
-        marginBottom: '10px',
+        marginTop: '20px !important',
+        marginBottom: '10px !important',
     }
 });

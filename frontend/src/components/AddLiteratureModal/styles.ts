@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     dialogContent: {
@@ -34,6 +35,7 @@ export default (theme: Theme) => createStyles({
     header: {
         display: 'flex',
         marginBottom: 40,
+        marginTop: 60,
         justifyContent: 'space-between'
     },
     appBar: {
@@ -48,7 +50,7 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center'
     },
     saveButton: {
-        marginLeft: 8
+        marginLeft: '10px !important'
     },
     link: {
         display: 'flex',

@@ -1,6 +1,8 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import {makeStyles} from "@mui/styles";
 
-export default (theme: Theme) => createStyles({
+export default makeStyles((theme: Theme) => createStyles({
     iconsContainer: {
         display: 'flex',
         flexDirection: 'column' as 'column',
@@ -21,4 +23,4 @@ export default (theme: Theme) => createStyles({
         width: 40,
         height: 40
     }
-});
+}));

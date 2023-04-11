@@ -3,19 +3,20 @@ import React from 'react';
 // @ts-ignore
 import matchSorter from 'match-sorter';
 import {Link} from "react-router-dom";
-import {List, AutoSizer, CellMeasurer, CellMeasurerCache} from 'react-virtualized';
-import Scrollbars from "react-custom-scrollbars";
+// @ts-ignore
+import {List, AutoSizer, CellMeasurer, CellMeasurerCache} from 'react-virtualized-reactv17';
+import Scrollbars from "react-custom-scrollbars-2";
 
 import className from "classnames";
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
-import Slider from '@material-ui/core/Slider';
-import IconButton from "@material-ui/core/IconButton";
-import CheckCircleOutline from "@material-ui/icons/CheckCircleOutline";
-import CancelOutlined from "@material-ui/icons/CancelOutlined";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from '@mui/material/Button';
+import Slider from '@mui/material/Slider';
+import IconButton from "@mui/material/IconButton";
+import CheckCircleOutline from "@mui/icons-material/CheckCircleOutline";
+import CancelOutlined from "@mui/icons-material/CancelOutlined";
+import {withStyles} from '@mui/styles';
 
 import TextField from '../../components/TextField';
 
@@ -47,7 +48,7 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
         }
     }
 
-    handleChangeSemester = (e: React.ChangeEvent<{}>, value: number | number[]) => {
+    handleChangeSemester = (e: any, value: number | number[]) => {
         this.props.actions.selectSemester(value);
     }
 
@@ -128,7 +129,9 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
     getSearchedKeywords = () => matchSorter(this.props.allKeywords, this.state.searchQuery, {threshold: matchSorter.rankings.CONTAINS});
 
     render() {
-        const {classes, qualification, semester, allKeywords, selectedKeywords, workPrograms} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {qualification, semester, allKeywords, selectedKeywords, workPrograms} = this.props;
         const {scrollTop} = this.state;
         const searchedKeywords = this.getSearchedKeywords();
 
@@ -147,14 +150,14 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
                         <Typography>Уровень образования: </Typography>
                         <ButtonGroup>
                             <Button onClick={this.handleChangeQualification(qualificationEnum.BACHELOR)}
-                                    color={qualification === qualificationEnum.BACHELOR ? 'primary' : 'default'}
+                                    color={qualification === qualificationEnum.BACHELOR ? 'primary' : 'info'}
                                     variant="contained"
                                     className={className({[classes.whiteButton]: qualification !== qualificationEnum.BACHELOR})}
                             >
                                 Бакалавр
                             </Button>
                             <Button onClick={this.handleChangeQualification(qualificationEnum.MASTER)}
-                                    color={qualification === qualificationEnum.MASTER ? 'primary' : 'default'}
+                                    color={qualification === qualificationEnum.MASTER ? 'primary' : 'info'}
                                     variant="contained"
                                     className={className({[classes.whiteButton]: qualification !== qualificationEnum.MASTER})}
                             >
@@ -284,5 +287,5 @@ class SelectDiscipline extends React.Component<SelectDisciplineProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(SelectDiscipline));

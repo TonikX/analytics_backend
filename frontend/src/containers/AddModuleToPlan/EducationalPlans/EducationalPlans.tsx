@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import Search from "../../../components/Search/Search";
-import Scrollbars from "react-custom-scrollbars";
-import Table from "@material-ui/core/Table";
+import Scrollbars from "react-custom-scrollbars-2";
+import Table from "@mui/material/Table";
 import cn from 'classnames';
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import {Checkbox} from "@material-ui/core";
-import TablePagination from "@material-ui/core/TablePagination";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
+import TableBody from "@mui/material/TableBody";
+import {Checkbox} from "@mui/material";
+import TablePagination from "@mui/material/TablePagination";
 import {useStyles} from "../AddModuleToPlan.styles";
 import actions from "../actions";
 import {useDispatch, useSelector} from "react-redux";
@@ -23,12 +23,13 @@ import {
 } from "../getters";
 import {EducationalPlanListType} from "../../EducationalPlan/types";
 import {EducationalPlanFields} from "../../EducationalPlan/enum";
-import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
+import FormControlLabel from "@mui/material/FormControlLabel/FormControlLabel";
 import get from "lodash/get";
-import Select from "@material-ui/core/Select/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@mui/material/Select/Select";
+import MenuItem from "@mui/material/MenuItem";
 import {Qualifications} from "../enum";
 import {EducationalPlanShort} from "../types";
+import Pagination from "@mui/lab/Pagination";
 
 export const EducationalPlans = () => {
     const classes = useStyles();
@@ -75,8 +76,8 @@ export const EducationalPlans = () => {
         dispatch(actions.setSelectedPlans(newArray));
     };
 
-    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        dispatch(actions.changePlansCurrentPage(page + 1));
+    const handleChangePage = (event: any, page: number) => {
+        dispatch(actions.changePlansCurrentPage(page));
         dispatch(actions.getEducationalPlan());
     };
 
@@ -131,14 +132,10 @@ export const EducationalPlans = () => {
                 </div>
             </Scrollbars>
             <div>
-                <TablePagination
-                    count={Math.ceil(plansAllCount / 10)}
-                    component="div"
-                    page={currentPage - 1}
-                    rowsPerPageOptions={[]}
-                    onChangePage={handleChangePage}
-                    rowsPerPage={10}
-                    onChangeRowsPerPage={() => {}}
+                <Pagination count={Math.ceil(plansAllCount / 10)}
+                            page={currentPage - 1}
+                            onChange={handleChangePage}
+                            color="primary"
                 />
             </div>
         </>
@@ -167,7 +164,7 @@ export const EducationalPlans = () => {
                         <MenuItem value={item.value} key={`qualification-${index}`}>
                             {item.label}
                         </MenuItem>
-                    )}}
+                    )}
                 </Select>
             </div>
             {opContent}

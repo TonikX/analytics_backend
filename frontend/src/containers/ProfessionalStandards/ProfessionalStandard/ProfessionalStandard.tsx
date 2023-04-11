@@ -3,18 +3,18 @@ import {useDispatch, useSelector} from "react-redux";
 import actions from "../actions";
 import {getProfStandard} from "../getters";
 import {rootState} from "../../../store/reducers";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {useParams} from 'react-router-dom'
 import {useStyles} from "./ProfessionalStandard.styles"
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/EditOutlined";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/EditOutlined";
 import {ProfessionalStandardsType} from "../types";
 import ProfessionalStandardLaborFunctionsCreateModal from "./ProfessionalStandardLaborFunctionsCreateModal";
 import ProfessionalStandardCreateModal from "../CreateModal";
 import classNames from "classnames";
-import AddIcon from "@material-ui/icons/Add";
-import Fab from "@material-ui/core/Fab";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import Fab from "@mui/material/Fab";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 export default () => {
   const dispatch = useDispatch()
@@ -103,6 +103,8 @@ export default () => {
             laborFunction={editedItem}
           />
         )}
+        {/*
+// @ts-ignore */}
         <ProfessionalStandardCreateModal />
       </div>
     </div>

@@ -2,22 +2,22 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import classNames from 'classnames';
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -30,7 +30,7 @@ import {TrainingEntitiesFields} from './enum';
 import connect from './TrainingEntities.connect';
 import styles from './TrainingEntities.styles';
 import {SubjectAreaFields} from "../SubjectArea/enum";
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class TrainingEntities extends React.Component<TrainingEntitiesProps> {
     state = {
@@ -89,7 +89,9 @@ class TrainingEntities extends React.Component<TrainingEntitiesProps> {
     }
 
     render() {
-        const {classes, trainingEntities, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {trainingEntities, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -181,4 +183,5 @@ class TrainingEntities extends React.Component<TrainingEntitiesProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(TrainingEntities));

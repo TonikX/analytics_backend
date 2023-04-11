@@ -1,13 +1,14 @@
 import React from 'react';
 import get from "lodash/get";
 
-import {AutoSizer} from "react-virtualized";
+// @ts-ignore
+import {AutoSizer} from "react-virtualized-reactv17";
 
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from '@material-ui/core/InputLabel';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from '@mui/material/InputLabel';
+import {withStyles} from '@mui/styles';
 
 import InputsLoader from "../../../../components/InputsLoader/InputsLoader";
 
@@ -27,7 +28,9 @@ class Specialization extends React.PureComponent<SpecializationProps> {
     };
 
     render() {
-        const {classes, isFetching, value, isCanEdit, disabled} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {isFetching, value, isCanEdit, disabled} = this.props;
 
         if (!value) return <></>;
 
@@ -36,7 +39,7 @@ class Specialization extends React.PureComponent<SpecializationProps> {
                 <InputLabel className={classes.label}> Уровень образовательной программы </InputLabel>
                 <InputsLoader loading={isFetching}>
                     <AutoSizer style={{width: '100%', height: '80px'}}>
-                        {({width}) => (
+                        {({width}: any) => (
                             <FormControl
                                 style={{width: width}}>
                                 <Select
@@ -63,4 +66,5 @@ class Specialization extends React.PureComponent<SpecializationProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Specialization));

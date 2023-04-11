@@ -7,6 +7,7 @@ import {GENERAL_PATH} from "./reducer";
 import {fields} from './enum';
 
 import {individualTrajectoriesState, IndividualTrajectoriesType} from './types';
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): individualTrajectoriesState => get(state, GENERAL_PATH);
 export const getIndividualTrajectories = (state: rootState): Array<IndividualTrajectoriesType> => get(getStateData(state), fields.INDIVIDUAL_TRAJECTORIES, []);
@@ -19,6 +20,6 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);
 
 export const getFilters = (state: rootState) => get(getStateData(state), fields.FILTERING, {});

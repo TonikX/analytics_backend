@@ -19,18 +19,18 @@ const changeSorting = createAction('ENTITY_TO_ENTITY_CHANGE_SORTING');
 const changeSubjectId = createAction('ENTITY_TO_ENTITY_CHANGE_SUBJECT_ID');
 
 const actions: EntityToEntityActions = {
-    changeSubjectId,
-    getEntityToEntityList,
-    setEntityToEntityList,
-    createNewEntityToEntity,
-    changeEntityToEntity,
-    deleteEntityToEntity,
-    openDialog,
-    closeDialog,
-    changeSearchQuery,
-    changeCurrentPage,
-    changeAllCount,
-    changeSorting,
+  changeSubjectId,
+  getEntityToEntityList,
+  setEntityToEntityList,
+  createNewEntityToEntity,
+  changeEntityToEntity,
+  deleteEntityToEntity,
+  openDialog,
+  closeDialog,
+  changeSearchQuery,
+  changeCurrentPage,
+  changeAllCount,
+  changeSorting,
 }
 
 export default actions;

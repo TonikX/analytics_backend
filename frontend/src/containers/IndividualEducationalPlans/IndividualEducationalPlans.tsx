@@ -4,23 +4,23 @@ import get from 'lodash/get';
 import classNames from 'classnames';
 import {Link} from "react-router-dom";
 
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
 
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import {withStyles} from '@mui/styles';
+
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -35,6 +35,7 @@ import {IndividualEducationalPlansProps} from './types';
 
 import connect from './IndividualEducationalPlans.connect';
 import styles from './IndividualEducationalPlans.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class IndividualEducationalPlans extends React.Component<IndividualEducationalPlansProps> {
     state = {
@@ -74,8 +75,8 @@ class IndividualEducationalPlans extends React.Component<IndividualEducationalPl
         this.props.actions.getIndividualEducationalPlans();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getIndividualEducationalPlans();
     }
 
@@ -85,7 +86,9 @@ class IndividualEducationalPlans extends React.Component<IndividualEducationalPl
     }
 
     render() {
-        const {classes, IndividualEducationalPlans, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {IndividualEducationalPlans, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -183,14 +186,10 @@ class IndividualEducationalPlans extends React.Component<IndividualEducationalPl
                 </Scrollbars>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
                 </div>
 
@@ -206,4 +205,5 @@ class IndividualEducationalPlans extends React.Component<IndividualEducationalPl
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(IndividualEducationalPlans));

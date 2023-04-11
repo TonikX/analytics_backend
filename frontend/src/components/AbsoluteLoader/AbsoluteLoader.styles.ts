@@ -1,5 +1,5 @@
-import {createStyles} from '@material-ui/core';
-import {Theme} from '@material-ui/core/styles/createMuiTheme';
+import createStyles from "@mui/styles/createStyles";
+import {Theme} from '@mui/material/styles/createTheme';
 
 export default (theme: Theme) => createStyles({
     loaderContainer: {

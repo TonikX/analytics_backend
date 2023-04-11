@@ -2,23 +2,23 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import classNames from 'classnames';
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import {withStyles} from '@mui/styles';
+
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -30,7 +30,7 @@ import {literatureFields} from './enum';
 
 import connect from './Literature.connect';
 import styles from './Literature.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class Literature extends React.Component<LiteratureProps> {
     state = {
@@ -89,7 +89,9 @@ class Literature extends React.Component<LiteratureProps> {
     }
 
     render() {
-        const {classes, literature, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {literature, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -169,4 +171,5 @@ class Literature extends React.Component<LiteratureProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Literature));

@@ -29,7 +29,7 @@ const getAcademicPlanUpdateLogs = createLogic({
         const currentPage = getLogsCurrentPage(state);
         const searchQuery = getLogsSearchQuery(state);
         const sortingField = getLogsSortingField(state);
-        const sortingMode = getLogsSortingMode(state);
+        const sortingMode = getLogsSortingMode(state) as any;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_ACADEMIC_PLAN_UPDATE_LOGS}));
 
@@ -135,7 +135,7 @@ const getUpdatedAcademicPlans = createLogic({
         const currentPage = getUpdatedPlansCurrentPage(state);
         const searchQuery = getUpdatedPlansSearchQuery(state);
         const sortingField = getUpdatedPlansSortingField(state);
-        const sortingMode = getUpdatedPlansSortingMode(state);
+        const sortingMode = getUpdatedPlansSortingMode(state) as any;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_UPDATED_ACADEMIC_PLANS}));
 
