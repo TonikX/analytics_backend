@@ -9,7 +9,7 @@ export default (theme: Theme) => createStyles({
         top: '100vh',
         left: 0,
         background: '#fff',
-        zIndex: 1000,
+        zIndex: 10000,
         transition: '0.35s top',
     },
     openDialog: {
@@ -49,7 +49,7 @@ export default (theme: Theme) => createStyles({
     },
     dialogContent: {
         display: 'flex',
-        padding: '80px 48px 20px 48px',
+        padding: '80px 48px 20px 48px !important',
         justifyContent: 'space-between',
         overflowX: 'hidden',
         height: 'calc(100% - 100px)'
@@ -73,6 +73,10 @@ export default (theme: Theme) => createStyles({
     },
     rightSide: {
         width: '55%',
+        height: "calc(100vh - 280px) !important",
+        '& .ck-content': {
+            height: "calc(100vh - 280px) !important",
+        }
     },
     sectionSelector: {
         '& .MuiInputLabel-shrink': {

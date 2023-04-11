@@ -9,7 +9,7 @@ export default (theme: Theme) => createStyles({
         top: '100vh',
         left: 0,
         background: '#fff',
-        zIndex: 1000,
+        zIndex: 10000,
         transition: '0.35s top',
     },
     openDialog: {

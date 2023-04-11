@@ -12,7 +12,8 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center'
     },
     dialogContent: {
-        height: '450px'
+        height: '450px',
+        padding: '10px 24px 20px 24px !important',
     },
     filtersLine: {
         display: 'flex',
@@ -22,7 +23,7 @@ export default (theme: Theme) => createStyles({
     },
     input: {
         width: '100%',
-        marginRight: 20,
+        marginRight: '20px !important',
     },
     actions: {
         padding: '15px 24px 20px'
