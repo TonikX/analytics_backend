@@ -66,13 +66,20 @@ def post_gia_to_isu(token, gia, ap_id):
     headers = {'Content-Type': "application/json", 'Authorization': "Bearer " + token}
     practice_dict = body[0]
 
-    gia_title_splitted = gia.title.split("/")[0]
+    gia_title_splitted = gia.title.split("/")
     practice_dict["name_ru"] = gia_title_splitted[0]
     if len(gia_title_splitted) > 1:
         practice_dict["name_en"] = gia_title_splitted[1]
         practice_dict["lang_id"] = 1
     else:
         practice_dict["lang_id"] = 4
+
+    if practice_dict["name_ru"] == "preparation":
+        practice_dict["name_ru"] = "Подготовка к защите и защита ВКР"
+    elif practice_dict["name_ru"] == "preparation-en":
+        practice_dict["name_ru"] = "Подготовка к защите и защита ВКР"
+        practice_dict["name_en"] = "Preparation for Thesis Defense and Thesis Defense"
+
     practice_dict["type_id"] = 3
     practice_dict["format_id"] = 1
     practice_dict["rpd_url"] = "https://op.itmo.ru/gia/" + str(gia.id)
