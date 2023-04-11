@@ -66,7 +66,7 @@ def post_gia_to_isu(token, gia, ap_id):
     headers = {'Content-Type': "application/json", 'Authorization': "Bearer " + token}
     practice_dict = body[0]
 
-    gia_title_splitted = gia.title.split("/")[0]
+    gia_title_splitted = gia.title.split("/")
     practice_dict["name_ru"] = gia_title_splitted[0]
     if len(gia_title_splitted) > 1:
         practice_dict["name_en"] = gia_title_splitted[1]
