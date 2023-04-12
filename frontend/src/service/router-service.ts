@@ -62,7 +62,7 @@ export default class RouterService {
     }
 
     getSignInRoute = () => {
-        return SEPARATOR + SIGN_IN;
+        return SEPARATOR + SIGN_IN + SEPARATOR + '*';
     };
 
     getFoldersRoute = () => {
