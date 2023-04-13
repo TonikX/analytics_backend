@@ -19,6 +19,7 @@ export const initialState: expertisesState = {
     [fields.IS_OPEN_ADD_EXPERT_MODAL]: false,
     [fields.SELECTED_STATUS]: '',
     [fields.SELECTED_QUALIFICATION]: '',
+    [fields.COMMENTS]: [],
 };
 
 const setExpertise = (state: expertisesState, {payload}: any): expertisesState => ({
@@ -65,6 +66,11 @@ const changeSelectedQualification = (state: expertisesState, {payload}: any): ex
     [fields.SELECTED_QUALIFICATION]: payload,
 });
 
+const setComments = (state: expertisesState, {payload}: any): expertisesState => ({
+    ...state,
+    [fields.COMMENTS]: payload,
+});
+
 const changeSorting = (state: expertisesState, {payload}: any): expertisesState => ({
     ...state,
     [fields.SORTING]: {
@@ -75,6 +81,7 @@ const changeSorting = (state: expertisesState, {payload}: any): expertisesState 
 
 export const reducer = createReducer(initialState, {
     [actions.setExpertisesList.type]: setData,
+    [actions.setComments.type]: setComments,
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,

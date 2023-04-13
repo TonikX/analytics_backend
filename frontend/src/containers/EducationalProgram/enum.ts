@@ -20,6 +20,7 @@ export enum fields {
 export enum fetchingTypes {
     GET_EDUCATION_PROGRAM_LIST = 'GET_EDUCATION_PROGRAM_LIST',
     DELETE_EDUCATION_PROGRAM = 'DELETE_EDUCATION_PROGRAM',
+    SEND_TO_CHECK = 'SEND_TO_CHECK',
     UPDATE_EDUCATION_PROGRAM = 'UPDATE_EDUCATION_PROGRAM',
     CREATE_EDUCATION_PROGRAM = 'CREATE_EDUCATION_PROGRAM',
     GET_COMPETENCE_MATRIX = 'GET_COMPETENCE_MATRIX',
@@ -47,10 +48,17 @@ export enum fetchingTypes {
     SAVE_ZUN = 'SAVE_ZUN',
     DELETE_ZUN = 'DELETE_ZUN',
     GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM = 'GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_WORK_PROGRAM',
+    ADD_NEW_REPRESENTATIVE = 'ADD_NEW_REPRESENTATIVE',
+    UPDATE_REPRESENTATIVE = 'UPDATE_REPRESENTATIVE',
+    DELETE_REPRESENTATIVE = 'DELETE_REPRESENTATIVE',
 }
 
 export enum EducationProgramCharacteristicFields {
     ID = 'id',
+    STATUS = 'on_check',
+    REALIZATION_FORMAT = 'realization_format',
+
+    LANGUAGE = 'language',
     DIRECTION = 'area_of_activity',
     DEAN = 'dean_of_the_faculty',
     DEVELOPERS = 'developers',
@@ -72,9 +80,24 @@ export enum EducationProgramCharacteristicFields {
     OBJECTS_OF_ACTIVITY = 'objects_of_activity',
     TASKS_OF_ACTIVITY = 'tasks_for_prof_standards',
     AREA_OF_ACTIVITY = 'area_of_activity',
+    ADDITIONAL_AREA_OF_ACTIVITY = 'additional_area_of_activity',
     PPS = 'pps',
     ANNOTATION = 'annotation',
     EDUCATIONAL_STANDART = 'educational_standard',
+    EMPLOYERS_LIST = 'employers_in_characteristic',
+    DIRECTOR_POSITION = 'directors_position',
+    DEAN_POSITION = 'dean_of_the_faculty_directors_position',
+    IS_ONLY_IN_UNIVERSITY = 'is_only_in_university',
+    IS_GLOBAL_EDUCATIONAL_PROGRAM = 'is_global_educational_program',
+    IS_ONLINE_FORMAT = 'is_online_format',
+    COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT = 'collaboration_russian_in_online_format',
+    IS_COLLABORATION_FOREIGN = 'is_collaboration_foreign',
+    COLLABORATION_FOREIGN = 'collaboration_foreign',
+    SCIENCE_TYPE = 'science_type',
+    INDUSTRIAL_TYPE = 'industrial_type',
+    CORPORATE_TYPE = 'corporate_type',
+    ENTERPRISE_TYPE = 'enterprise_type',
+    TARGET_MASTER_TYPE = 'target_master_type',
 }
 
 export enum EducationProgramFields {
@@ -99,4 +122,22 @@ export enum CompetenceTableType {
     SUPRA_PROFESSIONAL_COMPETENCES = 'SUPRA_PROFESSIONAL_COMPETENCES',
     GENERAL_PROFESSIONAL_COMPETENCES = 'GENERAL_PROFESSIONAL_COMPETENCES',
     PROFESSIONAL_COMPETENCES = 'PROFESSIONAL_COMPETENCES',
+}
+
+
+export enum CharacteristicStatuses {
+    IN_WORK = 'in_work',
+    ON_CHECK = 'on_check',
+    APPROVED = 'verified',
+}
+
+export const CharacteristicStatusesNames = {
+    [CharacteristicStatuses.IN_WORK]: 'В работе',
+    [CharacteristicStatuses.ON_CHECK]: 'На проверке',
+    [CharacteristicStatuses.APPROVED]: 'Принят',
+}
+export const CharacteristicStatusesColors = {
+    [CharacteristicStatuses.IN_WORK]: '#009aff',
+    [CharacteristicStatuses.ON_CHECK]: '#C000FF',
+    [CharacteristicStatuses.APPROVED]: '#2abb00',
 }

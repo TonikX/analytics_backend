@@ -24,7 +24,17 @@ const removeExpertFromExpertise = createAction('REMOVE_EXPERT_FROM_EXPERTISE');
 const changeSelectedStatus = createAction('EXPERTISES_CHANGE_SELECTED_STATUS');
 const changeSelectedQualification = createAction('EXPERTISES_CHANGE_SELECTED_QUALIFICATION');
 
+const getComments = createAction('EXPERTISES_GET_COMMENTS');
+const setComments = createAction('EXPERTISES_SET_COMMENTS');
+const createComment = createAction('EXPERTISES_CREATE_COMMENT');
+const updateUnreadCommentStatus = createAction('EXPERTISES_UPDATE_UNREAD_COMMENT_STATUS');
+
 const actions: ExpertisesActions = {
+    getComments,
+    setComments,
+    createComment,
+    updateUnreadCommentStatus,
+
     changeSelectedQualification,
     changeSelectedStatus,
 

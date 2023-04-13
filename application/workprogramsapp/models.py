@@ -463,12 +463,22 @@ class GeneralCharacteristics(models.Model):
         ('offline', 'offline'),
     )
 
+    check_status = (
+        ('in_work', 'in_work'),
+        ('on_check', 'on_check'),
+        ('verified', 'verified'),
+    )
+
     educational_program = models.ManyToManyField('ImplementationAcademicPlan', verbose_name='Образовательная программа',
                                                  related_name="general_characteristics_in_educational_program",
                                                  blank=True, null=True)
     area_of_activity = models.ManyToManyField('ProfessionalStandard',
                                               verbose_name='Проф. Стандарт/Область профессиональной деятельности',
-                                              blank=True, null=True)
+                                              blank=True, null=True, related_name="area_in_characteristic")
+    additional_area_of_activity = models.ManyToManyField('ProfessionalStandard',
+                                                         verbose_name='Дополнительные Области профессиональной деятельности',
+                                                         blank=True, null=True,
+                                                         related_name="add_area_in_characteristic")
     objects_of_activity = models.ManyToManyField(ObjectsOfActivity,
                                                  verbose_name="Объекты проф. деятельности выпускников", blank=True,
                                                  null=True)
@@ -518,8 +528,17 @@ class GeneralCharacteristics(models.Model):
     dean_of_the_faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                             verbose_name="Декан факультета", related_name="dean_of_the_faculty_in_gh",
                                             blank=True, null=True)
+    dean_of_the_faculty_directors_position = models.CharField(max_length=512, verbose_name="должность Декана", blank=True,
+                                          null=True)
     cluster_name = models.CharField(max_length=512, verbose_name="Имя подразделения, кластера, института", blank=True,
                                     null=True)
+    science_type = models.BooleanField(blank=True, null=True, verbose_name="Научная ОП?")
+    industrial_type = models.BooleanField(blank=True, null=True, verbose_name="Индустриальная ОП?")
+    corporate_type = models.BooleanField(blank=True, null=True, verbose_name="Корпоративная ОП?")
+    enterprise_type = models.BooleanField(blank=True, null=True, verbose_name="Предпринемательская ОП?")
+    target_master_type = models.BooleanField(blank=True, null=True, verbose_name="Магистратура перспективных направлений?")
+    on_check = models.CharField(max_length=1024, verbose_name="Статус проверки", choices=check_status,
+                                default="in_work")
 
     def __str__(self):
         return str(self.educational_program)
@@ -577,6 +596,8 @@ class ProfessionalStandard(models.Model):
                                          blank=True, null=True)
     code_of_prof_area = models.CharField(max_length=512, verbose_name="Код обощенной трудовой функции",
                                          blank=True, null=True)
+
+    registration_number = models.IntegerField(verbose_name="Регистрационный номер", blank=True, null=True)
 
     # generalized_labor_functions = models.ManyToManyField(GeneralizedLaborFunctions,
     #                                                      verbose_name="обобщенные трудовые функции", blank=True)

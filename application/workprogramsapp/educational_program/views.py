@@ -7,13 +7,17 @@ from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
-from rest_framework import filters
+from rest_framework import filters, mixins
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
+import pandas as pd
 
 # Сериализаторы
+from rest_framework.viewsets import GenericViewSet
+
 from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
@@ -50,7 +54,7 @@ from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, D
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsEducationPlanDeveloper
 
 # Блок реализации АПИ для КПУД интерфейсов
 from ..notifications.emails.send_mail import mail_sender
@@ -137,13 +141,13 @@ class GeneralCharacteristicsCreateAPIView(generics.CreateAPIView):
 class GeneralCharacteristicsDestroyView(generics.DestroyAPIView):
     queryset = GeneralCharacteristics.objects.all()
     serializer_class = GeneralCharacteristicsSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsEducationPlanDeveloper]
 
 
 class GeneralCharacteristicsUpdateView(generics.UpdateAPIView):
     queryset = GeneralCharacteristics.objects.all()
     serializer_class = GeneralCharacteristicsSerializer
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsEducationPlanDeveloper]
 
 
 class GeneralCharacteristicsDetailsView(generics.RetrieveAPIView):
@@ -151,6 +155,10 @@ class GeneralCharacteristicsDetailsView(generics.RetrieveAPIView):
     serializer_class = GeneralCharacteristicsSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = GeneralCharacteristicsSerializer(instance, context={'request': request})
+        return Response(serializer.data)
 
 class DepartmentListAPIView(generics.ListAPIView):
     serializer_class = DepartmentSerializer
@@ -187,10 +195,11 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
 class ProfessionalStandardSet(viewsets.ModelViewSet):
     queryset = ProfessionalStandard.objects.all()
     serializer_class = ProfessionalStandardSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
     permission_classes = [IsRpdDeveloperOrReadOnly]
-    filterset_fields = ['title',
+    filterset_fields = ['title', 'code_of_prof_area'
                         ]
+    search_fields = ['title', 'code']
 
 
 class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
@@ -201,6 +210,7 @@ class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
     serializer_class = GeneralLaborFunctionsSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    search_fields = ['name', 'code']
 
 
 class KindsOfActivitySet(viewsets.ModelViewSet):
@@ -211,6 +221,7 @@ class KindsOfActivitySet(viewsets.ModelViewSet):
     serializer_class = KindsOfActivitySerializerForEd
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    search_fields = ['name']
 
 
 class ObjectsOfActivitySet(viewsets.ModelViewSet):
@@ -223,7 +234,10 @@ class ObjectsOfActivitySet(viewsets.ModelViewSet):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class EmployerSet(viewsets.ModelViewSet):
+class EmployerSet(mixins.CreateModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.DestroyModelMixin,
+                   GenericViewSet):
     """
     CRUD представителей работодателей
     """
@@ -300,11 +314,14 @@ def UploadCompetences(request):
 @permission_classes((IsAuthenticated,))
 def GetCompetenceMatrix(request, gen_pk):
     unique_wp = []  # Уникальные РПД в нескольких УП
+    unique_practice = []  # Уникальные Практики в нескольких УП
+    unique_gia = []  # Уникальные ГИА в нескольких УП
     gen_characteristic = GeneralCharacteristics.objects.get(pk=gen_pk)
     academic_plans = gen_characteristic.educational_program.all()
     pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__general_characteristic_id=gen_pk, competence__isnull=False).distinct(),
+            group_of_pk__general_characteristic_id=gen_pk, competence__isnull=False).order_by(
+            "competence").distinct("competence"),
         many=True).data
     general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
@@ -321,15 +338,17 @@ def GetCompetenceMatrix(request, gen_pk):
     competence_matrix = {"pk_competences": pk_competences, "general_prof_competences": general_prof_competences,
                          "key_competences": key_competences, "over_prof_competences": over_prof_competences, }
     matrix_list = []
+    first_ap_iter=True
     for ap in academic_plans:
         academic_plan = ap.academic_plan
-        academic_plan_matrix_dict = {"academic_plan": ap.title, "discipline_blocks_in_academic_plan": []}
+        academic_plan_matrix_dict = {"academic_plan": ap.title, "ap_id":ap.id, "ap_isu_id":ap.ap_isu_id,
+                                     "discipline_blocks_in_academic_plan": []}
         matrix_list.append(academic_plan_matrix_dict)
         for block in DisciplineBlock.objects.filter(academic_plan=academic_plan):
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
             # academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
             for block_module in DisciplineBlockModule.objects.filter(descipline_block=block):
-                block_module_dict = recursion_module_matrix(block_module, unique_wp)
+                block_module_dict = recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice, first_ap_iter)
                 if block_module_dict["change_blocks_of_work_programs_in_modules"] or block_module_dict["childs"]:
                     block_dict["modules_in_discipline_block"].append(block_module_dict)
             if block_dict["modules_in_discipline_block"]:
@@ -337,6 +356,7 @@ def GetCompetenceMatrix(request, gen_pk):
         list_to_sort = academic_plan_matrix_dict["discipline_blocks_in_academic_plan"]
         newlist = sorted(list_to_sort, key=lambda d: d['name'])
         academic_plan_matrix_dict["discipline_blocks_in_academic_plan"] = newlist
+        first_ap_iter=False
     competence_matrix["wp_matrix"] = matrix_list
     competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(
         gen_characteristic.educational_program.all(), many=True).data
@@ -425,3 +445,57 @@ def academic_plan_all_ids_by_year(request, year):
     academic_plan_all_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=year) \
         .values_list('id', flat=True).distinct()
     return Response({"academic_plan_ids": academic_plan_all_ids})
+
+
+@permission_classes((IsAdminUser,))
+class UploadProfStandards(CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        file = request.FILES["standards"]
+        standards = pd.read_csv(file, delimiter=';', encoding="utf-8")
+        for i, row in standards.iterrows():
+            if pd.isnull(row["Номер (регистрационный)"]):
+                break
+            else:
+                ProfessionalStandard.objects.create(registration_number=int(row["Номер (регистрационный)"]),
+                                                    title=row["Название стандарта"],
+                                                    name_of_prof_area=row["Наименование области проф. деятельности"],
+                                                    code=str(row["Код ПС"]).split(".")[0],
+                                                    code_of_prof_area=str(row["Код ПС"]))
+
+        return Response("standards")
+
+
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=None,
+        properties={
+            'new_status': openapi.Schema(type=openapi.TYPE_STRING,
+                                         description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
+        }
+    ),
+    operation_description='Метод для изменения статусов общей характеристики')
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+@transaction.atomic
+def gh_check(request, gh_id):
+    gh = GeneralCharacteristics.objects.get(id=gh_id)
+    if gh is not None:
+        if gh.on_check == "on_check" and bool(request.user.groups.filter(name="expertise_master")):
+            if request.data['new_status'] == 'in_work':
+                gh.on_check = "in_work"
+                gh.save()
+            elif request.data['new_status'] == 'verified':
+                gh.on_check = "verified"
+                gh.save()
+            return Response({'message': 'status changed', 'status': True}, status=200)
+        mail_sender(topic=f'Общая характеристика с КОП ИД {gh.id} готова к проверке',
+                    text=f'Общая характеристика с КОП ИД {gh.id} готова к проверке',
+                    emails=['osop@itmo.ru'], users=[])
+        gh.on_check = "on_check"
+        gh.save()
+        return Response({'message': 'email sent', 'status': True}, status=200)
+    else:
+        return Response({'message': 'academic plan was sent', 'status': False}, status=400)

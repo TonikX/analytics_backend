@@ -13,12 +13,16 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from gia_practice_app.GIA.models import GIA
+from gia_practice_app.Practice.models import Practice
 from workprogramsapp.isu_merge.academic_plan_headers import process_headers
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_excel_creator import AcademicPlanExcelCreator
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
 from workprogramsapp.isu_merge.filterset import HistoryFilter
 from workprogramsapp.isu_merge.post_to_isu.ap_to_isu import ap_isu_generate_dict
+from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import post_wp_to_isu, post_practice_to_isu, \
+    post_gia_to_isu
 from workprogramsapp.isu_merge.serializers import IsuHistoryListViewSerializer
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan, \
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
@@ -848,3 +852,114 @@ class IsuHistoryListView(ListAPIView):
     filterset_class =HistoryFilter
     search_fields = ["error_status", "obj_id", "obj_type", "date_of_sending"]
     permission_classes = [IsAdminUser]
+
+
+class SendWorkProgramToISU(APIView):
+    """
+        {
+        "wp_id": INT
+        }
+        """
+    permission_classes = [IsExpertiseMasterStrict]
+
+    def post(self, request):
+        wp_id = request.data.get("wp_id")
+        try:
+            wp = WorkProgram.objects.get(id=wp_id)
+        except WorkProgram.DoesNotExist:
+            return Response(data={"error": "Такой РПД не существует"}, status=404)
+        if wp.discipline_code:
+            return Response(data={"error": "У РПД уже есть свой ID"}, status=500)
+        if not wp.structural_unit:
+            return Response(data={"error": "У РПД нету структурного подразделения"}, status=500)
+        isu_logger = IsuService(
+            IsuUser(
+                settings.ISU["ISU_CLIENT_ID"],
+                settings.ISU["ISU_CLIENT_SECRET"]
+            )
+        )
+        isu_logger.get_access_token(add_headers={"scope": "service.edu-complex-isu"})
+        token = isu_logger.token
+        created_id = post_wp_to_isu(token, wp, -1)
+        if created_id:
+            status_response = 200
+            wp.discipline_code = str(created_id)
+            wp.save()
+            return Response(data={"wp_created_id": created_id}, status=status_response)
+        else:
+            status_response = 500
+            return Response(data={"error": "error when creating wp"}, status=status_response)
+
+
+class SendPracticeToISU(APIView):
+    """
+        {
+        "practice_id": INT
+        }
+        """
+    permission_classes = [IsExpertiseMasterStrict]
+
+    def post(self, request):
+        practice_id = request.data.get("practice_id")
+        try:
+            practice = Practice.objects.get(id=practice_id)
+        except Practice.DoesNotExist:
+            return Response(data={"error": "Такой практики не существует"}, status=404)
+        if practice.discipline_code:
+            return Response(data={"error": "У Практики уже есть свой ID"}, status=500)
+        if not practice.structural_unit:
+            return Response(data={"error": "У практики нету структурного подразделения"}, status=500)
+        isu_logger = IsuService(
+            IsuUser(
+                settings.ISU["ISU_CLIENT_ID"],
+                settings.ISU["ISU_CLIENT_SECRET"]
+            )
+        )
+        isu_logger.get_access_token(add_headers={"scope": "service.edu-complex-isu"})
+        token = isu_logger.token
+        created_id = post_practice_to_isu(token, practice, -1)
+        if created_id:
+            status_response = 200
+            practice.discipline_code = created_id
+            practice.save()
+            return Response(data={"practice_created_id": created_id}, status=status_response)
+        else:
+            status_response = 500
+            return Response(data={"error": "error when creating practice"}, status=status_response)
+
+
+class SendGIAToISU(APIView):
+    """
+        {
+        "gia_id": INT
+        }
+        """
+    permission_classes = [IsExpertiseMasterStrict]
+
+    def post(self, request):
+        gia_id = request.data.get("gia_id")
+        try:
+            gia = GIA.objects.get(id=gia_id)
+        except GIA.DoesNotExist:
+            return Response(data={"error": "Такой ГИА не существует"}, status=404)
+        if gia.discipline_code:
+            return Response(data={"error": "У ГИА уже есть свой ID"}, status=500)
+        if not gia.structural_unit:
+            return Response(data={"error": "У ГИА нету структурного подразделения"}, status=500)
+        isu_logger = IsuService(
+            IsuUser(
+                settings.ISU["ISU_CLIENT_ID"],
+                settings.ISU["ISU_CLIENT_SECRET"]
+            )
+        )
+        isu_logger.get_access_token(add_headers={"scope": "service.edu-complex-isu"})
+        token = isu_logger.token
+        created_id = post_gia_to_isu(token, gia, -1)
+        if created_id:
+            status_response = 200
+            gia.discipline_code = created_id
+            gia.save()
+            return Response(data={"gia_created_id": created_id}, status=status_response)
+        else:
+            status_response = 500
+            return Response(data={"error": "error when creating gia"}, status=status_response)

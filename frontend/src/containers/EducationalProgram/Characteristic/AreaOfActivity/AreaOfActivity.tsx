@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -22,19 +22,26 @@ import {EducationProgramCharacteristicFields} from "../../enum";
 import useStyles from './AreaOfActivity.styles'
 import QuestionIcon from "@material-ui/icons/HelpOutline";
 import Tooltip from "@material-ui/core/Tooltip";
+import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
-export default ({ characteristic }: any) => {
+type Props = {
+  tableTitle: string;
+  characteristic: any;
+  tableType: EducationProgramCharacteristicFields.AREA_OF_ACTIVITY | EducationProgramCharacteristicFields.ADDITIONAL_AREA_OF_ACTIVITY
+}
+export default ({ characteristic, tableType, tableTitle }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [openAddProfStandardModal, setOpenAddProfStandardModal] = useState(false)
   const [profStandard, setProfStandard] = useState()
+  const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const handleAddNewItem = useCallback((item: any) => {
-    const allActivities = characteristic?.[EducationProgramCharacteristicFields.AREA_OF_ACTIVITY].map((item: any) => item.id)
+    const allActivities = characteristic?.[tableType].map((item: any) => item.id)
     dispatch(actions.changeEducationalProgramCharacteristic({
       id: characteristic.id,
       payload: {
-        [EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]: [
+        [tableType]: [
           ...allActivities,
           profStandard,
         ]
@@ -47,8 +54,8 @@ export default ({ characteristic }: any) => {
     dispatch(actions.changeEducationalProgramCharacteristic({
       id: characteristic.id,
       payload: {
-        [EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]:
-          characteristic?.[EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]
+        [tableType]:
+          characteristic?.[tableType]
             .map((item: any) => item.id)
             .filter((item: any) => item !== id)
       }
@@ -58,7 +65,7 @@ export default ({ characteristic }: any) => {
   return (
     <>
       <Typography className={classes.label}>
-        Области профессиональной деятельности
+        {tableTitle}
 
         <Tooltip title={(
           <div className={classes.tooltip}>
@@ -90,42 +97,46 @@ export default ({ characteristic }: any) => {
             <TableCell>
               Наименование профессионального стандарта из данной области
             </TableCell>
-            <TableCell />
+            {canEdit ? <TableCell /> : null}
           </TableRow>
         </TableHead>
         <TableBody>
-          {characteristic?.[EducationProgramCharacteristicFields.AREA_OF_ACTIVITY]?.map((item: any, index: number) => (
+          {characteristic?.[tableType]?.map((item: any, index: number) => (
             <TableRow>
               <TableCell>
                 {index + 1}
               </TableCell>
               <TableCell>
-                {item?.code_of_prof_area} {item?.name_of_prof_area}
+                {item?.code} {item?.name_of_prof_area}
               </TableCell>
               <TableCell>
-                {item?.code}
+                {item?.code_of_prof_area}
               </TableCell>
               <TableCell>
                 {item?.title}
               </TableCell>
-              <TableCell>
-                <IconButton onClick={() => handleRemoveItem(item?.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+              {canEdit ? (
+                <TableCell>
+                  <IconButton onClick={() => handleRemoveItem(item?.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              ) : null}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <div style={{display: 'flex'}}>
-        <Button
-          variant="outlined"
-          style={{marginLeft: 'auto', marginTop: '20px'}}
-          onClick={() => setOpenAddProfStandardModal(true)}
-        >
-          Добавить
-        </Button>
-      </div>
+      {canEdit ? (
+        <div style={{display: 'flex'}}>
+          <Button
+            variant="outlined"
+            style={{marginLeft: 'auto', marginTop: '20px'}}
+            onClick={() => setOpenAddProfStandardModal(true)}
+          >
+            Добавить
+          </Button>
+        </div>
+      ) : null}
       <Dialog
         open={openAddProfStandardModal}
         fullWidth

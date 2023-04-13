@@ -13,6 +13,13 @@ export default makeStyles((theme: Theme) => createStyles({
     indicatorCell: {
         width: '35%'
     },
+    link: {
+        textDecoration: 'none',
+        color: theme.palette.primary.main,
+        '&:hover': {
+            color: theme.palette.primary.main
+        }
+    },
     groupTitleCell: {
         textAlign: 'center',
         fontWeight: 'bold',

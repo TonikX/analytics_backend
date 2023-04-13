@@ -11,7 +11,7 @@ export default (theme: Theme) => createStyles({
     },
     contentScroll: {
         maxHeight: '100%',
-        overflowY: 'auto',
+        
     },
     selectorWrap: {
         width: '100%',

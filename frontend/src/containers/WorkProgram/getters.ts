@@ -29,6 +29,7 @@ export const getWorkProgramNotificationsUnread = (state: rootState) => (
 
 export const isCanEdit = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_EDIT);
 export const isCanApprove = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_APPROVE);
+export const isCanSendToIsu = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_SEND_TO_ISU);
 export const isCanArchive = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_ARCHIVE);
 export const isCanComment = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_COMMENT);
 export const isStudent = (state: rootState) => get(getWorkProgram(state), WorkProgramGeneralFields.CAN_COMMENT);

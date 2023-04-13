@@ -5,9 +5,12 @@ from collections import OrderedDict
 
 import pandas
 from django.db import transaction
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from django_super_deduper.merge import MergedModelInstance
+from drf_yasg2 import openapi
+from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework import status
@@ -17,6 +20,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.models import Items
+from .educational_program.search_filters import CompetenceFilter
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
@@ -134,45 +138,103 @@ class IndicatorDetailsView(generics.RetrieveAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+
 class ZunManyViewSet(viewsets.ModelViewSet):
     model = Zun
     queryset = Zun.objects.all()
     serializer_class = ZunForManyCreateSerializer
     http_method_names = ['post', 'delete', 'patch']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    # @swagger_auto_schema(
+    #     request_body=openapi.Schema(
+    #         type=openapi.TYPE_OBJECT,
+    #         required=None,
+    #         properties={
+    #             'new_status': openapi.Schema(type=openapi.TYPE_STRING,
+    #                                          description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
+    #         }
+    #     ),
+    #     operation_description='Метод для изменения статусов учебного плана')
     def create(self, request, *args, **kwargs):
         """
         Example:
-            {"wpa_in_fss": [74089, 74090, 74091],
+            {
+            "workprogram_id": 1 - ссылка на РПД
+            "gh_id": 1 новое - ссылка на ОХ
             "zun": {
-              "indicator_in_zun": 16,
+              "indicator_in_zun": 85,
               "items": []
-                },
-              "knowledge",
-              "skills",
-              "attainments"
+                }
             }
         """
-
-        for wp_in_fs in request.data['wpa_in_fss']:
+        aps = AcademicPlan.objects.filter(
+            academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=int(
+                request.data.get('gh_id')))
+        wp_in_fss = WorkProgramInFieldOfStudy.objects.filter(
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__in=aps) |
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__descipline_block__academic_plan__in=aps) |
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+            Q(work_program__id=int(request.data.get('workprogram_id')),
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps)
+        ).distinct()
+        for wp_in_fs in wp_in_fss:
             serializer = self.get_serializer(data=request.data['zun'])
             serializer.is_valid(raise_exception=True)
-            serializer.save(wp_in_fs=WorkProgramInFieldOfStudy.objects.get(id=wp_in_fs))
+            serializer.save(wp_in_fs=wp_in_fs)
         return Response(status=status.HTTP_201_CREATED)
 
 
-# class IndicatorForCompetence(generics.ListAPIView):
-#     serializer_class = IndicatorListSerializer
-#     queryset = Indicator.objects.all()
-#
-#     def list(self, request, **kwargs):
-#         """
-#         Вывод всех результатов для одной рабочей программы по id
-#         """
-#         # Note the use of `get_queryset()` instead of `self.queryset`
-#         queryset = OutcomesOfWorkProgram.objects.filter(competence__id=self.kwargs['competence_id'])
-#         serializer = IndicatorSerializer(queryset, many=True)
-#         return Response(serializer.data)
+class ZunManyForAllGhViewSet(viewsets.ModelViewSet):
+    model = Zun
+    queryset = Zun.objects.all()
+    serializer_class = ZunForManyCreateSerializer
+    http_method_names = ['post', 'delete', 'patch']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    # @swagger_auto_schema(
+    #     request_body=openapi.Schema(
+    #         type=openapi.TYPE_OBJECT,
+    #         required=None,
+    #         properties={
+    #             'new_status': openapi.Schema(type=openapi.TYPE_STRING,
+    #                                          description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
+    #         }
+    #     ),
+    #     operation_description='Метод для изменения статусов учебного плана')
+    def create(self, request, *args, **kwargs):
+        """
+        Example:
+            {
+            "workprogram_id": 1 - ссылка на РПД
+            "zun": {
+              "indicator_in_zun": 85,
+              "items": []
+                }
+            }
+        """
+        wp_in_fss = WorkProgramInFieldOfStudy.objects.filter(work_program__id=int(request.data.get('workprogram_id'))).distinct()
+        for wp_in_fs in wp_in_fss:
+            serializer = self.get_serializer(data=request.data['zun'])
+            serializer.is_valid(raise_exception=True)
+            serializer.save(wp_in_fs=wp_in_fs)
+        return Response(status=status.HTTP_201_CREATED)
+
 
 
 class CompetenceCreateView(generics.CreateAPIView):
@@ -184,7 +246,8 @@ class CompetenceCreateView(generics.CreateAPIView):
 class CompetencesListView(generics.ListAPIView):
     serializer_class = CompetenceSerializer
     queryset = Competence.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_class = CompetenceFilter
     search_fields = ['name', 'number']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -523,7 +586,8 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
                     section.save()
         except:
             pass
-        response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id=serializer.data['id']))
+        response_serializer = WorkProgramSerializer(WorkProgram.objects.get(id=serializer.data['id'])
+                                                    , context={'request': request})
         return Response(response_serializer.data)
 
 
@@ -549,7 +613,7 @@ class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
-        return Response(WorkProgramSerializer(instance).data)
+        return Response(WorkProgramSerializer(instance, context={'request': request}).data)
 
 
 class WorkProgramDetailsView(generics.RetrieveAPIView):
@@ -559,7 +623,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
 
     def get(self, request, **kwargs):
         queryset = WorkProgram.objects.filter(pk=self.kwargs['pk'])
-        serializer = WorkProgramSerializer(queryset, many=True)
+        serializer = WorkProgramSerializer(queryset, many=True, context={'request': request})
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
         newdata = dict(serializer.data[0])
@@ -1330,16 +1394,26 @@ class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
             work_program__id=self.kwargs['workprogram_id'],
             # work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study = self.kwargs['ap_id']
         ).distinct()
+
+        modules = DisciplineBlockModule.objects.none()
+        for module in queryset:
+            modules = modules | DisciplineBlockModule.objects.filter(id__in=self.get_blocks_for_all_children(
+                module.work_program_change_in_discipline_block_module.discipline_block_module,
+            ))
+
         serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
         return Response(serializer.data)
-        try:
-            queryset = WorkProgramInFieldOfStudy.objects.filter(
-                work_program__id
-                =self.kwargs['workprogram_id']).distinct()
-            serializer = WorkProgramInFieldOfStudySerializer(queryset, many=True)
-            return Response(serializer.data)
-        except:
-            return Response(status=400)
+
+    def get_blocks_for_all_children(self, instance, include_self=True):
+        r = []
+        if include_self:
+            r.append(instance.id)
+        for c in DisciplineBlockModule.objects.filter \
+                    (childs=instance):
+            _r = self.get_blocks_for_all_children(c, include_self=True)
+            if 0 < len(_r):
+                r.extend(_r)
+        return r
 
 
 class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
@@ -1350,20 +1424,31 @@ class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
         """
         Вывод учебных планов для одной рабочей программы по id
         """
-        queryset = WorkProgramInFieldOfStudy.objects.filter(
-            work_program__id=self.kwargs['workprogram_id'],
-            work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program=
-            self.kwargs['gh_id']).distinct()
-        serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
+        aps=AcademicPlan.objects.filter(academic_plan_in_field_of_study__general_characteristics_in_educational_program__id = int(self.kwargs['gh_id']))
+        print(aps)
+        wp_in_fss = WorkProgramInFieldOfStudy.objects.filter(
+            Q(work_program__id=int(self.kwargs['workprogram_id']), work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__in = aps) |
+            Q(work_program__id=int(self.kwargs['workprogram_id']), work_program_change_in_discipline_block_module__discipline_block_module__father_module__descipline_block__academic_plan__in = aps) |
+            Q(work_program__id=int(self.kwargs['workprogram_id']),
+          work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__descipline_block__academic_plan__in = aps) |
+            Q(work_program__id=int(self.kwargs['workprogram_id']),
+          work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__descipline_block__academic_plan__in = aps) |
+            Q(work_program__id=int(self.kwargs['workprogram_id']),
+          work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in = aps) |
+            Q(work_program__id=int(self.kwargs['workprogram_id']),
+          work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in = aps) |
+            Q(work_program__id=int(self.kwargs['workprogram_id']),
+          work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in = aps) |
+            Q(work_program__id=int(self.kwargs['workprogram_id']),
+          work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in = aps) |
+            Q(work_program__id=int(self.kwargs['workprogram_id']),
+          work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in = aps) |
+            Q(work_program__id=int(self.kwargs['workprogram_id']),
+          work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in = aps)
+        ).distinct()
+        print(wp_in_fss)
+        serializer = WorkProgramInFieldOfStudyForCompeteceListSerializer(wp_in_fss, many=True)
         return Response(serializer.data)
-        try:
-            queryset = WorkProgramInFieldOfStudy.objects.filter(
-                work_program__id
-                =self.kwargs['workprogram_id']).distinct()
-            serializer = WorkProgramInFieldOfStudySerializer(queryset, many=True)
-            return Response(serializer.data)
-        except:
-            return Response(status=400)
 
 
 # Блок эндпоинтов для обрабоки файлов
@@ -1978,7 +2063,6 @@ class AcademicPlanCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-
         academic_plan = serializer.save(author=self.request.user)
         DisciplineBlock.objects.create(name="Блок 1. Модули (дисциплины)", academic_plan=academic_plan)
         DisciplineBlock.objects.create(name="Блок 2. Практика", academic_plan=academic_plan)
@@ -2032,26 +2116,30 @@ class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
 
 
 class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
+    """
+    Класс для вывода информации о списке ОП
+    """
     serializer_class = ImplementationAcademicPlanSerializer
     queryset = ImplementationAcademicPlan.objects.all()
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
-    search_fields = ['academic_plan__educational_profile',
+    search_fields = ['title',
+                     'academic_plan__educational_profile',
                      'field_of_study__title',
                      'field_of_study__number',
                      'field_of_study__qualification',
-                     'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
-                     'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                     # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
+                     # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
                      'year',
                      ]
     filterset_fields = ['title',
                         'field_of_study__title',
                         'field_of_study__number',
                         'field_of_study__qualification',
-                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
-                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
-                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__id',
-                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__id',
-                        'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
+                        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
+                        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
+                        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__id',
+                        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__id',
+                        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
                         'year',
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]

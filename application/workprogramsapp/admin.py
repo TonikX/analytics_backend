@@ -1,41 +1,38 @@
 from django.contrib import admin
 
 from .bars_merge.models import BarsWorkProgramsAssociate, HistoryOfSendingToBars, BarsEPAssociate, AcceptedBarsInWp
+from .educational_program.educational_standart.models import EducationalStandard, TasksForEducationalStandard
+from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInEducationalStandard, \
+    GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
+from .educational_program.key_competences.models import GroupOfKeyCompetencesInEducationalStandard, \
+    KeyCompetencesInGroupOfGeneralCharacteristic, IndicatorInKeyCompetenceInGeneralCharacteristic
+from .educational_program.over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard, \
+    OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
+from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
+    PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
 from .expertise.models import UserExpertise, ExpertiseComments, Expertise, ExpertsOnStructuralUnit
+from .feedback.models import FeedbackRecord
 from .folders_ans_statistic.models import Folder, WorkProgramInFolder
+from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 from .individualization.models import IndividualImplementationAcademicPlan, \
     WorkProgramInWorkProgramChangeInDisciplineBlockModule, DisciplineBlockModuleInDisciplineBlock
-from .models import (
-    WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
-    Competence, Indicator, EvaluationTool, DisciplineSection, Topic, WorkProgramInFieldOfStudy,
-    RouteComposition, Route, Certification, BibliographicReference, AcademicPlan,
-    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
-    СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
-    OnlineCourse, WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions,
-    AcademicPlanUpdateConfiguration,
-    AcademicPlanUpdateLog, GiaInFieldOfStudy, PracticeInFieldOfStudy, DisciplineBlockModuleInIsu
-)
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
     SkillsOfRole, \
-    Role, ProfessionalStandard, KindsOfActivity
-from .notifications.emails.models import SentMail
+    Role, ProfessionalStandard
+from .models import (
+    WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
+    Competence, Indicator, EvaluationTool, Topic, WorkProgramInFieldOfStudy,
+    RouteComposition, Route, Certification, BibliographicReference, AcademicPlan,
+    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
+    СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
+    WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions,
+    AcademicPlanUpdateConfiguration,
+    AcademicPlanUpdateLog, GiaInFieldOfStudy, PracticeInFieldOfStudy, DisciplineBlockModuleInIsu, EmployerRepresentative
+)
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments, EmailReset, \
     AcademicPlanUpdateNotification
-
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit, UniversityPartner
-
-from .educational_program.pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
-    PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
-from .educational_program.over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard, \
-    OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
-from .educational_program.key_competences.models import GroupOfKeyCompetencesInEducationalStandard, \
-    KeyCompetencesInGroupOfGeneralCharacteristic, IndicatorInKeyCompetenceInGeneralCharacteristic
-from .educational_program.general_prof_competencies.models import GroupOfGeneralProfCompetencesInEducationalStandard, \
-    GeneralProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInGeneralProfCompetenceInGeneralCharacteristic
-from .individualization.models import ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
-from .feedback.models import FeedbackRecord
-from .educational_program.educational_standart.models import EducationalStandard, TasksForEducationalStandard
 
 # from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
@@ -180,6 +177,7 @@ class AcademicPlanAdmin(admin.ModelAdmin):
 admin.site.register(PracticeInFieldOfStudy)
 admin.site.register(UniversityPartner)
 admin.site.register(AcademicPlanUpdateNotification)
+admin.site.register(EmployerRepresentative)
 
 
 @admin.register(DisciplineBlockModuleInIsu)

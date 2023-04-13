@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import get from 'lodash/get';
 
 import Table from "@material-ui/core/Table";
@@ -26,6 +26,9 @@ import AddIndicatorsModal from "../../../../components/AddIndicatorsModal";
 
 import useStyles from './MinorProfessionalCompetences.style';
 import useStylesReusable  from '../CompetencesTable/CompetencesTable.style';
+import {appRouter} from "../../../../service/router-service";
+import {Link} from "react-router-dom";
+import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({tableData}) => {
   const dispatch = useDispatch();
@@ -33,6 +36,7 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
     ...useStylesReusable(),
     ...useStyles()
   };
+  const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const competenceTableType = CompetenceTableType.PROFESSIONAL_COMPETENCES;
 
@@ -111,7 +115,7 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
               Код и наименование индикатора достижения компетенции
             </TableCell>
             <TableCell className={classes.standardCell}>
-              Наименование сферы профессиональной деятельности
+              Наименование трудовой функции
             </TableCell>
           </TableRow>
         </TableHead>
@@ -131,20 +135,21 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
                                     onClickCancel={() => changeEditGroupTitle({isEdit: false, groupId: 0})}
                                     onValueClick={() => changeEditGroupTitle({isEdit: true, groupId: item.id})}
                                     fullWidth
+                                    disabled={!canEdit}
                       />
                     </div>
 
-                    <Tooltip title="Удалить группу">
+                    {canEdit ? <Tooltip title="Удалить группу">
                       <IconButton onClick={deleteGroup(item.id)}>
                         <DeleteIcon/>
                       </IconButton>
-                    </Tooltip>
+                    </Tooltip> : null}
                   </div>
                 </TableCell>
               </TableRow>
             );
 
-            const addCompetenceRow = (
+            const addCompetenceRow = canEdit ? (
               <TableRow>
                 <TableCell colSpan={4}>
                   <Button color="primary"
@@ -156,7 +161,7 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
                   </Button>
                 </TableCell>
               </TableRow>
-            );
+            ) : null;
 
             if (competences.length === 0) {
               return (
@@ -170,26 +175,32 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
             return (
               <>
                 {groupRow}
-                {competences.map((competenceItem: any, index: number) => (
+                {competences.map((competenceItem: any) => (
                   <TableRow key={`competence-${get(competenceItem, 'competence.id')}`}>
                     <TableCell className={classes.competenceCell}>
-                      {get(competenceItem, 'competence.number')} {get(competenceItem, 'competence.name')}
-                      <Tooltip title="Удалить компетенцию">
+                      <Link
+                        to={appRouter.getCompetenceIndicatorsRouteLink(get(competenceItem, 'competence.id'))}
+                        target="_blank"
+                        className={classes.link}
+                      >
+                        {get(competenceItem, 'competence.number')} {get(competenceItem, 'competence.name')}
+                      </Link>
+                      {canEdit ? <Tooltip title="Удалить компетенцию">
                         <DeleteIcon className={classes.deleteIcon} onClick={deleteCompetence(competenceItem.id)} />
-                      </Tooltip>
+                      </Tooltip> : null}
                       <br/>
                     </TableCell>
                     <TableCell>
                       {get(competenceItem, 'indicator_of_competence_in_group_of_pk_competences').map((indicatorItem: any) => (
                         <>
                           {get(indicatorItem, 'indicator.number')} {get(indicatorItem, 'indicator.name')}
-                          <Tooltip title="Удалить индикатор" onClick={deleteIndicator(indicatorItem.id)}>
+                          {canEdit ? <Tooltip title="Удалить индикатор" onClick={deleteIndicator(indicatorItem.id)}>
                             <DeleteIcon className={classes.deleteIcon}/>
-                          </Tooltip>
+                          </Tooltip> : null}
                           <br/>
                         </>
                       ))}
-                      <Button color="primary"
+                      {canEdit ? <Button color="primary"
                               variant="text"
                               size="small"
                               className={classes.addSmallButton}
@@ -200,7 +211,7 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
                               })}
                       >
                         <AddIcon/> Добавить индикатор
-                      </Button>
+                      </Button> : null}
                     </TableCell>
                     <TableCell className={classes.standardCell}>
 
@@ -212,6 +223,7 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
                                     onClickCancel={() => changeEditCompetenceLaborFunction({isEdit: false, competenceId: 0})}
                                     onValueClick={() => changeEditCompetenceLaborFunction({isEdit: true, competenceId: competenceItem.id})}
                                     fullWidth
+                                    disabled={!canEdit}
                       />
                     </TableCell>
                   </TableRow>
@@ -223,18 +235,19 @@ export const MinorProfessionalCompetences: React.FC<CompetenceTableProps> = ({ta
         </TableBody>
       </Table>
 
-      <Button className={classes.addButton}
+      {canEdit ? <Button className={classes.addButton}
               onClick={createNewGroup}
               variant="outlined"
               size="small"
       >
         Добавить новую категорию
-      </Button>
+      </Button> : null}
 
 
       <AddCompetenceModal closeDialog={() => changeCompetenceOpenModal({isOpen: false, groupId: 0})}
                           isOpen={competenceModalData.isOpen}
                           saveDialog={saveCompetence}
+                          competenceType="ПК"
       />
       <AddIndicatorsModal closeDialog={() => changeIndicatorOpenModal({isOpen: false, competenceId: 0, competenceIdRelation: 0})}
                           isOpen={indicatorModalData.isOpen}

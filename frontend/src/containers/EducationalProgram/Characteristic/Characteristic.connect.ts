@@ -6,13 +6,15 @@ import actions from "../actions";
 import {EducationalProgramActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
-import {getEducationalProgramCharacteristic} from "../getters";
+import {getCharacteristicStatusInfo, getEducationalProgramCharacteristic, getEducationalProgramCharacteristicCanEdit} from "../getters";
 
 import mainActions from '../../../layout/actions'
 
 const mapStateToProps = (state: rootState) => {
     return {
-        educationalProgramCharacteristic: getEducationalProgramCharacteristic(state)
+        educationalProgramCharacteristic: getEducationalProgramCharacteristic(state),
+        canEdit: getEducationalProgramCharacteristicCanEdit(state),
+        statusInfo: getCharacteristicStatusInfo(state),
     };
 };
 

@@ -30,6 +30,7 @@ interface EditableTextProps extends WithStyles {
     textClass?: string;
     onValueClick?: () => void;
     disableOutline?: boolean;
+    disabled?: boolean;
 }
 
 interface EditableTexState {
@@ -103,14 +104,14 @@ class EditableText extends Component<EditableTextProps, EditableTexState> {
     };
 
     render(): React.ReactElement {
-        const { isEditMode, classes, height, autoFocus, fullWidth, textPrefix, textClass, onValueClick } = this.props;
+        const { isEditMode, classes, height, autoFocus, fullWidth, textPrefix, textClass, onValueClick, disabled } = this.props;
         const { value } = this.state;
 
         if (!isEditMode) {
-            return <p className={classNames(classes.text, {[classes.clickableValue]: Boolean(onValueClick)})}
-                      onClick={this.valueClickHandler}
+            return <p className={classNames(classes.text, {[classes.clickableValue]: !disabled && Boolean(onValueClick)})}
+                      onClick={disabled ? undefined : this.valueClickHandler}
             >
-                {textPrefix} <span className={textClass && classes[textClass]}>{value}</span>&nbsp;<EditIcon />
+                {textPrefix} <span className={textClass && classes[textClass]}>{value}</span>&nbsp;{disabled ? null : <EditIcon />}
             </p>;
         }
 
@@ -124,6 +125,7 @@ class EditableText extends Component<EditableTextProps, EditableTexState> {
                     autoFocus={autoFocus}
                     fullWidth={fullWidth}
                     value={value}
+                    disabled={disabled}
                     InputProps={{
                         className: classes.textField,
                         style: {

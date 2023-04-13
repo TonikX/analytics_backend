@@ -4,18 +4,26 @@ import {rootState} from '../../store/reducers';
 
 import {GENERAL_PATH} from "./reducer";
 
-import {fields} from './enum';
+import {EducationProgramCharacteristicFields, fields} from './enum';
 
-import {educationalProgramState, EducationalProgramCharacteristicType, EducationalProgramType} from './types';
+import {
+  educationalProgramState,
+  EducationalProgramCharacteristicType,
+  EducationalProgramType,
+} from './types';
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {AcademicPlan, CompetenceMatrix} from './Characteristic/CompetenceMatrix/types';
 import {EducationalPlanListType} from "../EducationalPlan/types";
 import {EducationalPlanFields} from "../EducationalPlan/enum";
 
+import {CharacteristicStatuses, CharacteristicStatusesNames, CharacteristicStatusesColors} from "./enum";
+
 const getStateData = (state: rootState): educationalProgramState => get(state, GENERAL_PATH);
 export const getEducationalProgramCharacteristic = (state: rootState): EducationalProgramCharacteristicType|{} => get(getStateData(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {});
 export const getEducationalProgramId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'educational_program.id', 0);
 export const getEducationalProgramCharacteristicId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'id', 0);
+export const getEducationalProgramCharacteristicCanEdit= (state: rootState): boolean =>
+  get(getEducationalProgramCharacteristic(state), 'can_edit', false);
 
 export const getSupraProfessionalCompetencies = (state: rootState): EducationalProgramCharacteristicType|{} =>
     get(getEducationalProgramCharacteristic(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {})
@@ -71,3 +79,16 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+
+export const getCharacteristicStatusInfo = (state: rootState) => {
+  const characteristic = getEducationalProgramCharacteristic(state)
+  // @ts-ignore
+  const status = characteristic?.[EducationProgramCharacteristicFields.STATUS] as CharacteristicStatuses
+
+  if (!status) return {}
+
+  return ({
+    backgroundColor: CharacteristicStatusesColors[status],
+    statusText: CharacteristicStatusesNames[status],
+  })
+};

@@ -113,7 +113,7 @@ export default (theme: Theme) => createStyles({
     },
     rightButton: {
         marginTop: '10px',
-        width: '100%',
+        marginRight: '20px'
     },
     rightButtons: {
         margin: '35px 0 0 30px',

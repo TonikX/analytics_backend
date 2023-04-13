@@ -170,6 +170,30 @@ const sendToExpertise = createLogic({
     }
 });
 
+const sendToIsu = createLogic({
+    type: workProgramActions.sendWorkProgramToIsu.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SEND_TO_ISU}));
+
+        service.sendToIsu(workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.getWorkProgram());
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SEND_TO_ISU}));
+                return done();
+            });
+    }
+});
+
 const sendWorkProgramToArchive = createLogic({
     type: workProgramActions.sendWorkProgramToArchive.type,
     latest: true,
@@ -242,29 +266,6 @@ const approveWorkProgram = createLogic({
     }
 });
 
-const saveZUN = createLogic({
-    type: workProgramActions.saveZUN.type,
-    latest: true,
-    process({getState, action}: any, dispatch, done) {
-        const state = getState();
-
-        dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
-
-        service.saveZUN(action.payload)
-            .then((res) => {
-                dispatch(workProgramActions.getWorkProgram());
-                dispatch(actions.fetchingSuccess());
-            })
-            .catch((err) => {
-                dispatch(actions.fetchingFailed(err));
-            })
-            .then(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN}));
-                return done();
-            });
-    }
-});
-
 export default [
     ...sectionLogics,
     ...topicLogics,
@@ -281,6 +282,7 @@ export default [
     cloneWorkProgram,
     sendToExpertise,
     returnWorkProgramToWork,
+    sendToIsu,
     approveWorkProgram,
     sendWorkProgramToArchive,
 ];

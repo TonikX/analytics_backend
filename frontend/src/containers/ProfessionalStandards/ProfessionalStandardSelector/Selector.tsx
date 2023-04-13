@@ -12,7 +12,8 @@ export default ({onChange, value, isReset, label, className, disabled, valueLabe
   const dispatch = useDispatch()
   const list = useSelector((state: rootState) => getProfStandardsForSelector(state))
 
-  const handleChangeSearchQuery = useCallback(() => {
+  const handleChangeSearchQuery = useCallback((searchQuery) => {
+    dispatch(actions.changeSearchQuery(searchQuery))
     dispatch(actions.getProfessionalStandards())
   }, [])
 
@@ -26,6 +27,12 @@ export default ({onChange, value, isReset, label, className, disabled, valueLabe
 
   useEffect(() => {
     return resetMenu
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      dispatch(actions.changeSearchQuery(''))
+    }
   }, [])
 
   return (

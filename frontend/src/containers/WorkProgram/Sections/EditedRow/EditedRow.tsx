@@ -1,5 +1,4 @@
 import React from 'react';
-import get from "lodash/get";
 
 import TableCell from "@material-ui/core/TableCell";
 import IconButton from "@material-ui/core/IconButton";
@@ -98,7 +97,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
 
     calculateContactWork = () => {
         const {section} = this.state;
-        const canEditConsultation = this.props.implementationFormat === ImplementationFormatsEnum.ONLINE
+        const canEditConsultation = this.canEditConsultation()
 
         if (canEditConsultation) {
             return ((
@@ -113,10 +112,12 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
         }
     }
 
+    canEditConsultation = () => this.props.implementationFormat !== ImplementationFormatsEnum.OFFLINE
+
     render() {
-        const {classes, isCanEdit, implementationFormat} = this.props;
+        const {classes, isCanEdit} = this.props;
         const {isEditMode, section} = this.state;
-        const canEditConsultation = implementationFormat === ImplementationFormatsEnum.ONLINE
+        const canEditConsultation = this.canEditConsultation()
 
         const contactWork = this.calculateContactWork();
 

@@ -5,6 +5,7 @@ from dataprocessing.serializers import userProfileSerializer
 from gia_practice_app.GIA.models import CriteriaVKR, GIABaseTemplate, GIA
 from gia_practice_app.logic import get_permissions_gia_practice
 from workprogramsapp.expertise.models import Expertise, UserExpertise
+from workprogramsapp.expertise.serializers import ShortExpertiseSerializer
 from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.serializers import WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -87,6 +88,7 @@ class GIASerializer(serializers.ModelSerializer):
         self.fields['answers_quality_marks'] = CriteriaVKRSerializer(required=False)
         self.fields['editors'] = userProfileSerializer(many=True)
         self.fields['gia_in_change_block'] = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True)
+        self.fields['expertise_with_gia'] = ShortExpertiseSerializer(many=True,)
         return super().to_representation(value)
 
     class Meta:
@@ -98,3 +100,9 @@ class GIAPrimitiveSerializer(serializers.ModelSerializer):
     class Meta:
         model = GIA
         fields = "__all__"
+
+
+class GIASmallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GIA
+        fields = ['id', 'title']

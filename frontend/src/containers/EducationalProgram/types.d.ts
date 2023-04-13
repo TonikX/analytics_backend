@@ -9,13 +9,16 @@ import {EducationalPlanType} from "../EducationalPlan/types";
 import {DirectionType} from "../Direction/types";
 import {UserType} from "../../layout/types";
 
-import {CompetenceTableType, EducationProgramFields, fields} from './enum';
-import {EducationProgramCharacteristicFields} from './enum';
+import {CompetenceTableType, EducationProgramFields, fields, EducationProgramCharacteristicFields, CharacteristicStatuses} from './enum';
 
 import {characterisicStyles} from './Сharacteristic/Сharacteristic.styles';
 import styles from "./WorkProgram.styles";
 
 export interface EducationalProgramActions {
+    sendToCheck: any;
+    addNewRepresentative: any;
+    updateRepresentative: any;
+    deleteRepresentative: any;
     createTaskType: any,
     getTasksTypes: any,
     setTasksTypes: any,
@@ -90,9 +93,23 @@ export interface educationalProgramState {
 
 export type EducationalProgramCharacteristicType = {
     [EducationProgramCharacteristicFields.ID]: number,
+    [EducationProgramCharacteristicFields.STATUS]: CharacteristicStatuses,
     [EducationProgramCharacteristicFields.YEAR]: ReactText,
+    [EducationProgramCharacteristicFields.LANGUAGE]: string,
     [EducationProgramCharacteristicFields.DIRECTION]: DirectionType,
     [EducationProgramCharacteristicFields.EDUCATION_PLAN]: EducationalPlanType,
+    [EducationProgramCharacteristicFields.IS_ONLY_IN_UNIVERSITY]: boolean,
+    [EducationProgramCharacteristicFields.IS_GLOBAL_EDUCATIONAL_PROGRAM]: boolean,
+    [EducationProgramCharacteristicFields.IS_ONLINE_FORMAT]: boolean,
+    [EducationProgramCharacteristicFields.COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT]: string,
+    [EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN]: boolean,
+    [EducationProgramCharacteristicFields.COLLABORATION_FOREIGN]: string,
+    [EducationProgramCharacteristicFields.SCIENCE_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.INDUSTRIAL_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.CORPORATE_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.ENTERPRISE_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.TARGET_MASTER_TYPE]: boolean,
+    [EducationProgramCharacteristicFields.DEAN_POSITION]: string,
 };
 
 export type EducationalProgramType = {
@@ -118,7 +135,9 @@ export interface EducationalProgramProps extends WithStyles<typeof styles> {
 export interface CharacteristicProps extends WithStyles<typeof characterisicStyles> {
     actions: EducationalProgramActions;
     mainActions: any;
-    educationalProgramCharacteristic: EducationProgramCharacteristicFields;
+    educationalProgramCharacteristic: any;
+    canEdit: boolean;
+    statusInfo: any;
 }
 
 export type CharacteristicCreateGroupActionType = {

@@ -21,7 +21,7 @@ export default ({onChange, value, isReset, label, className, disabled, valueLabe
   }
 
   useEffect(() => {
-    dispatch(actions.getKindsOfActivity())
+    dispatch(actions.getKindsOfActivity(''))
   }, [])
 
   useEffect(() => {

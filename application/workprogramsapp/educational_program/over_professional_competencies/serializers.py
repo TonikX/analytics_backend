@@ -69,6 +69,13 @@ class OverProfCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.Mo
 class CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer(serializers.ModelSerializer):
     """Сериализатор создания и изменения над-профессиональных компетенций"""
 
+    def create(self, validated_data):
+        pk = OverProfCompetencesInGroupOfGeneralCharacteristic.objects.create(**validated_data)
+        for indicator in Indicator.objects.filter(competence=pk.competence):
+            IndicatorInOverProfCompetenceInGeneralCharacteristic.objects.create(competence_in_group_of_pk=pk,
+                                                                                indicator=indicator)
+        return pk
+
     class Meta:
         model = OverProfCompetencesInGroupOfGeneralCharacteristic
         fields = "__all__"

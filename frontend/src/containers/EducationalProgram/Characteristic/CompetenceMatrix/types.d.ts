@@ -86,8 +86,9 @@ enum CHANGE_TYPE {
 
 interface DisciplineModule {
     name: string;
-    type: typeof DISCIPLINE_MODULE_TYPE;
-    change_blocks_of_work_programs_in_modules: WorkProgramChangeInDisciplineBlockModule[]
+    type: string;
+    change_blocks_of_work_programs_in_modules: WorkProgramChangeInDisciplineBlockModule[];
+    childs?: DisciplineModule[];
 }
 
 interface EducationalProgram {
@@ -113,6 +114,7 @@ interface WorkProgramChangeInDisciplineBlockModule {
     change_type: typeof CHANGE_TYPE;
     credit_units: string;
     work_program: ModuleWorkProgram[]
+    practice?: ModuleWorkProgram[];
 }
 
 interface AcademicPlan {

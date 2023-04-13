@@ -1,15 +1,16 @@
 import React, {useCallback, useEffect, useState, useMemo} from 'react'
-import {Dialog} from '@material-ui/core'
+import {Dialog, Select} from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Chip from '@material-ui/core/Chip'
 import CompetenceSelector from '../../../../Competences/CompetenceSelector'
 import IndicatorSelector from '../../../../Competences/Indicators/IndicatorSelector'
-import PlanSelector from '../WorkProgramPlansSelector'
 import {useStyles} from './IndicatorDialog.styles'
 import actions from '../../../actions'
 import {useDispatch} from 'react-redux'
+import Tooltip from "@material-ui/core/Tooltip/Tooltip";
+import MenuItem from "@material-ui/core/MenuItem";
 
 interface IndicatorsProps {
     workProgramId: number;
@@ -31,13 +32,12 @@ interface IndicatorsProps {
     onDeleteZun: (id: number) => void;
 }
 
-export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId, addedIndicators, onDeleteZun}: IndicatorsProps) => {
+export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workProgramId, addedIndicators, onDeleteZun}: IndicatorsProps) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [competence, setCompetence] = useState<{ value: number; label: string }>({value: 0, label: ''});
     const [indicator, setIndicator] = useState<{ value: number; label: string }>({value: 0, label: ''});
-    const [plans, setPlans] = useState<Array<{ value: number; label: string }>>([]);
-
+    const [onlyCurrentGh, setOnlyCurrentGh] = useState(true);
     const addIndicator = (value: number, label: string) => {
         setIndicator({
             value,
@@ -45,27 +45,15 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
         })
     };
 
-    const removePlan = useCallback((value: number) => {
-        setPlans(plans.filter(plan => plan.value !== value))
-    }, [plans]);
+    const close = () => {
+        handleClose();
+        setOnlyCurrentGh(true);
+    };
 
     const removeIndicator = (value: number) => {
         onDeleteZun(value);
         dispatch(actions.deleteZun(value));
     };
-
-    const addPlan = useCallback((value: number, label: string) => {
-        if (plans.find(item => item.value === value)) return;
-        if (value) {
-            setPlans([
-                ...plans,
-                {
-                    value,
-                    label
-                }
-            ])
-        }
-    }, [plans]);
 
     const addCompetence = (value: number, label: string) => {
         setCompetence({
@@ -77,15 +65,16 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
     const saveZun = useCallback(() => {
         dispatch(actions.saveZun({
             indicator: indicator.value,
-            results: [],
-            plans: plans.map(item => item.value),
+            workprogram_id: workProgramId,
+            onlyCurrentGh: onlyCurrentGh,
         }));
-        handleClose()
-    }, [indicator, competence, plans]);
+        close()
+    }, [indicator, competence, onlyCurrentGh]);
 
-    const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0 || plans.length === 0),
-        [indicator, competence, plans]
+    const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0),
+        [indicator, competence]
     );
+
 
     useEffect(() => {
         setIndicator({value: 0, label: ''})
@@ -102,6 +91,17 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
             setIndicator(defaultIndicator)
         }
     }, [defaultIndicator]);
+
+    const selectOptions = [
+        {
+            label: 'Связать индикатор только с этой ОХ',
+            value: true
+        },
+        {
+            label: 'Связать индикатор со всеми ОХ',
+            value: false
+        },
+    ];
 
     return (
         <Dialog
@@ -125,31 +125,32 @@ export default ({isOpen, isEditMode, handleClose, defaultCompetence, defaultIndi
                 onChange={addIndicator}
                 value={0}
                 label="Индикатор"
-                className={classes.marginBottom10}
                 competenceId={competence.value}
                 disabled={competence.value === 0 || Boolean(defaultIndicator)}
             />
             <div className={classes.chipsList}>
                 {addedIndicators.map(item => (
+                    <Tooltip title={item.label}>
                     <Chip key={`indicator-${item.value}`} className={classes.chip} onDelete={() => removeIndicator(item.value)}
-                          label={item.label}/>
+                          label={`${item.label.slice(0, 30)}...`}/>
+                    </Tooltip>
                 ))}
             </div>
-            <PlanSelector
-                label="Учебный план и образовательная программа"
-                onChange={addPlan}
-                valueLabel=""
-                value={0}
-                workProgramId={workProgramId}
-            />
-            <div className={classes.chipsList}>
-                {plans.map(plan => (
-                    <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)}
-                          label={plan.label}/>
-                ))}
-            </div>
+            <Select
+                value={onlyCurrentGh}
+                // @ts-ignore
+                onChange={(event) => setOnlyCurrentGh(event.target.value)}
+                variant="outlined"
+                fullWidth
+            >
+                {selectOptions.map((item: {label: string; value: any}, index) =>
+                    <MenuItem value={item.value} key={`block-${index}`}>
+                        {item.label}
+                    </MenuItem>
+                )}
+            </Select>
             <DialogActions className={classes.actions}>
-                <Button onClick={handleClose}
+                <Button onClick={close}
                         variant="text">
                     Отмена
                 </Button>

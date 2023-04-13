@@ -9,7 +9,7 @@ from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById, \
     DeleteUserExpertise
 from .files_export.views import DocxFileExportView, SyllabusExportView, UploadPlans, UploadPlansAPIView, \
-    AcademicPlanGenerateXlsx
+    AcademicPlanGenerateXlsx, GeneralCharacteristicGenerateDocx, CompetenceMatrixGenerateExcel
 from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, CreateFolderView, EditFolderView, \
     AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
@@ -25,7 +25,7 @@ from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfes
 from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAPIView, SkillsOfRoleInRoleUpdateView, \
     SkillsOfRoleInRoleDestroyView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
-    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView
+    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, ZunManyForAllGhViewSet
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -70,6 +70,8 @@ router = DefaultRouter()
 
 router.register(r'api/zun/many_create',
                 ZunManyViewSet, basename='zun_many_create')
+router.register(r'api/zun/many_create_for_all_gh',
+                ZunManyForAllGhViewSet, basename='zun_many_create_for_all_gh')
 
 urlpatterns = [
 
@@ -189,6 +191,8 @@ urlpatterns = [
     path('api/export/docx/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', DocxFileExportView.as_view()),
     path('api/export/syllabus/<int:pk>/<int:fs_id>/<int:ap_id>/<int:year>', SyllabusExportView.as_view()),
     path('api/export/academic_plan/<int:pk>', AcademicPlanGenerateXlsx.as_view()),
+    path('api/export/general_characteristic/<int:pk>', GeneralCharacteristicGenerateDocx.as_view()),
+    path('api/export/competence_matrix/<int:pk>', CompetenceMatrixGenerateExcel.as_view()),
 
     # Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),

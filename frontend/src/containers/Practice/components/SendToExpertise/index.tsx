@@ -18,7 +18,6 @@ interface SendToExpertiseProps extends WithStyles<typeof styles> {
 }
 
 class SendToExpertise extends React.Component<SendToExpertiseProps> {
-
     handleClick = () => {
         this.props.actions.showErrors();
         const erroredFields = this.props.validation.erroredFields;
@@ -40,7 +39,6 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
     }
 
     render() {
-
         const {validation, classes} = this.props;
 
         if (validation.erroredFields.length === 0) {
@@ -50,6 +48,7 @@ class SendToExpertise extends React.Component<SendToExpertiseProps> {
                 </Button>
             )
         }
+
         return (
             <Tooltip arrow title={
                 <Typography variant='body1'>

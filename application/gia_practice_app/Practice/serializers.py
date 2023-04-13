@@ -7,6 +7,7 @@ from gia_practice_app.Practice.models import PracticeTemplate, Practice, Prerequ
     ZunPractice
 from gia_practice_app.logic import get_permissions_gia_practice
 from workprogramsapp.expertise.models import Expertise, UserExpertise
+from workprogramsapp.expertise.serializers import ShortExpertiseSerializer
 from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule, Competence, Zun, Indicator, \
     ImplementationAcademicPlan, PracticeInFieldOfStudy
 from workprogramsapp.serializers import WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer, \
@@ -113,6 +114,7 @@ class PracticeSerializer(serializers.ModelSerializer):
         self.fields['competences'] = SerializerMethodField()
         self.fields['editors'] = userProfileSerializer(many=True)
         self.fields['practice_in_change_block'] = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True)
+        self.fields['expertise_with_practice'] = ShortExpertiseSerializer(many=True,)
         return super().to_representation(value)
 
     def get_competences(self, instance):
@@ -206,3 +208,48 @@ class PracticeInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializ
     class Meta:
         model = PracticeInFieldOfStudy
         fields = ['id', 'work_program_change_in_discipline_block_module', 'zun_in_practice']
+
+
+class PracticeCompetenceSerializer(serializers.ModelSerializer):
+    competences = SerializerMethodField()
+
+    def get_competences(self, instance):
+        competences = Competence.objects.filter(
+            indicator_in_competencse__zun_practice__practice_in_fs__practice__id=instance.id).distinct()
+        competences_dict = []
+        for competence in competences:
+            zuns = ZunPractice.objects.filter(practice_in_fs__practice__id=instance.id,
+                                              indicator_in_zun__competence__id=competence.id)
+            zuns_array = []
+            for zun in zuns:
+                try:
+                    indicator = Indicator.objects.get(competence=competence.id,
+                                                      zun_practice__id=zun.id)
+                    indicator = IndicatorSerializer(indicator).data
+                except:
+                    indicator = None
+                # indicators_array = []
+                # for indicator in indicators:
+                #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
+                items_array = []
+                items = Items.objects.filter(practice_item_in_outcomes__item_in_practice__id=zun.id,
+                                             practice_item_in_outcomes__item_in_practice__practice_in_fs__practice__id=instance.id,
+                                             practice_item_in_outcomes__item_in_practice__indicator_in_zun__competence__id=competence.id)
+                for item in items:
+                    items_array.append({"id": item.id, "name": item.name})
+                # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
+                queryset = ImplementationAcademicPlan.objects.filter(
+                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb_for_practice__zun_in_practice__id=zun.id)
+                serializer = ImplementationAcademicPlanSerializer(queryset, many=True)
+                zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
+                                   "attainments": zun.attainments, "indicator": indicator,
+                                   "items": items_array, "educational_program": serializer.data,
+                                   "wp_in_fs": PracticeInFieldOfStudyCreateSerializer(
+                                       PracticeInFieldOfStudy.objects.get(zun_in_practice=zun.id)).data["id"]})
+            competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
+                                     "zuns": zuns_array})
+        return competences_dict
+
+    class Meta:
+        model = Practice
+        fields = ['id', 'title', 'competences']

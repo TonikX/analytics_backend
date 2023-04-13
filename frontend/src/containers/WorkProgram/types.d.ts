@@ -24,6 +24,7 @@ export interface WorkProgramActions {
 
     sendWorkProgramToArchive: any;
     sendWorkProgramToExpertise: any;
+    sendWorkProgramToIsu: any;
     returnWorkProgramToWork: any;
     approveWorkProgram: any;
 
@@ -131,6 +132,7 @@ export interface WorkProgramProps extends WithStyles<typeof styles> {
     canSendToExpertise: boolean;
     canSendToArchive: boolean;
     canAddToFolder: boolean;
+    canSendToIsu: boolean;
     canComment: boolean;
     workProgramStatus: string;
     workProgramRating: boolean;

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -23,6 +23,7 @@ import {EducationProgramCharacteristicFields} from "../../enum";
 import useStyles from './KindsOfActivity.styles'
 import Tooltip from "@material-ui/core/Tooltip";
 import QuestionIcon from "@material-ui/icons/HelpOutline";
+import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 export default ({ characteristic }: any) => {
   const classes = useStyles()
@@ -30,6 +31,7 @@ export default ({ characteristic }: any) => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedObject, setSelectedObject] = useState()
   const [newObject, setNewObject] = useState()
+  const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const handleSave = useCallback(() => {
     const allActivities = characteristic[EducationProgramCharacteristicFields.KINDS_OF_ACTIVITIES].map((item: any) => item.id)
@@ -86,7 +88,7 @@ export default ({ characteristic }: any) => {
             <TableCell>
               Название
             </TableCell>
-            <TableCell />
+            {canEdit ? <TableCell /> : null}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -95,24 +97,28 @@ export default ({ characteristic }: any) => {
               <TableCell>
                 {item.name}
               </TableCell>
-              <TableCell className={classes.deleteButtonWrap}>
-                <IconButton onClick={() => handleRemoveItem(item?.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+              {canEdit ? (
+                <TableCell className={classes.deleteButtonWrap}>
+                  <IconButton onClick={() => handleRemoveItem(item?.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              ) : null}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <div style={{display: 'flex'}}>
-        <Button
-          variant="outlined"
-          style={{marginLeft: 'auto', marginTop: '20px'}}
-          onClick={() => setOpenModal(true)}
-        >
-          Добавить
-        </Button>
-      </div>
+      {canEdit ? (
+        <div style={{display: 'flex'}}>
+          <Button
+            variant="outlined"
+            style={{marginLeft: 'auto', marginTop: '20px'}}
+            onClick={() => setOpenModal(true)}
+          >
+            Добавить
+          </Button>
+        </div>
+      ) : null}
       <Dialog
         open={openModal}
         fullWidth

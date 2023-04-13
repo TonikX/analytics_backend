@@ -53,6 +53,7 @@ const setIntermediateCertification = createAction('WORK_PROGRAM_SET_INTERMEDIATE
 
 const sendWorkProgramToArchive = createAction('WORK_PROGRAM_SEND_TO_ARCHIVE');
 const sendWorkProgramToExpertise = createAction('WORK_PROGRAM_SEND_TO_EXPERTIZE');
+const sendWorkProgramToIsu = createAction('WORK_PROGRAM_SEND_TO_ISU');
 const returnWorkProgramToWork = createAction('WORK_PROGRAM_RETURN_TO_WORK');
 const approveWorkProgram = createAction('WORK_PROGRAM_APPROVE');
 
@@ -85,6 +86,7 @@ const actions: WorkProgramActions = {
 
     sendWorkProgramToArchive,
     sendWorkProgramToExpertise,
+    sendWorkProgramToIsu,
     returnWorkProgramToWork,
     approveWorkProgram,
 

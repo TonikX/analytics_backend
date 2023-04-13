@@ -26,8 +26,6 @@ import EducationPlanInDirectionSelector
   from "../../EduationPlanInDirection/EducationPlanInDirectionSelector/EducationPlanInDirectionSelector";
 import {CompetenceTableType, EducationProgramCharacteristicFields, EducationProgramFields} from "../enum";
 import {getUserFullName, YEAR_DATE_FORMAT} from "../../../common/utils";
-import DatePickerComponent from "../../../components/DatePicker/DatePicker";
-import QualificationSelector from "../../../components/QualificationSelector/QualificationSelector";
 import {MaterialUiPickersDate} from "@material-ui/pickers/typings/date";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
@@ -38,7 +36,6 @@ import {CompetenceType} from "../../Competences/types";
 import {CompetenceFields} from "../../Competences/enum";
 import {IndicatorType} from "../../Indicators/types";
 import {IndicatorsFields} from "../../Indicators/enum";
-import {UserFields} from "../../../layout/enum";
 import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
 import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
 import ForsitesProfessionalCompetences from "./ForsitesProfessionalCompetences";
@@ -48,9 +45,15 @@ import KindsOfActivity from "./KindsOfActivity";
 import ObjectsOfActivity from "./ObjectsOfActivity";
 import TasksTypes from "./TasksTypes";
 import CompetenceMatrix from "./CompetenceMatrix";
+import {RepresentativesOrganizations} from "./RepresentativesOrganizations";
 import InputLabel from '@material-ui/core/InputLabel'
 import {getEducationalProgramFullNameForSelect} from "../../EduationPlanInDirection/getters";
 import EducationalStandardSelector from "../../EducationalStandards/EducationalStandardSelector";
+import {languageArray} from "../../WorkProgram/constants";
+import SimpleSelector from "../../../components/SimpleSelector";
+import Checkbox from "@material-ui/core/Checkbox";
+import TextField from "../../../components/TextField";
+import {StatusPoint} from "../../../components/StatusPoint";
 
 class Characteristic extends React.Component<CharacteristicProps> {
   state = {
@@ -116,11 +119,47 @@ class Characteristic extends React.Component<CharacteristicProps> {
     })
   }
 
+  handleChangeLanguage = (value: number) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [EducationProgramCharacteristicFields.LANGUAGE]: value
+      }
+    })
+  }
+
+  handleChangeRealizationFormat = (value: number) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [EducationProgramCharacteristicFields.REALIZATION_FORMAT]: value
+      }
+    })
+  }
+
   handleChangeDean = (value: string) => {
     this.props.actions.changeEducationalProgram({
       id: this.getEducationalProgramId(),
       payload: {
-        [EducationProgramFields.DEAN]: value
+        [EducationProgramCharacteristicFields.DEAN]: value
+      }
+    })
+  }
+
+  handleChangeDeanPost = (value: string) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [EducationProgramCharacteristicFields.DEAN_POSITION]: value
+      }
+    })
+  }
+
+  handleChangeDirectorPost = (value: string) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [EducationProgramCharacteristicFields.DIRECTOR_POSITION]: value
       }
     })
   }
@@ -162,7 +201,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             const indicators = get(item, 'indicator_in_competencse', []);
 
             if (indicators.length === 0) {
-              return <TableRow>
+              return <TableRow key={'competence' + index}>
                 <TableCell>
                   {item[CompetenceFields.NUMBER]}
                 </TableCell>
@@ -174,7 +213,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             }
 
             return indicators.map((indicator: IndicatorType, index: number) =>
-              <TableRow>
+              <TableRow key={'indicators' + index}>
                 {index === 0 &&
                   <TableCell rowSpan={indicators.length}>
                     {item[CompetenceFields.NUMBER]}
@@ -221,8 +260,8 @@ class Characteristic extends React.Component<CharacteristicProps> {
           </TableRow>
         </TableHead>
         <TableBody>
-          {competences.map((item: any, index: number) =>
-            <TableRow>
+          {competences.map((item: any) =>
+            <TableRow key={item.competence[CompetenceFields.ID]}>
               <TableCell style={{width: '25%'}}>
                 {item.competence[CompetenceFields.NUMBER]} {item.competence[CompetenceFields.TITLE]}
               </TableCell>
@@ -250,7 +289,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
   deleteEducationalProgram = (id: number) => () => {
     const { educationalProgramCharacteristic } = this.props
 
-    if (get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])) {
+    if (get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, []).length === 1) {
       this.props.mainActions.fetchingFailed(['Нельзя удалить единственную ОП'])
       return
     }
@@ -270,8 +309,169 @@ class Characteristic extends React.Component<CharacteristicProps> {
 
   }
 
+  handleChangeRealizationType = (type: string) => (event: any, checked: boolean) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [type]: checked
+      }
+    })
+  }
+
+  handleChangeOPType = (type: string) => (event: any, checked: boolean) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [type]: checked
+      }
+    })
+  }
+
+  handleChangeTextCheckboxRealizationType = (type: string) => (event: any, checked: boolean) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [type]: checked ? '' : null
+      }
+    })
+  }
+
+  handleChangeTextRealizationType = (type: string) => (value: string) => {
+    this.props.actions.changeEducationalProgram({
+      id: this.getEducationalProgramId(),
+      payload: {
+        [type]: value,
+      }
+    })
+  }
+
+  renderRealizationTypeSelect = () => {
+    const {classes, educationalProgramCharacteristic, canEdit} = this.props
+    return (
+      <>
+        <Typography>
+          Форма реализации образовательной программы
+        </Typography>
+        <br/>
+        <div className={classes.realizationBlockItem}>
+          <Checkbox
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_ONLY_IN_UNIVERSITY]}
+            onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_ONLY_IN_UNIVERSITY)}
+            className={classes.checkbox}
+            disabled={!canEdit}
+          />
+          <Typography>Только в университете ИТМО</Typography>
+        </div>
+        <div className={classes.realizationBlockItem}>
+          <Checkbox
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_GLOBAL_EDUCATIONAL_PROGRAM]}
+            onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_GLOBAL_EDUCATIONAL_PROGRAM)}
+            className={classes.checkbox}
+            disabled={!canEdit}
+          />
+          <Typography>Имеет статус международной образовательной программы (МОП)</Typography>
+        </div>
+        <div className={classes.realizationBlockItem}>
+          <Checkbox
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_ONLINE_FORMAT]}
+            onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_ONLINE_FORMAT)}
+            className={classes.checkbox}
+            disabled={!canEdit}
+          />
+          <Typography  className={classes.realizationBlockItemTitle}>В сетевой форме</Typography> <br/>
+        </div>
+        {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_ONLINE_FORMAT] ? (
+          <div className={classes.realizationBlockItem}>
+            <Typography className={classes.realizationAdditionalBlockItemTitle}>Совместно с российским(-и) партнером(-ами)</Typography>
+            <TextField
+              noMargin
+              onChange={this.handleChangeTextRealizationType(EducationProgramCharacteristicFields.COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT)}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.COLLABORATION_RUSSIAN_IN_ONLINE_FORMAT]}
+              disabled={!canEdit}
+            />
+          </div>
+        ) : null}
+        <div className={classes.realizationBlockItem}>
+          <Checkbox
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN]}
+            onChange={this.handleChangeRealizationType(EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN)}
+            className={classes.checkbox}
+            disabled={!canEdit}
+          />
+          <Typography className={classes.realizationBlockItemTitle}>В форме совместной образовательной программы</Typography>
+        </div>
+        {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.IS_COLLABORATION_FOREIGN] ? (
+          <div className={classes.realizationBlockItem}>
+            <Typography className={classes.realizationAdditionalBlockItemTitle}>Совместно с иностранным(-и) партнером(-ами)</Typography>
+            <TextField
+              noMargin
+              disabled={!canEdit}
+              onChange={this.handleChangeTextRealizationType(EducationProgramCharacteristicFields.COLLABORATION_FOREIGN)}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.COLLABORATION_FOREIGN]}
+            />
+          </div>
+        ) : null}
+      </>
+    )
+  }
+
+  renderTypeOP = () => {
+    const {classes, educationalProgramCharacteristic, canEdit} = this.props
+    return (
+      <>
+        <Typography>
+          Тип образовательной программы
+        </Typography>
+        <br/>
+        <div className={classes.opTypeBlockItem}>
+          <Checkbox
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.SCIENCE_TYPE]}
+            onChange={this.handleChangeOPType(EducationProgramCharacteristicFields.SCIENCE_TYPE)}
+            className={classes.checkbox}
+            disabled={!canEdit}
+          />
+          <Typography>Научная</Typography>
+        </div>
+        <div className={classes.opTypeBlockItem}>
+          <Checkbox
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.CORPORATE_TYPE]}
+            onChange={this.handleChangeOPType(EducationProgramCharacteristicFields.CORPORATE_TYPE)}
+            className={classes.checkbox}
+            disabled={!canEdit}
+          />
+          <Typography> Корпоративная ОП</Typography>
+        </div>
+        <div className={classes.opTypeBlockItem}>
+          <Checkbox
+            checked={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.INDUSTRIAL_TYPE]}
+            onChange={this.handleChangeOPType(EducationProgramCharacteristicFields.INDUSTRIAL_TYPE)}
+            className={classes.checkbox}
+            disabled={!canEdit}
+          />
+          <Typography>Индустриальная ОП</Typography>
+        </div>
+        {/*<div className={classes.opTypeBlockItem}>*/}
+        {/*  <Checkbox*/}
+        {/*    checked={educationalProgramCharacteristic?.[EducationProgramFields.ENTERPRISE_TYPE]}*/}
+        {/*    onChange={this.handleChangeOPType(EducationProgramFields.ENTERPRISE_TYPE)}*/}
+        {/*    className={classes.checkbox}*/}
+        {/*  />*/}
+        {/*  <Typography>Предпринимательская ОП</Typography>*/}
+        {/*</div>*/}
+        {/*<div className={classes.opTypeBlockItem}>*/}
+        {/*  <Checkbox*/}
+        {/*    checked={educationalProgramCharacteristic?.[EducationProgramFields.TARGET_MASTER_TYPE]}*/}
+        {/*    onChange={this.handleChangeOPType(EducationProgramFields.TARGET_MASTER_TYPE)}*/}
+        {/*    className={classes.checkbox}*/}
+        {/*  />*/}
+        {/*  <Typography>Магистратура перспективных направлений</Typography>*/}
+        {/*</div>*/}
+      </>
+    )
+  }
+
   renderContent = () => {
-    const {educationalProgramCharacteristic, classes} = this.props;
+    const {educationalProgramCharacteristic, classes, canEdit} = this.props;
     const {activeStep, addNewOP} = this.state;
     const educationalProgramId = get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, '0', 'id'], '')
 
@@ -284,19 +484,23 @@ class Characteristic extends React.Component<CharacteristicProps> {
           </Typography>
           <br/>
           {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, []).map((item: any) => (
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap' }}>
               <Chip
                 label={getEducationalProgramFullNameForSelect(item)}
-                onDelete={this.deleteEducationalProgram(item.id)} style={{marginRight: 10}}
+                onDelete={canEdit ? this.deleteEducationalProgram(item.id) : undefined}
+                classes={{
+                  label: classes.chipLabel,
+                }}
+                className={classes.chip}
               />
               <Link style={{ color: '#1d51a3', textDecoration: 'none', marginRight: '10px',  display: 'flex', alignItems: 'center' }} to={appRouter.getPlanDetailLink(get(item, 'academic_plan.id', ''))}>
                 <LinkIcon style={{ cursor: 'pointer', marginRight: '5px' }} /> <Typography> Перейти в учебный план </Typography>
               </Link>
             </div>
-
           ))}
           <br />
-          {addNewOP ? <>
+          {canEdit ? (
+            addNewOP ? <>
               <EducationPlanInDirectionSelector
                 value={educationalProgramId}
                 handleChange={this.handleChangePlan}
@@ -305,36 +509,108 @@ class Characteristic extends React.Component<CharacteristicProps> {
               <Button variant="outlined" size="small" onClick={() => this.setState({ addNewOP: false })}>Отменить</Button>
             </>:
             <Button variant="outlined" size="small" onClick={() => this.setState({ addNewOP: true })}>Добавить образовательную программу</Button>
-          }
+          ) : null}
           <br /><br /><br />
-          <UserSelector selectorLabel="Руководитель"
-                        value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.EP_SUPERVISOR, 'id'], '').toString()}
-                        label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.EP_SUPERVISOR], ''))}
-                        handleChange={this.handleChangeHead}
-          />
-          <UserSelector selectorLabel="Декан"
-                        value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.DEAN, 'id'], '').toString()}
-                        label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.DEAN], ''))}
-                        handleChange={this.handleChangeDean}
-          />
           <EducationalStandardSelector
             label="Образовательный стандарт"
             onChange={this.handleChangeEducationalStandard}
             value={get(educationalProgramCharacteristic, [EducationProgramFields.EDUCATIONAL_STANDARD, 'id'], '').toString()}
             valueLabel={get(educationalProgramCharacteristic, [EducationProgramFields.EDUCATIONAL_STANDARD, 'name'], '')}
+            disabled={!canEdit}
+          />
+          <SimpleSelector
+            label="Язык реализации"
+            onChange={this.handleChangeLanguage}
+            value={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.LANGUAGE]}
+            metaList={languageArray}
+            wrapClass={classes.wrapSelector}
+            disabled={!canEdit}
+          />
+          <UserSelector selectorLabel="Руководитель"
+                        value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.EP_SUPERVISOR, 'id'], '').toString()}
+                        label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.EP_SUPERVISOR], ''))}
+                        handleChange={this.handleChangeHead}
+                        disabled={!canEdit}
+          />
+
+          {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
+            <TextField
+              label="Должность руководителя"
+              onChange={this.handleChangeDirectorPost}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DIRECTOR_POSITION]}
+              disabled={!canEdit}
+            />
+          ) : null}
+          <UserSelector selectorLabel="Декан"
+                        value={get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATION_PROGRAM, EducationProgramFields.DEAN, 'id'], '').toString()}
+                        label={getUserFullName(get(educationalProgramCharacteristic, [EducationProgramFields.DEAN], ''))}
+                        handleChange={this.handleChangeDean}
+                        disabled={!canEdit}
+          />
+          {educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.ID] ? (
+            <TextField
+              label="Должность декана"
+              onChange={this.handleChangeDeanPost}
+              defaultValue={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.DEAN_POSITION]}
+              disabled={!canEdit}
+            />
+          ) : null}
+
+          <SimpleSelector
+            label="Формат реализации"
+            onChange={this.handleChangeRealizationFormat}
+            value={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.REALIZATION_FORMAT]}
+            metaList={[
+              {value: 'online', label: 'Онлайн'},
+              {value: 'offline', label: 'Офлайн'},
+            ]}
+            wrapClass={classes.formatRealizationWrapSelector}
+            disabled={!canEdit}
+          />
+          {this.renderRealizationTypeSelect()}
+          <br/>
+          {this.renderTypeOP()}
+          <br/>
+
+          <Typography>
+            Представители работодателей
+          </Typography>
+          <br/>
+          <RepresentativesOrganizations
+            list={educationalProgramCharacteristic?.[EducationProgramCharacteristicFields.EMPLOYERS_LIST]}
           />
         </>
       case 1:
         return <div className={classes.editorWrap}>
           <InputLabel className={classes.label}>Аннотация</InputLabel>
-          <CKEditor
-            value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
-            onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
-            toolbarContainerId="toolbar-container"
-          />
+          {canEdit ? (
+            <CKEditor
+              value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
+              onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
+              toolbarContainerId="toolbar-container"
+              readOnly={!canEdit}
+            />
+          ) : (
+            <Typography>
+              {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
+            </Typography>
+          )}
         </div>
       case 2:
-        return <AreaOfActivity characteristic={educationalProgramCharacteristic} />
+        return (
+          <>
+            <AreaOfActivity
+              characteristic={educationalProgramCharacteristic}
+              tableTitle="Области профессиональной деятельности"
+              tableType={EducationProgramCharacteristicFields.AREA_OF_ACTIVITY}
+            />
+            <AreaOfActivity
+              characteristic={educationalProgramCharacteristic}
+              tableTitle="Дополнительные области профессиональной деятельности"
+              tableType={EducationProgramCharacteristicFields.ADDITIONAL_AREA_OF_ACTIVITY}
+            />
+          </>
+        )
       case 3:
         return <KindsOfActivity characteristic={educationalProgramCharacteristic} />
       case 4:
@@ -362,82 +638,96 @@ class Characteristic extends React.Component<CharacteristicProps> {
         return <ForsitesProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_foresight', [])} />;
       case 11:
         return <MinorProfessionalCompetences tableData={get(educationalProgramCharacteristic, 'group_of_pk_competences_minor', [])} />;
+      // case 12:
+      //   return <div className={classes.editorWrap}>
+      //     <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
+      //     <CKEditor
+      //       value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
+      //       onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
+      //       toolbarContainerId="toolbar-container"
+      //     />
+      //   </div>
       case 12:
-        return <div className={classes.editorWrap}>
-          <InputLabel className={classes.label}>Необходимый преподавательский состав</InputLabel>
-          <CKEditor
-            value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.PPS, '')}
-            onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.PPS)}
-            toolbarContainerId="toolbar-container"
-          />
-        </div>
-      case 13:
         return <CompetenceMatrix/>
     }
   }
 
+  sendToCheck = () => this.props.actions.sendToCheck()
+
   render() {
-    const {classes, educationalProgramCharacteristic} = this.props;
+    const {classes, educationalProgramCharacteristic, canEdit, statusInfo} = this.props;
     const {activeStep} = this.state;
+    const names = get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
+      .reduce((items: any, item:any) => {
+        if(!items.includes('"' + item.title + '"')) {
+          items.push('"' + item.title + '"')
+        }
+        return items
+      }, [])
 
     return (
-      <Paper className={classes.root}>
-        <Stepper activeStep={activeStep}
-                 orientation="vertical"
-                 nonLinear
-                 className={classes.stepper}
-        >
-          {steps.map((value, index) => {
-            return (
-              <Step key={index}>
-                <StepButton onClick={this.handleStep(index)}
-                            completed={false}
-                            style={{textAlign: 'left'}}
-                >
-                  {value}
-                </StepButton>
-              </Step>
-            );
-          })}
-        </Stepper>
-        <div className={classes.content}>
-          <Typography className={classes.title}>
-            <div style={{ display: 'flex', width: '100%' }}>
-              <div>
-                Характеристика образовательных программ {' '}
-                {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
-                  .map((item: any) => '"' + item.title + '"')
-                  .join(', ')
-                }
-              </div>
-              <div style={{ marginLeft: 'auto'}}>
-                {[6, 7, 8].includes(activeStep) &&
-                  <Tooltip title="Данный вид компетенций подгружается из связного образовательного стандарта">
-                    <Button variant="contained" style={{marginLeft: 'auto', marginRight: 10, height: '36px'}}
-                            color="primary">
-                      <Link
-                        style={{color: '#fff', textDecoration: 'none'}}
-                        to={appRouter.getEducationalStandardRoute(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATIONAL_STANDART, 'id'], ''))}
-                      >
-                        Образовательный стандарт
-                      </Link>
-                    </Button>
-                  </Tooltip>
-                }
-                <Tooltip title={(
-                  <>
-                    1. Ошибка в матрице компетенций: Компетенция не покрывается ни одной дисциплиной
-                  </>
-                )}>
-                  <Button variant="contained" color="primary" style={{height: '36px'}}>Валидация</Button>
-                </Tooltip>
-              </div>
-            </div>
-          </Typography>
-
-          {this.renderContent()}
+      <div className={classes.wrap}>
+        <div className={classes.paperHeader}>
+          <StatusPoint {...statusInfo} />
+          {canEdit ? (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.sendToCheck}
+              className={classes.sendToCheckButton}
+            >
+              Отправить на проверку
+            </Button>
+          ) : null}
         </div>
-      </Paper>
+        <Paper className={classes.root}>
+          <Stepper activeStep={activeStep}
+                   orientation="vertical"
+                   nonLinear
+                   className={classes.stepper}
+          >
+            {steps.map((value, index) => {
+              return (
+                <Step key={index}>
+                  <StepButton onClick={this.handleStep(index)}
+                              completed={false}
+                              style={{textAlign: 'left'}}
+                  >
+                    {value}
+                  </StepButton>
+                </Step>
+              );
+            })}
+          </Stepper>
+          <div className={classes.content}>
+            <Typography className={classes.title}>
+              <div style={{ display: 'flex', width: '100%' }}>
+                <div>
+                  Характеристика образовательн{names.length === 1 ? 'ой' : 'ых'} программ{names.length === 1 ? 'ы' : ''} {' '}
+                  {names.join(',')}
+                </div>
+                <div style={{ marginLeft: 'auto'}}>
+                  {[6, 7, 8].includes(activeStep) &&
+                    <Tooltip title="Данный вид компетенций подгружается из связного образовательного стандарта">
+                      <Button variant="contained" style={{marginLeft: 'auto', marginRight: 10, height: '36px'}}
+                              color="primary">
+                        <Link
+                          style={{color: '#fff', textDecoration: 'none'}}
+                          to={appRouter.getEducationalStandardRoute(get(educationalProgramCharacteristic, [EducationProgramCharacteristicFields.EDUCATIONAL_STANDART, 'id'], ''))}
+                        >
+                          Образовательный стандарт
+                        </Link>
+                      </Button>
+                    </Tooltip>
+                  }
+                </div>
+              </div>
+            </Typography>
+
+            {this.renderContent()}
+          </div>
+        </Paper>
+      </div>
     );
   }
 }
