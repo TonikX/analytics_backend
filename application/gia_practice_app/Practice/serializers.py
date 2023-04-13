@@ -69,6 +69,7 @@ class OutcomesOfPracticeSerializer(serializers.ModelSerializer):
 class PracticeSerializer(serializers.ModelSerializer):
     practice_in_change_block = SerializerMethodField()
     permissions_info = SerializerMethodField()
+    prac_isu_id = SerializerMethodField()
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -103,18 +104,21 @@ class PracticeSerializer(serializers.ModelSerializer):
         return WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
             instance=WorkProgramChangeInDisciplineBlockModule.objects.filter(practice=instance), many=True).data
 
+    def get_prac_isu_id(self, instance):
+        return instance.discipline_code
+
     def to_representation(self, value):
         self.fields['bibliographic_reference'] = BibliographicReferenceSerializer(required=False, many=True)
         self.fields['practice_base'] = PracticeTemplateSerializer(required=False)
         self.fields['structural_unit'] = ShortStructuralUnitSerializer(required=False)
         self.fields['prerequisites'] = PrerequisitesOfPracticeSerializer(source='prerequisitesofpractice_set',
-                                                                      many=True)
+                                                                         many=True)
         self.fields['outcomes'] = OutcomesOfPracticeSerializer(source='outcomesofpractice_set',
-                                                                      many=True)
+                                                               many=True)
         self.fields['competences'] = SerializerMethodField()
         self.fields['editors'] = userProfileSerializer(many=True)
         self.fields['practice_in_change_block'] = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True)
-        self.fields['expertise_with_practice'] = ShortExpertiseSerializer(many=True,)
+        self.fields['expertise_with_practice'] = ShortExpertiseSerializer(many=True, )
         return super().to_representation(value)
 
     def get_competences(self, instance):
