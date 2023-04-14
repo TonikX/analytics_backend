@@ -44,7 +44,7 @@ export default (theme: Theme) => createStyles({
     width: '15px',
     height: '15px',
     bottom: '7px',
-    left: '33px',
+    left: '27px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

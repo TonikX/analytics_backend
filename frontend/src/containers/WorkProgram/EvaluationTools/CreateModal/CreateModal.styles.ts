@@ -9,7 +9,7 @@ export default (theme: Theme) => createStyles({
         top: '100vh',
         left: 0,
         background: '#fff',
-        zIndex: 10000,
+        zIndex: 1000,
         transition: '0.35s top',
     },
     openDialog: {
@@ -98,7 +98,8 @@ export default (theme: Theme) => createStyles({
         marginBottom: '30px !important',
     },
     selector: {
-        width: '500px'
+        width: '500px',
+        zIndex: 10001,
     },
     label: {
         fontSize: '14px',

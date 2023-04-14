@@ -55,7 +55,7 @@ export default (theme: Theme) => createStyles({
     },
     searchInput: {
         height: '40px',
-        marginLeft: 'auto'
+        marginLeft: 'auto !important'
     },
     addIcon: {
         marginLeft: 'auto',
