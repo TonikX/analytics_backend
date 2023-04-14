@@ -262,6 +262,8 @@ def SendCheckpointsForAcceptedWP(request):
                     isu_wp_id = int(work_program.discipline_code)
                 except ValueError:
                     isu_wp_id = None
+                except TypeError:
+                    isu_wp_id = None
                 for imp in implementation_of_academic_plan:
                     # создаем список направлений + уп с айдишниками ИСУ для БАРСа
                     field_of_studies = FieldOfStudy.objects.filter(
@@ -304,6 +306,8 @@ def SendCheckpointsForAcceptedWP(request):
                 try:
                     isu_wp_id = int(work_program.discipline_code)
                 except ValueError:
+                    isu_wp_id = None
+                except TypeError:
                     isu_wp_id = None
                 for imp in implementation_of_academic_plan:
                     # создаем список направлений + уп с айдишниками ИСУ для БАРСа
