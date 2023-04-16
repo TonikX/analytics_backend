@@ -16,7 +16,7 @@ import {MinimalPracticeState} from "../../types";
 import {PracticeFields} from "../../enum";
 import {appRouter} from "../../../../service/router-service";
 import MenuItem from "@mui/material/MenuItem";
-import {Select, Table} from "@mui/material";
+import {Select, Table, TextField} from "@mui/material";
 import FormLabel from "@mui/material/FormLabel";
 import RadioGroup from "@mui/material/RadioGroup/RadioGroup";
 import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
@@ -31,7 +31,6 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell/TableCell";
 import {HoursSection} from "./types";
 import EditedRow from "./EditableRow/EditableRow";
-import {PRACTICE_TITLES} from "../../constants";
 import {withRouter} from '../../../../hoc/WithRouter'
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
@@ -155,19 +154,16 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 <DialogContent>
                     <div>
                         <InputLabel className={classes.label}>Название</InputLabel>
-                        <Select
+                        <TextField
+                            label=""
+                            onChange={this.saveField(PracticeFields.TITLE)}
                             variant="outlined"
                             fullWidth
                             value={minimalPracticeState[PracticeFields.TITLE]}
-                            // @ts-ignore
-                            onChange={this.saveField(PracticeFields.TITLE)}
-                        >
-                            {PRACTICE_TITLES.map((item, index) =>
-                                <MenuItem value={item.label} key={`practice-title-${index}`}>
-                                    {item.label}
-                                </MenuItem>
-                            )}
-                        </Select>
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
                     </div>
                     <div className={classes.marginTop20}>
                         <InputLabel className={classes.label}>Год</InputLabel>
@@ -261,5 +257,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         );
     }
 }
+
 // @ts-ignore
 export default connect(withStyles(styles)(withRouter(CreateModal)));
