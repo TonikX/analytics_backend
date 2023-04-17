@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     root: {
@@ -16,7 +17,8 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
     },
     titleCell: {
         width: '40%',
@@ -54,8 +56,15 @@ export default (theme: Theme) => createStyles({
         marginTop: '10px'
     },
     header: {
-        background: theme.palette.primary.main,
-        color: '#fff'
+        display: 'flex',
+        '& th': {
+            background: theme.palette.primary.main,
+            color: '#fff !important',
+        }
+    },
+    headerCell: {
+        display: 'flex',
+        alignItems: 'center'
     },
     marginRight: {
         marginRight: 20

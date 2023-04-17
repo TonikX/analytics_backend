@@ -1,26 +1,26 @@
+// @ts-nocheck
 import React from 'react';
 import get from 'lodash/get';
 import {appRouter} from "../../../service/router-service";
-import {withRouter} from "react-router-dom";
 import {Link} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
 // @ts-ignore
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import Paper from '@material-ui/core/Paper';
-import Typography from "@material-ui/core/Typography";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Tooltip from "@material-ui/core/Tooltip";
+import Paper from '@mui/material/Paper';
+import Typography from "@mui/material/Typography";
+import {withStyles} from '@mui/styles';
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Tooltip from "@mui/material/Tooltip";
 import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
 
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import AttachIcon from '@material-ui/icons/AttachFileOutlined';
-import WarningIcon from '@material-ui/icons/WarningRounded';
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import AttachIcon from '@mui/icons-material/AttachFileOutlined';
+import WarningIcon from '@mui/icons-material/WarningRounded';
 
 import ConfirmDialog from "../../../components/ConfirmDialog";
 
@@ -29,6 +29,7 @@ import ChangePlanModal from '../CreateModal';
 import ModuleModal from "./ModuleModal";
 import DownloadFileModal from "./DownloadFileModal";
 import AddTrainingModuleModal from "../TrainingModules/AddTrainingModuleModal";
+import {withRouter} from "../../../hoc/WithRouter";
 
 import DetailHeader from './DetailHeader/DetailHeader';
 import actions from "../actions";
@@ -58,26 +59,26 @@ import {OPTIONALLY} from "../data";
 import connect from './Detail.connect';
 import styles from './Detail.styles';
 import {fields, TrainingModuleFields} from "../TrainingModules/enum";
-import FileIcon from '@material-ui/icons/DescriptionOutlined';
+import FileIcon from '@mui/icons-material/DescriptionOutlined';
 import classNames from "classnames";
 import {selectRulesArray, typesListArray} from "../TrainingModules/constants";
 import {UserType} from "../../../layout/types";
-import Chip from "@material-ui/core/Chip";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import Dialog from "@material-ui/core/Dialog";
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import Chip from "@mui/material/Chip";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import Dialog from "@mui/material/Dialog";
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import UserSelector from "../../Profile/UserSelector/UserSelector";
 
 const DragHandle = SortableHandle(() => <DragIndicatorIcon style={{cursor: "pointer"}}/>);
 
 const SortableItem = SortableElement((props:any) => {
-  const {classes, detailPlan, canEdit, blockId, handleDisconnectModule, module} = props;
+  const {detailPlan, canEdit, blockId, handleDisconnectModule, module, classes} = props;
 
   const renderModule = (module:any, level:number):any => {
     const selectionRule = selectRulesArray.find(type => type.value === module?.selection_rule)?.label
     const selectionParameter = module?.selection_parametr
-    console.log('module?.childs', module?.childs)
+
     return (
       <>
         <TableRow tabIndex={0}>
@@ -147,7 +148,9 @@ const SortableList = SortableContainer((props:any) => {
 
 
 const RenderBlockOfWP = (props:any) => {
-  const {classes, detailPlan, blockOfWorkPrograms, level} = props
+  //@ts-ignore
+  const {classes} = props;
+  const {detailPlan, blockOfWorkPrograms, level} = props
   const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '');
   const maxSem = qualification === BACHELOR_QUALIFICATION ? 8 : 4;
 
@@ -312,7 +315,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     this.props.actions.pageDown();
   }
 
-  getPlanId = () => get(this, 'props.match.params.id');
+  getPlanId = () => get(this, 'props.params.id');
 
   handleClickBlockDelete = (id: number, length: number) => () => {
     this.setState({
@@ -409,13 +412,6 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
     });
   }
 
-  goToPracticePage = (id: number) => () => {
-    // @ts-ignore
-    const {history} = this.props;
-
-    history.push(appRouter.getPracticeLink(id));
-  }
-
   saveOptionalProgram = (moduleId: number, workProgram: number) => {
     this.props.actions.planTrajectorySelectOptionalWp({
       moduleId,
@@ -443,7 +439,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   renderEducationPlan = () => {
-    const {classes, blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {blocks, detailPlan, trajectoryRoute, user, direction} = this.props;
     const {deleteBlockConfirmId, deleteModuleConfirmId, deletedWorkProgramsLength, selectSpecializationData} = this.state;
     const canEdit = detailPlan[EducationalPlanFields.CAN_EDIT];
 
@@ -461,7 +459,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
             <Table stickyHeader size='small' className={classes.tableHeader}>
               <TableHead className={classes.header}>
                 <TableRow>
-                  <TableCell style={{ width: '74%'}}> Название </TableCell>
+                  <TableCell style={{ width: '54%'}}> Название </TableCell>
                   <TableCell style={{ width: '7%', minWidth: '125px'}}> Зачетные единицы </TableCell>
                   <TableCell style={{ width: '7%', minWidth: '90px'}}> Семестр начала </TableCell>
                   <TableCell style={{ width: '7%', minWidth: '90px'}}> Обязательность </TableCell>
@@ -469,7 +467,7 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                 </TableRow>
               </TableHead>
             </Table>
-                {blocks.map(block => {
+            {blocks.map(block => {
                   return (
                     <>
                       <Table stickyHeader size='small'>
@@ -503,7 +501,6 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                     </>
                   )
                 })}
-              
           </div>
         </Scrollbars>
 
@@ -574,7 +571,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
 
 
   renderMain = () => {
-    const {classes, detailPlan, canValidate} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {detailPlan, canValidate} = this.props;
 
     //@ts-ignore
     const isuId = detailPlan?.ap_isu_id
@@ -739,7 +738,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
   }
 
   render() {
-    const {classes, trajectoryRoute} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {trajectoryRoute} = this.props;
     // @ts-ignore
     const {tab} = this.state
     return (

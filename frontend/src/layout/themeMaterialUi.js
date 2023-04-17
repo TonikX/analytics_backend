@@ -1,5 +1,5 @@
-import {createMuiTheme} from '@material-ui/core/styles';
-import { ruRU } from '@material-ui/core/locale';
+import {createTheme, responsiveFontSizes} from '@mui/material/styles';
+import { ruRU } from '@mui/material/locale';
 
 export const PRIMARY = '#1d51a3';
 export const PRIMARY_HOVERED = '#163ea4';
@@ -10,7 +10,7 @@ export const SECONDARY_HOVERED = '#bf1338';
 export const ERROR = '#d00000';
 export const TEXT_COLOR = '#333';
 
-const muiTheme = createMuiTheme({
+let muiTheme = createTheme({
     fontWeight: 200,
     typography: {
         useNextVariants: true,
@@ -105,5 +105,7 @@ const muiTheme = createMuiTheme({
         },
     }
 }, ruRU);
+
+muiTheme = responsiveFontSizes(muiTheme);
 
 export default muiTheme;

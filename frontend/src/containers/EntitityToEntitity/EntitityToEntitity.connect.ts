@@ -9,19 +9,19 @@ import {EntityToEntityActions} from "./types";
 import {rootState} from "../../store/reducers";
 
 const mapStateToProps = (state: rootState) => {
-    return {
-        trainingEntities: getEntityToEntityList(state),
-        currentPage: getCurrentPage(state),
-        searchQuery: getSearchQuery(state),
-        allCount: getAllCount(state),
-        sortingField: getSortingField(state),
-        sortingMode: getSortingMode(state),
-    };
+  return {
+    trainingEntities: getEntityToEntityList(state),
+    currentPage: getCurrentPage(state),
+    searchQuery: getSearchQuery(state),
+    allCount: getAllCount(state),
+    sortingField: getSortingField(state),
+    sortingMode: getSortingMode(state),
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<EntityToEntityActions>) => ({
-    // @ts-ignore
-    actions: bindActionCreators(actions, dispatch),
+  // @ts-ignore
+  actions: bindActionCreators(actions, dispatch),
 });
 
 // @ts-ignore

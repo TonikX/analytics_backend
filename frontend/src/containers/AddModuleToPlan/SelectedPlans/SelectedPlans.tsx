@@ -1,8 +1,8 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import cn from 'classnames';
-import Chip from "@material-ui/core/Chip";
-import Typography from "@material-ui/core/Typography";
+import Chip from "@mui/material/Chip";
+import Typography from "@mui/material/Typography";
 import {rootState} from "../../../store/reducers";
 import {getSelectedPlans} from "../getters";
 import actions from "../actions";

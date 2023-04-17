@@ -3,34 +3,33 @@ import get from "lodash/get";
 
 import {CreateModalProps, HoursSection} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {CertificationFields} from "../../enum";
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../../../hoc/WithRouter";
 import {appRouter} from "../../../../service/router-service";
-import {Select, Table} from "@material-ui/core";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import {Select, Table} from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel/InputLabel";
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup/RadioGroup";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup/RadioGroup";
 import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
-import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
-import Radio from "@material-ui/core/Radio/Radio";
-import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel/FormControlLabel";
+import Radio from "@mui/material/Radio/Radio";
+import FormControl from "@mui/material/FormControl";
 import {specialization} from "../../../WorkProgram/constants";
 import EditedRow from "./EditableRow/EditableRow";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
 import {GIA_TITLES} from "../../Steps/MainInfo";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
@@ -52,9 +51,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     handleSave = () => {
         const {state} = this.state;
-        const history = this.props.history;
         const callback = (id: number) => {
-            history.push(appRouter.getFinalCertificationLink(id));
+          //@ts-ignore
+            this.props.navigate(appRouter.getFinalCertificationLink(id));
         };
         this.props.actions.createCertification({
             state: {
@@ -164,7 +163,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                 <MenuItem value={item.value} key={`gia-title-${index}`}>
                                     {item.label}
                                 </MenuItem>
-                            )}}
+                            )}
                         </Select>
                     </div>
                     <div className={classes.marginTop20}>
@@ -260,5 +259,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(withRouter(CreateModal)));

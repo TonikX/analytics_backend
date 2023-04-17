@@ -2,20 +2,20 @@ import React from 'react';
 import classNames from 'classnames';
 
 import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import Typography from "@material-ui/core/Typography";
-import withStyles from '@material-ui/core/styles/withStyles';
-import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-import Button from "@material-ui/core/Button";
+import Typography from "@mui/material/Typography";
+import {withStyles} from '@mui/styles';
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import Button from "@mui/material/Button";
 
-import AddIcon from "@material-ui/icons/Add";
-import AddCircleIcon from "@material-ui/icons/AddCircleOutline";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import Tooltip from "@material-ui/core/Tooltip";
-import DescriptionIcon from '@material-ui/icons/DescriptionOutlined';
+import AddIcon from "@mui/icons-material/Add";
+import AddCircleIcon from "@mui/icons-material/AddCircleOutline";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import Tooltip from "@mui/material/Tooltip";
+import DescriptionIcon from '@mui/icons-material/DescriptionOutlined';
 
 import {TopicsProps} from './types';
 import {fields, workProgramSectionFields, workProgramTopicFields} from "../enum";
@@ -87,7 +87,9 @@ class Topics extends React.PureComponent<TopicsProps, any> {
     };
 
     render() {
-        const {classes, sections, isCanEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {sections, isCanEdit} = this.props;
         const {showMaterial} = this.state;
 
         return (
@@ -255,4 +257,5 @@ const SortableList = SortableContainer(({section, classes, handleClickDelete, ha
 });
 
 
+//@ts-ignore
 export default connect(withStyles(styles)(Topics));

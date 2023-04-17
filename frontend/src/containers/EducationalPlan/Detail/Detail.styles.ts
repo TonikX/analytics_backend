@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
   tableWrap: {
@@ -72,8 +73,8 @@ export default (theme: Theme) => createStyles({
     '& th': {
       color: '#fff',
       background: theme.palette.primary.main,
-      fontWeight: '400',
-      fontSize: '14px',
+      fontWeight: '400 !important',
+      fontSize: '14px !important',
       padding: '0px 10px !important',
     }
   },
@@ -124,10 +125,10 @@ export default (theme: Theme) => createStyles({
     color: theme.palette.primary.main,
   },
   likeIcon: {
-    marginLeft: '20px'
+    marginLeft: '20px !important'
   },
   trajectoryOwner: {
-    marginBottom: '10px'
+    marginBottom: '10px !important'
   },
   wpStatus: {
     margin: '0 6px',
@@ -137,18 +138,18 @@ export default (theme: Theme) => createStyles({
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    margin: '20px 0px 10px',
+    margin: '20px 0px 10px !important',
   },
   editorsTitle: {
     lineHeight: '32px',
-    marginRight: '10px',
+    marginRight: '10px !important',
   },
   editorsItem: {
-    marginLeft: '5px',
+    marginLeft: '5px !important',
   },
   editorsAdd: {
     height: '32px',
-    marginLeft: 'auto',
+    marginLeft: 'auto !important',
   },
   dialog: {
     padding: '40px',
@@ -178,7 +179,10 @@ export default (theme: Theme) => createStyles({
   },
   tableHeader: {
     position: 'fixed',
-    width: 'Calc(100% - 100px)',
-    marginTop: '-23px'
+    width: 'Calc(100% - 100px) !important',
+    marginTop: '-23px',
+    '& th': {
+        fontSize: '12px !important',
+    }
   }
 });

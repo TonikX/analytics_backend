@@ -1,6 +1,6 @@
-import {createStyles, Theme} from "@material-ui/core";
+import createStyles from "@mui/styles/createStyles";
 
-export default (theme: Theme) => createStyles({
+export default () => createStyles({
     input: {
         width: '100%',
         marginBottom: '30px',
@@ -13,10 +13,10 @@ export default (theme: Theme) => createStyles({
     },
     languageSelector: {
         width: '100%',
-        marginBottom: 30,
     },
     radioGroup: {
-        flexDirection: 'row',
+        // @ts-ignore
+        flexDirection: 'row !important',
         marginBottom: 20,
     },
     headerCell: {
@@ -32,7 +32,7 @@ export default (theme: Theme) => createStyles({
     },
     label: {
         fontSize: '14px',
-        marginBottom: 10
+        marginTop: 10
     },
     datePicker: {
         width: '100%',
@@ -42,6 +42,6 @@ export default (theme: Theme) => createStyles({
         marginBottom: '20px',
     },
     marginTop20: {
-        marginTop: '20px',
+        marginTop: '20px !important',
     }
 });

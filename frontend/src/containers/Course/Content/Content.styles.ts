@@ -1,12 +1,13 @@
-import {createStyles, Theme, makeStyles} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
   title: {
-    fontSize: '24px',
-    marginTop: '10px',
-    marginBottom: '10px',
+    fontSize: '24px !important',
+    marginTop: '10px !important',
+    marginBottom: '10px !important',
   },
   content: {
-    marginBottom: '10px',
+    marginBottom: '10px !important',
   }
 }));

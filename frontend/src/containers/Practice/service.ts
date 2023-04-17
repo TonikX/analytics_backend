@@ -129,6 +129,12 @@ class PracticeService extends AnalyticsService {
     deleteZUN(compentenceId: number){
         return this.delete(`/api/zun/practice-many/${compentenceId}`);
     }
+
+    sendToIsu(id: number) {
+        return this.post(`api/isu_v2/academic-plans/send_practice_to_isu/`, {
+            practice_id: id,
+        });
+    }
 }
 
 export default PracticeService;

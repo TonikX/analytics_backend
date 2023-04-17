@@ -1,4 +1,5 @@
-import {createStyles, Theme, makeStyles} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -14,18 +15,19 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         }
     },
     title: {
-        fontSize: '24px',
-        display: 'flex',
-        justifyContent: 'space-between'
+        fontSize: '24px !important',
+        display: 'flex !important',
+        justifyContent: 'space-between !important'
     },
     subtitle: {
-        marginBottom: '20px',
-        marginTop: '20px'
+        marginBottom: '20px !important',
+        marginTop: '20px !important'
     },
     submitBtn: {
         width: 'fit-content'
     },
     whiteButton: {
-        background: 'white !important'
+        background: 'white !important',
+        color: '#000 !important'
     },
 }));

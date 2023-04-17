@@ -2,15 +2,15 @@ import React from "react";
 import {CertificationFields, CertificationSteps, TemplateTextCertificationFields} from "../../enum";
 import get from "lodash/get";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles, withStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {Typography} from "@mui/material";
 import {CertificationActions, CertificationState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
 import ReadonlyRow from "./ReadonlyRow";
-import Scrollbars from "react-custom-scrollbars";
-import QuestionIcon from "@material-ui/icons/HelpOutline";
-import Tooltip from "@material-ui/core/Tooltip/Tooltip";
+import Scrollbars from "react-custom-scrollbars-2";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
+import Tooltip from "@mui/material/Tooltip/Tooltip";
 
 interface DatesProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -27,7 +27,9 @@ class Dates extends React.Component<DatesProps> {
 
     render() {
 
-        const {classes, templateText} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {templateText} = this.props;
 
         return (
             <div className={classes.content}>
@@ -70,5 +72,5 @@ class Dates extends React.Component<DatesProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(Dates));

@@ -1,25 +1,26 @@
 import React from "react";
-import Paper from '@material-ui/core/Paper';
-import withStyles from '@material-ui/core/styles/withStyles';
-import {Link, withRouter} from "react-router-dom";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Paper from '@mui/material/Paper';
+import {withStyles} from '@mui/styles';
+import {Link} from "react-router-dom";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 import styles from "./Practice.styles";
 import connect from './Practice.connect';
 import {PracticeProps} from "./types";
 import get from "lodash/get";
 import {ExpertiseStatus, PermissionsInfoFields, PracticeFields} from "./enum";
-import Step from "@material-ui/core/Step";
-import StepButton from "@material-ui/core/StepButton";
-import Stepper from "@material-ui/core/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
+import Stepper from "@mui/material/Stepper";
 import ErrorPage from "../../components/ErrorPage";
 import Download from "./components/Download";
 import {STEPS} from "./constants";
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import SendToExpertise from "./components/SendToExpertise";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import Comments from "../../components/Comments";
 import {appRouter} from "../../service/router-service";
+import {withRouter} from '../../hoc/WithRouter';
 
 class Practice extends React.Component<PracticeProps> {
 
@@ -31,7 +32,7 @@ class Practice extends React.Component<PracticeProps> {
   stepList = STEPS.map(step => step.component);
   stepNameList = STEPS.map(step => step.name);
 
-  getPracticeId = () => get(this, 'props.match.params.id');
+  getPracticeId = () => get(this, 'props.params.id');
 
   componentDidMount() {
     this.getPractice();
@@ -82,7 +83,9 @@ class Practice extends React.Component<PracticeProps> {
   }
 
   render() {
-    const {classes, isError, permissionsInfo} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {isError, permissionsInfo} = this.props;
     const {activeStep} = this.state;
 
     const workProgramStatus = permissionsInfo[PermissionsInfoFields.EXPERTISE_STATUS] ?? ExpertiseStatus.WORK;
@@ -166,9 +169,7 @@ class Practice extends React.Component<PracticeProps> {
             {Object.values(this.stepNameList).map((label, index) => {
               return (
                 <Step key={index} onClick={this.handleOpenStep(index)}>
-                  <StepButton completed={false}
-                              style={{textAlign: 'left',}}
-                  >
+                  <StepButton style={{textAlign: 'left',}}>
                     {label}
                   </StepButton>
                 </Step>
@@ -195,4 +196,5 @@ class Practice extends React.Component<PracticeProps> {
   }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(withRouter(Practice)));

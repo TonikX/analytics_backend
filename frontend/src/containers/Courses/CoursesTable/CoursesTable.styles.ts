@@ -1,4 +1,5 @@
-import {createStyles, Theme, makeStyles} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -33,7 +34,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         }
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
         marginBottom: '20px',
         display: 'flex',
         justifyContent: 'space-between'

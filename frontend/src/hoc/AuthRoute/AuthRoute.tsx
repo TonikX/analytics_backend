@@ -1,15 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect, Route } from "react-router";
+import {Route, Navigate} from 'react-router-dom';
 import {appRouter} from '../../service/router-service';
 import {userService} from "../../service/user-service";
 
-const AuthRoute = (props: any) => {
+const AuthRoute = ({children}: any) => {
     const isAuth = userService.isAuth();
 
-    if (!isAuth) return <Redirect to={appRouter.getSignInRoute()} />;
+    if (!isAuth) return <Navigate to={appRouter.getSignInRoute()} />;
 
-    return <Route exact {...props} />;
+    return children;
 };
 
+//@ts-ignore
 export default connect()(AuthRoute);

@@ -1,21 +1,20 @@
 import React from 'react';
 import get from 'lodash/get';
 
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import classNames from 'classnames';
 
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
+import Paper from '@mui/material/Paper';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import {withStyles} from '@mui/styles';
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -32,167 +31,170 @@ import {relations} from './constants';
 
 import connect from './EntitityToEntitity.connect';
 import styles from './EntitityToEntitity.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class EntitityToEntitity extends React.Component<EntityToEntityProps> {
-    state = {
-        deleteConfirmId: null
-    }
+  state = {
+    deleteConfirmId: null
+  }
 
-    componentDidMount() {
-        this.props.actions.getEntityToEntityList();
-    }
+  componentDidMount() {
+    this.props.actions.getEntityToEntityList();
+  }
 
-    handleClickDelete = (id: number) => () => {
-        this.setState({
-            deleteConfirmId: id
-        });
-    }
+  handleClickDelete = (id: number) => () => {
+    this.setState({
+      deleteConfirmId: id
+    });
+  }
 
-    handleConfirmDeleteDialog = () => {
-        const {deleteConfirmId} = this.state;
+  handleConfirmDeleteDialog = () => {
+    const {deleteConfirmId} = this.state;
 
-        this.props.actions.deleteEntityToEntity(deleteConfirmId);
-        this.closeConfirmDeleteDialog();
-    }
+    this.props.actions.deleteEntityToEntity(deleteConfirmId);
+    this.closeConfirmDeleteDialog();
+  }
 
-    closeConfirmDeleteDialog = () => {
-        this.setState({
-            deleteConfirmId: null
-        });
-    }
+  closeConfirmDeleteDialog = () => {
+    this.setState({
+      deleteConfirmId: null
+    });
+  }
 
-    handleClickEdit = (item: EntityToEntityType) => () => {
-        this.props.actions.openDialog(item);
-    }
+  handleClickEdit = (item: EntityToEntityType) => () => {
+    this.props.actions.openDialog(item);
+  }
 
-    handleCreate = () => {
-        this.props.actions.openDialog();
-    }
+  handleCreate = () => {
+    this.props.actions.openDialog();
+  }
 
-    handleChangeSearchItem1 = (searchQuery: string) => {
-        this.props.actions.changeSearchQuery({[EntityToEntityFields.ITEM1] : searchQuery});
-        this.changeFilter();
-    }
+  handleChangeSearchItem1 = (searchQuery: string) => {
+    this.props.actions.changeSearchQuery({[EntityToEntityFields.ITEM1] : searchQuery});
+    this.changeFilter();
+  }
 
-    handleChangeSearchItem2 = (searchQuery: string) => {
-        this.props.actions.changeSearchQuery({[EntityToEntityFields.ITEM2] : searchQuery});
-        this.changeFilter();
-    }
+  handleChangeSearchItem2 = (searchQuery: string) => {
+    this.props.actions.changeSearchQuery({[EntityToEntityFields.ITEM2] : searchQuery});
+    this.changeFilter();
+  }
 
-    changeFilter = () => {
-        this.props.actions.changeCurrentPage(1);
-        this.props.actions.getEntityToEntityList();
-    }
+  changeFilter = () => {
+    this.props.actions.changeCurrentPage(1);
+    this.props.actions.getEntityToEntityList();
+  }
 
-    handleChangePage = (event: any, page: number) => {
-        this.props.actions.changeCurrentPage(page);
-        this.props.actions.getEntityToEntityList();
-    }
+  handleChangePage = (event: any, page: number) => {
+    this.props.actions.changeCurrentPage(page);
+    this.props.actions.getEntityToEntityList();
+  }
 
-    changeSorting = (field: string) => (mode: SortingType)=> {
-        this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
-        this.props.actions.getEntityToEntityList();
-    }
+  changeSorting = (field: string) => (mode: SortingType)=> {
+    this.props.actions.changeSorting({field: mode === '' ? '' : field, mode});
+    this.props.actions.getEntityToEntityList();
+  }
 
-    handleSelectFilter = (items: Array<any>) => {
-        this.props.actions.changeSearchQuery({[EntityToEntityFields.RELATION] : get(items, 0, '')});
-        this.changeFilter();
-    }
+  handleSelectFilter = (items: Array<any>) => {
+    this.props.actions.changeSearchQuery({[EntityToEntityFields.RELATION] : get(items, 0, '')});
+    this.changeFilter();
+  }
 
-    render() {
-        const {classes, trainingEntities, allCount, currentPage, sortingField, sortingMode} = this.props;
-        const {deleteConfirmId} = this.state;
+  render() {
+    //@ts-ignore
+    const {classes} = this.props;
+    const {trainingEntities, allCount, currentPage, sortingField, sortingMode} = this.props;
+    const {deleteConfirmId} = this.state;
 
-        return (
-            <Paper className={classes.root}>
-                <Typography className={classes.title}>
-                    Связи
-                </Typography>
+    return (
+      <Paper className={classes.root}>
+        <Typography className={classes.title}>
+          Связи
+        </Typography>
 
-                <div className={classes.tableWrap}>
-                    <div className={classNames(classes.listItem, classes.header)}>
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Сущность 1
-                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM1)}
-                                           mode={sortingField === EntityToEntityFields.ITEM1 ? sortingMode : ''}
-                            />
-                            <TableSearchButton handleSearch={this.handleChangeSearchItem1} />
-                        </Typography>
+        <div className={classes.tableWrap}>
+          <div className={classNames(classes.listItem, classes.header)}>
+            <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+              Сущность 1
+              <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM1)}
+                             mode={sortingField === EntityToEntityFields.ITEM1 ? sortingMode : ''}
+              />
+              <TableSearchButton handleSearch={this.handleChangeSearchItem1} />
+            </Typography>
 
-                        <Typography className={classNames(classes.marginRight, classes.relationCell)}>
-                            Связь
-                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.RELATION)}
-                                           mode={sortingField === EntityToEntityFields.RELATION ? sortingMode : ''}
-                            />
-                            <TableFilter items={relations} handleSelect={this.handleSelectFilter} />
-                        </Typography>
+            <Typography className={classNames(classes.marginRight, classes.relationCell)}>
+              Связь
+              <SortingButton changeMode={this.changeSorting(EntityToEntityFields.RELATION)}
+                             mode={sortingField === EntityToEntityFields.RELATION ? sortingMode : ''}
+              />
+              <TableFilter items={relations} handleSelect={this.handleSelectFilter} />
+            </Typography>
 
-                        <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                            Сущность 2
-                            <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM2)}
-                                           mode={sortingField === EntityToEntityFields.ITEM2 ? sortingMode : ''}
-                            />
-                            <TableSearchButton handleSearch={this.handleChangeSearchItem2} />
-                        </Typography>
-                    </div>
+            <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+              Сущность 2
+              <SortingButton changeMode={this.changeSorting(EntityToEntityFields.ITEM2)}
+                             mode={sortingField === EntityToEntityFields.ITEM2 ? sortingMode : ''}
+              />
+              <TableSearchButton handleSearch={this.handleChangeSearchItem2} />
+            </Typography>
+          </div>
 
-                    <div className={classes.list}>
-                        <Scrollbars>
-                            {trainingEntities.map(item =>
-                                <div className={classes.listItem} key={item[EntityToEntityFields.ID]}>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {item[EntityToEntityFields.ITEM1][TrainingEntitiesFields.TITLE]}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.relationCell)}>
-                                        {get(relations, item[EntityToEntityFields.RELATION])}
-                                    </Typography>
-                                    <Typography className={classNames(classes.marginRight, classes.titleCell)}>
-                                        {item[EntityToEntityFields.ITEM2][TrainingEntitiesFields.TITLE]}
-                                    </Typography>
-                                    <div className={classes.actions}>
-                                        <IconButton onClick={this.handleClickDelete(item[EntityToEntityFields.ID])}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                        <IconButton onClick={this.handleClickEdit(item)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                    </div>
-                                </div>
-                            )}
-                        </Scrollbars>
-                    </div>
+          <div className={classes.list}>
+            <Scrollbars>
+              {trainingEntities.map(item =>
+                <div className={classes.listItem} key={item[EntityToEntityFields.ID]}>
+                  <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                    {item[EntityToEntityFields.ITEM1][TrainingEntitiesFields.TITLE]}
+                  </Typography>
+                  <Typography className={classNames(classes.marginRight, classes.relationCell)}>
+                    {get(relations, item[EntityToEntityFields.RELATION])}
+                  </Typography>
+                  <Typography className={classNames(classes.marginRight, classes.titleCell)}>
+                    {item[EntityToEntityFields.ITEM2][TrainingEntitiesFields.TITLE]}
+                  </Typography>
+                  <div className={classes.actions}>
+                    <IconButton onClick={this.handleClickDelete(item[EntityToEntityFields.ID])}>
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton onClick={this.handleClickEdit(item)}>
+                      <EditIcon />
+                    </IconButton>
+                  </div>
                 </div>
+              )}
+            </Scrollbars>
+          </div>
+        </div>
 
-                <div className={classes.footer}>
-                    <Pagination count={Math.ceil(allCount / 10)}
-                                page={currentPage}
-                                onChange={this.handleChangePage}
-                                color="primary"
-                    />
+        <div className={classes.footer}>
+          <Pagination count={Math.ceil(allCount / 10)}
+                      page={currentPage}
+                      onChange={this.handleChangePage}
+                      color="primary"
+          />
 
-                    <Fab color="secondary"
-                         classes={{
-                             root: classes.addIcon
-                         }}
-                         onClick={this.handleCreate}
-                    >
-                        <AddIcon/>
-                    </Fab>
-                </div>
+          <Fab color="secondary"
+               classes={{
+                 root: classes.addIcon
+               }}
+               onClick={this.handleCreate}
+          >
+            <AddIcon/>
+          </Fab>
+        </div>
 
-                <TrainingEntitiesCreateModal />
+        <TrainingEntitiesCreateModal />
 
-                <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
-                               onDismiss={this.closeConfirmDeleteDialog}
-                               confirmText={'Вы точно уверены, что хотите удалить учебную сущность?'}
-                               isOpen={Boolean(deleteConfirmId)}
-                               dialogTitle={'Удалить учебную сущность'}
-                               confirmButtonText={'Удалить'}
-                />
-            </Paper>
-        );
-    }
+        <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}
+                       onDismiss={this.closeConfirmDeleteDialog}
+                       confirmText={'Вы точно уверены, что хотите удалить учебную сущность?'}
+                       isOpen={Boolean(deleteConfirmId)}
+                       dialogTitle={'Удалить учебную сущность'}
+                       confirmButtonText={'Удалить'}
+        />
+      </Paper>
+    );
+  }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(EntitityToEntitity));

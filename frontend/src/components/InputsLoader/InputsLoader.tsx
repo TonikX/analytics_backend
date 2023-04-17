@@ -1,13 +1,13 @@
 import React from 'react';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
-import withStyles from '@material-ui/core/styles/withStyles';
-import {WithStyles} from "@material-ui/core";
+import CircularProgress from '@mui/material/CircularProgress';
+import {withStyles, WithStyles} from '@mui/styles';
 
 import styles from "./InputLoader.styles";
 
 interface InputsLoaderProps extends WithStyles<typeof styles>{
     loading: boolean;
+    children: any;
 }
 
 class InputsLoader extends React.PureComponent<InputsLoaderProps>{

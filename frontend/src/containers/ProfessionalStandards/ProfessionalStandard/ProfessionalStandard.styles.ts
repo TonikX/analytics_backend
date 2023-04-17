@@ -1,6 +1,7 @@
-import {createStyles, makeStyles} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from '@mui/material/styles';
 
-export const useStyles = makeStyles( (theme) => createStyles ({
+export const useStyles = makeStyles( (theme: Theme) => createStyles ({
     root: {
         padding: '20px 50px 20px 50px',
         boxShadow: 'none',
@@ -12,8 +13,8 @@ export const useStyles = makeStyles( (theme) => createStyles ({
         backgroundColor: 'white',
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
+        fontSize: '24px !important',
+        marginBottom: '20px !important',
         display: 'flex',
         justifyContent: 'space-between'
     },
@@ -56,11 +57,14 @@ export const useStyles = makeStyles( (theme) => createStyles ({
     },
     input: {
         width: '550px',
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     select: {
         width: '550px',
-        marginBottom: '10px',
+        marginBottom: '10px !important',
+    },
+    dialogContent: {
+        padding: '10px 24px 20px 24px !important',
     },
     subTitle: {
         marginTop: 20,

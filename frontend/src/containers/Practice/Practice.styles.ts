@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     wrap: {
@@ -109,8 +110,8 @@ export default (theme: Theme) => createStyles({
         marginTop: '20px',
     },
     rightButton: {
-        marginTop: '10px',
-        marginRight: '20px'
+        marginTop: '10px !important',
+        marginRight: '20px !important'
     },
     rightButtons: {
         margin: '35px 0 0 30px',

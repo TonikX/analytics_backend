@@ -1,19 +1,19 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux'
-import {useHistory, Link} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import get from 'lodash/get';
 import moment from 'moment';
 
-import Pagination from "@material-ui/lab/Pagination";
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
+import Pagination from "@mui/lab/Pagination";
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
 
 import MergeWorkProgramsBlock from "../MergeWorkPrograms";
 import {getUserData, getUserGroups} from '../../layout/getters';
@@ -35,7 +35,7 @@ export default () => {
     const classes = useStyles();
     const userData = useSelector(getUserData);
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(userProfileActions.changeCurrentPage(1));
@@ -45,7 +45,7 @@ export default () => {
     const handleLogout = () => {
         userService.logout();
         dispatch(layoutActions.setAuthFalse());
-        history.push(appRouter.getSignInRoute());
+        navigate(appRouter.getSignInRoute());
     };
 
     const composeUserName = () => `${userData.first_name} ${userData.last_name}`;
@@ -158,7 +158,7 @@ const MyWorkProgramsList = () => {
                     </Table>
                     <div className={classes.footer}>
                         <Pagination
-                            count={Math.ceil(allCount / 10)}
+                            count={allCount}
                             page={currentPage}
                             onChange={handleChangePage}
                             color="primary"

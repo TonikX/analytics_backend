@@ -41,14 +41,15 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ./frontend:/app
-            - node-modules:/app/node_modules
+            #- ./frontend/node_modules:/app/node_modules
+            - /app/node_modules
         ports:
             - "3003:3000"
-        environment:
-            - REACT_APP_API_HOST=${BACKEND_URL_FOR_REACT}
-            - REACT_APP_API_SCHEMA=http
-            - REACT_APP_API_PORT=8003
-            - PORT=3000
+              #environment:
+              # - REACT_APP_API_HOST=${BACKEND_URL_FOR_REACT}
+              # - REACT_APP_API_SCHEMA=https
+              #- REACT_APP_API_PORT=443 #8003
+              #- PORT=3000
 #        networks:
 #            - djangonetwork
 

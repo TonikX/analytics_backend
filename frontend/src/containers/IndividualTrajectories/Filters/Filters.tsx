@@ -5,8 +5,8 @@ import cn from 'classnames';
 
 import { getFilters } from '../getters'
 
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
 import SearchSelector from '../../../components/SearchSelector'
 
 import {languageArray, specialization} from '../../WorkProgram/constants';

@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
   wrap: {
@@ -38,8 +39,8 @@ export default (theme: Theme) => createStyles({
     paddingLeft: '50px',
   },
   title: {
-    fontSize: '24px',
-    marginBottom: '20px',
+    fontSize: '24px !important',
+    marginBottom: '20px !important',
     display: 'flex',
     alignItems: 'center'
   },
@@ -84,7 +85,7 @@ export default (theme: Theme) => createStyles({
     '& .MuiOutlinedInput-notchedOutline legend': {
       width: '100px !important'
     },
-    marginTop: '30px',
+    marginTop: '30px !important',
   },
   paperHeader: {
     display: 'flex',

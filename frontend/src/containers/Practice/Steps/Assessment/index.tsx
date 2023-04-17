@@ -1,9 +1,9 @@
 import React from "react";
 import {PracticeFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {PracticeActions, PracticeState} from "../../types";
 import Input from "../../components/Input";
 
@@ -51,4 +51,5 @@ class Assessment extends React.Component<AssessmentProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Assessment));

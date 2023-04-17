@@ -1,23 +1,22 @@
 import React from 'react';
 import get from 'lodash/get';
-import {withRouter} from "react-router-dom";
+import {withRouter} from "../../hoc/WithRouter";
 
-import {Link} from "react-router-dom";
-import Typography from '@material-ui/core/Typography';
-import CopyIcon from "@material-ui/icons/FileCopyOutlined";
-import CommentIcon from "@material-ui/icons/CommentOutlined";
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Fab from '@material-ui/core/Fab';
-import withStyles from '@material-ui/core/styles/withStyles';
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import Tooltip from "@material-ui/core/Tooltip";
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
-import Grow from '@material-ui/core/Grow';
+import Typography from '@mui/material/Typography';
+import CopyIcon from "@mui/icons-material/FileCopyOutlined";
+import CommentIcon from "@mui/icons-material/CommentOutlined";
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Fab from '@mui/material/Fab';
+import {withStyles} from '@mui/styles';
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Tooltip from "@mui/material/Tooltip";
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepButton from '@mui/material/StepButton';
+import Grow from '@mui/material/Grow';
 
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import WorkProgramStatus from "../../components/WorkProgramStatus/WorkProgramStatus";
 import LikeButton from "../../components/LikeButton";
@@ -122,7 +121,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.actions.cloneWorkProgram(this.getWorkProgramId());
     }
 
-    getWorkProgramId = () => get(this, 'props.match.params.id');
+    getWorkProgramId = () => get(this, 'props.params.id') as number;
 
     renderContent = () => {
         const {classes} = this.props;
@@ -276,13 +275,15 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         }
     }
 
-    openStep = (link: string) => {
+    openStep = (link: any) => {
         //@ts-ignore
-        this.props.history.push(link)
+        this.props.navigate(link)
     }
 
     render() {
-        const {classes, workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
+        //@ts-ignore
+        const {classes} = this.props;
+        const {workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
             workProgramRating, canAddToFolder, validateErrors, notificationsRead, canSendToIsu} = this.props;
         const {activeStep, isOpenComments} = this.state;
 
@@ -345,8 +346,9 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         {Object.values(steps).map(({ label, link }, index) => {
                             return (
                                 <Step key={index} onClick={() => this.openStep(link(this.getWorkProgramId()))}>
-                                    <StepButton completed={false}
-                                                style={{textAlign: 'left',}}
+                                    <StepButton
+                                      // completed={false}
+                                        style={{textAlign: 'left',}}
                                     >
                                         {notificationsRead[index] && <Tooltip title="Есть непрочитанные комментарии"><CommentIcon className={classes.commentIcon} /></Tooltip>} {label}
                                     </StepButton>

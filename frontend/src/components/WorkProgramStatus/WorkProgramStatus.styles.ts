@@ -1,6 +1,7 @@
-import {createStyles, Theme} from "@material-ui/core";
+import createStyles from "@mui/styles/createStyles";
+import {makeStyles} from "@mui/styles";
 
-export default (theme: Theme) => createStyles({
+export default makeStyles(() => createStyles({
     status: {
         display: 'flex',
         alignItems: 'center',
@@ -19,4 +20,4 @@ export default (theme: Theme) => createStyles({
     disabledStyle: {
 
     }
-});
+}));

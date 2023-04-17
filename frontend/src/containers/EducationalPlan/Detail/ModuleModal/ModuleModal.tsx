@@ -1,16 +1,16 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {ModuleModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
 
 import {EducationalPlanBlockFields, ModuleFields} from '../../enum';
 
@@ -31,7 +31,7 @@ class ModuleModal extends React.Component<ModuleModalProps> {
     componentDidUpdate(prevProps: Readonly<ModuleModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {module} = this.props;
 
-        if (!shallowEqual(module, prevProps.module)){
+        if (!shallowEqualObjects(module, prevProps.module)){
             this.setState({
                 module: {
                     [ModuleFields.ID]: get(module, ModuleFields.ID),
@@ -115,4 +115,5 @@ class ModuleModal extends React.Component<ModuleModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(ModuleModal));

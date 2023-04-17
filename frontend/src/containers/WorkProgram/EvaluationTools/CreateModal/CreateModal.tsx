@@ -1,34 +1,35 @@
 import React from 'react';
 import get from "lodash/get";
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import classNames from 'classnames';
 
 import {CreateModalProps} from './types';
 
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import withStyles from '@material-ui/core/styles/withStyles';
-import TextField from "@material-ui/core/TextField";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
-import Slider from "@material-ui/core/Slider";
-import AppBar from "@material-ui/core/AppBar";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import {AutoSizer} from "react-virtualized";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
-import QuestionIcon from "@material-ui/icons/HelpOutline";
-import Tooltip from "@material-ui/core/Tooltip";
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import {withStyles} from '@mui/styles';
+import TextField from "@mui/material/TextField";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
+import Slider from "@mui/material/Slider";
+import AppBar from "@mui/material/AppBar";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+// @ts-ignore
+import {AutoSizer} from "react-virtualized-reactv17";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import Radio from "@mui/material/Radio";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
+import Tooltip from "@mui/material/Tooltip";
 import CKEditor from '../../../../components/CKEditor'
 import { types } from '../constants'
 
@@ -64,7 +65,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {evaluationTool} = this.props;
 
-        if (!shallowEqual(this.props, prevProps)){
+        if (!shallowEqualObjects(this.props, prevProps)){
             this.setState({
                 isOpen: this.props.isOpen,
                 evaluationTool: {
@@ -121,7 +122,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
     saveMinMaxField = (field: string) => (e: React.ChangeEvent) => {
         const {evaluationTool} = this.state;
-        const value = get(e, 'target.value')
+        const value = get(e, 'target.value', '')
 
         this.setState({
             evaluationTool: {
@@ -153,9 +154,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    changeDescription = (event: any) => {
+    changeDescription = (event: any, editor: any) => {
         const {evaluationTool} = this.state;
-        const data = event.editor.getData();
+        const data = editor.getData();
 
         this.setState({
             evaluationTool: {
@@ -169,7 +170,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         return showErrors && get(evaluationTool, [field, 'length'], 0) === 0
     }
 
-    changeSemesterCount = (e: React.ChangeEvent<{}>, value: number | number[]) => {
+    changeSemesterCount = (e: any, value: number | number[]) => {
         const {evaluationTool} = this.state;
 
         this.setState({
@@ -181,7 +182,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     render() {
-        const {classes, sections, semesterCount} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {sections, semesterCount} = this.props;
         const {evaluationTool, isOpen} = this.state;
 
         const isEditMode = Boolean(evaluationTool[EvaluationToolFields.ID]);
@@ -215,7 +218,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <>
                             <div className={classes.leftSide}>
                                 <AutoSizer style={{width: '100%'}}>
-                                    {({width}) => (
+                                    {({width}: any) => (
                                         <>
                                             <TextField label="Название оценочного средства *"
                                                        onChange={this.saveField(EvaluationToolFields.NAME)}
@@ -245,7 +248,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                     input={
                                                         <OutlinedInput
                                                             notched
-                                                            labelWidth={100}
                                                             name="course"
                                                             id="section-label"
                                                         />
@@ -275,7 +277,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                     input={
                                                         <OutlinedInput
                                                             notched
-                                                            labelWidth={100}
                                                             name="course"
                                                             id="section-label"
                                                         />
@@ -372,7 +373,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                             ? evaluationTool[EvaluationToolFields.DESCRIPTION] : ''}
                                     onChange={this.changeDescription}
                                     useFormulas
-                                    height="calc(100vh - 280px)"
+                                    height="calc(100vh - 280px) !important"
                                     style={this.hasError(EvaluationToolFields.DESCRIPTION)? {border: '1px solid #d00000'} : {border: '1px solid #d1d1d1'}}
                                 />
                             </div>
@@ -396,4 +397,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

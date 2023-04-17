@@ -32,6 +32,7 @@ export enum PracticeFields {
     PREREQUISITES = 'prerequisites',
     COMPETENCES = 'competences',
     OUTCOMES = 'outcomes',
+    CAN_SEND_TO_ISU = 'can_send_to_isu',
 }
 
 export enum DialogType {
@@ -170,5 +171,6 @@ export enum fetchingTypes {
     GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_PRACTICE = 'GET_COMPETENCE_DIRECTIONS_DEPENDED_ON_PRACTICE',
     UPDATE_ZUN = 'UPDATE_ZUN',
     DELETE_ZUN = 'DELETE_ZUN',
-    SAVE_ZUN = 'SAVE_ZUN'
+    SAVE_ZUN = 'SAVE_ZUN',
+    SEND_TO_ISU = 'SEND_TO_ISU',
 }

@@ -1,4 +1,5 @@
-import {createStyles, Theme, makeStyles} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -14,14 +15,15 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    [theme.breakpoints.down('sm')]: {
+    "@media (max-width: 600px)": {
       justifyContent: 'flex-start',
     }
   },
   menuButton: {
-    display: 'none',
-    [theme.breakpoints.down('sm')]: {
-      display: 'block'
+    display: 'none !important',
+    "@media (max-width: 600px)": {
+      display: 'block !important',
+      marginLeft: 'initial !important',
     }
   },
   drawerLink: {
@@ -34,18 +36,18 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   headerLeft: {
     display: 'flex',
     alignItems: 'center',
-    [theme.breakpoints.down('sm')]: {
+    "@media (max-width: 600px)": {
       display: 'none'
     }
   },
   logo: {
     fontSize: '25px',
-    marginRight: '70px'
+    marginRight: '70px !important'
   },
   header: {
-    boxShadow: 'none',
+    boxShadow: 'initial !important',
     padding: '10px',
-    background: "rgba(7, 21, 43, 0.4)",
+    background: "rgba(7, 21, 43, 0.4) !important",
   },
   link: {
     cursor: 'pointer',
@@ -62,15 +64,16 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     outline: 'none',
     '-webkit-tap-highlight-color': 'transparent',
     marginRight: '10px',
-    [theme.breakpoints.down(480)]: {
-      marginRight: '0px'
+    "@media (max-width: 480px)": {
+      marginRight: '0px',
+      marginLeft: 'initial !important',
     }
   },
   headerRight: {
     width: 'fit-content',
     display: 'flex',
     alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
+    "@media (max-width: 900px)": {
       width: '100%',
     },
     justifyContent: 'flex-end'
@@ -82,20 +85,20 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     padding: '0 10px'
   },
   h1: {
-    fontSize: '50px',
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: '30px',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '30px'
+    fontSize: '50px !important',
+    fontWeight: 'bold !important',
+    color: '#fff !important',
+    marginBottom: '30px !important',
+    "@media (max-width: 600px)": {
+      fontSize: '30px !important'
     }
   },
   subTitle: {
-    fontSize: '20px',
+    fontSize: '20px !important',
     color: '#fff',
-    marginBottom: '30px',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '15px'
+    marginBottom: '30px !important',
+    "@media (max-width: 600px)": {
+      fontSize: '15px !important'
     }
   },
   mainScreenButtons: {
@@ -104,17 +107,18 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     justifyContent: 'space-between',
     margin: '0 auto',
     flexWrap: 'wrap',
-    [theme.breakpoints.down(420)]: {
+    "@media (max-width: 420px)": {
       justifyContent: 'center'
     }
   },
   mainButton: {
     color: '#fff',
-    padding: '14px 25px',
-    textTransform: 'initial',
-    background: '#1d51a3',
-    fontWeight: 'bold',
-    borderRadius: '10px',
+    padding: '14px 25px !important',
+    // @ts-ignore
+    textTransform: 'initial !important',
+    background: '#1d51a3 !important',
+    fontWeight: 'bold !important',
+    borderRadius: '10px !important',
     '& a': {
       textDecoration: 'none',
       color: '#fff',
@@ -124,12 +128,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     }
   },
   headerSignUpBtn: {
-    color: '#fff',
-    padding: '14px 25px',
-    textTransform: 'initial',
-    background: '#1d51a3',
-    fontWeight: 'bold',
-    borderRadius: '10px',
+    color: '#fff !important',
+    padding: '14px 25px !important',
+    // @ts-ignore
+    textTransform: 'initial !important',
+    background: '#1d51a3 !important',
+    fontWeight: 'bold !important',
+    borderRadius: '10px !important',
     '& a': {
       textDecoration: 'none',
       color: '#fff',
@@ -137,33 +142,35 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     '&:hover': {
       background: '#163ea4'
     },
-    [theme.breakpoints.down(480)]: {
-      display: 'none'
+    "@media (max-width: 480px)": {
+      display: 'none !important'
     }
   },
   signUpIconBtn: {
     display: 'none',
     textDecoration: 'none',
-    color: '#fff',
-    border: 'none',
+    color: '#fff !important',
+    border: 'none !important',
     outline: 'none',
     '-webkit-tap-highlight-color': 'transparent',
-    [theme.breakpoints.down(480)]: {
-      display: 'block'
+    "@media (max-width: 480px)": {
+      display: 'block',
+      marginLeft: 'initial !important'
     }
   },
   signInLink: {
-    [theme.breakpoints.down(480)]: {
+    "@media (max-width: 480px)": {
       display: 'none'
     }
   },
   secondaryButton: {
-    color: '#fff',
-    padding: '14px 25px',
-    textTransform: 'initial',
-    border: '2px solid #fff',
-    fontWeight: 'bold',
-    borderRadius: '10px',
+    color: '#fff !important',
+    padding: '14px 25px !important',
+    // @ts-ignore
+    textTransform: 'initial !important',
+    border: '2px solid #fff !important',
+    fontWeight: 'bold !important',
+    borderRadius: '10px !important',
     '& a': {
       textDecoration: 'none',
       color: '#fff',
@@ -192,7 +199,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     '& p':{
       fontSize: '30px',
       whiteSpace: 'nowrap',
-      [theme.breakpoints.down(720)]: {
+      "@media (max-width: 720px)": {
         fontSize: '20px',
         padding: '10px'
       }
@@ -213,22 +220,22 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   processesListContent: {
     width: '40%',
     minWidth: '304px',
-    [theme.breakpoints.down(760)]: {
+    "@media (max-width: 760px)": {
       width: '100%'
     }
   },
   processesListContentTitle: {
-    fontSize: '30px',
-    fontWeight: 'bold',
-    marginBottom: '20px'
+    fontSize: '30px !important',
+    fontWeight: 'bold !important',
+    marginBottom: '20px !important'
   },
   processesListContentText: {
-    lineHeight: '30px'
+    lineHeight: '30px !important'
   },
   videoWrapper: {
     width: '100%',
     height: '503px',
-    [theme.breakpoints.down('md')]: {
+    "@media (max-width: 900px)": {
       height: '353px',
     }
   },
@@ -239,21 +246,22 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     overflow: 'hidden',
     flex: 'none',
     minWidth: '420px',
-    [theme.breakpoints.down('md')]: {
+    "@media (max-width: 900px)": {
       width: '55%',
     },
-    [theme.breakpoints.down(760)]: {
+    "@media (max-width: 760px)": {
       width: '100%',
       order: 2,
       minWidth: 'auto',
     }
   },
   sectionTitle: {
-    fontWeight: 'bold',
+    fontWeight: 'bold !important',
     color: '#fff',
-    textAlign: 'center',
-    fontSize: '20px',
-    marginBottom: '50px'
+    // @ts-ignore
+    textAlign: 'center !important',
+    fontSize: '20px !important',
+    marginBottom: '50px !important'
   },
   usersList: {
     display: 'flex',
@@ -272,9 +280,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     minWidth: '250px',
   },
   usersListItemTitle: {
-    marginLeft: '20px',
+    marginLeft: '20px !important',
     color: '#1f1f24',
-    fontWeight: 'bold'
+    fontWeight: 'bold !important'
   },
   usersListItemImg: {
     width: '40px'
@@ -282,7 +290,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   teamList: {
     display: 'flex',
     justifyContent: 'space-between',
-    [theme.breakpoints.down(480)]: {
+    "@media (max-width: 480px)": {
       flexDirection: 'column',
       alignItems: 'center'
     }
@@ -304,7 +312,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   teamItemTitle: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontWeight: 'bold !important',
     textAlign: 'center'
   },
   teamItemRole: {
@@ -318,7 +326,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     align: 'center',
     cursor: 'pointer',
-    fontWeight: 'bold'
+    fontWeight: 'bold !important'
   },
   footer: {
     background: '#1f1f24',
@@ -338,11 +346,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   footerText: {
     color: '#dfdfdf',
-    [theme.breakpoints.down(480)]: {
-      fontSize: '12px'
+    "@media (max-width: 480px)": {
+      fontSize: '12px !important'
     },
-    [theme.breakpoints.down(350)]: {
-      fontSize: '10px'
+    "@media (max-width: 350px)": {
+      fontSize: '10px !important'
     }
   },
   mailIcon: {
@@ -352,11 +360,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   mailWrap: {
     display: 'flex',
     alignItems: 'center',
-    [theme.breakpoints.down(480)]: {
-      fontSize: '12px'
+    "@media (max-width: 480px)": {
+      fontSize: '12px !important'
     },
-    [theme.breakpoints.down(350)]: {
-      fontSize: '10px'
+    "@media (max-width: 350px)": {
+      fontSize: '10px !important'
     }
   }
 }));

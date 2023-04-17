@@ -1,5 +1,5 @@
 import {fields} from './enum';
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import styles from "./WorkProgram.styles";
 import {CourseFields, PlatformFields, InstitutionFields, filterFields, FieldOfStudyFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
@@ -95,4 +95,5 @@ export interface CoursesProps extends WithStyles<typeof styles> {
     sortingMode: SortingType;
     platforms: Array<PlatformType> | [];
     institutions: Array<InstitutionType> | [];
+    classes: any;
 }

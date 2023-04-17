@@ -1,23 +1,23 @@
 import React from 'react';
 
-import {withRouter, Link} from "react-router-dom";
-import Scrollbars from "react-custom-scrollbars";
+import {Link} from "react-router-dom";
+import Scrollbars from "react-custom-scrollbars-2";
 import get from "lodash/get";
 
-import Paper from '@material-ui/core/Paper';
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from "@material-ui/core/Button";
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import TableBody from '@material-ui/core/TableBody';
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
-
+import Paper from '@mui/material/Paper';
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import {withStyles} from '@mui/styles';
+import Button from "@mui/material/Button";
+import ButtonGroup from '@mui/material/ButtonGroup';
+import TableBody from '@mui/material/TableBody';
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import {withRouter, withRouterData} from "../../../hoc/WithRouter";
 import WorkProgramStatus from "../../../components/WorkProgramStatus/WorkProgramStatus";
 import AddExpertModal from './AddExpertModal';
 
@@ -28,9 +28,9 @@ import connect from './Expertise.connect';
 import styles from './Expertise.styles';
 import {getLink, getLinkLabel} from "../utils";
 
-class Expertise extends React.Component<ExpertiseProps> {
+class Expertise extends React.Component<ExpertiseProps & withRouterData> {
     componentDidMount() {
-        const expertiseId = get(this, 'props.match.params.id');
+        const expertiseId = get(this, 'props.params.id');
 
         this.props.actions.getExpertise(expertiseId);
     }
@@ -53,7 +53,9 @@ class Expertise extends React.Component<ExpertiseProps> {
 
     render() {
         let canApproveWP
-        const {classes, expertise} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {expertise} = this.props;
 
         const experts = get(expertise, ExpertisesFields.EXPERTS_USERS_IN_RPD, [])
             .filter((item: any) => get(item, "stuff_status") === 'AU' || get(item, "stuff_status") === 'EX');

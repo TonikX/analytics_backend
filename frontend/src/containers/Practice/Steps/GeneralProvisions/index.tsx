@@ -2,9 +2,10 @@ import React from "react";
 import cn from 'classnames';
 import {PracticeFields, PracticeSteps, TemplateTextPracticeFields} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
+import {Typography} from "@mui/material";
 import {PracticeActions, PracticeState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
 
@@ -18,7 +19,9 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
 
     render() {
 
-        const {classes, templateText} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {templateText} = this.props;
 
         return (
             <div>
@@ -38,4 +41,5 @@ class GeneralProvisions extends React.Component<GeneralProvisionsProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(GeneralProvisions));

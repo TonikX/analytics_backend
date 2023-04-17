@@ -1,18 +1,18 @@
 import React, {useCallback, useEffect, useState, useMemo} from 'react'
-import { Dialog } from '@material-ui/core'
-import Button from '@material-ui/core/Button'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Chip from '@material-ui/core/Chip'
-import TextField from '@material-ui/core/TextField'
-import InfoIcon from "@material-ui/icons/InfoOutlined";
+import { Dialog } from '@mui/material'
+import Button from '@mui/material/Button'
+import DialogActions from '@mui/material/DialogActions'
+import DialogTitle from '@mui/material/DialogTitle'
+import Chip from '@mui/material/Chip'
+import TextField from '@mui/material/TextField'
+import InfoIcon from "@mui/icons-material/InfoOutlined";
 import CompetenceSelector from '../../../../Competences/CompetenceSelector'
 import IndicatorSelector from '../../../../Competences/Indicators/IndicatorSelector'
 import ResultsSelector from '../ResultsSeletor'
 import PlanSelector from '../PlansSelector'
 import { useStyles } from './IndicatorDialog.styles'
 import {useDispatch} from 'react-redux'
-import Tooltip from "@material-ui/core/Tooltip/Tooltip";
+import Tooltip from "@mui/material/Tooltip/Tooltip";
 import actions from "../../../actions";
 
 interface IndicatorsProps {

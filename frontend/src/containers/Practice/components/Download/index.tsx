@@ -1,12 +1,12 @@
 import createReport from 'docx-templates';
 
-import {WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
 import styles from "./styles";
 import {PracticeActions, PracticeState} from "../../types";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "@material-ui/core/Button";
+import {WithStyles} from "@mui/styles";
+import Button from "@mui/material/Button";
 
 
 // @ts-ignore
@@ -96,19 +96,36 @@ class Download extends React.Component<DownloadProps> {
             'work-program-practice.docx',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         );
-    }
+    };
+
+    sendToIsu = () => {
+        this.props.actions.sendToIsu();
+    };
 
     render() {
-        const {classes, fields} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {fields} = this.props;
+        const canSendToIsu = fields.can_send_to_isu;
 
         return (
-            <Button variant='outlined'
-                    className={classes.input}
-                    onClick={this.handleDownload(fields)}>
-                Скачать практику
-            </Button>
+            <div className={classes.wrapper}>
+                {
+                    canSendToIsu && <Button variant='outlined'
+                                            className={classes.marginRight}
+                                            onClick={this.sendToIsu}>
+                        Отправить в ИСУ
+                    </Button>
+                }
+                <Button variant='outlined'
+                        className={classes.input}
+                        onClick={this.handleDownload(fields)}>
+                    Скачать практику
+                </Button>
+            </div>
         );
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Download));

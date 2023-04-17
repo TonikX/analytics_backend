@@ -1,5 +1,5 @@
-import MenuItem from "@material-ui/core/MenuItem";
-import {Select} from "@material-ui/core";
+import MenuItem from "@mui/material/MenuItem";
+import {Select} from "@mui/material";
 import React from "react";
 import {useStyles} from "../AddModuleToPlan.styles";
 import {useDispatch, useSelector} from "react-redux";

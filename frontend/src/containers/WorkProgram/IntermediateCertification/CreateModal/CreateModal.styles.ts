@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     dialog: {
@@ -8,7 +9,7 @@ export default (theme: Theme) => createStyles({
         top: '100vh',
         left: 0,
         background: '#fff',
-        zIndex: 1000,
+        zIndex: 10000,
         transition: '0.35s top',
     },
     openDialog: {
@@ -47,10 +48,11 @@ export default (theme: Theme) => createStyles({
     },
     dialogContent: {
         display: 'flex',
-        padding: '20px 48px',
+        padding: '70px 48px 20px 48px !important',
         justifyContent: 'space-between',
         overflowX: 'hidden',
-        height: 'calc(100% - 100px)'
+        height: 'calc(100% - 50px) !important',
+        boxSizing: "border-box",
     },
     leftSide: {
         width: '40%',
@@ -61,16 +63,20 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between'
     },
     numberInput: {
-        marginRight: '20px'
+        marginRight: '20px !important'
     },
     marginBottom30: {
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     weekTitle: {
         marginBottom: '20px'
     },
     rightSide: {
         width: '55%',
+        height: "calc(100vh - 280px) !important",
+        '& .ck-content': {
+            height: "calc(100vh - 280px) !important",
+        }
     },
     sectionSelector: {
         '& .MuiInputLabel-shrink': {
@@ -79,7 +85,7 @@ export default (theme: Theme) => createStyles({
         '& .MuiOutlinedInput-notchedOutline legend': {
             width: '58px !important'
         },
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     typeSelector: {
         '& .MuiInputLabel-shrink': {
@@ -88,7 +94,7 @@ export default (theme: Theme) => createStyles({
         '& .MuiOutlinedInput-notchedOutline legend': {
             width: '38px !important'
         },
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     selector: {
         width: '500px'

@@ -1,9 +1,9 @@
 import React from "react";
 import {CertificationFields, CertificationSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {CertificationActions, CertificationState} from "../../types";
 import Input from "../../components/Input";
 import {SelectorListType} from "../../../../components/SearchSelector/types";
@@ -11,11 +11,11 @@ import {StructuralUnitsActions} from "../../../StructuralUnits/types";
 import StructuralUnit from "../../components/StructuralUnit";
 import Select from "../../../FinalCertification/components/Select";
 
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
 import UserSelector from "../../../EmailWidget/UserSelector";
-import AddIcon from "@material-ui/icons/Add";
-import Chip from "@material-ui/core/Chip";
+import AddIcon from "@mui/icons-material/Add";
+import Chip from "@mui/material/Chip";
 import {getUserFullName} from "../../../../common/utils";
 import {UserFields} from "../../../../layout/enum";
 import {UserType} from "../../../../layout/types";
@@ -88,7 +88,9 @@ class MainInfo extends React.Component<MainInfoProps> {
       }
 
     render() {
-        const {classes, canAddEditors, isCanEdit, fields} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {canAddEditors, isCanEdit, fields} = this.props;
         const {addEditorsMode} = this.state;
 
         return (
@@ -155,4 +157,5 @@ class MainInfo extends React.Component<MainInfoProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(MainInfo));

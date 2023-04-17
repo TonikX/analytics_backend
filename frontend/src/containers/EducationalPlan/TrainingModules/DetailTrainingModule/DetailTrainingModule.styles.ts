@@ -1,9 +1,10 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
   textField: {
     width: '100%',
-    marginBottom: '30px'
+    marginBottom: '30px !important'
   },
   checkbox: {
     margin: '10px 0px 10px -12px'
@@ -52,10 +53,11 @@ export default (theme: Theme) => createStyles({
     marginBottom: '10px'
   },
   header: {
-    background: theme.palette.primary.main,
+    backgroundColor: `${theme.palette.primary.main} !important`,
+    color: '#fff !important',
     '& th': {
-      color: '#fff',
       background: theme.palette.primary.main,
+      color: '#fff !important',
       fontWeight: '400',
       fontSize: '14px',
       padding: '0px 10px !important',
@@ -78,7 +80,7 @@ export default (theme: Theme) => createStyles({
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    marginBottom: '10px',
+    marginBottom: '10px !important',
   },
   wrap: {
     padding: '0px 30px 30px',
@@ -87,14 +89,14 @@ export default (theme: Theme) => createStyles({
   },
   editorsTitle: {
     lineHeight: '32px',
-    marginRight: '10px',
+    marginRight: '10px !important',
   },
   editorsItem: {
-    marginLeft: '5px',
+    marginLeft: '5px !important',
   },
   editorsAdd: {
     height: '32px',
-    marginLeft: 'auto',
+    marginLeft: 'auto !important',
   },
   moduleNameWrap: {
     display: 'flex',
@@ -121,8 +123,8 @@ export default (theme: Theme) => createStyles({
     display: 'flex'
   },
   subTitle: {
-    marginBottom: '10px',
-    fontSize: '20px',
+    marginBottom: '10px !important',
+    fontSize: '20px !important',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between'
@@ -162,6 +164,7 @@ export default (theme: Theme) => createStyles({
   },
   addEducationalProgramButtonWrap: {
     display: 'flex',
+    marginTop: 10,
     justifyContent: 'flex-end'
   },
   errorBlock: {

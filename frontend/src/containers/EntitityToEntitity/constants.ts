@@ -6,10 +6,10 @@ const SYNONYMS = '5'
 const NO = 'None'
 
 export const relations: {[key: string]: string} = {
-    [NOT_DEFINED]: 'Неопределенное',
-    [HIERARCHY]: 'Включает в себя',
-    [SAME_PARENT]: 'Является частью одного раздела',
-    [HAVE_PREREQUISITE]: 'Имеет пререквизит',
-    [SYNONYMS]: 'Тождество',
-    [NO]: 'Отсутствует',
+  [NOT_DEFINED]: 'Неопределенное',
+  [HIERARCHY]: 'Включает в себя',
+  [SAME_PARENT]: 'Является частью одного раздела',
+  [HAVE_PREREQUISITE]: 'Имеет пререквизит',
+  [SYNONYMS]: 'Тождество',
+  [NO]: 'Отсутствует',
 }

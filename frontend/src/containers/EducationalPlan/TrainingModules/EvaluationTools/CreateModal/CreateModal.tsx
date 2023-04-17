@@ -1,30 +1,31 @@
 import React from 'react';
 import get from "lodash/get";
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import classNames from 'classnames';
 
 import {CreateModalProps} from './types';
 
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
-import TextField from "@material-ui/core/TextField";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
-import Slider from "@material-ui/core/Slider";
-import AppBar from "@material-ui/core/AppBar";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import {AutoSizer} from "react-virtualized";
-import FormLabel from "@material-ui/core/FormLabel";
-import QuestionIcon from "@material-ui/icons/HelpOutline";
-import Tooltip from "@material-ui/core/Tooltip";
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
+import TextField from "@mui/material/TextField";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
+import Slider from "@mui/material/Slider";
+import AppBar from "@mui/material/AppBar";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+// @ts-ignore
+import {AutoSizer} from "react-virtualized-reactv17";
+import FormLabel from "@mui/material/FormLabel";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
+import Tooltip from "@mui/material/Tooltip";
 import CKEditor from '../../../../../components/CKEditor'
 
 import {EvaluationToolFields, fields, IntermediateCertificationFields} from '../../../../WorkProgram/enum';
@@ -51,7 +52,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {evaluationTool} = this.props;
 
-        if (!shallowEqual(this.props, prevProps)){
+        if (!shallowEqualObjects(this.props, prevProps)){
             this.setState({
                 isOpen: this.props.isOpen,
                 evaluationTool: {
@@ -103,7 +104,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
 
     saveMinMaxField = (field: string) => (e: React.ChangeEvent) => {
         const {evaluationTool} = this.state;
-        const value = get(e, 'target.value')
+        const value = get(e, 'target.value', '')
 
         this.setState({
             evaluationTool: {
@@ -113,7 +114,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
         })
     }
 
-    changeSemesterCount = (e: React.ChangeEvent<{}>, value: number | number[]) => {
+    changeSemesterCount = (e: any, value: number | number[]) => {
         const {evaluationTool} = this.state;
 
         this.setState({
@@ -124,13 +125,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
         })
     }
 
-    changeDescription = (event: any) => {
+    changeDescription = (event: any, editor: any) => {
         const {evaluationTool} = this.state;
 
         this.setState({
             evaluationTool: {
                 ...evaluationTool,
-                [IntermediateCertificationFields.DESCRIPTION]: event.editor.getData()
+                [IntermediateCertificationFields.DESCRIPTION]: editor.getData()
             }
         })
     }
@@ -173,7 +174,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
                     <>
                         <div className={classes.leftSide}>
                             <AutoSizer style={{width: '100%'}}>
-                                {({width}) => (
+                                {({width}:any) => (
                                   <>
                                       <TextField label="Название оценочного средства *"
                                                  onChange={this.saveField(IntermediateCertificationFields.NAME)}
@@ -202,7 +203,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
                                             input={
                                                 <OutlinedInput
                                                   notched
-                                                  labelWidth={100}
                                                   name="course"
                                                   id="section-label"
                                                 />
@@ -293,4 +293,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {    editor = nu
 
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

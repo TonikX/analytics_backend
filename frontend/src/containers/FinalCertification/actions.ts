@@ -22,6 +22,7 @@ const sendCertificationToRework = createAction('SEND_CERTIFICATION_TO_REWORK');
 const getComments = createAction('GET_COMMENTS_CERTIFICATION');
 const setComments = createAction('SET_COMMENTS_CERTIFICATION');
 const sendComment = createAction('SEND_COMMENT_CERTIFICATION');
+const sendToIsu = createAction('SEND_GIA_TO_ISU');
 
 export const actions: CertificationActions = {
     getCertification,
@@ -45,6 +46,7 @@ export const actions: CertificationActions = {
     getComments,
     setComments,
     sendComment,
+    sendToIsu,
 }
 
 export default actions;

@@ -1,18 +1,17 @@
 import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
-import {Link, RouteComponentProps, withRouter} from "react-router-dom";
+import {WithStyles} from "@mui/styles";
+import {Link} from "react-router-dom";
 import styles from "./styles";
-import {WithStyles} from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import {withStyles} from '@mui/styles';
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 import {appRouter} from "../../service/router-service";
 
-export interface ErrorPageProps extends WithStyles<typeof styles>, RouteComponentProps {
+export interface ErrorPageProps extends WithStyles<typeof styles> {
 
 }
 
 class ErrorPage extends React.Component<ErrorPageProps> {
-
     render() {
         const {classes} = this.props;
 
@@ -31,4 +30,4 @@ class ErrorPage extends React.Component<ErrorPageProps> {
     }
 }
 
-export default withStyles(styles)(withRouter(ErrorPage))
+export default withStyles(styles)(ErrorPage)

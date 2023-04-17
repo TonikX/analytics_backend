@@ -1,35 +1,30 @@
 import React, {SyntheticEvent} from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
-import {withRouter} from 'react-router-dom'
-import Scrollbars from "react-custom-scrollbars";
-import Switch from "@material-ui/core/Switch";
-import AddIcon from "@material-ui/icons/Add";
-import TextField from '@material-ui/core/TextField';
-import Fab from "@material-ui/core/Fab";
-import Paper from '@material-ui/core/Paper';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import TablePagination from '@material-ui/core/TablePagination';
+import Scrollbars from "react-custom-scrollbars-2";
+import Switch from "@mui/material/Switch";
+import AddIcon from "@mui/icons-material/Add";
+import TextField from '@mui/material/TextField';
+import Fab from "@mui/material/Fab";
+import Paper from '@mui/material/Paper';
 
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import {withStyles} from '@mui/styles';
 import {
     Select,
     FormControl,
     InputLabel,
     MenuItem
-} from "@material-ui/core";
-import {
-    KeyboardTimePicker
-} from '@material-ui/pickers';
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Button from "@material-ui/core/Button";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+} from "@mui/material";
+import TimePicker from '@mui/lab/TimePicker';
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Button from "@mui/material/Button";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 
 import SortingButton from "../../components/SortingButton";
@@ -43,6 +38,7 @@ import styles from './AcademicPlanUpdate.styles';
 import {AcademicPlanUpdateLogFields, SchedulerConfigurationFields, UpdatedAcademicPlanFields} from "./enum";
 import CreateModal from "./CreateModal/CreateModal";
 import {WorkProgramGeneralFields} from "../WorkProgram/enum";
+import Pagination from "@mui/lab/Pagination";
 
 class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
     state = {
@@ -88,10 +84,10 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
 
     handleChangePage = (event: any, page: number) => {
         if(this.state.isUpdatedPlansShown){
-            this.props.actions.updatedPlansChangeCurrentPage(page + 1);
+            this.props.actions.updatedPlansChangeCurrentPage(page);
             this.props.actions.getUpdatedAcademicPlans()
         }else {
-            this.props.actions.logsChangeCurrentPage(page + 1);
+            this.props.actions.logsChangeCurrentPage(page);
             this.props.actions.getAcademicPlanUpdateLogs();
         }
     }
@@ -137,8 +133,9 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
     };
 
     render() {
+        //@ts-ignore
+        const {classes} = this.props;
         const {
-            classes,
             schedulerConfiguration,
             academicPlanUpdateLogs,
             updatedAcademicPlans,
@@ -151,13 +148,13 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
             updatedPlansSortingField,
             updatedPlansSortingMode
         } = this.props;
-        console.log(schedulerConfiguration[SchedulerConfigurationFields.EXECUTION_HOURS])
+
         return (
             <Paper className={classes.root}>
                 <div className={classes.titleWrap}>
                     <Typography className={classes.title}>Обновления учебных планов</Typography>
                     <div className={classes.additionalFunctionsWrap}>
-                        <KeyboardTimePicker
+                        <TimePicker
                             margin="normal"
                             id="time-picker"
                             label="Время обновления"
@@ -182,7 +179,6 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                                             vertical: "top",
                                             horizontal: "left"
                                         },
-                                        getContentAnchorEl: null
                                     }}>
                                 <MenuItem value="1">1 день</MenuItem>
                                 <MenuItem value="3">3 дня</MenuItem>
@@ -352,26 +348,17 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
 
                 <div className={classes.footer}>
                     {this.state.isUpdatedPlansShown ?
-                        <TablePagination count={updatedPlansAllCount}
-                                         component="div"
-                                         page={updatedPlansCurrentPage - 1}
-                                         rowsPerPageOptions={[]}
-                                         onChangePage={this.handleChangePage}
-                            //@ts-ignore
-                                         rowsPerPage={10}
-                                         onChangeRowsPerPage={()=>{}}
-                        />
+                      <Pagination count={updatedPlansAllCount}
+                                  page={updatedPlansCurrentPage - 1}
+                                  onChange={this.handleChangePage}
+                                  color="primary"
+                      />
                         :
-                        <TablePagination count={logsAllCount}
-                                         component="div"
-                                         page={logsCurrentPage - 1}
-                                         rowsPerPageOptions={[]}
-                                         onChangePage={this.handleChangePage}
-                            //@ts-ignore
-                                         rowsPerPage={10}
-                                         onChangeRowsPerPage={()=>{}}
-                        />
-
+                      <Pagination count={logsAllCount}
+                                  page={logsCurrentPage - 1}
+                                  onChange={this.handleChangePage}
+                                  color="primary"
+                      />
                     }
                     {this.state.isUpdatedPlansShown &&
                         <Fab color="secondary"
@@ -391,4 +378,4 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
 }
 
 // @ts-ignore
-export default connect(withStyles(styles)(withRouter(AcademicPlanUpdate)));
+export default connect(withStyles(styles)(AcademicPlanUpdate));

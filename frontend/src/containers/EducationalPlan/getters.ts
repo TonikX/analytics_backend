@@ -11,6 +11,7 @@ import {SelectorListType} from "../../components/SearchSelector/types";
 import {UserType} from "../../layout/types";
 import {DirectionType} from "../Direction/types";
 import {getTrainingModule} from "./TrainingModules/getters";
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): educationalPlanState => get(state, GENERAL_PATH);
 export const getEducationalPlan = (state: rootState): Array<EducationalPlanListType> => get(getStateData(state), fields.EDUCATIONAL_PLAN_LIST, []);
@@ -37,10 +38,10 @@ export const getNewPlanIdForRedirect = (state: rootState): null|number => get(ge
 
 export const getEducationalPlanDetailBlocks = (state: rootState): Array<EducationalPlanType> =>
   get(getEducationalPlanDetail(state), EducationalPlanFields.DISCIPLINE_BLOCKS, []);
-export const getEducationalPlanDetailId = (state: rootState): Array<EducationalPlanType> =>
-  get(getEducationalPlanDetail(state), EducationalPlanFields.ID, '');
-export const getEducationalPlanOpId = (state: rootState): Array<EducationalPlanType> =>
-  get(getEducationalPlanDetail(state), 'academic_plan_in_field_of_study.0.id', '');
+export const getEducationalPlanDetailId = (state: rootState): number =>
+  get(getEducationalPlanDetail(state), EducationalPlanFields.ID, 0);
+export const getEducationalPlanOpId = (state: rootState): number =>
+  get(getEducationalPlanDetail(state), 'academic_plan_in_field_of_study.0.id', 0);
 
 export const getEducationalPlanForSelector = (state: rootState): SelectorListType =>
   getEducationalPlan(state).map((plan: EducationalPlanListType) => ({
@@ -86,7 +87,7 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);
 
 export const getAvailableButtons = (state: rootState) => {
   const module = getTrainingModule(state)

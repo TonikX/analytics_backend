@@ -1,14 +1,14 @@
 import React, {useCallback, useState} from 'react'
 import {useDispatch} from 'react-redux';
 
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 import actions from '../../actions'
 import useStyles from './TasksTable.style';

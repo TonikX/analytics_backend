@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     input: {
@@ -6,6 +7,9 @@ export default (theme: Theme) => createStyles({
     },
     lastInput: {
         width: '550px',
+    },
+    dialogContent: {
+        padding: '10px 24px 20px 24px !important',
     },
     selector: {
         width: '550px'
@@ -17,9 +21,10 @@ export default (theme: Theme) => createStyles({
         padding: 20,
     },
     marginBottom30: {
-        marginBottom: '30px'
+        marginBottom: '30px !important'
     },
     selectorWrap: {
+        width: '100%',
         '& .MuiInputLabel-shrink': {
             transform: 'translate(14px, -6.5px) scale(0.75) !important',
         },
@@ -29,7 +34,8 @@ export default (theme: Theme) => createStyles({
     },
     radioGroup: {
         display: 'flex',
-        flexDirection: 'row',
+        //@ts-ignore
+        flexDirection: 'row !important',
         marginBottom: '30px',
         width: '550px'
     },

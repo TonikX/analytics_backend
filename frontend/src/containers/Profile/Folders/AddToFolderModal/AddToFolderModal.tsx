@@ -5,18 +5,18 @@ import ReactStars from "react-rating-stars-component";
 
 import {AddToFolderModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
-import MenuItem from "@material-ui/core/MenuItem";
-import Typography from "@material-ui/core/Typography";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
+import MenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 import TextFieldComponent from "../../../../components/TextField";
 
@@ -56,7 +56,7 @@ class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
         });
     }
 
-    changeFolder = (e: React.ChangeEvent<any>) => {
+    changeFolder = (e: any) => {
         this.setState({
             folder: get(e, 'target.value')
         });
@@ -88,7 +88,6 @@ class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     id="section-label"
                                 />
                             }
@@ -129,4 +128,5 @@ class AddToFolderModal extends React.PureComponent<AddToFolderModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(AddToFolderModal));

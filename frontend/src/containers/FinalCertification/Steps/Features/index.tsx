@@ -7,13 +7,13 @@ import {
 } from "../../enum";
 import get from "lodash/get";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles, withStyles} from "@mui/styles";
 import styles from "../styles";
-import {Checkbox, FormControlLabel, FormGroup, FormLabel, Typography, WithStyles} from "@material-ui/core";
+import {Checkbox, FormControlLabel, FormGroup, FormLabel, Typography} from "@mui/material";
 import {CertificationActions, CertificationState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
-import {shallowEqual} from "recompose";
-import Scrollbars from "react-custom-scrollbars";
+import {shallowEqualObjects} from "shallow-equal";
+import Scrollbars from "react-custom-scrollbars-2";
 
 interface FeaturesProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -62,7 +62,7 @@ class Features extends React.Component<FeaturesProps> {
     componentDidUpdate(prevProps: Readonly<FeaturesProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {fields} = this.props;
 
-        if (shallowEqual(fields, prevProps.fields)) {
+        if (shallowEqualObjects(fields, prevProps.fields)) {
             return;
         }
 
@@ -98,7 +98,9 @@ class Features extends React.Component<FeaturesProps> {
 
     render() {
 
-        const {classes, templateText} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {templateText} = this.props;
 
         const requirements = this.state.optionalRequirements;
 
@@ -150,4 +152,5 @@ class Features extends React.Component<FeaturesProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Features));

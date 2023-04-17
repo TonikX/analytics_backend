@@ -1,16 +1,16 @@
 import React from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
-import TablePagination from '@material-ui/core/TablePagination';
-import Checkbox from "@material-ui/core/Checkbox";
-import Typography from "@material-ui/core/Typography";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
+
+import Checkbox from "@mui/material/Checkbox";
+import Typography from "@mui/material/Typography";
 
 import {getUserFullName} from "../../../../common/utils";
 
@@ -20,7 +20,8 @@ import {TrainingModuleCreateModalProps} from './types';
 
 import connect from './AddTrainingModuleModal.connect';
 import styles from './AddTrainingModuleModal.styles';
-import Switch from "@material-ui/core/Switch";
+import Switch from "@mui/material/Switch";
+import Pagination from "@mui/lab/Pagination";
 
 class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateModalProps, { selectedTrainingModules: TrainingModuleType[]}> {
     state = {
@@ -95,8 +96,8 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
         })
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getTrainingModulesList();
     }
 
@@ -196,15 +197,10 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
                                 })}
                             </>
                         </Scrollbars>
-
-                        <TablePagination
-                            component="div"
-                            count={allCount}
-                            page={currentPage - 1}
-                            rowsPerPageOptions={[]}
-                            onChangePage={this.handleChangePage}
-                            rowsPerPage={10}
-                            onChangeRowsPerPage={()=>{}}
+                        <Pagination count={Math.ceil(allCount / 10)}
+                                    page={currentPage}
+                                    onChange={this.handleChangePage}
+                                    color="primary"
                         />
                     </div>
                 </DialogContent>
@@ -225,4 +221,5 @@ class AddTrainingModuleModal extends React.PureComponent<TrainingModuleCreateMod
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(AddTrainingModuleModal));

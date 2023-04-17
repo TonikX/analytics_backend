@@ -131,8 +131,9 @@ const cloneWorkProgram = createLogic({
         service.cloneWorkProgram(workProgramId)
             .then((res) => {
                 const newWorkProgramId = get(res, 'data.id');
-
-                window.location.href = appRouter.getWorkProgramLink(newWorkProgramId);
+                if (newWorkProgramId) {
+                    window.location.href = appRouter.getWorkProgramLink(newWorkProgramId);
+                }
 
                 dispatch(actions.fetchingSuccess());
             })

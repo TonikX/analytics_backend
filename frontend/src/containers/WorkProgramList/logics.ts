@@ -25,6 +25,7 @@ const getWorkProgramList = createLogic({
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_WORK_PROGRAM_LIST}));
 
+        // @ts-ignore
         service.getWorkPrograms(currentPage, searchQuery, sortingField, sortingMode, filters)
             .then((res) => {
                 const courses = get(res, 'data.results', []);

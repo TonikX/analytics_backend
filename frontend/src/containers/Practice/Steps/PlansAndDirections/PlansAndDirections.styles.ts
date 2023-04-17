@@ -1,11 +1,12 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     header: {
-        background: theme.palette.primary.main,
-        color: '#fff',
-        fontWeight: 400,
-        height: '45px'
+        background: `${theme.palette.primary.main} !important`,
+        color: '#fff !important',
+        fontWeight: '400 !important',
+        height: '45px !important'
     },
     cellLink: {
         textDecoration: 'none',
@@ -22,6 +23,6 @@ export default (theme: Theme) => createStyles({
         height: '600px',
     },
     h1: {
-        marginBottom: '30px'
+        marginBottom: '30px !important'
     }
 });

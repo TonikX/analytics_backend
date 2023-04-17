@@ -1,14 +1,14 @@
 import React from 'react';
 
-import TableCell from "@material-ui/core/TableCell";
-import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import TableCell from "@mui/material/TableCell";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
 
-import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-import EditIcon from '@material-ui/icons/EditOutlined';
-import CancelIcon from '@material-ui/icons/CloseOutlined';
-import SuccessIcon from '@material-ui/icons/CheckOutlined';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import CancelIcon from '@mui/icons-material/CloseOutlined';
+import SuccessIcon from '@mui/icons-material/CheckOutlined';
 
 import {EditedRowProps, EditedRowState} from './types';
 
@@ -16,7 +16,7 @@ import {ImplementationFormatsEnum, workProgramSectionFields} from '../../enum';
 
 import connect from './EditedRow.connect';
 import styles from './EditedRow.styles';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
 class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     constructor(props: EditedRowProps) {
@@ -31,7 +31,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     componentDidUpdate(prevProps: Readonly<EditedRowProps>, prevState: Readonly<EditedRowState>, snapshot?: any) {
         const { section } = this.props
 
-        if (!shallowEqual(prevProps.section, this.props.section)){
+        if (!shallowEqualObjects(prevProps.section, this.props.section)){
             this.setState({
                 section: section,
             })
@@ -98,6 +98,16 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     calculateContactWork = () => {
         const {section} = this.state;
         const canEditConsultation = this.canEditConsultation()
+        const isMixed = this.isMixed()
+
+        if (isMixed) {
+            return ((
+              (parseFloat(section[workProgramSectionFields.LECTURE_CLASSES]) || 0) +
+              (parseFloat(section[workProgramSectionFields.PRACTICAL_LESSONS]) || 0) +
+              (parseFloat(section[workProgramSectionFields.LABORATORY]) || 0) +
+              (parseFloat(section[workProgramSectionFields.CONSULTATIONS]) || 0)
+            ) * 1.1).toFixed(2);
+        }
 
         if (canEditConsultation) {
             return ((
@@ -113,11 +123,16 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
     }
 
     canEditConsultation = () => this.props.implementationFormat !== ImplementationFormatsEnum.OFFLINE
+    canEditOfflineHours = () => this.props.implementationFormat !== ImplementationFormatsEnum.ONLINE
+    isMixed = () => this.props.implementationFormat === ImplementationFormatsEnum.MIXED
 
     render() {
-        const {classes, isCanEdit} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {isCanEdit} = this.props;
         const {isEditMode, section} = this.state;
         const canEditConsultation = this.canEditConsultation()
+        const canEditOfflineHours = this.canEditOfflineHours()
 
         const contactWork = this.calculateContactWork();
 
@@ -149,7 +164,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.LECTURE_CLASSES)}
-                                   disabled={canEditConsultation}
+                                   disabled={!canEditOfflineHours}
                         />
                         :
                         <>{section.lecture_classes}</>
@@ -163,7 +178,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.LABORATORY)}
-                                   disabled={canEditConsultation}
+                                   disabled={!canEditOfflineHours}
                         />
                         :
                         <>{section.laboratory}</>
@@ -177,7 +192,7 @@ class EditedRow extends React.Component<EditedRowProps, EditedRowState> {
                                    className={classes.smallInput}
                                    type="number"
                                    onChange={this.handleChangeField(workProgramSectionFields.PRACTICAL_LESSONS)}
-                                   disabled={canEditConsultation}
+                                   disabled={!canEditOfflineHours}
                         />
                         :
                         <>{section.practical_lessons}</>

@@ -1,22 +1,22 @@
 import React, {useEffect} from "react";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import Search from "../../../components/Search/Search";
-import Scrollbars from "react-custom-scrollbars";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableBody from "@material-ui/core/TableBody";
+import Scrollbars from "react-custom-scrollbars-2";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
+import TableBody from "@mui/material/TableBody";
 import {TrainingModuleType} from "../../EducationalPlan/TrainingModules/types";
 import {TrainingModuleFields} from "../../EducationalPlan/TrainingModules/enum";
 import {getUserFullName} from "../../../common/utils";
-import {Checkbox} from "@material-ui/core";
-import TablePagination from "@material-ui/core/TablePagination";
+import {Checkbox} from "@mui/material";
 import {useStyles} from "../AddModuleToPlan.styles";
 import actions from "../actions";
 import {useDispatch, useSelector} from "react-redux";
 import {rootState} from "../../../store/reducers";
 import {getCurrentModulePage, getModulesAllCount, getSelectedModules, getTrainingModulesList} from "../getters";
+import Pagination from "@mui/lab/Pagination";
 
 export const Modules = () => {
     const classes = useStyles();
@@ -45,8 +45,8 @@ export const Modules = () => {
         dispatch(actions.setSelectedModules(newArray));
     };
 
-    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        dispatch(actions.changeModulesCurrentPage(page + 1));
+    const handleChangePage = (event: any, page: number) => {
+        dispatch(actions.changeModulesCurrentPage(page));
         dispatch(actions.getTrainingModulesList());
     };
 
@@ -96,14 +96,10 @@ export const Modules = () => {
                 </div>
             </Scrollbars>
             <div>
-                <TablePagination
-                    count={Math.ceil(modulesAllCount / 10)}
-                    component="div"
-                    page={currentPage - 1}
-                    rowsPerPageOptions={[]}
-                    onChangePage={handleChangePage}
-                    rowsPerPage={10}
-                    onChangeRowsPerPage={() => {}}
+                <Pagination count={trainingModules.length}
+                            page={currentPage}
+                            onChange={handleChangePage}
+                            color="primary"
                 />
             </div>
         </>
