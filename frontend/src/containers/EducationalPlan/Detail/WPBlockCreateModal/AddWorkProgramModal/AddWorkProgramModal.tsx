@@ -66,6 +66,8 @@ class AddWorkProgramModal extends React.PureComponent<AddWorkProgramModalProps> 
                                     changeItem={this.saveWorkProgram}
                                     value={''}
                                     valueLabel={''}
+                                    
+                                    
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

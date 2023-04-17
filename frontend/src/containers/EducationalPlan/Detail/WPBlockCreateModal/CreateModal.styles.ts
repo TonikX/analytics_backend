@@ -4,7 +4,8 @@ import createStyles from "@mui/styles/createStyles";
 export default (theme: Theme) => createStyles({
     dialogContent: {
         display: 'flex',
-        padding: 48
+        padding: '48px !important',
+        marginTop: '64px !important'
     },
     label: {
         fontSize: '14px',

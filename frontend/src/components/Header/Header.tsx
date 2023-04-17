@@ -106,7 +106,7 @@ class Header extends React.PureComponent<HeaderProps>{
                 >
                   <IconButton aria-haspopup="true">
                     <NotificationsIcon className={classes.bookmarkIcon} />
-                    {notificationsCount ? <div className={classes.count}>{notificationsCount}</div> : <></>}
+                    {1 ? <div className={classes.count}>6</div> : <></>}
                   </IconButton>
                 </Link>
               </Tooltip>
