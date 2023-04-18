@@ -1,16 +1,16 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {LiteratureCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
 
 import {literatureFields} from '../enum';
 
@@ -29,7 +29,7 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
     componentDidUpdate(prevProps: Readonly<LiteratureCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {literature} = this.props;
 
-        if (!shallowEqual(literature, prevProps.literature)){
+        if (!shallowEqualObjects(literature, prevProps.literature)){
             this.setState({
                 literature: {
                     [literatureFields.ID]: get(literature, literatureFields.ID),
@@ -113,4 +113,5 @@ class LiteratureCreateModal extends React.PureComponent<LiteratureCreateModalPro
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(LiteratureCreateModal));

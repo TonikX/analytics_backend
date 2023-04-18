@@ -1,10 +1,14 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     //@ts-ignore
     root: {
         //@ts-ignore
         zIndex: '10000 !important'
+    },
+    dialogContent: {
+        padding: '10px 24px 20px 24px !important',
     },
     dialog: {
         boxSizing: 'border-box',

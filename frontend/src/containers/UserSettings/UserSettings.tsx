@@ -1,21 +1,21 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Box, Button, Typography, TextField} from "@material-ui/core";
-import VerifiedIcon from '@material-ui/icons/CheckCircle';
-import NotVerifiedIcon from '@material-ui/icons/Close';
+import {Box, Button, Typography, TextField} from "@mui/material";
+import VerifiedIcon from '@mui/icons-material/CheckCircle';
+import NotVerifiedIcon from '@mui/icons-material/Close';
 import get from "lodash/get";
 import {getUserData} from "../../layout/getters";
 import {isValidEmail} from "../../common/utils";
 import {useStyles} from "./UserSettings.styles";
 import actions from "./actions";
-import Checkbox from "@material-ui/core/Checkbox/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
-import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import Chip from "@material-ui/core/Chip";
+import Checkbox from "@mui/material/Checkbox/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel/FormControlLabel";
+import Tooltip from "@mui/material/Tooltip/Tooltip";
+import Chip from "@mui/material/Chip";
 import StructuralUnitsSelector from "../StructuralUnits/StructuralUnitsSelector";
 import structuralUnitActions from "../StructuralUnits/actions";
-import AddIcon from "@material-ui/icons/Add";
-import Dialog from "@material-ui/core/Dialog";
+import AddIcon from "@mui/icons-material/Add";
+import Dialog from "@mui/material/Dialog";
 
 export default () => {
     const classes = useStyles();

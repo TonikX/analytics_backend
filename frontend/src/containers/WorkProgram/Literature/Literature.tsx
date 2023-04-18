@@ -1,13 +1,13 @@
 import React from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import Typography from "@material-ui/core/Typography";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from "@material-ui/core/Button";
+import Typography from "@mui/material/Typography";
+import {withStyles} from '@mui/styles';
+import Button from "@mui/material/Button";
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 import {FourthStepProps} from './types';
 import {fields} from "../enum";
@@ -30,7 +30,9 @@ class Literature extends React.PureComponent<FourthStepProps> {
     };
 
     render() {
-        const {classes, literatureList, isCanEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {literatureList, isCanEdit} = this.props;
 
         return (
             <div className={classes.root}>
@@ -65,10 +67,14 @@ class Literature extends React.PureComponent<FourthStepProps> {
                     </div>
                 }
 
-                {isCanEdit && <LiteratureAddModal />}
+                {isCanEdit ?
+                    //@ts-ignore
+                    <LiteratureAddModal />
+                : null}
             </div>
         );
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Literature));

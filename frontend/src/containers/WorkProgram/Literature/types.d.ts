@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import {WorkProgramActions} from '../types';
 import {Literature} from "../types";
 

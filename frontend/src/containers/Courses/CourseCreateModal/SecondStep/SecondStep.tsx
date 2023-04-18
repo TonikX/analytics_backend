@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Scrollbars } from 'react-custom-scrollbars'
-import DialogContent from '@material-ui/core/DialogContent';
-import TextField from "@material-ui/core/TextField";
+import { Scrollbars } from 'react-custom-scrollbars-2'
+import DialogContent from '@mui/material/DialogContent';
+import TextField from "@mui/material/TextField";
 
 import { useStyles } from './SecondStep.styles'
 

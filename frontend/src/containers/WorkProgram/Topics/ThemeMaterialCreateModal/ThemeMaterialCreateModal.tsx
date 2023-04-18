@@ -1,16 +1,16 @@
 import React from 'react';
 import get from "lodash/get";
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
 import {ThemeCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
 
 import {fields} from '../../enum';
 
@@ -28,7 +28,7 @@ class ThemeMaterialCreateModal extends React.PureComponent<ThemeCreateModalProps
     componentDidUpdate(prevProps: Readonly<ThemeCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {data} = this.props;
 
-        if (!shallowEqual(data, prevProps.data)){
+        if (!shallowEqualObjects(data, prevProps.data)){
             this.setState({
                 ...data
             });
@@ -37,6 +37,12 @@ class ThemeMaterialCreateModal extends React.PureComponent<ThemeCreateModalProps
 
     handleClose = () => {
         this.props.actions.closeDialog(fields.ADD_NEW_MATERIAL_TO_TOPIC);
+        this.setState({
+            id: null,
+            topicId: null,
+            title: '',
+            url: ''
+        })
     }
 
     handleSave = () => {
@@ -70,7 +76,7 @@ class ThemeMaterialCreateModal extends React.PureComponent<ThemeCreateModalProps
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} материал</DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Название материала *"
                                onChange={this.saveField('title')}
                                variant="outlined"
@@ -84,7 +90,6 @@ class ThemeMaterialCreateModal extends React.PureComponent<ThemeCreateModalProps
                     <TextField label="URL материала *"
                                onChange={this.saveField('url')}
                                variant="outlined"
-                               className={classes.input}
                                fullWidth
                                value={url}
                                InputLabelProps={{
@@ -109,4 +114,5 @@ class ThemeMaterialCreateModal extends React.PureComponent<ThemeCreateModalProps
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(ThemeMaterialCreateModal));

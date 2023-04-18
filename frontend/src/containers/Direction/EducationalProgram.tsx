@@ -2,21 +2,21 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 // @ts-ignore
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import {withStyles} from '@mui/styles';
+
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -29,12 +29,13 @@ import {DirectionFields} from './enum';
 import connect from './EducationalProgram.connect';
 import styles from './EducationalProgram.styles';
 import {specialization} from "../WorkProgram/constants";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
 import classNames from "classnames";
+import Pagination from "@mui/lab/Pagination";
 
 class EducationalProgram extends React.Component<EducationalProgramProps> {
     state = {
@@ -82,8 +83,8 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
         this.props.actions.getDirections();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getDirections();
     }
 
@@ -93,7 +94,9 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     }
 
     render() {
-        const {classes, educationalProgram, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {educationalProgram, allCount, currentPage, sortingField, sortingMode, canEdit} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -189,14 +192,10 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
                 </Scrollbars>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     {canEdit &&
@@ -225,4 +224,5 @@ class EducationalProgram extends React.Component<EducationalProgramProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(EducationalProgram));

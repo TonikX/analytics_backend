@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     list: {
@@ -11,7 +12,8 @@ export default (theme: Theme) => createStyles({
         alignItems: 'center'
     },
     dialogContent: {
-        height: '450px'
+        height: '450px',
+        padding: '10px 24px 20px 24px !important',
     },
     filtersLine: {
         display: 'flex',
@@ -31,7 +33,7 @@ export default (theme: Theme) => createStyles({
         padding: 20,
     },
     select: {
-        width: '20%',
+        width: '45%',
         marginLeft: 20,
     }
 });

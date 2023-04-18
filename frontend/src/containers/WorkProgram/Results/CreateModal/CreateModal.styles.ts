@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     actions: {
@@ -18,19 +19,19 @@ export default (theme: Theme) => createStyles({
         width: '550px'
     },
     marginBottom30: {
-        marginBottom: '30px'
+        marginBottom: '30px !important'
     },
     evaluationToolSelector: {
         '& .MuiInputLabel-shrink': {
             transform: 'translate(11px, -6.5px) scale(0.75) !important',
         },
         '& .MuiOutlinedInput-notchedOutline legend': {
-            width: '140px !important'
+            width: '120px !important'
         },
-        marginTop: '30px',
+        marginTop: '30px !important',
     },
     selector: {
-        width: '550px'
+        width: '550px !important'
     },
     link: {
         marginRight: 'auto',

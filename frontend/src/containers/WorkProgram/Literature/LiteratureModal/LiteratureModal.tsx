@@ -29,5 +29,5 @@ class LiteratureModal extends React.PureComponent<LiteratureModalProps> {
         )
     }
 }
-
+//@ts-ignore
 export default connect(LiteratureModal);

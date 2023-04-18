@@ -1,7 +1,4 @@
-import {WithStyles} from "@material-ui/core";
-import styles from "./TableSettingsMenu.styles";
-
-export interface TableSettingsMenuProps extends WithStyles<typeof styles> {
+export interface TableSettingsMenuProps {
     handleCloseMenu: Function;
     handleOpenMenu: Function;
     anchorEl: any;

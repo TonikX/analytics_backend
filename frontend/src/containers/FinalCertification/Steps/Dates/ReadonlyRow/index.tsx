@@ -1,7 +1,7 @@
 import React from "react";
-import {FormLabel, Typography, WithStyles} from "@material-ui/core";
+import {FormLabel, Typography} from "@mui/material";
 import styles from "../../styles";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles, withStyles} from "@mui/styles";
 
 export interface ReadonlyProps extends WithStyles<typeof styles> {
     label: string,
@@ -11,7 +11,9 @@ export interface ReadonlyProps extends WithStyles<typeof styles> {
 class ReadonlyRow extends React.Component<ReadonlyProps> {
 
     render() {
-        const {classes, label, value} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {label, value} = this.props;
         return (
             <div className={classes.datesReadonlyRow}>
                 <FormLabel component="legend" className={classes.datesReadOnlyLabel}>

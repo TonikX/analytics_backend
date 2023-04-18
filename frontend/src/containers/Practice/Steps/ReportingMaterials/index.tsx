@@ -1,13 +1,13 @@
 import React from "react";
 import {PracticeFields, PracticeSteps, TemplateTextPracticeFields} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {PracticeActions, PracticeState, TemplateTextState} from "../../types";
 import Input from "../../components/Input";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import Tooltip from "@material-ui/core/Tooltip";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import Tooltip from "@mui/material/Tooltip";
 import {RussianPracticeFields} from "../../constants";
 
 interface ReportingMaterialsProps extends WithStyles<typeof styles> {
@@ -20,7 +20,9 @@ class Structure extends React.Component<ReportingMaterialsProps> {
 
     render() {
 
-        const {classes, templateText} = this.props;
+      //@ts-ignore
+      const {classes} = this.props;
+        const {templateText} = this.props;
 
         return (
             <div className={classes.content}>
@@ -54,4 +56,5 @@ class Structure extends React.Component<ReportingMaterialsProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(Structure));

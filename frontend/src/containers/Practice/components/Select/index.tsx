@@ -1,16 +1,17 @@
-import {FormHelperText, Select as MuiSelect, WithStyles} from "@material-ui/core";
+import {FormHelperText, Select as MuiSelect} from "@mui/material";
+import {withStyles} from "@mui/styles";
 import styles from "./styles";
 import {PracticeActions, Validation} from "../../types";
 import {PracticeFields} from "../../enum";
 import React, {ReactText} from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import InputsLoader from "../../../../components/InputsLoader";
 import {RussianPracticeFields} from "../../constants";
 import {validate} from "../../validation";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 import get from "lodash/get";
 
 type SelectOption = {
@@ -71,7 +72,7 @@ class Select extends React.Component<SelectProps> {
         });
     }
 
-    saveSelect = (e: React.ChangeEvent<any>) => {
+    saveSelect = (e: any) => {
         const field = this.props.fieldName;
         const value = get(e, 'target.value')
         const error = validate(field, value);
@@ -92,6 +93,7 @@ class Select extends React.Component<SelectProps> {
         const {fields, classes, metaList, fieldName, getLoading} = this.props;
         const {errorMessage} = this.state;
 
+        // @ts-ignore
         const label = RussianPracticeFields[fieldName];
         const value = fields[fieldName];
 
@@ -124,4 +126,5 @@ class Select extends React.Component<SelectProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Select));

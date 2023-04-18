@@ -7,6 +7,7 @@ import {GENERAL_PATH} from "./reducer";
 import {fields} from './enum';
 
 import {literatureState, LiteratureType} from './types';
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): literatureState => get(state, GENERAL_PATH);
 export const getLiterature = (state: rootState): Array<LiteratureType> => get(getStateData(state), fields.LITERATURE_LIST, []);
@@ -22,4 +23,4 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);

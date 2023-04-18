@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     root: {
@@ -10,8 +11,7 @@ export default (theme: Theme) => createStyles({
         flexDirection: 'column'
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
+        fontSize: '24px !important',
         display: 'flex',
         justifyContent: 'space-between',
     },
@@ -30,6 +30,7 @@ export default (theme: Theme) => createStyles({
         height: 'calc(100% - 50px)'
     },
     tableWrap: {
+        marginTop: '10px',
         height: 'calc(100% - 60px)'
     },
     listItem: {

@@ -1,1 +1,1 @@
-export { default } from './AddRepresentativesOrganizations'
+export { AddRepresentativesOrganizations } from './AddRepresentativesOrganizations'

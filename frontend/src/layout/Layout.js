@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import className from 'classnames';
-import shallowEqual from "recompose/shallowEqual";
-import {withRouter} from "react-router-dom";
+import {shallowEqualObjects} from "shallow-equal";
 
-import MomentUtils from '@date-io/moment';
 import {SnackbarProvider} from 'notistack';
 import "moment/locale/ru";
 
-import {MuiThemeProvider} from '@material-ui/core/styles';
-import withStyles from '@material-ui/core/styles/withStyles';
-import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import {ThemeProvider} from '@mui/material/styles';
+import {withStyles} from '@mui/styles';
+// import AdapterDateMoment from '@mui/lab/AdapterMoment';
+// import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 
 import UserService from '../service/user-service';
 
@@ -20,12 +21,13 @@ import AbsoluteLoader from '../components/AbsoluteLoader';
 import Notificator from '../components/Notificator';
 import AddToFolderModal from "../containers/Profile/Folders/AddToFolderModal/AddToFolderModal";
 
+import {withRouter} from '../hoc/WithRouter'
 import theme from './themeMaterialUi';
 
 import connect from './Layout.connect';
 import styles from './Layout.styles';
 
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 const userService = UserService.factory();
 
@@ -46,9 +48,9 @@ class Layout extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return !shallowEqual(this.props.errors, nextProps.errors)
-            || !shallowEqual(this.props.children, nextProps.children)
-            || !shallowEqual(this.props.location, nextProps.location)
+        return !shallowEqualObjects(this.props.errors, nextProps.errors)
+            || !shallowEqualObjects(this.props.children, nextProps.children)
+            || !shallowEqualObjects(this.props.location, nextProps.location)
             || this.props.fetching !== nextProps.fetching
             || this.props.auth !== nextProps.auth
             || this.props.mockMenu !== nextProps.mockMenu
@@ -91,9 +93,9 @@ class Layout extends React.Component {
         if (isLandingPage) return this.props.children
 
         return (
-            <MuiPickersUtilsProvider utils={MomentUtils}>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
                 <SnackbarProvider maxSnack={3}>
-                    <MuiThemeProvider theme={theme}>
+                    <ThemeProvider theme={theme}>
                         <AbsoluteLoader isFetching={fetching} />
                         <Notificator errors={errors} successMessages={successMessages} />
                         <Header handleOpenMenu={this.handleOpenMenu}
@@ -119,9 +121,9 @@ class Layout extends React.Component {
                         </div>
 
                         {isAuth && <AddToFolderModal />}
-                    </MuiThemeProvider>
+                    </ThemeProvider>
                 </SnackbarProvider>
-            </MuiPickersUtilsProvider>
+            </LocalizationProvider>
         );
     }
 }

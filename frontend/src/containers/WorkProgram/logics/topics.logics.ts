@@ -104,11 +104,11 @@ const addTopicMaterial = createLogic({
     process({getState, action}: any, dispatch, done) {
         const state = getState();
         const workProgramId = getWorkProgramId(state);
-        const id = action.payload;
+        const topic = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.ADD_TOPIC_MATERIAL}));
 
-        service.addTopicMaterial(id)
+        service.addTopicMaterial(topic)
             .then((res) => {
                 dispatch(workProgramActions.getWorkProgram(workProgramId));
                 dispatch(actions.fetchingSuccess());

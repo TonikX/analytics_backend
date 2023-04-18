@@ -7,7 +7,7 @@ import {
     WorkProgramGeneralFields,
     WorkProgramStatusEnum
 } from './enum';
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import styles from "./WorkProgram.styles";
 import {CourseType} from "../Courses/types";
 import {TrainingEntitityType} from "../TrainingEntities/types";
@@ -20,6 +20,7 @@ export interface WorkProgramActions {
 
     saveZUN: any;
     deleteZUN: any;
+    updateZUNFull: any;
     updateZUN: any;
 
     sendWorkProgramToArchive: any;

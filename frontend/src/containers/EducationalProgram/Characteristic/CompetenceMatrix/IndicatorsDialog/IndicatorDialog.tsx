@@ -1,16 +1,16 @@
 import React, {useCallback, useEffect, useState, useMemo} from 'react'
-import {Dialog, Select} from '@material-ui/core'
-import Button from '@material-ui/core/Button'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Chip from '@material-ui/core/Chip'
+import {Dialog, Select} from '@mui/material'
+import Button from '@mui/material/Button'
+import DialogActions from '@mui/material/DialogActions'
+import DialogTitle from '@mui/material/DialogTitle'
+import Chip from '@mui/material/Chip'
 import CompetenceSelector from '../../../../Competences/CompetenceSelector'
 import IndicatorSelector from '../../../../Competences/Indicators/IndicatorSelector'
 import {useStyles} from './IndicatorDialog.styles'
 import actions from '../../../actions'
 import {useDispatch} from 'react-redux'
-import Tooltip from "@material-ui/core/Tooltip/Tooltip";
-import MenuItem from "@material-ui/core/MenuItem";
+import Tooltip from "@mui/material/Tooltip/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
 
 interface IndicatorsProps {
     workProgramId: number;

@@ -1,18 +1,15 @@
 import React from 'react';
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import DialogTitle from "@mui/material/DialogTitle";
 
-import {WithStyles} from '@material-ui/core';
+import useStyles from './ConfirmDialog.styles';
 
-import styles from './ConfirmDialog.styles';
-
-interface ConfirmDialogProps extends WithStyles<typeof styles> {
+interface ConfirmDialogProps {
     isOpen: boolean;
     confirmText: string;
     dialogTitle: string;
@@ -21,7 +18,8 @@ interface ConfirmDialogProps extends WithStyles<typeof styles> {
     onConfirm: Function;
 }
 
-const ConfirmDialog = ({isOpen, confirmText, onDismiss, onConfirm, dialogTitle, confirmButtonText, classes}: ConfirmDialogProps) => {
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({isOpen, confirmText, onDismiss, onConfirm, dialogTitle, confirmButtonText}) => {
+    const classes = useStyles()
     const handleConfirmDialog = () => {
         onConfirm();
     };
@@ -55,4 +53,4 @@ const ConfirmDialog = ({isOpen, confirmText, onDismiss, onConfirm, dialogTitle, 
     );
 };
 
-export default withStyles(styles)(ConfirmDialog);
+export default ConfirmDialog;

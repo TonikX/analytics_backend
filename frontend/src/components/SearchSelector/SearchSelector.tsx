@@ -1,17 +1,18 @@
 import React, {ReactText} from 'react';
 import get from 'lodash/get';
 import debounce from "lodash/debounce";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import {AutoSizer} from 'react-virtualized';
+// @ts-ignore
+import {AutoSizer} from 'react-virtualized-reactv17';
 
-import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import withStyles from '@material-ui/core/styles/withStyles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from "@material-ui/core/MenuItem";
+import Fade from '@mui/material/Fade';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import {withStyles} from '@mui/styles';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import TextField from '@mui/material/TextField';
+import MenuItem from "@mui/material/MenuItem";
 
 import {SearchSelectorProps, SelectorItemType} from './types';
 
@@ -85,7 +86,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
         this.props.changeItem(value, label);
     }
 
-    getLabelForValue = (value: ReactText) => {
+    getLabelForValue = (value?: ReactText) => {
         const {list} = this.props;
         const findElement = list.find(el => el.value === value);
 
@@ -93,7 +94,9 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
     }
 
     render(): any {
-        const {classes, label, list, value, disabled, className, popperPlacement, errorMessage} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {label, list, value, disabled, className, popperPlacement, errorMessage} = this.props;
         const {anchorEl, searchText} = this.state;
         const open = Boolean(anchorEl);
 
@@ -115,7 +118,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
                                helperText={errorMessage}
                     />
                     <AutoSizer style={{width: '100%'}}>
-                        {({width}) => (
+                        {({width}: any) => (
                             <Popper open={open}
                                     anchorEl={anchorEl}
                                     transition

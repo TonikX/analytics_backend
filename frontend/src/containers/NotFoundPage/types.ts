@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import styles from "./NotFound.styles";
 
 export interface NotFoundProps extends WithStyles<typeof styles>{}

@@ -1,23 +1,23 @@
 import * as React from "react";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import {Link} from 'react-router-dom';
-import {Typography} from "@material-ui/core";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableHead from "@material-ui/core/TableHead";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import Paper from "@material-ui/core/Paper";
-import Pagination from '@material-ui/lab/Pagination';
+import {Typography} from "@mui/material";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableHead from "@mui/material/TableHead";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import Paper from "@mui/material/Paper";
+import Pagination from '@mui/lab/Pagination';
 import {specializationObject} from "../WorkProgram/constants";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import Notifications from "../Profile/Notifications/Notifications";
 import MergeWorkProgramsBlock from "../MergeWorkPrograms";
 import {EmailWidget} from "../EmailWidget";
 import {FULL_DATE_FORMAT} from "../../common/utils";
 import moment from "moment";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import actions from "./actions";
@@ -87,7 +87,7 @@ export default () => {
 
                     <div className={classes.tableWrap}>
                         <Table stickyHeader size='small'>
-                            <TableHead>
+                            <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell>
                                         Код

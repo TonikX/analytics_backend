@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
-import Paper from '@material-ui/core/Paper'
-import Stepper from '@material-ui/core/Stepper'
-import Step from '@material-ui/core/Step'
-import StepButton from '@material-ui/core/StepButton'
-import Typography from '@material-ui/core/Typography'
+import Paper from '@mui/material/Paper'
+import Stepper from '@mui/material/Stepper'
+import Step from '@mui/material/Step'
+import StepButton from '@mui/material/StepButton'
+import Typography from '@mui/material/Typography'
 //import LikeButton from "../../components/LikeButton"
 import { General } from './General/General'
 import { Content } from './Content/Content'
@@ -72,70 +72,62 @@ export const Course: React.FC = () => {
           <Step>
             <StepButton
               onClick={() => setActiveStep(0)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.GENERAL}
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(1)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.CONTENT}
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(2)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.CURRENT_SESSION}
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(3)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.PREP_DIRECTION}
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(4)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.REQUIREMENTS}
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(5)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.COMPETENCES}
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(6)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.RESULTS}
             </StepButton>
           </Step>
           <Step>
-            <StepButton 
+            <StepButton
               onClick={() => setActiveStep(7)}
-              completed={false} 
               style={{textAlign: 'left'}}
             >
               {steps.WORK_PROGRAMS}

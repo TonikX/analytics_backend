@@ -3,9 +3,9 @@ import React from 'react';
 import debounce from "lodash/debounce";
 import get from "lodash/get";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import TextField from "@material-ui/core/TextField";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import {withStyles} from '@mui/styles';
+import TextField from "@mui/material/TextField";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import {SearchProps} from './types';
 

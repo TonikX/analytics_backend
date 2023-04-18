@@ -1,4 +1,4 @@
-import {createStyles} from "@material-ui/core";
+import createStyles from "@mui/styles/createStyles";
 
 export default () => createStyles({
     input: {
@@ -32,10 +32,11 @@ export default () => createStyles({
         marginBottom: '20px',
     },
     marginTop20: {
-        marginTop: '20px'
+        marginTop: '20px !important'
     },
     radioGroup: {
-        flexDirection: 'row',
+        // @ts-ignore
+        flexDirection: 'row !important',
         marginBottom: 20,
     },
     headerCell: {

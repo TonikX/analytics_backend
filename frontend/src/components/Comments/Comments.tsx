@@ -1,11 +1,11 @@
 import React from 'react';
 import moment from 'moment';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import {withStyles} from '@mui/styles';
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 import {CommentsProps} from './types';
 
@@ -13,10 +13,10 @@ import styles from './Comments.styles';
 import get from "lodash/get";
 import {CommentFields} from "./enum";
 import {FULL_DATE_FORMAT, getUserFullName} from "../../common/utils";
-import Grow from "@material-ui/core/Grow";
-import Paper from "@material-ui/core/Paper";
-import Fab from "@material-ui/core/Fab";
-import CommentIcon from "@material-ui/icons/CommentOutlined";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Fab from "@mui/material/Fab";
+import CommentIcon from "@mui/icons-material/CommentOutlined";
 
 class Comments extends React.Component<CommentsProps> {
     state = {
@@ -42,7 +42,9 @@ class Comments extends React.Component<CommentsProps> {
     }
 
     render() {
-        const {classes, comments, isOpen} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {comments, isOpen} = this.props;
         const {commentText} = this.state;
 
         return (
@@ -77,7 +79,7 @@ class Comments extends React.Component<CommentsProps> {
                                            value={commentText}
                                            multiline
                                            rows={2}
-                                           rowsMax={5}
+                                           maxRows={5}
                                 />
                                 <div className={classes.commentTextFieldButtons}>
                                     <Button onClick={this.clearTextInput}>Отменить</Button>

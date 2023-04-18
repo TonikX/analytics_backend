@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useStyles } from './Filters.styles'
 import cn from 'classnames';
 
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
 import SearchSelector from '../../../../components/SearchSelector'
 
 import {languageArray, specialization} from '../../../WorkProgram/constants';

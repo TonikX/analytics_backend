@@ -1,17 +1,17 @@
 import React from "react";
 import {PracticeFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles, withStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {Typography} from "@mui/material";
 import {PracticeActions, PracticeState} from "../../types";
 import Input from "../../components/Input";
 
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
 import UserSelector from "../../../EmailWidget/UserSelector";
-import AddIcon from "@material-ui/icons/Add";
-import Chip from "@material-ui/core/Chip";
+import AddIcon from "@mui/icons-material/Add";
+import Chip from "@mui/material/Chip";
 import {getUserFullName} from "../../../../common/utils";
 import {UserFields} from "../../../../layout/enum";
 
@@ -28,12 +28,12 @@ import {
   QUALIFICATIONS,
 } from "../../constants";
 import StructuralUnit from "../../components/StructuralUnit";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import TableContainer from "@material-ui/core/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
 import {UserType} from "../../../../layout/types";
 
 interface GeneralInfoProps extends WithStyles<typeof styles> {
@@ -94,7 +94,9 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
   }
 
   render() {
-    const {classes, fields, canAddEditors, isCanEdit} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {fields, canAddEditors, isCanEdit} = this.props;
     const semesterCount = fields[PracticeFields.SEMESTER_COUNT] || 0;
     const semesterColumns = new Array(semesterCount).fill(0);
     const ze = fields[PracticeFields.ZE_V_SEM] || "";
@@ -214,4 +216,5 @@ class GeneralInfo extends React.Component<GeneralInfoProps> {
   }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(GeneralInfo));

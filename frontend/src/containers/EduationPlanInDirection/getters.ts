@@ -11,6 +11,7 @@ import {SelectorListType} from "../../components/SearchSelector/types";
 import {EducationalPlanFields} from "../EducationalPlan/enum";
 import {DirectionFields} from "../Direction/enum";
 import {specializationObject} from "../WorkProgram/constants";
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): educationalPlanInDirectionState => get(state, GENERAL_PATH);
 export const getEducationalPlanInDirection = (state: rootState): Array<EducationalPlanInDirectionType> => get(getStateData(state), fields.EDUCATION_PLAN_IN_DIRECTION, []);
@@ -49,4 +50,4 @@ export const getFilters = (state: rootState) => get(getStateData(state), fields.
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);

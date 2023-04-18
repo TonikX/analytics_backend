@@ -1,5 +1,5 @@
 import {fields, filterFields} from './enum';
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import styles from "./WorkProgram.styles";
 import {WorkProgramActions, WorkProgramGeneralType} from '../WorkProgram/types';
 import {SortingType} from "../../components/SortingButton/types";
@@ -61,4 +61,5 @@ export interface WorkProgramListProps extends WithStyles<typeof styles> {
     workProgramIdForRedirect: number|null;
     sortingMode: SortingType;
     status: WorkProgramStatusEnum|null;
+    classes: any;
 }

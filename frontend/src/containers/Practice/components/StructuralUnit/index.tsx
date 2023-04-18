@@ -1,10 +1,10 @@
-import {WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
 import styles from "./styles";
 import {PracticeActions, PracticeState, Validation} from "../../types";
 import {PracticeFields} from "../../enum";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import {validate} from "../../validation";
 import {RussianPracticeFields} from "../../constants";
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
@@ -85,7 +85,9 @@ class StructuralUnit extends React.Component<StructuralUnitProps> {
 
 
     render() {
-        const {classes, structuralUnitsList, fields} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {structuralUnitsList, fields} = this.props;
         const {errorMessage} = this.state;
 
         return (
@@ -102,4 +104,5 @@ class StructuralUnit extends React.Component<StructuralUnitProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(StructuralUnit));

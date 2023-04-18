@@ -2,23 +2,23 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 // @ts-ignore
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import classNames from 'classnames';
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import {withStyles} from '@mui/styles';
+
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import ConfirmDialog from "../../components/ConfirmDialog";
 import SortingButton from "../../components/SortingButton";
@@ -31,6 +31,7 @@ import {CompetenceFields} from "../Competences/enum";
 
 import connect from './Indicators.connect';
 import styles from './Indicators.styles';
+import Pagination from "@mui/lab/Pagination";
 
 class Indicators extends React.Component<IndicatorProps> {
     state = {
@@ -78,8 +79,8 @@ class Indicators extends React.Component<IndicatorProps> {
         this.props.actions.getIndicators();
     }, 300);
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getIndicators();
     }
 
@@ -89,7 +90,9 @@ class Indicators extends React.Component<IndicatorProps> {
     }
 
     render() {
-        const {classes, indicators, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {indicators, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -151,14 +154,10 @@ class Indicators extends React.Component<IndicatorProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
 
                     <Fab color="secondary"
@@ -185,4 +184,5 @@ class Indicators extends React.Component<IndicatorProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Indicators));

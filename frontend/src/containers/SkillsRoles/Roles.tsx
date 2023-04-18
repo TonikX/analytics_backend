@@ -1,18 +1,17 @@
 import React from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import get from "lodash/get";
 import debounce from "lodash/debounce";
 import classNames from 'classnames';
 
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Typography from "@material-ui/core/Typography";
-import Chip from "@material-ui/core/Chip";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import TextField from "@material-ui/core/TextField";
-
-import withStyles from '@material-ui/core/styles/withStyles';
+import Paper from '@mui/material/Paper';
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import TextField from "@mui/material/TextField";
+import Pagination from "@mui/lab/Pagination";
+import {withStyles} from '@mui/styles';
 
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
@@ -28,8 +27,8 @@ class Roles extends React.Component<RolesProps> {
         this.props.actions.getRolesList();
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getRolesList();
     }
 
@@ -49,7 +48,9 @@ class Roles extends React.Component<RolesProps> {
     }, 300);
 
     render() {
-        const {classes, rolesList, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {rolesList, allCount, currentPage, sortingField, sortingMode} = this.props;
 
         return (
             <Paper className={classes.root}>
@@ -102,14 +103,11 @@ class Roles extends React.Component<RolesProps> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     //@ts-ignore
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                      //@ts-ignore
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
                 </div>
             </Paper>
@@ -117,4 +115,5 @@ class Roles extends React.Component<RolesProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Roles));

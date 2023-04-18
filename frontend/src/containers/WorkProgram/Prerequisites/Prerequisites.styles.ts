@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     root: {
@@ -8,9 +9,10 @@ export default (theme: Theme) => createStyles({
     },
     addIcon: {
         marginTop: '10px',
-        marginLeft: 'auto',
+        marginLeft: 'auto !important',
         flex: 'none',
         marginBottom: '20px',
+        width: 'fit-content'
     },
     list: {
         height: '100%',

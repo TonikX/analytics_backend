@@ -1,9 +1,8 @@
 import {fields} from './enum';
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import styles from "./WorkProgram.styles";
 import {ProfessionsFields} from './enum';
 import {SortingType} from "../../components/SortingButton/types";
-import {TrainingEntitityType} from "../TrainingEntities/types";
 
 export interface ProfessionsActions {
     changeSearchQuery: any;

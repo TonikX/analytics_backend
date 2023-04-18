@@ -1,6 +1,6 @@
 import {WorkProgramActions} from '../types';
 import {SectionType} from '../types';
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import styles from "./Sections.styles";
 import {ImplementationFormatsEnum} from "../enum";
 

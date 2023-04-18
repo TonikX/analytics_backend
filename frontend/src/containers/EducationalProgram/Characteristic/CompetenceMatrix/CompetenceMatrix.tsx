@@ -4,13 +4,13 @@ import get from 'lodash/get';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import {useDispatch, useSelector} from "react-redux";
-import Tooltip from "@material-ui/core/Tooltip";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Table from "@material-ui/core/Table";
+import Tooltip from "@mui/material/Tooltip";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Table from "@mui/material/Table";
 import actions from "../../../EducationalProgram/actions";
 import {getCompetenceMatrix, getEducationalProgramCharacteristicId, getMatrixAcademicPlans} from "../../getters";
 import {useStyles} from "./CompetenceMatrix.styles";
@@ -259,7 +259,7 @@ const ContentByAcademicPlan = (
             <React.Fragment key={itemIndex}>
                 {/*Учебный план*/}
                 <TableRow className={classes.tableHeading}>
-                    <TableCell align="center" colSpan={7}>{item.name}</TableCell>
+                    <TableCell align="center" colSpan={7} style={{color: '#fff'}}>{item.name}</TableCell>
                 </TableRow>
                 {/*Модули учебного плана*/}
                 {item.modules_in_discipline_block.map((moduleBlock: DisciplineModule, blockIndex: number) =>
@@ -295,7 +295,7 @@ export default () => {
     const classes = useStyles();
     const competenceMatrixId = useSelector(getEducationalProgramCharacteristicId);
     const [isOpen, setIsOpen] = useState(false);
-    const [defaultCompetence, setDefaultCompetence] = useState();
+    const [defaultCompetence, setDefaultCompetence] = useState<{value: number; label: string;}|undefined>();
     const [indicators, setIndicators] = useState([] as { label: string; value: number } []);
     const [workProgramId, setWorkProgramId] = useState(-1);
 
@@ -315,6 +315,7 @@ export default () => {
 
     const attachIndicator = (props: AttachIndicatorProps) => {
         setWorkProgramId(props.workProgramId);
+        // @ts-ignore
         setDefaultCompetence(props.competence);
         setIsOpen(true);
     };

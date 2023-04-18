@@ -1,4 +1,5 @@
-import {createStyles, Theme, makeStyles} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
@@ -24,13 +25,13 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     width: '490px',
     justifyContent: 'space-between',
-    [theme.breakpoints.down(880)]: {
+    "@media (max-width: 880px)": {
       width: '100%',
     }
   },
   btn: {
     width: '235px',
-    [theme.breakpoints.down(880)]: {
+    "@media (max-width: 880px)": {
       width: '40%',
     }
   },

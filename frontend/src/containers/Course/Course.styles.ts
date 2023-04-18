@@ -1,4 +1,5 @@
-import {createStyles, Theme, makeStyles} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
   wrap: {
@@ -29,7 +30,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     alignSelf: 'stretch',
   },
   title: {
-    fontSize: '24px',
+    fontSize: '24px !important',
   },
   courseName: {
     fontWeight: 500,

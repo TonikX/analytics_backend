@@ -1,19 +1,19 @@
 import React, {SyntheticEvent} from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import get from "lodash/get";
 
 import moment from "moment";
 import {Link} from "react-router-dom";
 
-import Paper from '@material-ui/core/Paper';
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import withStyles from '@material-ui/core/styles/withStyles';
-import EyeIcon from "@material-ui/icons/VisibilityOutlined";
-import TableBody from "@material-ui/core/TableBody";
+import Paper from '@mui/material/Paper';
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import {withStyles} from '@mui/styles';
+import EyeIcon from "@mui/icons-material/VisibilityOutlined";
+import TableBody from "@mui/material/TableBody";
 
 import SortingButton from "../../components/SortingButton";
 import {SortingType} from "../../components/SortingButton/types";
@@ -34,7 +34,7 @@ import {appRouter} from "../../service/router-service";
 
 import connect from './Expertises.connect';
 import styles from './Expertises.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 import {UserType} from "../../layout/types";
 import {PracticeFields} from "../Practice/enum";
 import {CertificationFields} from "../FinalCertification/enum";
@@ -93,7 +93,9 @@ class Expertises extends React.Component<ExpertisesProps> {
     }
 
     render() {
-        const {classes, expertisesList, allCount, currentPage, sortingField, sortingMode, selectedStatus} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {expertisesList, allCount, currentPage, sortingField, sortingMode, selectedStatus} = this.props;
 
         return (
             <Paper className={classes.root}>
@@ -119,15 +121,19 @@ class Expertises extends React.Component<ExpertisesProps> {
                             <TableHead className={classes.header}>
                                 <TableRow>
                                     <TableCell>
-                                        Рабочая программа
-                                        <SortingButton changeMode={this.changeSorting(ExpertisesFields.WORK_PROGRAM)}
-                                                       mode={sortingField === ExpertisesFields.WORK_PROGRAM ? sortingMode : ''}
-                                        />
+                                        <div className={classes.headerCell}>
+                                            Рабочая программа
+                                            <SortingButton changeMode={this.changeSorting(ExpertisesFields.WORK_PROGRAM)}
+                                                           mode={sortingField === ExpertisesFields.WORK_PROGRAM ? sortingMode : ''}
+                                            />
+                                        </div>
                                     </TableCell>
                                     <TableCell className={classes.qualificationCell}>
-                                        Уровень
-                                        <TableFilter items={specializationObject}
-                                                     handleSelect={this.handleSelectQualification}/>
+                                        <div className={classes.headerCell}>
+                                            Уровень
+                                            <TableFilter items={specializationObject}
+                                                         handleSelect={this.handleSelectQualification}/>
+                                        </div>
                                     </TableCell>
                                     <TableCell>
                                         Эксперты
@@ -136,11 +142,13 @@ class Expertises extends React.Component<ExpertisesProps> {
                                         Редакторы
                                     </TableCell>
                                     <TableCell>
-                                        Дата изменения
-                                        <SortingButton
-                                            changeMode={this.changeSorting(ExpertisesFields.DATE_OF_LAST_CHANGE)}
-                                            mode={sortingField === ExpertisesFields.DATE_OF_LAST_CHANGE ? sortingMode : ''}
-                                        />
+                                        <div className={classes.headerCell}>
+                                            Дата изменения
+                                            <SortingButton
+                                                changeMode={this.changeSorting(ExpertisesFields.DATE_OF_LAST_CHANGE)}
+                                                mode={sortingField === ExpertisesFields.DATE_OF_LAST_CHANGE ? sortingMode : ''}
+                                            />
+                                        </div>
                                     </TableCell>
 
                                     <TableCell/>
@@ -221,4 +229,5 @@ class Expertises extends React.Component<ExpertisesProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Expertises));

@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import get from "lodash/get";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {rootState} from "../../../store/reducers";
 
 import {appRouter} from "../../../service/router-service";
@@ -14,7 +14,7 @@ import {FULL_DATE_FORMAT_WITH_TIME} from "../../../common/utils";
 
 import {useStyles} from './Notifications.styles'
 import moment from "moment";
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 import {NotificationProps} from "./types";
 
 const colors = {

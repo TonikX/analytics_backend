@@ -2,11 +2,11 @@ import React from 'react'
 import get from 'lodash/get';
 import {Link} from "react-router-dom";
 
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
 
 import {appRouter} from "../../../../service/router-service";
 

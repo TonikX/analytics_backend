@@ -2,20 +2,20 @@ import React from 'react';
 import get from "lodash/get";
 import classNames from "classnames";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
+import {withStyles} from '@mui/styles';
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
 
 import {QualificationSelectorProps} from './types';
 
 import styles from './SimpleSelector.styles';
-import {FormHelperText} from "@material-ui/core";
+import {FormHelperText} from "@mui/material";
 
 const Selector = ({classes, label, value, onChange, noMargin, wrapClass, metaList, errorMessage, disabled}: QualificationSelectorProps) => {
-    const handleChange = (e: React.ChangeEvent<any>) => {
+    const handleChange = (e: any) => {
         onChange(get(e, 'target.value'))
     }
 
@@ -34,7 +34,6 @@ const Selector = ({classes, label, value, onChange, noMargin, wrapClass, metaLis
                 input={
                     <OutlinedInput
                         notched
-                        labelWidth={100}
                         id="section-label"
                     />
                 }

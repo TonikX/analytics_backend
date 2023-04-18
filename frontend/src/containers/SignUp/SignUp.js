@@ -1,13 +1,12 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {Redirect} from "react-router";
+import {Link, Navigate} from 'react-router-dom';
 import PropTypes from "prop-types";
 import get from "lodash/get";
 
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Typography  from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography  from '@mui/material/Typography';
+import {withStyles} from '@mui/styles';
 
 import {appRouter} from '../../service/router-service';
 import UserService from "../../service/user-service";
@@ -45,22 +44,24 @@ class SignUp extends React.PureComponent{
     };
 
     render() {
-        const {classes, disableButton, isPasswordError, auth,
+        //@ts-ignore
+        const {classes} = this.props;
+        const {disableButton, isPasswordError, auth,
             username, firstName, lastName, password, passwordRepeat } = this.props;
         const {passwordFieldIsFocused} = this.state;
         const showPasswordError = isPasswordError && !passwordFieldIsFocused;
 
         const isAuth = userService.isAuth() && auth;
 
-        if (isAuth) return <Redirect to={appRouter.getEducationPlanRoute()} />;
+        if (isAuth) return <Navigate to={appRouter.getEducationPlanRoute()} />;
 
         return(
             <div className={classes.root}>
                 <div className={classes.form}>
                     <div className={classes.tabs}>
-                        <Link to={appRouter.getSignInRoute}>
+                        <Link to={appRouter.getSignInRoute()}>
                             <Typography>
-                                    Вход
+                                Вход
                             </Typography>
                         </Link>
                         <Typography className={classes.activeTab}>
@@ -137,4 +138,5 @@ SignUp.propTypes = {
     groupOptions: PropTypes.array,
 };
 
+//@ts-ignore
 export default connect(withStyles(styles)(SignUp));

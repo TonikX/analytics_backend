@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from "classnames";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {useStyles} from './StatusPoint.styles';
 
 type Props = {

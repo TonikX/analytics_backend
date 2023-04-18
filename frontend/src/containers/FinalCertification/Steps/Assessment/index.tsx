@@ -6,13 +6,13 @@ import {
     TemplateTextCertificationFields
 } from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles, withStyles} from "@mui/styles";
 import styles from "../styles";
-import {FormControl, MenuItem, TextField, Typography, WithStyles} from "@material-ui/core";
+import {FormControl, MenuItem, TextField, Typography} from "@mui/material";
 import {CertificationActions, CertificationMark, CertificationState, TemplateTextState} from "../../types";
 import get from "lodash/get";
 import {markTypesRussian} from "../../constants";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 interface AssessmentProps extends WithStyles<typeof styles> {
     actions: CertificationActions;
@@ -53,8 +53,10 @@ class Assessment extends React.Component<AssessmentProps> {
     }
 
     render() {
+        //@ts-ignore
+        const {classes} = this.props;
 
-        const {classes, fields, templateText} = this.props;
+        const {fields, templateText} = this.props;
         const {activeField} = this.state;
 
         const professionalProblems = templateText[TemplateTextCertificationFields.PROFESSIONAL_PROBLEMS_MARKS];
@@ -151,5 +153,5 @@ class Assessment extends React.Component<AssessmentProps> {
             ;
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(Assessment));

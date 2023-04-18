@@ -1,26 +1,27 @@
-import React, { useState } from 'react'
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Typography from "@material-ui/core/Typography";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-
+import React  from 'react'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Typography from '@mui/material/Typography';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import { CustomizeExpansionPanelProps } from './types'
-import { useStyles } from "./CustomizeExpansionPanel.styles";
+import { useStyles } from './CustomizeExpansionPanel.styles';
 
-export default ({label, details}: CustomizeExpansionPanelProps) => {
-    const [ openPanel, changeOpenPanel ] = useState(false)
-    const classes = useStyles();
+const CustomizeExpansionPanel: React.FC<CustomizeExpansionPanelProps> = ({label, details}) => {
+  const classes = useStyles();
 
-    return (
-        <ExpansionPanel classes={{root: classes.expansionPanelRoot}} expanded={openPanel} onChange={() => changeOpenPanel(!openPanel)}>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>{label}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails classes={{root: classes.expansionPanel}}>
-                {details}
-            </ExpansionPanelDetails>
-        </ExpansionPanel>
-    )
+  return (
+    <Accordion className={classes.expansionPanelRoot}>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+      >
+        <Typography>{label}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        {details}
+      </AccordionDetails>
+    </Accordion>
+  )
 }
+
+export default CustomizeExpansionPanel;

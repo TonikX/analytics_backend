@@ -1,23 +1,23 @@
 import React, {ReactText} from 'react';
 import get from "lodash/get";
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
 import {CreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import FormLabel from "@material-ui/core/FormLabel";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Tooltip from "@material-ui/core/Tooltip";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import FormLabel from "@mui/material/FormLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Tooltip from "@mui/material/Tooltip";
+import {withStyles} from '@mui/styles';
 
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import SearchSelector from '../../../../components/SearchSelector';
 
@@ -27,13 +27,13 @@ import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {SubjectAreaFields} from "../../../SubjectArea/enum";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
 import {Link} from "react-router-dom";
 import {appRouter} from "../../../../service/router-service";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -55,7 +55,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {result} = this.props;
 
-        if (!shallowEqual(result, prevProps.result)){
+        if (!shallowEqualObjects(result, prevProps.result)){
             const subjectAreaId = get(result, [ResultsFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], null);
 
             this.props.trainingEntitiesActions.changeSubjectId(subjectAreaId);
@@ -155,10 +155,10 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         <Tooltip
                             title={
                                 <span style={{ fontSize: '13px' }}>
-                                    Пререквезит - объект, отражающий конкретное знание из конкретной области 
+                                    Пререквезит - объект, отражающий конкретное знание из конкретной области
                                     (далее "учебная сущность"), которое должно быть у студента перед началом изучения курса.
-                                    <br /><br />Для добавления необходимо выбрать предметную область и учебную сущность в ней. 
-                                    <br /><br />Если необходимо создать новую учебную сущность, необходимо нажать кнопку 
+                                    <br /><br />Для добавления необходимо выбрать предметную область и учебную сущность в ней.
+                                    <br /><br />Если необходимо создать новую учебную сущность, необходимо нажать кнопку
                                     "Создать учебную сущность" и создать ее в соответствующем интерфейсе.
                                 </span>
                             }
@@ -205,7 +205,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     name="course"
                                     id="section-label"
                                 />
@@ -244,4 +243,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

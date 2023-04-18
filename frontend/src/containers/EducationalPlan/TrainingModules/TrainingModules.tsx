@@ -1,21 +1,21 @@
 import React, {SyntheticEvent} from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import get from 'lodash/get';
 
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import withStyles from '@material-ui/core/styles/withStyles';
-import TableBody from "@material-ui/core/TableBody";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import AddIcon from "@material-ui/icons/Add";
-import Fab from "@material-ui/core/Fab";
-import EyeIcon from "@material-ui/icons/VisibilityOutlined";
+import Paper from '@mui/material/Paper';
+
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import {withStyles} from '@mui/styles';
+import TableBody from "@mui/material/TableBody";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import Fab from "@mui/material/Fab";
+import EyeIcon from "@mui/icons-material/VisibilityOutlined";
 
 import ConfirmDialog from "../../../components/ConfirmDialog/ConfirmDialog";
 import SortingButton from "../../../components/SortingButton";
@@ -41,8 +41,9 @@ import connect from './TrainingModules.connect';
 import styles from './TrainingModules.styles';
 
 import Filters from "./Filters";
-import Switch from "@material-ui/core/Switch";
-import {withRouter} from "react-router-dom";
+import Switch from "@mui/material/Switch";
+import {withRouter} from "../../../hoc/WithRouter";
+import Pagination from "@mui/lab/Pagination";
 
 const userService = UserService.factory();
 
@@ -68,14 +69,14 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
     goToTrainingModule = () => {
         // @ts-ignore
-        const {history, trainingModuleIdForRedirect} = this.props;
+        const {navigate, trainingModuleIdForRedirect} = this.props;
 
         this.props.actions.setTrainingModuleIdForRedirect(null)
-        history.push(appRouter.getTrainingModuleDetailLink(trainingModuleIdForRedirect));
+        navigate(appRouter.getTrainingModuleDetailLink(trainingModuleIdForRedirect));
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.actions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.actions.changeCurrentPage(page);
         this.props.actions.getTrainingModulesList();
     }
 
@@ -185,7 +186,9 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
     }
 
     render() {
-        const {classes, trainingModules, allCount, currentPage, sortingField, sortingMode, canEdit, showOnlyMy} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {trainingModules, allCount, currentPage, sortingField, sortingMode, canEdit, showOnlyMy} = this.props;
         const {deleteConfirmId, anchorsEl} = this.state;
 
         return (
@@ -209,31 +212,31 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                 <Scrollbars>
                     <div className={classes.tableWrap}>
                         <Table stickyHeader size='small'>
-                            <TableHead className={classes.header}>
+                            <TableHead>
                                 <TableRow>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         Название
                                         <SortingButton changeMode={this.changeSorting(TrainingModuleFields.NAME)}
                                                        mode={sortingField === TrainingModuleFields.NAME ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         Тип
                                         <SortingButton changeMode={this.changeSorting(TrainingModuleFields.TYPE)}
                                                        mode={sortingField === TrainingModuleFields.TYPE ? sortingMode : ''}
                                         />
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         КОП ИД
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         ИСУ ИД
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className={classes.headerCell}>
                                         Редакторы
                                     </TableCell>
 
-                                    {canEdit && <TableCell />}
+                                    {canEdit && <TableCell className={classes.headerCell} />}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -290,13 +293,10 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
 
 
                 <div className={classes.footer}>
-                    <TablePagination count={allCount}
-                                     component="div"
-                                     page={currentPage - 1}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     rowsPerPage={10}
-                                     onChangeRowsPerPage={()=>{}}
+                    <Pagination count={Math.ceil(allCount / 10)}
+                                page={currentPage}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
                     {canEdit &&
                         <Fab color="secondary"

@@ -12,18 +12,18 @@ import {rootState} from "../../../store/reducers";
 import {getTrainingEntitiesForSelect} from "../../TrainingEntities/getters";
 
 const mapStateToProps = (state: rootState) => {
-    return {
-        isOpen: isOpenDialog(state),
-        trainingModule: getDialogData(state),
-        trainingEntitiesList: getTrainingEntitiesForSelect(state),
-    };
+  return {
+    isOpen: isOpenDialog(state),
+    trainingModule: getDialogData(state),
+    trainingEntitiesList: getTrainingEntitiesForSelect(state),
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<EntityToEntityActions>) => ({
-    // @ts-ignore
-    actions: bindActionCreators(actions, dispatch),
-    // @ts-ignore
-    trainingEntitiesActions: bindActionCreators(trainingEntitiesActions, dispatch),
+  // @ts-ignore
+  actions: bindActionCreators(actions, dispatch),
+  // @ts-ignore
+  trainingEntitiesActions: bindActionCreators(trainingEntitiesActions, dispatch),
 });
 
 // @ts-ignore

@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     root: {
@@ -11,7 +12,8 @@ export default (theme: Theme) => createStyles({
         flexDirection: 'column'
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        alignItems: 'center',
         marginBottom: '20px',
         display: 'flex',
     },
@@ -53,7 +55,7 @@ export default (theme: Theme) => createStyles({
     },
     searchInput: {
         height: '40px',
-        marginLeft: 'auto'
+        marginLeft: 'auto !important'
     },
     addIcon: {
         marginLeft: 'auto',
@@ -77,7 +79,7 @@ export default (theme: Theme) => createStyles({
         fill: 'rgba(0, 0, 0, 0.54)'
     },
     menuLinkItem: {
-        padding: 0,
+        padding: '0px !important',
         '&>a': {
             padding: '6px 16px',
             display: 'flex',

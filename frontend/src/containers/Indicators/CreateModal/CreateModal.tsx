@@ -1,17 +1,17 @@
 import React, {ReactText} from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import classNames from "classnames";
 
 import {IndicatorCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
 
 import {CompetenceFields} from "../../Competences/enum";
 import SearchSelector from "../../../components/SearchSelector/SearchSelector";
@@ -37,7 +37,7 @@ class CreateModal extends React.PureComponent<IndicatorCreateModalProps> {
     componentDidUpdate(prevProps: Readonly<IndicatorCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {indicator} = this.props;
 
-        if (!shallowEqual(indicator, prevProps.indicator)){
+        if (!shallowEqualObjects(indicator, prevProps.indicator)){
             this.setState({
                 indicator: {
                     [IndicatorsFields.ID]: get(indicator, IndicatorsFields.ID),
@@ -161,4 +161,5 @@ class CreateModal extends React.PureComponent<IndicatorCreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

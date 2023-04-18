@@ -1,32 +1,32 @@
 import React, {ChangeEvent} from 'react';
 import get from "lodash/get";
 
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import {AddLiteratureModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Typography from "@material-ui/core/Typography";
-import TablePagination from "@material-ui/core/TablePagination";
-import Slide from '@material-ui/core/Slide';
-import TextField from "@material-ui/core/TextField";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Typography from "@mui/material/Typography";
+import TablePagination from "@mui/material/TablePagination";
+import Slide from '@mui/material/Slide';
+import TextField from "@mui/material/TextField";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import {withStyles} from '@mui/styles';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import AddIcon from "@material-ui/icons/Add";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from "@mui/icons-material/Add";
 
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
 
 import {literatureEbscoFields, literatureFields} from "../../containers/Literature/enum";
 import {LiteratureEbscoType, LiteratureType} from "../../containers/Literature/types";
@@ -58,7 +58,7 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
     componentDidUpdate(prevProps: Readonly<AddLiteratureModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {selectedItems} = this.props;
 
-        if (!shallowEqual(selectedItems, prevProps.selectedItems)){
+        if (!shallowEqualObjects(selectedItems, prevProps.selectedItems)){
             this.setState({
                 selectedLiterature: selectedItems
             });
@@ -71,8 +71,8 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
         this.props.literatureActions.getLiterature({ source: this.state.source });
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.literatureActions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.literatureActions.changeCurrentPage(page);
         this.props.literatureActions.getLiterature({ source: this.state.source });
     }
 
@@ -195,13 +195,10 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
                     </DialogContent>
                     <DialogActions className={classes.actions}>
                         {source !== literatureSource.EBSCO && <TablePagination count={allCount}
-                                         component="div"
                                          page={currentPage - 1}
                                          rowsPerPageOptions={[]}
-                                         onChangePage={this.handleChangePage}
-                            //@ts-ignore
+                                         onPageChange={this.handleChangePage}
                                          rowsPerPage={10}
-                                         onChangeRowsPerPage={()=>{}}
                         />}
                         <div>
                             <Button onClick={handleClose}
@@ -224,5 +221,5 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
         );
     }
 }
-
+//@ts-ignore
 export default connect(withStyles(styles)(AddLiteratureModal));

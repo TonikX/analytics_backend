@@ -1,37 +1,38 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import {useDispatch, useSelector} from "react-redux";
 
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import IconButton from "@material-ui/core/IconButton";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
-import FormControl from "@material-ui/core/FormControl";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import IconButton from "@mui/material/IconButton";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
+import Dialog from "@mui/material/Dialog";
+import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import DialogContent from "@mui/material/DialogContent";
 
 import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
 
 import useStyles from './TasksTypes.styles'
-import Tooltip from "@material-ui/core/Tooltip";
-import QuestionIcon from "@material-ui/icons/HelpOutline";
+import Tooltip from "@mui/material/Tooltip";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
 import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 export default ({ characteristic }: any) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [openModal, setOpenModal] = useState(false)
-  const [selectedObject, setSelectedObject] = useState()
+  const [selectedObject, setSelectedObject] = useState<string|undefined>()
   const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const handleSave = useCallback(() => {
@@ -75,7 +76,6 @@ export default ({ characteristic }: any) => {
             Использование в конструкторе ОП: В <a href="op.itmo.ru" target="_blank">op.itmo.ru</a> типы профессиональных задач, к которым готовятся выпускники хранятся в описании образовательных стандартов. Их описание доступно тут: <a href="https://op.itmo.ru/educational-standards" target="_blank"> op.itmo.ru/educational-standards </a>
           </div>
         )}
-          interactive
           leaveDelay={1000}
         >
           <QuestionIcon color="primary"/>
@@ -127,30 +127,31 @@ export default ({ characteristic }: any) => {
         }}
       >
         <DialogTitle className={classes.title}>Добавить тип профессиональной задачи</DialogTitle>
-        <FormControl className={classes.wrapSelector}>
-          <InputLabel shrink id="selected-object">
-            Тип профессиональной задачи *
-          </InputLabel>
-          <Select
-            variant="outlined"
-            onChange={(e) => setSelectedObject(e.target.value)}
-            value={selectedObject}
-            fullWidth
-            input={
-              <OutlinedInput
-                notched
-                labelWidth={100}
-                id="selected-object"
-              />
-            }
-          >
-            {tasksList.map((item: any) =>
-              <MenuItem value={item.value} key={`type-${item.value}`}>
-                {item.label}
-              </MenuItem>
-            )}
-          </Select>
-        </FormControl>
+        <DialogContent className={classes.dialogContent}>
+          <FormControl className={classes.wrapSelector}>
+            <InputLabel shrink id="selected-object">
+              Тип профессиональной задачи *
+            </InputLabel>
+            <Select
+              variant="outlined"
+              onChange={(e) => setSelectedObject(e.target.value)}
+              value={selectedObject}
+              fullWidth
+              input={
+                <OutlinedInput
+                  notched
+                  id="selected-object"
+                />
+              }
+            >
+              {tasksList.map((item: any) =>
+                <MenuItem value={item.value} key={`type-${item.value}`}>
+                  {item.label}
+                </MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </DialogContent>
         <DialogActions className={classes.actions}>
           <Button onClick={() => setOpenModal(false)}
                   variant="text">

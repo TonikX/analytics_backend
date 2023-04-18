@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 
 import LaborFunctionSelector from "../LaborFunctionSelector";
 import useStyles from "./AddLaborFunctionModal.styles";
@@ -12,8 +12,8 @@ import useStyles from "./AddLaborFunctionModal.styles";
 export default ({
   isOpen, closeDialog, saveDialog
 }: any) => {
-  const [laborFunction, setLaborFunction] = useState()
-  const classes = useStyles();
+  const [laborFunction, setLaborFunction] = useState<number|undefined>()
+  const classes = useStyles() as any;
 
   const handleSave = () => {
     saveDialog(laborFunction)
@@ -35,9 +35,9 @@ export default ({
       fullWidth
     >
       <DialogTitle>Добавить трудовую функцию</DialogTitle>
-      <DialogContent>
+      <DialogContent className={classes.dialogContent}>
         <LaborFunctionSelector
-          onChange={setLaborFunction}
+          onChange={(value, label) => setLaborFunction(value)}
           label="Трудовая функция"
           value={laborFunction}
         />
