@@ -107,25 +107,25 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
                 request.data.get('gh_id')))
         wp_in_fss = PracticeInFieldOfStudy.objects.filter(
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__in=aps) |
+              work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__in=aps) |
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__father_module__descipline_block__academic_plan__in=aps) |
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__descipline_block__academic_plan__in=aps) |
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
             Q(practice__id=int(request.data.get('practice_id')),
-              practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps)
+              work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps)
         ).distinct()
         for wp_in_fs in wp_in_fss:
             serializer = self.get_serializer(data=request.data['zun'])
