@@ -2,7 +2,8 @@ import {EducationalPlanType} from "../../../EducationalPlan/types";
 import {DirectionType} from "../../../Direction/types";
 
 type AttachIndicatorProps = {
-    workProgramId: number;
+    workProgramId?: number;
+    practiceId?: number;
     competence?: {
         value: number;
         label: string;
@@ -115,6 +116,7 @@ interface WorkProgramChangeInDisciplineBlockModule {
     credit_units: string;
     work_program: ModuleWorkProgram[]
     practice?: ModuleWorkProgram[];
+    gia?: ModuleWorkProgram[];
 }
 
 interface AcademicPlan {

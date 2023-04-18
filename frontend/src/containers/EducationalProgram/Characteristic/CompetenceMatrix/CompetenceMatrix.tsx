@@ -103,7 +103,8 @@ const ContentByAcademicPlan = (
 
     const getCompetencesContent = (
         workProgram: ModuleWorkProgram,
-        type: 'key' | 'prof' | 'over-prof' | 'general-prof'
+        type: 'key' | 'prof' | 'over-prof' | 'general-prof',
+        blockType: 'wp' | 'gia' | 'practice'
     ) => {
         // Хак для практик, у которых приходит null
         if (!workProgram.competences) return null;
@@ -139,7 +140,11 @@ const ContentByAcademicPlan = (
         };
 
         const setModalData = (competence: { value: number; label: string }) => {
-            attachIndicator({competence, workProgramId: workProgram.id});
+            attachIndicator({
+                competence,
+                workProgramId: blockType === 'wp' ? workProgram.id : undefined,
+                practiceId: blockType === 'practice' ? workProgram.id : undefined,
+            });
         };
 
         const getTooltipTitle = (sourceCompetence: Competence) => {
@@ -228,26 +233,35 @@ const ContentByAcademicPlan = (
                 </TableRow>
                 {moduleBlock.change_blocks_of_work_programs_in_modules.map((block: WorkProgramChangeInDisciplineBlockModule) => {
                     // Хак для новых практик
-                    const targetBlock = (name === "Практика" && !block.work_program.length ? block.practice : block.work_program) || [];
+                    // const targetBlock = (name === "Практика" && !block.work_program.length ? block.practice : block.work_program) || [];
+                    const wpBlock = block.work_program
+                    const giaBlock = block.gia
+                    const practiceBlock = block.practice
+                    const blockType = wpBlock.length ? 'wp' : giaBlock?.length ? 'gia' : practiceBlock?.length ? 'practice' : null
+                    const targetBlock = blockType === 'wp' ? wpBlock : (blockType === 'gia' ? giaBlock : practiceBlock);
+                    const linkCreator = blockType === 'wp' ? appRouter.getWorkProgramLink
+                      : blockType === 'gia' ? appRouter.getFinalCertificationLink : appRouter.getPracticeLink as (id: number) => string
 
-                    return targetBlock.map((wp: ModuleWorkProgram, elIndex: number) =>
+                    if (!blockType) return null;
+
+                    return targetBlock?.map((block: ModuleWorkProgram, elIndex: number) =>
                         <TableRow key={`wp-${elIndex}`}>
                             <TableCell className={classes.rowWithPadding}>
                                 <Link
                                     target="_blank"
-                                    to={appRouter.getWorkProgramLink(wp.id)}
+                                    to={linkCreator(block.id)}
                                 >
-                                    {wp.title}
+                                    {block.title}
                                 </Link>
                             </TableCell>
                             <TableCell
-                                className={classes.noPaddingCells}>{getCompetencesContent(wp, 'key')}</TableCell>
+                                className={classes.noPaddingCells}>{getCompetencesContent(block, 'key', blockType)}</TableCell>
                             <TableCell
-                                className={classes.noPaddingCells}>{getCompetencesContent(wp, 'over-prof')}</TableCell>
+                                className={classes.noPaddingCells}>{getCompetencesContent(block, 'over-prof', blockType)}</TableCell>
                             <TableCell
-                                className={classes.noPaddingCells}>{getCompetencesContent(wp, 'general-prof')}</TableCell>
+                                className={classes.noPaddingCells}>{getCompetencesContent(block, 'general-prof', blockType)}</TableCell>
                             <TableCell
-                                className={classes.noPaddingCells}>{getCompetencesContent(wp, 'prof')}</TableCell>
+                                className={classes.noPaddingCells}>{getCompetencesContent(block, 'prof', blockType)}</TableCell>
                         </TableRow>);
                 })}
             </>
@@ -298,6 +312,7 @@ export default () => {
     const [defaultCompetence, setDefaultCompetence] = useState<{value: number; label: string;}|undefined>();
     const [indicators, setIndicators] = useState([] as { label: string; value: number } []);
     const [workProgramId, setWorkProgramId] = useState(-1);
+    const [practiceId, setPracticeId] = useState(-1);
 
     useEffect(() => {
         dispatch(actions.getCompetenceMatrix(competenceMatrixId));
@@ -314,7 +329,14 @@ export default () => {
     };
 
     const attachIndicator = (props: AttachIndicatorProps) => {
-        setWorkProgramId(props.workProgramId);
+        if (props.workProgramId) {
+            setWorkProgramId(props.workProgramId);
+            setPracticeId(-1);
+        }
+        if (props.practiceId) {
+            setPracticeId(props.practiceId);
+            setWorkProgramId(-1);
+        }
         // @ts-ignore
         setDefaultCompetence(props.competence);
         setIsOpen(true);
@@ -369,6 +391,7 @@ export default () => {
                 addedIndicators={indicators}
                 defaultCompetence={defaultCompetence}
                 workProgramId={workProgramId}
+                practiceId={practiceId}
                 onDeleteZun={deleteZun}
             />
         </div>
