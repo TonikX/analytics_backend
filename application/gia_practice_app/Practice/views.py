@@ -130,7 +130,7 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
         for wp_in_fs in wp_in_fss:
             serializer = self.get_serializer(data=request.data['zun'])
             serializer.is_valid(raise_exception=True)
-            serializer.save(wp_in_fs=wp_in_fs)
+            serializer.save(practice_in_fs=wp_in_fs)
         return Response(status=status.HTTP_201_CREATED)
 
 
@@ -185,5 +185,5 @@ class ZunPracticeManyForAllGhViewSet(mixins.CreateModelMixin,
         for wp_in_fs in wp_in_fss:
             serializer = self.get_serializer(data=request.data['zun'])
             serializer.is_valid(raise_exception=True)
-            serializer.save(wp_in_fs=wp_in_fs)
+            serializer.save(practice_in_fs=wp_in_fs)
         return Response(status=status.HTTP_201_CREATED)
