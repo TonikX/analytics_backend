@@ -62,7 +62,7 @@ class AddGiaModal extends React.PureComponent<Props> {
             >
                 <DialogTitle>Добавить ГИА</DialogTitle>
 
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <SearchSelector label="ГИА * "
                                     changeSearchText={this.handleChangeSearchText}
                                     list={list}
