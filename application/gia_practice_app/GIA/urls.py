@@ -7,7 +7,7 @@ router = DefaultRouter()
 router.register(r'api/gia', GIASet, basename='gia')
 router.register(r'api/gia/gia_template', GIABaseTemplateSet, basename='gia-template')
 router.register(r'api/gia/vkr_criteria', CriteriaVKRSet, basename='vkr-criteria')
-urlpatterns  = [
+urlpatterns = [
 
     url(r'^', include(router.urls)),
 

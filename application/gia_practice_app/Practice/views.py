@@ -134,3 +134,29 @@ class PracticeInFieldOfStudyForWorkProgramList(generics.ListAPIView):
         ).distinct()
         serializer = PracticeInFieldOfStudyForCompeteceListSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class ZunPracticeManyForAllGhViewSet(viewsets.ModelViewSet):
+    my_tags = ["Gia and Practice"]
+    model = ZunPractice
+    queryset = ZunPractice.objects.all()
+    serializer_class = ZunPracticeForManyCreateSerializer
+    http_method_names = ['post', 'delete', 'patch']
+
+    def create(self, request, *args, **kwargs):
+        """
+        Example:
+            {
+            "practice_id": 1 - ссылка на ПРАКТИКУ
+            "zun": {
+              "indicator_in_zun": 85,
+              "items": []
+                }
+            }
+        """
+        wp_in_fss = PracticeInFieldOfStudy.objects.filter(practice__id=int(request.data.get('practice_id'))).distinct()
+        for wp_in_fs in wp_in_fss:
+            serializer = self.get_serializer(data=request.data['zun'])
+            serializer.is_valid(raise_exception=True)
+            serializer.save(wp_in_fs=wp_in_fs)
+        return Response(status=status.HTTP_201_CREATED)
