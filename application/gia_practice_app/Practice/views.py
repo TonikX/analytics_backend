@@ -136,12 +136,17 @@ class PracticeInFieldOfStudyForWorkProgramList(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class ZunPracticeManyForAllGhViewSet(viewsets.ModelViewSet):
+class ZunPracticeManyForAllGhViewSet(mixins.CreateModelMixin,
+                   #mixins.RetrieveModelMixin,
+                   #mixins.UpdateModelMixin,
+                   mixins.DestroyModelMixin,
+                   #mixins.ListModelMixin,
+                   GenericViewSet):
     my_tags = ["Gia and Practice"]
     model = ZunPractice
     queryset = ZunPractice.objects.all()
     serializer_class = ZunPracticeForManyCreateSerializer
-    http_method_names = ['post', 'delete', 'patch']
+    http_method_names = ['post', 'delete']
 
     def create(self, request, *args, **kwargs):
         """
