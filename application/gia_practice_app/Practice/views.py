@@ -115,7 +115,7 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
         """
         Example:
             {
-            "workprogram_id": 1 - ссылка на РПД
+            "practice_id": 1 - ссылка на РПД
             "gh_id": 1 новое - ссылка на ОХ
             "zun": {
               "indicator_in_zun": 85,
