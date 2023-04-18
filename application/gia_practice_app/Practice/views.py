@@ -77,7 +77,6 @@ class PracticeInFieldOfStudySet(#mixins.CreateModelMixin,
     permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
 
 
-
 class ZunPracticeManyViewSet(mixins.CreateModelMixin,
                    #mixins.RetrieveModelMixin,
                    #mixins.UpdateModelMixin,
@@ -90,27 +89,7 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
     serializer_class = ZunPracticeForManyCreateSerializer
     http_method_names = ['post', 'delete', 'patch']
 
-    # @swagger_auto_schema(request_body=openapi.Schema(
-    #     type=openapi.TYPE_OBJECT,
-    #     required=['version'],
-    #     properties={
-    #         'pra_in_fss': openapi.Schema(type=openapi.TYPE_ARRAY,
-    #                                      description='id объектов класса PracticeInFieldOfStudy (api/practice/fieldofstudies_for_competences/<int:practice_id>)',
-    #                                      items=openapi.Items(type=openapi.TYPE_INTEGER)),
-    #         'zun': openapi.Schema(type=openapi.TYPE_OBJECT, properties={
-    #             'indicator_in_zun': openapi.Schema(type=openapi.TYPE_INTEGER, description='id интикатора'),
-    #             'items': openapi.Schema(type=openapi.TYPE_ARRAY, description='id объектов OutcomesOfPractice (доступны в ендпоинте практики)',
-    #                                          items=openapi.Items(type=openapi.TYPE_INTEGER)),
-    #             }, )
-    #         },
-    #     ),
-    #     operation_description='Метод для добавления компетенций в практики')
-    # def create(self, request, *args, **kwargs):
-    #     for pr_in_fs in request.data['pra_in_fss']:
-    #         serializer = self.get_serializer(data=request.data['zun'])
-    #         serializer.is_valid(raise_exception=True)
-    #         serializer.save(practice_in_fs=PracticeInFieldOfStudy.objects.get(id=pr_in_fs))
-    #     return Response(status=status.HTTP_201_CREATED)
+
     def create(self, request, *args, **kwargs):
         """
         Example:
@@ -127,25 +106,25 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
             academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=int(
                 request.data.get('gh_id')))
         wp_in_fss = PracticeInFieldOfStudy.objects.filter(
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__in=aps) |
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__father_module__descipline_block__academic_plan__in=aps) |
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps) |
-            Q(practice__id=int(request.data.get('workprogram_id')),
+            Q(practice__id=int(request.data.get('practice_id')),
               practice_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps)
         ).distinct()
         for wp_in_fs in wp_in_fss:

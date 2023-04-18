@@ -14,7 +14,7 @@ router.register(r'api/practice-outcomes', OutcomesPracticeSet, basename='prerequ
 router.register(r'api/practice-in-field-of-study', PracticeInFieldOfStudySet, basename='fos-practice')
 router.register(r'api/zun/practice-many', ZunPracticeManyViewSet, basename='practice_zun_many_create')
 router.register(r'api/zun/practice-many_create_for_all_gh',
-                ZunPracticeManyForAllGhViewSet, basename='zun_many_create_for_all_gh')
+                ZunPracticeManyForAllGhViewSet, basename='practice_zun_many_create_for_all_gh')
 urlpatterns = [
     path('api/practice/fieldofstudies_for_competences/<int:practice_id>',
          PracticeInFieldOfStudyForWorkProgramList.as_view()),
