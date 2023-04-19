@@ -372,8 +372,7 @@ class DocxFileExportView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         global tpl
-        tpl = DocxTemplate('C:/Users/123/Desktop/analitycs/analytics_backend/application/static-backend/export_template/RPD_shablon_2020_new.docx')
-        #tpl = DocxTemplate('workprogramapp/application/static-backend/export_template/RPD_shablon_2020_new.docx')
+        tpl = DocxTemplate('workprogramapp/application/static-backend/export_template/RPD_shablon_2020_new.docx')
         queryset = WorkProgram.objects.get(pk=kwargs['pk'])
         serializer = WorkProgramSerializer(queryset)
         data = dict(serializer.data)
