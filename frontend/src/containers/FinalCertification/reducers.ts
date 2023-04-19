@@ -12,6 +12,7 @@ export const initialState: certificationPageState = {
         erroredFields: [],
     },
     isError: false,
+// @ts-ignore
     certification: {
         [CertificationFields.ID]: 1,
         [CertificationFields.DISCIPLINE_CODE]: '',

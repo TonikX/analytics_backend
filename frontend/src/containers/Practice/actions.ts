@@ -34,6 +34,7 @@ const changeResult = createAction('PRACTICE_CHANGE_RESULT');
 const addResult = createAction('PRACTICE_ADD_RESULT');
 const getCompetencesDependedOnPractice = createAction('GET_COMPETENCES_DEPENDENT_ON_PRACTICE');
 const setCompetencesDependedOnPractice = createAction('SET_COMPETENCES_DEPENDENT_ON_PRACTICE');
+const sendToIsu = createAction('SEND_PRACTICE_TO_ISU');
 
 export const actions: PracticeActions = {
     getPractice,
@@ -67,7 +68,8 @@ export const actions: PracticeActions = {
     changeResult,
     addResult,
     getCompetencesDependedOnPractice,
-    setCompetencesDependedOnPractice
+    setCompetencesDependedOnPractice,
+    sendToIsu
 };
 
 export default actions;

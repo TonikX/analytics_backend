@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     //@ts-ignore
@@ -16,4 +17,18 @@ export default (theme: Theme) => createStyles({
         marginBottom: '30px',
         width: '100%'
     },
+    searchRow: {
+        display: 'flex',
+        marginTop: '20px',
+    },
+    searchInputCode: {
+        maxWidth: '110px',
+        marginRight: '20px !important'
+    },
+    searchInputText: {
+        flex: 1,
+    },
+    searchButton: {
+        marginLeft: '20px !important'
+    }
 });

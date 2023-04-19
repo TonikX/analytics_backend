@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'gia_practice_app',
     'drf_yasg2',
     'model_clone',
+    'selection_of_keywords_for_rpd',
     # 'django_extensions',
     # 'ckeditor',
     # 'ckeditor_uploader',

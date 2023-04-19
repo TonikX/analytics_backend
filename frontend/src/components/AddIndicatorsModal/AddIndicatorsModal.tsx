@@ -3,17 +3,17 @@ import get from 'lodash/get';
 
 import {AddIndicatorsModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import withStyles from '@material-ui/core/styles/withStyles';
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import {withStyles} from '@mui/styles';
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
 
 import connect from './AddIndicatorsModal.connect';
 import styles from './AddIndicatorsModal.styles';
@@ -69,7 +69,7 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
             >
                 <DialogTitle>Добавить индикаторы</DialogTitle>
 
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <FormControl className={classes.selectorWrap}>
                         <InputLabel shrink id="section-label">
                             Индикаторы *
@@ -85,7 +85,6 @@ class AddIndicatorsModal extends React.PureComponent<AddIndicatorsModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     id="section-label"
                                 />
                             }

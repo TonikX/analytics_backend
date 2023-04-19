@@ -1,8 +1,8 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import debounce from 'lodash/debounce';
-import {Autocomplete} from "@material-ui/lab";
-import {FormControl, Button, Modal, Box, Typography, TextField} from '@material-ui/core';
+import {Autocomplete} from "@mui/lab";
+import {FormControl, Button, Modal, Box, Typography, TextField} from '@mui/material';
 import {useStyles} from './MergeWorkProgramsBlock.styles';
 import actions from './actions';
 import {getWorkProgramList} from './getters';
@@ -62,7 +62,7 @@ const WorkProgramSelect = ({type, onChange}: WorkProgramSelectProps) => {
                 onChange={handleChange}
                 onInputChange={changeSearch}
                 getOptionLabel={option => option.label}
-                getOptionSelected={(option, value) => option.id === value.id}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
                 renderInput={(params) => <TextField {...params} label={labelText}/>}
             />
         </FormControl>

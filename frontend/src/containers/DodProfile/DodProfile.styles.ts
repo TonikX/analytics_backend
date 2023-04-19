@@ -1,4 +1,5 @@
-import {createStyles, makeStyles, Theme} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 import {PRIMARY} from "../../layout/themeMaterialUi";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -11,18 +12,18 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
-
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
         marginBottom: '20px',
         display: 'flex',
     },
     header: {
-        background: theme.palette.primary.main,
+        background: `${theme.palette.primary.main} !important`,
         '& th': {
-            color: '#fff',
-            background: theme.palette.primary.main,
+            color: '#fff !important',
+            background: `${theme.palette.primary.main} !important`,
             fontWeight: '400',
             fontSize: '14px',
             padding: '0px 10px !important',

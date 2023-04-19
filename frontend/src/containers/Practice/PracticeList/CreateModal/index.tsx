@@ -3,36 +3,35 @@ import get from "lodash/get";
 
 import {CreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {MinimalPracticeState} from "../../types";
 import {PracticeFields} from "../../enum";
-import {withRouter} from "react-router-dom";
 import {appRouter} from "../../../../service/router-service";
-import MenuItem from "@material-ui/core/MenuItem";
-import {Select, Table} from "@material-ui/core";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup/RadioGroup";
+import MenuItem from "@mui/material/MenuItem";
+import {Select, Table, TextField} from "@mui/material";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup/RadioGroup";
 import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
-import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
-import Radio from "@material-ui/core/Radio/Radio";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import FormControlLabel from "@mui/material/FormControlLabel/FormControlLabel";
+import Radio from "@mui/material/Radio/Radio";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel/InputLabel";
 import {specialization} from "../../../WorkProgram/constants";
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell/TableCell";
 import {HoursSection} from "./types";
 import EditedRow from "./EditableRow/EditableRow";
-import {PRACTICE_TITLES} from "../../constants";
+import {withRouter} from '../../../../hoc/WithRouter'
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -54,9 +53,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     handleSave = () => {
         const {minimalPracticeState} = this.state;
         minimalPracticeState[PracticeFields.FORM_OF_CERTIFICATION_TOOLS] = 'Защита отчёта';
-        const history = this.props.history;
         const callback = (id: number) => {
-            history.push(appRouter.getPracticeLink(id));
+            //@ts-ignore
+            this.props.navigate(appRouter.getPracticeLink(id));
         };
         this.props.actions.createPractice({
             state: {
@@ -155,19 +154,16 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 <DialogContent>
                     <div>
                         <InputLabel className={classes.label}>Название</InputLabel>
-                        <Select
+                        <TextField
+                            label=""
+                            onChange={this.saveField(PracticeFields.TITLE)}
                             variant="outlined"
                             fullWidth
                             value={minimalPracticeState[PracticeFields.TITLE]}
-                            // @ts-ignore
-                            onChange={this.saveField(PracticeFields.TITLE)}
-                        >
-                            {PRACTICE_TITLES.map((item, index) =>
-                                <MenuItem value={item.label} key={`practice-title-${index}`}>
-                                    {item.label}
-                                </MenuItem>
-                            )}}
-                        </Select>
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
                     </div>
                     <div className={classes.marginTop20}>
                         <InputLabel className={classes.label}>Год</InputLabel>
@@ -262,4 +258,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 }
 
+// @ts-ignore
 export default connect(withStyles(styles)(withRouter(CreateModal)));

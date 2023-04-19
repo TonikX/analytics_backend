@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import styles from "./LikeButton.styles";
 
 export interface LikeButtonProps extends WithStyles<typeof styles> {

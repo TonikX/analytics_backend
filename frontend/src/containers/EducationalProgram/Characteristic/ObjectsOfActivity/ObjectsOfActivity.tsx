@@ -1,36 +1,37 @@
 import React, { useState, useCallback } from 'react'
 import {useDispatch, useSelector} from "react-redux";
 
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import IconButton from "@material-ui/core/IconButton";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
-import TextField from "@material-ui/core/TextField";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import IconButton from "@mui/material/IconButton";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
+import Dialog from "@mui/material/Dialog";
+import TextField from "@mui/material/TextField";
+import DialogContent from "@mui/material/DialogContent";
+import QuestionIcon from "@mui/icons-material/HelpOutline";
+import Tooltip from "@mui/material/Tooltip";
 
 import ObjectOfActivitySelector from '../ObjectOfActivitySelector'
 
 import actions from '../../actions';
 import {EducationProgramCharacteristicFields} from "../../enum";
+import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 import useStyles from './ObjectsOfActivity.styles'
-import QuestionIcon from "@material-ui/icons/HelpOutline";
-import Tooltip from "@material-ui/core/Tooltip";
-import {getEducationalProgramCharacteristicCanEdit} from "../../getters";
 
 export default ({ characteristic }: any) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [openModal, setOpenModal] = useState(false)
-  const [selectedObject, setSelectedObject] = useState()
-  const [newObject, setNewObject] = useState()
+  const [selectedObject, setSelectedObject] = useState<number>()
+  const [newObject, setNewObject] = useState<string|undefined>()
   const canEdit = useSelector((state: any) => getEducationalProgramCharacteristicCanEdit(state))
 
   const handleSave = useCallback(() => {
@@ -124,25 +125,27 @@ export default ({ characteristic }: any) => {
         }}
       >
         <DialogTitle className={classes.title}>Добавить объект профессиональной деятельности</DialogTitle>
-        <Typography className={classes.marginBottom30}>
-          Выберите существующий объект профессиональной деятельности или введите название нового
-        </Typography>
-        <ObjectOfActivitySelector
-          onChange={setSelectedObject}
-          label="Выберите объект профессиональной деятельности"
-          value={selectedObject}
-          className={classes.marginBottom30}
-        />
-        <TextField
-          value={newObject}
-          onChange={(e) => setNewObject(e.target.value)}
-          label="Новый объект профессиональной деятельности"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-          fullWidth
-        />
+        <DialogContent className={classes.dialogContent}>
+          <Typography className={classes.marginBottom30}>
+            Выберите существующий объект профессиональной деятельности или введите название нового
+          </Typography>
+          <ObjectOfActivitySelector
+            onChange={(value) => setSelectedObject(value)}
+            label="Выберите объект профессиональной деятельности"
+            value={selectedObject}
+            className={classes.marginBottom30}
+          />
+          <TextField
+            value={newObject}
+            onChange={(e) => setNewObject(e.target.value)}
+            label="Новый объект профессиональной деятельности"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+            fullWidth
+          />
+        </DialogContent>
         <DialogActions className={classes.actions}>
           <Button onClick={() => setOpenModal(false)}
                   variant="text">

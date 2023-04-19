@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     //@ts-ignore
@@ -8,6 +9,9 @@ export default (theme: Theme) => createStyles({
     },
     dialog: {
         boxSizing: 'border-box',
+        '& .MuiDialogContent-root': {
+            padding: '20px 24px !important'
+        }
     },
     actions: {
         padding: '15px 24px 20px'
@@ -16,4 +20,8 @@ export default (theme: Theme) => createStyles({
         marginBottom: '30px',
         width: '100%'
     },
+    search: {
+        padding: '15px 24px 20px'
+    }
+    
 });

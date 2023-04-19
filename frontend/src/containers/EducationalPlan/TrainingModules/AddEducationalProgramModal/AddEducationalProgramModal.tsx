@@ -1,16 +1,16 @@
 import React from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
-import TablePagination from '@material-ui/core/TablePagination';
-import Checkbox from "@material-ui/core/Checkbox";
-import Typography from "@material-ui/core/Typography";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
+
+import Checkbox from "@mui/material/Checkbox";
+import Typography from "@mui/material/Typography";
 
 import {TrainingModuleCreateModalProps} from './types';
 
@@ -21,6 +21,7 @@ import {filterFields} from "../../../EduationPlanInDirection/enum";
 import StructuralUnitsSelector from "../../../StructuralUnits/StructuralUnitsSelector/StructuralUnitsSelector";
 import {specialization} from "../../../WorkProgram/constants";
 import {EducationalPlanInDirectionType} from "../../../EduationPlanInDirection/types";
+import Pagination from "@mui/lab/Pagination";
 
 class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreateModalProps, { selectedItems: EducationalPlanInDirectionType[]}> {
     state = {
@@ -68,8 +69,8 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
         })
     }
 
-    handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => {
-        this.props.educationalProgramActions.changeCurrentPage(page + 1);
+    handleChangePage = (event: any, page: number) => {
+        this.props.educationalProgramActions.changeCurrentPage(page);
         this.props.educationalProgramActions.getEducationalPlansInDirection();
     }
 
@@ -160,15 +161,10 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
                                 })}
                             </>
                         </Scrollbars>
-
-                        <TablePagination
-                            component="div"
-                            count={allCount}
-                            page={currentPage - 1}
-                            rowsPerPageOptions={[]}
-                            onChangePage={this.handleChangePage}
-                            rowsPerPage={10}
-                            onChangeRowsPerPage={()=>{}}
+                        <Pagination count={Math.ceil(allCount / 10)}
+                                    page={currentPage}
+                                    onChange={this.handleChangePage}
+                                    color="primary"
                         />
                     </div>
                 </DialogContent>
@@ -189,4 +185,5 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(AddEducationalProgramModal));

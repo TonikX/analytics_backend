@@ -1,17 +1,16 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import ArrowUp from "@mui/icons-material/ArrowDropUp";
+import ArrowDown from "@mui/icons-material/ArrowDropDown";
+import IconButton from "@mui/material/IconButton";
 
-import ArrowUp from "@material-ui/icons/ArrowDropUp";
-import ArrowDown from "@material-ui/icons/ArrowDropDown";
-import IconButton from "@material-ui/core/IconButton";
-
-import styles from './SortingButton.styles';
+import useStyles from './SortingButton.styles';
 
 import {SortingButtonProps, Types} from './types';
 
-const SortingButton = ({classes, changeMode, mode}: SortingButtonProps) => {
+const SortingButton: React.FC<SortingButtonProps> = ({changeMode, mode}) => {
+    const classes = useStyles()
     const changeModeHandler = () => {
         switch (mode) {
             case Types.ASC:
@@ -37,4 +36,4 @@ const SortingButton = ({classes, changeMode, mode}: SortingButtonProps) => {
     </IconButton>;
 }
 
-export default withStyles(styles)(SortingButton);
+export default SortingButton;

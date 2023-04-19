@@ -1,20 +1,20 @@
 import React from "react";
 import {DialogType, PermissionsInfoFields, PracticeSteps} from "../../enum";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
+import {WithStyles} from "@mui/styles";
 import styles from "../styles";
-import {Typography, WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles'; import {Typography} from "@mui/material";
 import {PermissionsInfoState, PracticeActions, PracticeState} from "../../types";
 
 import classNames from "classnames";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import {PrerequisiteFields} from "../../../WorkProgram/enum";
 import {TrainingEntitiesFields} from "../../../TrainingEntities/enum";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import Button from "@material-ui/core/Button";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import Button from "@mui/material/Button";
 import CreateModal from "./CreateModal";
 import {PrerequisiteType} from "../../../WorkProgram/types";
 
@@ -41,7 +41,9 @@ class Prerequisites extends React.Component<PrerequisitesProps> {
 
     render() {
 
-        const {classes, permissionsInfo, prerequisitesList} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {permissionsInfo, prerequisitesList} = this.props;
         const isCanEdit = permissionsInfo[PermissionsInfoFields.CAN_EDIT];
 
         return (
@@ -91,12 +93,12 @@ class Prerequisites extends React.Component<PrerequisitesProps> {
                     </Scrollbars>
 
                     {isCanEdit &&
-                    <Button color="secondary"
-                            className={classes.addIcon}
-                            onClick={this.handleCreateNew}
-                    >
-                        <AddIcon/> Добавить пререквизит
-                    </Button>
+                        <Button color="secondary"
+                                className={classes.addIcon}
+                                onClick={this.handleCreateNew}
+                        >
+                            <AddIcon/> Добавить пререквизит
+                        </Button>
                     }
 
                     {isCanEdit && <CreateModal />}
@@ -105,5 +107,5 @@ class Prerequisites extends React.Component<PrerequisitesProps> {
         );
     }
 }
-
+//@ts-ignore
 export default connect(withStyles(styles)(Prerequisites));

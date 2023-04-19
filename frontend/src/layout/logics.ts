@@ -81,7 +81,7 @@ const refreshToken = createLogic({
 
         service.refreshToken()
             .then((res) => {
-                const token = get(res, 'data.access', null);
+                const token = get(res, 'data.access', '');
 
                 userService.setToken(token);
                 dispatch(actions.getUserGroups());

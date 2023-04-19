@@ -1,4 +1,5 @@
-import {createStyles, Theme, makeStyles} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export default makeStyles((theme: Theme) => createStyles({
     root: {
@@ -24,8 +25,8 @@ export default makeStyles((theme: Theme) => createStyles({
         }
     },
     addButton: {
-        marginLeft: 'auto',
-        marginTop: '20px'
+        marginLeft: 'auto !important',
+        marginTop: '20px !important'
     },
     actions: {
         marginLeft: 'auto',

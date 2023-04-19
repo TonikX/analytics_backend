@@ -1,11 +1,12 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
   dialog: {
     padding: 20,
   },
   marginBottom30: {
-    marginBottom: '30px'
+    marginBottom: '30px !important'
   },
   actions: {
     marginTop: '10px'

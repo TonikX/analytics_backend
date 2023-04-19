@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import {PrerequisiteType, WorkProgramActions} from '../../types';
 import {SelectorListType} from "../../../../components/SearchSelector/types";
 

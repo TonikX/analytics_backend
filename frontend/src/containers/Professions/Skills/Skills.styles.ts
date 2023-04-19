@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     root: {
@@ -10,8 +11,8 @@ export default (theme: Theme) => createStyles({
         flexDirection: 'column'
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
+        fontSize: '24px !important',
+        marginBottom: '20px !important',
         display: 'flex',
         justifyContent: 'space-between',
     },

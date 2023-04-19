@@ -6,7 +6,7 @@ import {
     StructuralUnitFields,
     TemplateTextPracticeFields
 } from "./enum";
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import styles from "./Practice.styles";
 import {RouteComponentProps} from "react-router-dom";
 import {LiteratureType} from "../Literature/types";
@@ -83,6 +83,7 @@ export type PracticeState = GeneralInfoState
     [PracticeFields.OUTCOMES]: ResultsType[];
     [PracticeFields.EDITORS]: Array<UserType>;
     [PracticeFields.PLANS]: any;
+    [PracticeFields.CAN_SEND_TO_ISU]: boolean;
 }
 
 interface Competence {
@@ -184,6 +185,8 @@ export interface PracticeActions {
 
     getCompetencesDependedOnPractice: any;
     setCompetencesDependedOnPractice: any;
+
+    sendToIsu: any;
 }
 
 export interface PracticeProps extends WithStyles<typeof styles>, RouteComponentProps {

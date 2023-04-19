@@ -2,24 +2,24 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import {Link} from "react-router-dom";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import classNames from 'classnames';
 
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-import Fab from "@material-ui/core/Fab";
-import Typography from "@material-ui/core/Typography";
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import Fab from "@mui/material/Fab";
+import Typography from "@mui/material/Typography";
 
-import AddIcon from "@material-ui/icons/Add";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import SearchOutlined from "@material-ui/icons/SearchOutlined";
-import EyeIcon from "@material-ui/icons/VisibilityOutlined";
+import {withStyles} from '@mui/styles';
+
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import EyeIcon from "@mui/icons-material/VisibilityOutlined";
 
 import {appRouter} from "../../service/router-service";
 import ConfirmDialog from "../../components/ConfirmDialog";
@@ -33,7 +33,7 @@ import {StructuralUnitsProps} from "./types";
 
 import connect from './StructuralUnits.connect';
 import styles from './StructuralUnits.styles';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from "@mui/lab/Pagination";
 
 class StructuralUnits extends React.Component<StructuralUnitsProps> {
     state = {
@@ -92,7 +92,9 @@ class StructuralUnits extends React.Component<StructuralUnitsProps> {
     }
 
     render() {
-        const {classes, structuralUnits, allCount, currentPage, sortingField, sortingMode} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {structuralUnits, allCount, currentPage, sortingField, sortingMode} = this.props;
         const {deleteConfirmId} = this.state;
 
         return (
@@ -164,6 +166,8 @@ class StructuralUnits extends React.Component<StructuralUnitsProps> {
                     </Fab>
                 </div>
 
+                {/*
+// @ts-ignore */}
                 <StructuralUnitCreateModal />
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}

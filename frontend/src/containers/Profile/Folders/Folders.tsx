@@ -5,14 +5,14 @@ import {Link} from "react-router-dom";
 // @ts-ignore
 import ReactStars from "react-rating-stars-component";
 
-import withStyles from "@material-ui/core/styles/withStyles";
-import Typography from "@material-ui/core/Typography";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Box from "@material-ui/core/Box";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import AddIcon from "@material-ui/icons/Add";
-import Button from "@material-ui/core/Button";
+import {withStyles} from "@mui/styles";
+import Typography from "@mui/material/Typography";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import Button from "@mui/material/Button";
 import AddFolderModal from "./AddFolderModal";
 
 import LikeButton from "../../../components/LikeButton";
@@ -167,7 +167,9 @@ class Folders extends React.PureComponent<FoldersProps> {
     }
 
     render() {
-        const {classes, folders} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {folders} = this.props;
         const {currentTab, openConfirmDialogId} = this.state;
 
         return (
@@ -186,8 +188,9 @@ class Folders extends React.PureComponent<FoldersProps> {
                                 <Tab value={index}
                                      label={<div>{folder[FoldersFields.NAME]} <DeleteIcon className={classes.deleteIcon} onClick={this.deleteFolder(folder[FoldersFields.ID])}/> </div>}
                                      classes={{
-                                         wrapper: classes.tab
+                                         wrapped: classes.tab
                                      }}
+                                     wrapped
                                 />
                             )}
                         </Tabs>
@@ -231,4 +234,5 @@ class Folders extends React.PureComponent<FoldersProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Folders));

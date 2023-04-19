@@ -1,7 +1,7 @@
 import React, {ReactText} from 'react';
 import classNames from "classnames";
 
-import withStyles from "@material-ui/core/styles/withStyles";
+import {withStyles} from "@mui/styles";
 
 import SearchSelector from "../../../components/SearchSelector/SearchSelector";
 
@@ -60,4 +60,5 @@ class UserSelector extends React.PureComponent<UserSelectorType> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(UserSelector));

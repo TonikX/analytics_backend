@@ -1,12 +1,12 @@
 import createReport from 'docx-templates';
 
-import {WithStyles} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
 import styles from "./styles";
 import {CertificationActions, CertificationState} from "../../types";
 import React from "react";
 import connect from "./connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "@material-ui/core/Button";
+import {WithStyles} from "@mui/styles";
+import Button from "@mui/material/Button";
 
 
 // @ts-ignore
@@ -51,7 +51,11 @@ class Download extends React.Component<DownloadProps> {
     multilineToList = (str: string) => {
         if (!str || str.length === 0) return [];
         return str.split(/\r?\n/g);
-    }
+    };
+
+    sendToIsu = () => {
+        this.props.actions.sendToIsu();
+    };
 
     handleDownload = (fields: CertificationState) => async () => {
 
@@ -89,10 +93,18 @@ class Download extends React.Component<DownloadProps> {
     }
 
     render() {
-        const {classes, fields} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {fields} = this.props;
+        const canSendToIsu = fields.can_send_to_isu;
 
         return (
             <div className={classes.input}>
+                {
+                    canSendToIsu && <Button variant='outlined' className={classes.marginRight} onClick={this.sendToIsu}>
+                        Отправить в ИСУ
+                    </Button>
+                }
                 <Button variant='outlined'
                         onClick={this.handleDownload(fields)}>
                     Скачать ГИА
@@ -101,5 +113,5 @@ class Download extends React.Component<DownloadProps> {
         );
     }
 }
-
+// @ts-ignore
 export default connect(withStyles(styles)(Download));

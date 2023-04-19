@@ -1,4 +1,5 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     dialog: {
@@ -20,19 +21,20 @@ export default (theme: Theme) => createStyles({
         zIndex: '1000 !important'
     },
     nameInput: {
-        marginTop: '24px'
+        marginTop: '24px !important'
     },
     actions: {
         padding: '15px 24px 20px'
     },
     radioGroup: {
         display: 'flex',
-        flexDirection: 'row',
-        marginBottom: '30px',
+        //@ts-ignore
+        flexDirection: 'row !important',
+        marginBottom: '30px !important',
         width: '550px'
     },
     input: {
-        marginBottom: '30px',
+        marginBottom: '30px !important',
         width: '100%'
     },
     appBar: {
@@ -47,7 +49,7 @@ export default (theme: Theme) => createStyles({
     },
     dialogContent: {
         display: 'flex',
-        padding: '20px 48px',
+        padding: '80px 48px 20px 48px !important',
         justifyContent: 'space-between',
         overflowX: 'hidden',
         height: 'calc(100% - 100px)'
@@ -61,16 +63,20 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between'
     },
     numberInput: {
-        marginRight: '20px'
+        marginRight: '20px !important'
     },
     marginBottom30: {
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     weekTitle: {
-        marginBottom: '20px'
+        marginBottom: '20px !important'
     },
     rightSide: {
         width: '55%',
+        height: "calc(100vh - 280px) !important",
+        '& .ck-content': {
+            height: "calc(100vh - 280px) !important",
+        }
     },
     sectionSelector: {
         '& .MuiInputLabel-shrink': {
@@ -79,7 +85,7 @@ export default (theme: Theme) => createStyles({
         '& .MuiOutlinedInput-notchedOutline legend': {
             width: '58px !important'
         },
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     typeSelector: {
         '& .MuiInputLabel-shrink': {
@@ -88,7 +94,7 @@ export default (theme: Theme) => createStyles({
         '& .MuiOutlinedInput-notchedOutline legend': {
             width: '38px !important'
         },
-        marginBottom: '30px',
+        marginBottom: '30px !important',
     },
     selector: {
         width: '500px'

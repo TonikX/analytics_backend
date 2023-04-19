@@ -11,6 +11,7 @@ export const initialState: practicePageState = {
         erroredFields: [],
     },
     isError: false,
+// @ts-ignore
     practice: {
         [PracticeFields.ID]: 1,
         [PracticeFields.PRACTICE_BASE]: 1,

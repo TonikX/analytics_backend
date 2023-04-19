@@ -7,6 +7,7 @@ import {GENERAL_PATH} from "./reducer";
 import {fields} from './enum';
 
 import {professionsState, ProfessionType, SkillType} from './types';
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): professionsState => get(state, GENERAL_PATH);
 export const getProfessionsList = (state: rootState): Array<ProfessionType> => get(getStateData(state), fields.PROFESSIONS_LIST, []);
@@ -25,4 +26,4 @@ export const getFilteredRole = (state: rootState) => get(getStateData(state), fi
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);

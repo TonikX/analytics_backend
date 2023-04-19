@@ -1,16 +1,16 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {ProfessionsCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
-import TextField from "@material-ui/core/TextField";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
+import TextField from "@mui/material/TextField";
 
 import {ProfessionsFields} from '../enum';
 
@@ -28,7 +28,7 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
     componentDidUpdate(prevProps: Readonly<ProfessionsCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {profession} = this.props;
 
-        if (!shallowEqual(profession, prevProps.profession)){
+        if (!shallowEqualObjects(profession, prevProps.profession)){
             this.setState({
                 profession: {
                     [ProfessionsFields.ID]: get(profession, ProfessionsFields.ID),
@@ -80,7 +80,7 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} профессию </DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Название *"
                                onChange={this.saveField(ProfessionsFields.TITLE)}
                                value={profession[ProfessionsFields.TITLE]}
@@ -109,4 +109,5 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

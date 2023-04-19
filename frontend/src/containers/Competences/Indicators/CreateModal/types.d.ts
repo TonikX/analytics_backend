@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import {IndicatorProgramActions} from '../types';
 
 import styles from "./CreateModal.styles";

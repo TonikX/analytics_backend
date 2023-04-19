@@ -1,4 +1,5 @@
-import {createStyles, makeStyles, Theme} from "@material-ui/core";
+import {createStyles, makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -10,12 +11,12 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     title: {
         fontSize: '24px',
-        marginBottom: '20px',
+        marginBottom: '20px !important',
         display: 'flex',
         justifyContent: 'space-between',
     },
     notificationItem: {
-        marginBottom: '10px',
+        marginBottom: '10px !important',
         padding: '15px',
         border: '1px solid #ccc',
     },
@@ -25,7 +26,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     roundItem: {
         display: 'flex',
-        marginBottom: '10px',
+        marginBottom: '10px !important',
         alignItems: 'center'
     },
     round: {
@@ -33,10 +34,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         width: '10px',
         height: '10px',
         borderRadius: '50%',
-        marginRight: '5px'
+        marginRight: '5px !important'
     },
     roundText: {
-        marginRight: '15px'
+        marginRight: '15px !important'
     },
     footer: {
         display: 'flex',

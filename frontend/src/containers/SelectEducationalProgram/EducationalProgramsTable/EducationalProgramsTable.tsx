@@ -1,15 +1,15 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import Checkbox from "@material-ui/core/Checkbox";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Tooltip from "@material-ui/core/Tooltip";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 
 import {getEducationPlanInDirectionFullName as getEduPlan} from '../../EduationPlanInDirection/getters';
 import {EducationProgramFields} from '../../EducationalProgram/enum';

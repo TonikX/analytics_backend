@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import {appRouter} from "../../service/router-service";
 import styles from './Records.styles';
 import {
-    Button, ExpansionPanelDetails,
+    Button,
     FormControl,
     FormControlLabel,
     InputLabel, MenuItem,
@@ -12,22 +12,22 @@ import {
     Radio,
     RadioGroup,
     TableCell
-} from "@material-ui/core";
-import Select from '@material-ui/core/Select';
+} from "@mui/material";
+import Pagination from "@mui/lab/Pagination";
+import Select from '@mui/material/Select';
 import {RecordsProops} from "./types";
 import connect from "./Records.connect";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import TablePagination from "@material-ui/core/TablePagination";
-import FormLabel from "@material-ui/core/FormLabel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import {withStyles} from "@mui/styles";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import FormLabel from "@mui/material/FormLabel";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchSelector from "../../components/SearchSelector";
-
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 
 class Records extends Component<RecordsProops> {
     state = {
@@ -43,9 +43,12 @@ class Records extends Component<RecordsProops> {
 
     componentDidMount() {
         this.props.actions.GetAP();
-        this.state.AP = this.props.AP
         this.props.actions.GetSU();
-        this.state.SU = this.props.SU;
+        // кажется что тут пустые значения
+        this.setState({
+            AP: this.props.AP,
+            SU: this.props.SU,
+        })
     }
 
     handleChange = (event: any): void => {
@@ -64,22 +67,16 @@ class Records extends Component<RecordsProops> {
         this.props.actions.changeQualification(event.target.value);
     }
 
-    сhangeStatus = (event: any): void => {
+    changeStatus = (event: any): void => {
         this.props.actions.ChangeStatus(event.target.value);
     }
 
-    сhangeSemester = (event: any): void => {
+    changeSemester = (event: any): void => {
         this.props.actions.ChangeSemester(event.target.value);
     }
 
     changeYear = (event: any): void => {
         this.props.actions.changeYear(event.target.value);
-    }
-
-    changeYearForAP = (event: any): void => {
-        this.props.actions.changeYear(event.target.value);
-        this.props.actions.GetAP();
-        this.state.AP = this.props.AP
     }
 
     handleChangePage = (event: any, page: number): void => {
@@ -138,11 +135,11 @@ class Records extends Component<RecordsProops> {
         this.setState({SU:changeSU});
     }
 
-    сhangeAP = (value: string|number): void => {
+    changeAp = (value: string|number): void => {
         this.props.actions.ChangeAP(value);
     }
 
-    сhangeSU = (value: string|number): void => {
+    changeSU = (value: string|number): void => {
         this.props.actions.ChangeSU(value);
     }
 
@@ -158,8 +155,6 @@ class Records extends Component<RecordsProops> {
             STATUS,
             RPD_IN_SU,
             SEMESTER,
-            SU,
-            AP,
             APuse,
             RPD_IN_AP,
             SUuse,
@@ -188,7 +183,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}>
                         <MenuItem value="1">Отчёт о качестве РПД</MenuItem>
                         <MenuItem value="2">Отчёт о количестве РПД (по квалификации)</MenuItem>
@@ -199,7 +193,7 @@ class Records extends Component<RecordsProops> {
                         <MenuItem value="7">Отчёт о РПД и по учебному плану</MenuItem>
                     </Select>
                 </FormControl>
-                {this.state.value == 1 &&
+                {this.state.value === 1 &&
                 <Button
                     onClick={this.getSimpleStat}
                     variant="contained"
@@ -210,7 +204,7 @@ class Records extends Component<RecordsProops> {
                     Получить отчёт
                 </Button>
                 }
-                {this.state.isVisible && this.state.value == 1 &&
+                {this.state.isVisible && this.state.value === 1 &&
                 <Typography>
                     <p>Зарегестрированных пользователей: {SIMPLE_STATE['registered_users']}</p>
                     <p>Пользователей РПД: {SIMPLE_STATE['users_in_rpd']}</p>
@@ -221,7 +215,7 @@ class Records extends Component<RecordsProops> {
                 </Typography>
 
                 }
-                {this.state.value == 2 &&
+                {this.state.value === 2 &&
                 <>
                     <FormControl variant="outlined">
                         <InputLabel>Выберите квалификацию</InputLabel>
@@ -238,7 +232,6 @@ class Records extends Component<RecordsProops> {
                                         vertical: "top",
                                         horizontal: "left"
                                     },
-                                    getContentAnchorEl: null
                                 }}
                         >
                             <MenuItem value="bachelor">Бакалавриат</MenuItem>
@@ -250,13 +243,13 @@ class Records extends Component<RecordsProops> {
                             className={classes.Btn}>Получить отчёт</Button>
                 </>
                 }
-                {this.state.isVisible && this.state.value == 2 &&
+                {this.state.isVisible && this.state.value === 2 &&
                 <>
                     <Typography>Количество РПД по заданной квалификации: {QUANTITY_RPD['quantity']}</Typography>
                 </>
 
                 }
-                {this.state.value == 3 &&
+                {this.state.value === 3 &&
                 <>
                     <FormControl variant="outlined">
                         <InputLabel>Выберите квалификацию</InputLabel>
@@ -274,7 +267,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}
                         >
                             <MenuItem value="bachelor">Бакалавриат</MenuItem>
@@ -298,7 +290,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}
                         >
                             <MenuItem value="2021">2021</MenuItem>
@@ -315,12 +306,12 @@ class Records extends Component<RecordsProops> {
                     </Button>
                 </>
                 }
-                {this.state.isVisible && this.state.value == 3 &&
+                {this.state.isVisible && this.state.value === 3 &&
                 <>
                     <Typography>Количество ОП по заданной квалификации и году: {QUANTITY_OP['quantity']}</Typography>
                 </>
                 }
-                {this.state.value == 4 &&
+                {this.state.value === 4 &&
                 <Button
                     onClick={this.getRPDwithoutSU}
                     variant="contained"
@@ -329,7 +320,7 @@ class Records extends Component<RecordsProops> {
                     Получить отчёт
                 </Button>
                 }
-                {this.state.isVisible && this.state.value == 4 &&
+                {this.state.isVisible && this.state.value === 4 &&
                 <>
 
                     <div className={classes.tableWrap}>
@@ -374,23 +365,18 @@ class Records extends Component<RecordsProops> {
                     </div>
 
                     <div className={classes.footer}>
-                        <TablePagination count={RPD_WITHOUT_SU["length"]}
-                                         component="div"
-                                         page={this.state.page}
-                                         rowsPerPageOptions={[]}
-                                         onChangePage={this.handleChangePage}
-                                         rowsPerPage={this.state.rowsPerPage}
-                                         onChangeRowsPerPage={() => {
-                                         }}
+                        <Pagination count={Math.ceil(RPD_WITHOUT_SU["length"] / 10)}
+                                    page={this.state.page}
+                                    onChange={this.handleChangePage}
+                                    color="primary"
                         />
-
                     </div>
                 </>}
-                {this.state.value == 5 &&
+                {this.state.value === 5 &&
                 <>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
+                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.changeStatus}
                                     className={classes.field}>
                             <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
                             <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
@@ -407,18 +393,18 @@ class Records extends Component<RecordsProops> {
                     </Button>
                 </>
                 }
-                {this.state.isVisible && this.state.value == 5 &&
+                {this.state.isVisible && this.state.value === 5 &&
                 <div>
                     {RPD_IN_SU.filter((SU: any) => SU.work_programs.length > 0).map((SU: any) =>
-                        <ExpansionPanel expanded={this.state.expandend === SU.id}
+                        <Accordion expanded={this.state.expandend === SU.id}
                                         onChange={this.handleChangePanel(SU.id)} style={{width: "100%"}}>
-                            <ExpansionPanelSummary
+                            <AccordionSummary
                                 className={classes.accordionSummary}
                                 expandIcon={<ExpandMoreIcon/>}
                             >
                                 <Typography>{SU.title} </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <>
                                     <div className={classes.tableWrap} style={{width: "100%"}}>
                                         <Table>
@@ -461,36 +447,28 @@ class Records extends Component<RecordsProops> {
 
                                         </Table>
                                         <div className={classes.footer}>
-                                            <TablePagination count={SU.work_programs.length}
-                                                             component="div"
-                                                             page={this.state.page}
-                                                             rowsPerPageOptions={[]}
-                                                             onChangePage={this.handleChangePage}
-                                                             rowsPerPage={this.state.rowsPerPage}
-                                                             onChangeRowsPerPage={() => {
-                                                             }}
+                                            <Pagination count={SU.work_programs.length}
+                                                        page={this.state.page}
+                                                        onChange={this.handleChangePage}
                                             />
                                         </div>
                                     </div>
                                 </>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                            </AccordionDetails>
+                        </Accordion>
                     )}
                 </div>
                 }
-                {this.state.value == 6 &&
+                {this.state.value === 6 &&
                 <>
                     <SearchSelector
                         label='Выберите структурное подразделение'
                         changeSearchText={this.handleChangeSearchQuerySU}
                         list={this.state.SU}
-                        changeItem={(value: string) => this.сhangeSU(value)}
+                        changeItem={(value: string) => this.changeSU(value)}
                         value={SUuse}
                         valueLabel={''}
                         className={classes.field}
-
-
-
                     />
                     <FormControl variant="outlined">
                         <InputLabel>Выберите год учебного плана</InputLabel>
@@ -508,7 +486,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}>
                             <MenuItem value="all">Все</MenuItem>
                             <MenuItem value="2021">2021</MenuItem>
@@ -521,7 +498,7 @@ class Records extends Component<RecordsProops> {
                         <Select
                             label="Выберите семестр"
                             value={SEMESTER}
-                            onChange={this.сhangeSemester}
+                            onChange={this.changeSemester}
                             className={classes.field}
                             MenuProps={{
                                 anchorOrigin: {
@@ -532,7 +509,6 @@ class Records extends Component<RecordsProops> {
                                     vertical: "top",
                                     horizontal: "left"
                                 },
-                                getContentAnchorEl: null
                             }}>
                             <MenuItem value="all">Все</MenuItem>
                             <MenuItem value="1">Первый семестр</MenuItem>
@@ -547,7 +523,7 @@ class Records extends Component<RecordsProops> {
                     </FormControl>
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Выберите статус РПД</FormLabel>
-                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.сhangeStatus}
+                        <RadioGroup row aria-label="1" name="Status" value={STATUS} onChange={this.changeStatus}
                                     className={classes.field}>
                             <FormControlLabel value="all" control={<Radio color="primary"/>} label="Все"/>
                             <FormControlLabel value="EX" control={<Radio color="primary"/>} label="На экспертизе"/>
@@ -564,7 +540,7 @@ class Records extends Component<RecordsProops> {
                     </Button>
                 </>
                 }
-                {this.state.value == 6 && this.state.isVisible &&
+                {this.state.value === 6 && this.state.isVisible &&
                 <>
 
                 <div className={classes.tableWrap}>
@@ -609,26 +585,21 @@ class Records extends Component<RecordsProops> {
                 </div>
 
                 <div className={classes.footer}>
-                    <TablePagination count={RPD_IN_SEMESTER.length}
-                                     component="div"
-                                     page={this.state.page}
-                                     rowsPerPageOptions={[]}
-                                     onChangePage={this.handleChangePage}
-                                     rowsPerPage={this.state.rowsPerPage}
-                                     onChangeRowsPerPage={() => {
-                                     }}
+                    <Pagination count={RPD_IN_SEMESTER.length}
+                                page={this.state.page}
+                                onChange={this.handleChangePage}
+                                color="primary"
                     />
-
                 </div>
                 </>
                 }
-                {this.state.value == 7 &&
+                {this.state.value === 7 &&
                     <>
                 <SearchSelector
                     label='Выберите учебный план'
                     changeSearchText={this.handleChangeSearchQuery}
                     list={this.state.AP}
-                    changeItem={(value: string) => this.сhangeAP(value)}
+                    changeItem={(value: string) => this.changeAp(value)}
                     value={APuse}
                     valueLabel={''}
                     className={classes.field}
@@ -645,7 +616,7 @@ class Records extends Component<RecordsProops> {
                     </Button>
                     </>
                 }
-                {this.state.value == 7 && this.state.isVisible && RPD_IN_AP.length > 0 &&
+                {this.state.value === 7 && this.state.isVisible && RPD_IN_AP.length > 0 &&
                 <>
 
                     <div className={classes.tableWrap}>
@@ -688,11 +659,10 @@ class Records extends Component<RecordsProops> {
                     </div>
 
                     <div className={classes.footer}>
-                        <TablePagination count={RPD_IN_AP.length}
-                                         component="div"
-                                         page={this.state.page}
-                                         onChangePage={this.handleChangePage}
-                                         rowsPerPage={this.state.rowsPerPage}
+                        <Pagination count={RPD_IN_AP.length}
+                                    page={this.state.page}
+                                    onChange={this.handleChangePage}
+                                    color="primary"
                         />
                     </div>
                 </>}
@@ -701,4 +671,5 @@ class Records extends Component<RecordsProops> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Records));

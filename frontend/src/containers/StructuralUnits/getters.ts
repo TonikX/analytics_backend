@@ -8,6 +8,7 @@ import {fields, structuralUnitFields} from './enum';
 
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {structuralUnitsState, structuralUnitType} from "./types";
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): structuralUnitsState => get(state, GENERAL_PATH);
 export const getStructuralUnits = (state: rootState): Array<structuralUnitType> => get(getStateData(state), fields.STRUCTURAL_UNIT_LIST, []);
@@ -30,6 +31,6 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);
 
 

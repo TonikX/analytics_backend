@@ -1,6 +1,18 @@
-import {createStyles, Theme} from "@material-ui/core";
+import createStyles from "@mui/styles/createStyles";
+import {Theme} from "@mui/material";
 
 export default (theme: Theme) => createStyles({
+    header: {
+        background: theme.palette.primary.main,
+        '& th': {
+            color: '#fff',
+            background: theme.palette.primary.main,
+        }
+    },
+    headerCell: {
+        display: 'flex',
+        alignItems: 'center'
+    },
     tableWrap: {
         height: 'calc(100% - 60px)',
         maxheight: 'calc(100% - 60px)',
@@ -27,7 +39,8 @@ export default (theme: Theme) => createStyles({
         justifyContent: 'space-between',
     },
     title: {
-        fontSize: '24px',
+        fontSize: '24px !important',
+        lineHeight: '39px !important',
     },
     actions: {
         display: 'flex',
@@ -62,7 +75,7 @@ export default (theme: Theme) => createStyles({
         fill: 'rgba(0, 0, 0, 0.54)'
     },
     menuLinkItem: {
-        padding: 0,
+        padding: '0px !important',
         '&>a': {
             padding: '6px 16px',
             display: 'flex',

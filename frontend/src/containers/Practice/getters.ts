@@ -14,6 +14,7 @@ export const getValidation = (state: rootState): any =>
     get(getStateData(state), 'validation', initialState.validation);
 
 export const getLiteratureList = (state: rootState): PracticeState =>
+// @ts-ignore
     get(getStateData(state), 'practice.bibliographic_reference', initialState.practice.bibliographic_reference);
 
 export const getId = (state: rootState): Id => get(getStateData(state), 'practice.id', initialState.practice.id);

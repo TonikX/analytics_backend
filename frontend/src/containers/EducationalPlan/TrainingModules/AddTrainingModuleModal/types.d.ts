@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 
 import styles from "./AddTrainingModuleModal.styles";
 import {mapDispatchToProps, mapStateToProps} from "./AddTrainingModuleModal.connect";

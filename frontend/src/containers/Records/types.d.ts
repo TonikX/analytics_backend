@@ -1,5 +1,5 @@
-import {SimpleStatFields, fields} from './enum'
-import {WithStyles} from "@material-ui/core";
+import {fields} from './enum'
+import {WithStyles} from '@mui/styles';
 import styles from "./Records.styles";
 export interface StatisticsActions {
     GetSimpleStat: any;

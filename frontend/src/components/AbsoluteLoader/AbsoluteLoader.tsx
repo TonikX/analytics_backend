@@ -1,9 +1,8 @@
 import React from 'react';
 import className from 'classnames';
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import CircularProgress from "@material-ui/core/CircularProgress";
-import {WithStyles} from '@material-ui/core';
+import {WithStyles, withStyles} from '@mui/styles';
+import CircularProgress from "@mui/material/CircularProgress";
 
 import styles from './AbsoluteLoader.styles';
 

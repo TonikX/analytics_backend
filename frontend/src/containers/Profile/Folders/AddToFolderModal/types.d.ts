@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import {FolderActions, FolderType} from '../types';
 
 import styles from "./AddToFolderModal.styles";

@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react'
 import cn from 'classnames'
-import withStyles from '@material-ui/core/styles/withStyles'
+import {withStyles} from '@mui/styles'
 
 import {EvaluationCertificationTotalListProps} from "./types"
 
 import connect from './EvaluationCertificationTotalList.connect'
 import styles from './EvaluationCertificationTotalList.styles'
-import TableHead from "@material-ui/core/TableHead"
-import TableRow from "@material-ui/core/TableRow"
-import TableCell from "@material-ui/core/TableCell"
-import TableBody from "@material-ui/core/TableBody"
-import Table from "@material-ui/core/Table"
+import TableHead from "@mui/material/TableHead"
+import TableRow from "@mui/material/TableRow"
+import TableCell from "@mui/material/TableCell"
+import TableBody from "@mui/material/TableBody"
+import Table from "@mui/material/Table"
 import {getEvaluationToolsMaxSum} from "../utils"
 import {EvaluationToolFields} from "../enum"
 
@@ -68,4 +68,5 @@ const EvaluationCertificationTotalList = ({
   )
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(EvaluationCertificationTotalList))

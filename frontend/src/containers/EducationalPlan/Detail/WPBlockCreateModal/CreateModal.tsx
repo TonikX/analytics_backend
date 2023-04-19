@@ -1,43 +1,43 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import classNames from "classnames";
 import moment from "moment";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import {CreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import TextField from "@material-ui/core/TextField";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import withStyles from '@material-ui/core/styles/withStyles';
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import Slide from "@material-ui/core/Slide";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import AppBar from "@material-ui/core/AppBar";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import {withStyles} from '@mui/styles';
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import Slide from "@mui/material/Slide";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import AppBar from "@mui/material/AppBar";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
 
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import SaveIcon from "@material-ui/icons/SaveOutlined";
-import Tooltip from "@material-ui/core/Tooltip";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/SaveOutlined";
+import Tooltip from "@mui/material/Tooltip";
 
 import AddWorkProgramModal from "./AddWorkProgramModal";
 import {OPTIONALLY as optionalTypeOfWorkProgram, typeOfWorkProgramInPlan} from '../../data';
@@ -92,7 +92,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {blockOfWorkPrograms} = this.props;
 
-        if (!shallowEqual(blockOfWorkPrograms, prevProps.blockOfWorkPrograms)){
+        if (!shallowEqualObjects(blockOfWorkPrograms, prevProps.blockOfWorkPrograms)){
             const workProgram = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.WORK_PROGRAMS) || [];
             const gia = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.GIA) || [];
             const practice = get(blockOfWorkPrograms, BlocksOfWorkProgramsFields.PRACTICE) || [];
@@ -196,7 +196,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         }
 
         this.props.actions.closeDetailDialog();
-        
+
         if (planId){
             this.props.actions.getEducationalDetail(planId);
         } else {
@@ -708,7 +708,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     input={
                                         <OutlinedInput
                                             notched
-                                            labelWidth={100}
                                             id="section-label"
                                         />
                                     }
@@ -791,18 +790,18 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                     {this.renderGia()}
                                     {this.renderPractice()}
                                     {blockOfWorkPrograms[BlocksOfWorkProgramsFields.WORK_PROGRAMS].map((workProgram: any, wpIndex) =>
-                                        <ExpansionPanel expanded={disableZUN ? false : expandedWorkProgram === wpIndex}
+                                        <Accordion expanded={disableZUN ? false : expandedWorkProgram === wpIndex}
                                                         onChange={this.handleChangeExpandedWorkProgram(wpIndex)}
                                                         key={wpIndex}
                                         >
-                                            <ExpansionPanelSummary
+                                            <AccordionSummary
                                                 expandIcon={disableZUN ? <></> : <ExpandMoreIcon />}
                                                 aria-controls="panel1bh-content"
                                                 id="panel1bh-header"
                                             >
                                                 <Typography className={classes.workProgramItem}>{workProgram.label} <DeleteIcon onClick={this.handleRemoveWorkProgram(workProgram.value, workProgram.id)}/></Typography>
-                                            </ExpansionPanelSummary>
-                                            <ExpansionPanelDetails>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
                                                 <Table>
                                                     <TableHead>
                                                         <TableRow>
@@ -902,8 +901,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                                         </TableRow>
                                                     </TableBody>
                                                 </Table>
-                                            </ExpansionPanelDetails>
-                                        </ExpansionPanel>
+                                            </AccordionDetails>
+                                        </Accordion>
                                     )}
                                     {get(blockOfWorkPrograms, [BlocksOfWorkProgramsFields.WORK_PROGRAMS, 'length'], 0) === 0 && gia.length === 0 && practice.length === 0 ?
                                         <Typography> Рабочих программ, ГИА или практик пока не добавлено</Typography>

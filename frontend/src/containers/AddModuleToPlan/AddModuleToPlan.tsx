@@ -3,10 +3,10 @@ import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
     Dialog, Button, DialogTitle, DialogContent, Box
-} from "@material-ui/core";
+} from "@mui/material";
 import {useStyles} from "./AddModuleToPlan.styles";
-import Typography from "@material-ui/core/Typography";
-import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import Typography from "@mui/material/Typography";
+import DialogActions from "@mui/material/DialogActions/DialogActions";
 import {Modules} from "./Modules";
 import {EducationalPlans} from "./EducationalPlans";
 import {BlockSelector} from "./BlockSelector";

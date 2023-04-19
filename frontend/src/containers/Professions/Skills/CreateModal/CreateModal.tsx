@@ -1,20 +1,20 @@
 import React, {ReactText} from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 
 import {ProfessionsCreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import {withStyles} from '@mui/styles';
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
 
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
 
@@ -41,7 +41,7 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
     componentDidUpdate(prevProps: Readonly<ProfessionsCreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {skill} = this.props;
 
-        if (!shallowEqual(skill, prevProps.skill)){
+        if (!shallowEqualObjects(skill, prevProps.skill)){
             this.setState({
                 skill: {
                     [ProfessionsFields.ID]: get(skill, ProfessionsFields.ID),
@@ -164,4 +164,5 @@ class CreateModal extends React.PureComponent<ProfessionsCreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));

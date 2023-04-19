@@ -1,14 +1,14 @@
 import React from 'react';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 import {Link} from "react-router-dom";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import DownloadIcon from "@material-ui/icons/CloudDownloadOutlined";
+import {withStyles} from '@mui/styles';
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import DownloadIcon from "@mui/icons-material/CloudDownloadOutlined";
 
 import {PlansAndDirectionsProps} from './types';
 import Service from '../service'
@@ -40,7 +40,9 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
   }
 
   render() {
-    const {classes, plans} = this.props;
+    //@ts-ignore
+    const {classes} = this.props;
+    const {plans} = this.props;
 
     return (
       <div className={classes.root}>
@@ -53,7 +55,7 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
                 <TableCell className={classes.header}>Образовательные программы</TableCell>
                 <TableCell className={classes.header}>Направления</TableCell>
                 <TableCell className={classes.header}>Год набора</TableCell>
-                <TableCell />
+                <TableCell className={classes.header} />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -144,4 +146,5 @@ class PlansAndDirections extends React.PureComponent<PlansAndDirectionsProps> {
   }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(PlansAndDirections));

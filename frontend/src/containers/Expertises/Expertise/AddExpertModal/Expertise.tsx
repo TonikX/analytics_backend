@@ -1,12 +1,11 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from "@material-ui/core/Button";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import {withStyles} from '@mui/styles';
+import Button from "@mui/material/Button";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
 
 import {ExpertiseProps} from "./types";
 import SearchSelector from "../../../../components/SearchSelector/SearchSelector";
@@ -42,7 +41,9 @@ class Expertise extends React.Component<ExpertiseProps> {
     }
 
     render() {
-        const {classes, isOpen, usersList} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {isOpen, usersList} = this.props;
         const {id} = this.state;
 
         return (
@@ -57,7 +58,7 @@ class Expertise extends React.Component<ExpertiseProps> {
                 >
                     <DialogTitle> Добавить эксперта </DialogTitle>
 
-                    <DialogContent>
+                    <DialogContent className={classes.dialogContent}>
                         <SearchSelector label="Эксперт * "
                                         changeSearchText={this.handleChangeSearchText}
                                         list={usersList}
@@ -86,4 +87,4 @@ class Expertise extends React.Component<ExpertiseProps> {
 }
 
 //@ts-ignore
-export default connect(withStyles(styles)(withRouter(Expertise)));
+export default connect(withStyles(styles)(Expertise));

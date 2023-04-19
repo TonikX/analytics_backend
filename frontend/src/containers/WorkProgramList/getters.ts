@@ -11,6 +11,7 @@ import {FiltersType, workProgramListState} from './types';
 import {WorkProgramGeneralType} from '../WorkProgram/types';
 import {SelectorListType} from "../../components/SearchSelector/types";
 import {WorkProgramGeneralFields} from "../WorkProgram/enum";
+import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): workProgramListState => get(state, GENERAL_PATH);
 export const getWorkProgramList = (state: rootState): Array<WorkProgramGeneralType> => get(getStateData(state), fields.WORK_PROGRAM_LIST, []);
@@ -34,9 +35,12 @@ export const getSearchQuery = (state: rootState) => get(getStateData(state), fie
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
-export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, '');
+export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);
 
 export const getFilters = (state: rootState): FiltersType => get(getStateData(state), fields.FILTERING)
+// @ts-ignore
 export const getShowOnlyMy = (state: rootState): FiltersType => get(getFilters(state), filterFields.ONLY_MY)
+// @ts-ignore
 export const getShowArchive = (state: rootState): FiltersType => get(getFilters(state), filterFields.ARCHIVE)
+// @ts-ignore
 export const getStatus = (state: rootState): FiltersType => get(getFilters(state), filterFields.STATUS)

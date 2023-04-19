@@ -1,6 +1,3 @@
-import {WithStyles} from "@material-ui/core";
-import styles from "./SortingButton.styles";
-
 export type SortingType = Types.ASC | Types.DESC | '';
 
 export enum Types {
@@ -8,7 +5,7 @@ export enum Types {
     DESC = 'desc'
 }
 
-export interface SortingButtonProps extends WithStyles<typeof styles> {
+export interface SortingButtonProps {
     mode?: string;
     changeMode: Function;
 }

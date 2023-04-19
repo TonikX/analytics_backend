@@ -1,23 +1,24 @@
 import React, {SyntheticEvent} from 'react';
 import get from 'lodash/get';
-import Scrollbars from "react-custom-scrollbars";
-import {AutoSizer} from 'react-virtualized';
+import Scrollbars from "react-custom-scrollbars-2";
+// @ts-ignore
+import {AutoSizer} from 'react-virtualized-reactv17';
 
 import classNames from "classnames";
 
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import {withStyles} from '@mui/styles';
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
-import AddIcon from "@material-ui/icons/Add";
-import SettingsIcon from "@material-ui/icons/MoreVert";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import EditIcon from "@material-ui/icons/EditOutlined";
-import EyeIcon from '@material-ui/icons/VisibilityOutlined';
+import AddIcon from "@mui/icons-material/Add";
+import SettingsIcon from "@mui/icons-material/MoreVert";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import EyeIcon from '@mui/icons-material/VisibilityOutlined';
 
 import DescriptionModal from "./DescriptionModal";
 import CreateModal from "./CreateModal";
@@ -69,13 +70,15 @@ class EvaluationTools extends React.PureComponent<Props> {
     };
 
     render() {
-        const {classes, evaluationToolsList, isCanEdit} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {evaluationToolsList, isCanEdit} = this.props;
         const {anchorsEl} = this.state;
 
         return (
             <div className={classes.root}>
                 <AutoSizer disableHeight>
-                    {({ width, height }) => (
+                    {({ width, height }: any) => (
                 <Scrollbars style={{width, height}} autoHeight autoHeightMax={Number.MAX_VALUE}>
                 <div className={classNames(classes.header, classes.row)}>
                     <Typography className={classes.title}>

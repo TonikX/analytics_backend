@@ -89,7 +89,10 @@ class GIASerializer(serializers.ModelSerializer):
         self.fields['editors'] = userProfileSerializer(many=True)
         self.fields['gia_in_change_block'] = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True)
         self.fields['expertise_with_gia'] = ShortExpertiseSerializer(many=True,)
-        return super().to_representation(value)
+        data = super().to_representation(value)
+        if value.discipline_code == None:
+            data["can_send_to_isu"] = bool(self.context['request'].user.groups.filter(name="expertise_master"))
+        return data
 
     class Meta:
         model = GIA

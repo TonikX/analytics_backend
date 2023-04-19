@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import {IntermediateCertificationType} from "../../../WorkProgram/types";
 import styles from "./EvaluationTools.styles";
 

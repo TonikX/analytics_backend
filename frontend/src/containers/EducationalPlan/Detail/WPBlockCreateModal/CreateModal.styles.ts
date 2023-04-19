@@ -1,9 +1,11 @@
-import {createStyles, Theme} from "@material-ui/core";
+import {Theme} from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
 
 export default (theme: Theme) => createStyles({
     dialogContent: {
         display: 'flex',
-        padding: 48
+        padding: '48px !important',
+        marginTop: '64px !important'
     },
     label: {
         fontSize: '14px',
@@ -87,7 +89,6 @@ export default (theme: Theme) => createStyles({
     lastInput: {
         width: '550px',
     },
-    //@ts-ignore
     selector: {
         width: '290px',
         //@ts-ignore

@@ -1,4 +1,4 @@
-import {WithStyles} from "@material-ui/core";
+import {WithStyles} from '@mui/styles';
 import styles from "./SimpleSelector.styles";
 import {ReactText} from "react";
 

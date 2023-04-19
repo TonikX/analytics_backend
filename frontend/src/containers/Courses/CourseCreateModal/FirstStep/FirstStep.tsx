@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 
-import DialogContent from '@material-ui/core/DialogContent';
-import TextField from "@material-ui/core/TextField";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
+import DialogContent from '@mui/material/DialogContent';
+import TextField from "@mui/material/TextField";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 
 import { useStyles } from './FirstStep.styles'
 
 import { checkUrl } from '../../../../common/utils';
 
 import { CourseFields } from '../../enum'
-import { FirstStepProps } from './types.d'
+import { FirstStepProps } from './types'
 
 export const FirstStep: React.FC<FirstStepProps> = ({ saveField, course }) => {
   const classes = useStyles()

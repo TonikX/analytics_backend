@@ -3,14 +3,14 @@ import React, {Component} from 'react';
 import isFunction from 'lodash/isFunction';
 import get from 'lodash/get';
 
-import shallowEqual from 'recompose/shallowEqual';
+import {shallowEqualObjects} from 'shallow-equal';
 import classNames from "classnames";
 
-import withStyles, {WithStyles} from '@material-ui/core/styles/withStyles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import EditIcon from "@material-ui/icons/EditOutlined";
+import {WithStyles, withStyles} from '@mui/styles';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import EditIcon from "@mui/icons-material/EditOutlined";
 
 import ConfirmReject from '../ConfirmReject';
 
@@ -18,7 +18,7 @@ import {isStringValueValid} from '../../common/utils';
 
 import styles from './EditableText.styles';
 
-interface EditableTextProps extends WithStyles {
+interface EditableTextProps extends WithStyles<typeof styles> {
     value: string;
     height?: number;
     isEditMode: boolean;
@@ -56,7 +56,7 @@ class EditableText extends Component<EditableTextProps, EditableTexState> {
         return nextProps.value !== this.props.value
             || nextProps.isEditMode !== this.props.isEditMode
             || nextState.value !== this.state.value
-            || !shallowEqual(nextProps.classes, this.props.classes);
+            || !shallowEqualObjects(nextProps.classes, this.props.classes);
     }
 
     handleOnClick = (event: React.MouseEvent<HTMLElement>): void => {

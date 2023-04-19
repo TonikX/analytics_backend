@@ -1,11 +1,11 @@
 import React from 'react';
 import moment from 'moment';
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
-import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import {withStyles} from '@mui/styles';
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 import {CommentsProps} from './types';
 
@@ -56,7 +56,9 @@ class Comments extends React.Component<CommentsProps> {
     }
 
     render() {
-        const {classes, comments} = this.props;
+        //@ts-ignore
+        const {classes} = this.props;
+        const {comments} = this.props;
         const {commentText} = this.state;
 
         return (
@@ -83,7 +85,7 @@ class Comments extends React.Component<CommentsProps> {
                                value={commentText}
                                multiline
                                rows={2}
-                               rowsMax={5}
+                               maxRows={5}
                     />
                     <div className={classes.commentTextFieldButtons}>
                         <Button onClick={this.clearTextInput}>Отменить</Button>
@@ -99,4 +101,5 @@ class Comments extends React.Component<CommentsProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(Comments));

@@ -1,30 +1,30 @@
 import React from 'react';
-import {shallowEqual} from "recompose";
+import {shallowEqualObjects} from "shallow-equal";
 import get from "lodash/get";
 import classNames from "classnames";
 import moment, {Moment} from 'moment';
 
 import {CreateModalProps} from './types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField";
-import withStyles from '@material-ui/core/styles/withStyles';
-import MenuItem from "@material-ui/core/MenuItem";
-import DateIcon from "@material-ui/icons/DateRange";
-import IconButton from "@material-ui/core/IconButton";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import {DatePicker} from '@material-ui/pickers';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField";
+import {withStyles} from '@mui/styles';
+import MenuItem from "@mui/material/MenuItem";
+import DateIcon from "@mui/icons-material/DateRange";
+import IconButton from "@mui/material/IconButton";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import DatePicker from '@mui/lab/DatePicker';
 
 import {EducationalPlanFields} from '../enum';
 import {FULL_DATE_FORMAT} from "../../../common/utils";
@@ -49,7 +49,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
         const {educationalPlan} = this.props;
 
-        if (!shallowEqual(educationalPlan, prevProps.educationalPlan)){
+        if (!shallowEqualObjects(educationalPlan, prevProps.educationalPlan)){
             this.setState({
                 educationalPlan: {
                     [EducationalPlanFields.ID]: get(educationalPlan, EducationalPlanFields.ID),
@@ -120,7 +120,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 }}
             >
                 <DialogTitle> {isEditMode ? 'Редактировать' : 'Создать'} учебный план</DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Образовательная программа *"
                                onChange={this.saveField(EducationalPlanFields.PROFILE)}
                                variant="outlined"
@@ -172,7 +172,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     id="section-label"
                                 />
                             }
@@ -200,7 +199,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                             input={
                                 <OutlinedInput
                                     notched
-                                    labelWidth={100}
                                     name="year"
                                 />
                             }
@@ -247,4 +245,5 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 }
 
+//@ts-ignore
 export default connect(withStyles(styles)(CreateModal));
