@@ -1,6 +1,7 @@
 import AnalyticsService from "../../service/analytics-service";
 import {SortingType, Types} from "../../components/SortingButton/types";
 import {CompetenceTableType, EducationProgramFields} from "./enum";
+import appConfigService from '../../config/app-config-service';
 import {
   CharacteristicAddCompetenceActionType,
   CharacteristicAddIndicatorActionType, CharacteristicAddProfessionalStandardActionType,
@@ -29,6 +30,14 @@ class Service extends AnalyticsService{
     return this.post(`/api/gh_check/${id}`, {
       new_status: 'on_work'
     });
+  }
+
+  getDownloadFileGeneralCharacteristic(id: number){
+    return (`${appConfigService.getApiBasePath()}/api/export/general_characteristic/${id}`);
+  }
+
+  getDownloadFileCompetenceMatrix(id: number){
+    return (`${appConfigService.getApiBasePath()}/api/export/competence_matrix/${id}`);
   }
 
   deleteEducationProgram(id: number){
