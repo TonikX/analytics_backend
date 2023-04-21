@@ -50,7 +50,6 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
             onChange={readOnly ? undefined : onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            // disabled={readOnly}
             onReady={(editor: any) => {
               // editor.isReadOnly = true;
               // editor.disabled = true;
@@ -67,7 +66,7 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
                 // });
             }}
             // style={style}
-            disabled
+            // disabled
         />
         <div style={{marginTop: '10px'}}>
           <Tooltip title={
