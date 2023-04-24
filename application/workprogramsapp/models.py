@@ -681,6 +681,17 @@ class ImplementationAcademicPlan(models.Model):
 
     def __str__(self):
         return 'НАШ ОП ид: ' + str(self.id) + ' / ' + 'ОП ИСУ ИД: ' + str(self.op_isu_id)
+    @staticmethod
+    def get_all_imp_by_modules(modules):
+        imp_list = ImplementationAcademicPlan.objects.none()
+        for module in modules:
+            if module.father_module.all():
+                imp_list = imp_list|ImplementationAcademicPlan.get_all_imp_by_modules(module.father_module.all())
+            else:
+                imp_list = imp_list | ImplementationAcademicPlan.objects.filter(
+                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block=module)
+        return imp_list
+
 
 
 class DisciplineBlock(CloneMixin, models.Model):
