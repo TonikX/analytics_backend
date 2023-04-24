@@ -57,8 +57,14 @@ def render_context(context, **kwargs):
     for wpcb in context['work_program_in_change_block']:
         credit_units_list = []
         if wpcb['discipline_block_module']['descipline_block'] is not None:
+            print(dict(wpcb))
             try:
-                if wpcb['discipline_block_module']['descipline_block'][0]['academic_plan']['id'] == ap_obj.id:
+                is_included = False
+                for ap_blocks in wpcb['discipline_block_module']['descipline_block']:
+                    if ap_blocks['academic_plan']['id'] == ap_obj.id:
+                        is_included = True
+                        break
+                if is_included:
                     wpcb_pk = wpcb['id']
                     if wpcb['credit_units'] != None:
                         wpcb['credit_units'] = wpcb['credit_units'].replace(' ', '').replace('.0', '')

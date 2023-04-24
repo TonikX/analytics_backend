@@ -10,6 +10,7 @@ import {withStyles} from '@mui/styles';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
+import CircularProgress from '@mui/material/CircularProgress';
 
 import {CharacteristicProps,} from '../types';
 import {steps} from './constants';
@@ -53,11 +54,15 @@ import SimpleSelector from "../../../components/SimpleSelector";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "../../../components/TextField";
 import {StatusPoint} from "../../../components/StatusPoint";
+import Service from '../service';
+
+const service = new Service();
 
 class Characteristic extends React.Component<CharacteristicProps> {
   state = {
     activeStep: 0,
     addNewOP: false,
+    isFetching: false
   };
 
   componentDidMount() {
@@ -661,11 +666,41 @@ class Characteristic extends React.Component<CharacteristicProps> {
 
   sendToCheck = () => this.props.actions.sendToCheck()
 
+  handleSave = (dowloadLink:string) => () => {
+    this.setFetchingTrue();
+    const fileLink = dowloadLink;
+
+    let tempLink = document.createElement('a');
+
+    tempLink.href = fileLink;
+
+    tempLink.setAttribute('target', '_blank');
+
+    document.body.appendChild(tempLink);
+    tempLink.click();
+    document.body.removeChild(tempLink);
+
+    this.setFetchingFalse();
+  }
+
+  setFetchingTrue = () => {
+    this.setState({
+        isFetching: true
+    })
+  };
+
+  setFetchingFalse = () => {
+    this.setState({
+        isFetching: false
+    })
+  };
+
   render() {
     //@ts-ignore
     const {classes} = this.props;
     const {educationalProgramCharacteristic, canEdit, statusInfo} = this.props;
-    const {activeStep} = this.state;
+    const {activeStep, isFetching} = this.state;
+    const educationalProgramCharacteristicId = this.getEducationalProgramCharacteristicId();
     const names = get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.EDUCATION_PROGRAM, [])
       .reduce((items: any, item:any) => {
         if(!items.includes('"' + item.title + '"')) {
@@ -678,6 +713,16 @@ class Characteristic extends React.Component<CharacteristicProps> {
       <div className={classes.wrap}>
         <div className={classes.paperHeader}>
           <StatusPoint {...statusInfo} />
+          <div className={classes.dowloadFileButtonPosition}>
+            <Button onClick={this.handleSave(service.getDownloadFileGeneralCharacteristic(educationalProgramCharacteristicId))}>
+              Экспорт ОХ в word
+              {isFetching ? <CircularProgress size={20} style={{marginLeft: 10}} /> : <></>}
+            </Button>
+            <Button onClick={this.handleSave(service.getDownloadFileCompetenceMatrix(educationalProgramCharacteristicId))}>
+              Экспорт матрицы компетенций в Excel
+              {isFetching ? <CircularProgress size={20} style={{marginLeft: 10}} /> : <></>}
+            </Button>
+          </div>
           {canEdit ? (
             <Button
               variant="contained"
@@ -689,6 +734,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             </Button>
           ) : null}
         </div>
+        
         <Paper className={classes.root}>
           <Stepper activeStep={activeStep}
                    orientation="vertical"

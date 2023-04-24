@@ -40,20 +40,20 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
         },
       }
 
-      // return <>Текстовый редактор временно недоступен</>
-
     return (
       <div style={{position: 'relative'}}>
-        {readOnly ? <div style={{width: '100%', height: 'calc(100% - 30px)', position: 'absolute', zIndex: 1}} /> : null}
+        {/*{readOnly ? <div style={{width: '100%', height: 'calc(100% - 30px)', position: 'absolute', zIndex: 1}} /> : null}*/}
         <CKEditor
             config={config}
             editor={ClassicEditor}
             data={value}
-            onChange={onChange}
+            onChange={readOnly ? undefined : onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            // disabled={Boolean(readOnly)}
             onReady={(editor: any) => {
+              // editor.isReadOnly = true;
+              // editor.disabled = true;
+              // editor.isReadOnly = readOnly;
                 // CKEDITOR.plugins.addExternal( 'openlink', '/openlink/plugin.js');
                 // fix play video from Media Embed
                 // CKEDITOR.addCss('.cke_widget_wrapper iframe{z-index:9999;}');
@@ -66,6 +66,7 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
                 // });
             }}
             // style={style}
+            // disabled
         />
         <div style={{marginTop: '10px'}}>
           <Tooltip title={

@@ -85,6 +85,12 @@ def expertise_notificator(sender, instance, created, **kwargs):
             ExpertiseNotification.objects.create(expertise=instance, user=user,
                                                  message=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}')
 
+    if instance.expertise_status == 'AC':
+        read_notifications_array = [False, False, False, False, False, False, False, False]
+        wp_exp.read_notifications = str(read_notifications_array).replace('[', '').replace(']', '')
+        wp_exp.save()
+
+
     # isu_client_credentials_request('https://dev.disc.itmo.su/api/v1/disciplines/:disc_id?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(status=instance.expertise_status, wp_id=wp_exp.id))
 
     isu_client_credentials_request(

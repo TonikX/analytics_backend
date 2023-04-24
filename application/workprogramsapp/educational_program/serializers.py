@@ -7,12 +7,13 @@ from rest_framework.fields import BooleanField, SerializerMethodField
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, \
-    ProfessionalStandard
+    ProfessionalStandard, ImplementationAcademicPlan
 # Модели данных
 from workprogramsapp.models import GeneralizedLaborFunctions, KindsOfActivity, \
     EmployerRepresentative, WorkProgram, Competence, Zun, Indicator, WorkProgramInFieldOfStudy, ObjectsOfActivity
 from workprogramsapp.serializers import ImplementationAcademicPlanSerializer, IndicatorSerializer, \
-    WorkProgramInFieldOfStudySerializerForCb
+    WorkProgramInFieldOfStudySerializerForCb, AcademicPlanInImplementationSerializer, \
+    FieldOfStudyImplementationSerializer
 from .educational_standart.serializers import TasksForEducationalStandardSerializer, \
     EducationalStandardSingleObjectSerializer
 from .general_prof_competencies.models import GroupOfGeneralProfCompetencesInEducationalStandard
@@ -257,3 +258,14 @@ class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = "__all__"
+
+
+class ImplementationAcademicPlanShortSerializer(serializers.ModelSerializer):
+    academic_plan = AcademicPlanInImplementationSerializer()
+    field_of_study = FieldOfStudyImplementationSerializer(many=True)
+
+    # academic_plan = AcademicPlanSerializer()
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id', "title", "qualification", 'academic_plan', 'field_of_study', 'year']
