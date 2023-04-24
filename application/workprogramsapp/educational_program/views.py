@@ -45,7 +45,8 @@ from .process_modules_for_matrix import recursion_module_matrix
 
 from .serializers import ProfessionalStandardSerializer
 
-from workprogramsapp.serializers import ImplementationAcademicPlanSerializer, IndicatorSerializer
+from workprogramsapp.serializers import ImplementationAcademicPlanSerializer, IndicatorSerializer, \
+    WorkProgramInFieldOfStudySerializerForCb
 
 # --Работа с образовательной программой
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
@@ -557,3 +558,47 @@ def get_all_ap_with_competences_and_indicators(request, wp_id):
                                        "attainments": zun.attainments, "indicator": indicator,
                                    "items": items_array})
     return Response(ap_list_dict, status=200)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_all_competences_and_indicators_for_wp(request, wp_id):
+    competences = Competence.objects.filter(
+        indicator_in_competencse__zun__wp_in_fs__work_program__id=wp_id).distinct()
+    competences_dict = []
+    for competence in competences:
+        zuns = Zun.objects.filter(wp_in_fs__work_program__id=wp_id,
+                                  indicator_in_zun__competence__id=competence.id)
+        zuns_array = []
+        for zun in zuns:
+            try:
+                indicator = Indicator.objects.get(competence=competence.id,
+                                                  zun__id=zun.id)
+                indicator = IndicatorSerializer(indicator).data
+            except:
+                indicator = None
+            # indicators_array = []
+            # for indicator in indicators:
+            #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
+            items_array = []
+            items = Items.objects.filter(item_in_outcomes__item_in_wp__id=zun.id,
+                                         item_in_outcomes__item_in_wp__wp_in_fs__work_program__id=wp_id,
+                                         item_in_outcomes__item_in_wp__indicator_in_zun__competence__id=competence.id)
+            for item in items:
+                items_array.append({"id": item.id, "name": item.name})
+            # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
+            """queryset = ImplementationAcademicPlan.objects.filter(
+                academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)"""
+            modules = DisciplineBlockModule.objects.filter(
+                change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)
+            queryset = ImplementationAcademicPlan.get_all_imp_by_modules(modules=modules)
+            serializer = ImplementationAcademicPlanSerializer(queryset, many=True)
+            if queryset.exists():
+                zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
+                                   "attainments": zun.attainments, "indicator": indicator,
+                                   "items": items_array, "educational_program": serializer.data,
+                                   "wp_in_fs": WorkProgramInFieldOfStudySerializerForCb(
+                                       WorkProgramInFieldOfStudy.objects.get(zun_in_wp=zun.id)).data["id"]})
+        competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
+                                 "zuns": zuns_array})
+    return Response({"competences": competences_dict})

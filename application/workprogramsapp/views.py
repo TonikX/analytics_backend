@@ -714,7 +714,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         except:
 
             newdata.update({"rating": False})
-        competences = Competence.objects.filter(
+        """competences = Competence.objects.filter(
             indicator_in_competencse__zun__wp_in_fs__work_program__id=self.kwargs['pk']).distinct()
         competences_dict = []
         for competence in competences:
@@ -738,8 +738,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 for item in items:
                     items_array.append({"id": item.id, "name": item.name})
                 # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
-                """queryset = ImplementationAcademicPlan.objects.filter(
-                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)"""
+                #queryset = ImplementationAcademicPlan.objects.filter(
+                #    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)
                 modules = DisciplineBlockModule.objects.filter(
                     change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)
                 queryset = ImplementationAcademicPlan.get_all_imp_by_modules(modules=modules)
@@ -752,7 +752,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                                            WorkProgramInFieldOfStudy.objects.get(zun_in_wp=zun.id)).data["id"]})
             competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
                                      "zuns": zuns_array})
-        newdata.update({"competences": competences_dict})
+        newdata.update({"competences": competences_dict})"""
         newdata = OrderedDict(newdata)
         return Response(newdata, status=status.HTTP_200_OK)
 
