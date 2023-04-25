@@ -505,6 +505,11 @@ def gh_check(request, gh_id):
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_all_ap_with_competences_and_indicators(request, wp_id):
+    """
+
+    В GET-параметры можно передать ap_id - id объекта ImplementationAcademicPlan для фильтрации
+    """
+    ap_id = request.GET.get("ap_id")
     ap_list_dict = []
     competences = Competence.objects.filter(
         indicator_in_competencse__zun__wp_in_fs__work_program__id=wp_id).distinct()
@@ -528,6 +533,8 @@ def get_all_ap_with_competences_and_indicators(request, wp_id):
             modules = DisciplineBlockModule.objects.filter(
                 change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)
             queryset = ImplementationAcademicPlan.get_all_imp_by_modules(modules=modules).distinct()
+            if ap_id:
+                queryset=queryset.filter(pk=ap_id)
             for ap in queryset:
                 dict_with_ap = None
                 for ap_dict in ap_list_dict:
