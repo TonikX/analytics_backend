@@ -53,7 +53,10 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, pract
 
     const removeIndicator = (value: number) => {
         onDeleteZun(value);
-        dispatch(actions.deleteZun(value));
+        dispatch(actions.deleteZun({
+            practice_id: practiceId,
+            id: value,
+        }));
     };
 
     const addCompetence = (value: number, label: string) => {

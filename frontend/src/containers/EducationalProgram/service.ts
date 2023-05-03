@@ -243,7 +243,10 @@ class Service extends AnalyticsService{
     });
   }
 
-  deleteZUN(compentenceId: number){
+  deleteZUN(compentenceId: number, practice_id: number){
+    if (practice_id !== -1) {
+      return this.delete(`/api/zun/practice-many/${compentenceId}/`);
+    }
     return this.delete(`/api/zun/many_create/${compentenceId}/`);
   }
 

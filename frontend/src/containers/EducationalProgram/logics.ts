@@ -223,8 +223,9 @@ const deleteZun = createLogic({
     dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_ZUN}));
 
     const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
+    const {id, practice_id} = action.payload;
 
-    service.deleteZUN(action.payload)
+    service.deleteZUN(id, practice_id)
       .then(() => {
         dispatch(actions.fetchingSuccess(['Индикатор успешно удален']));
       })
