@@ -32,7 +32,7 @@ export const isUserInItemsEditorGroup = (groups: Array<string>) => {
 }
 
 export const isUserCanSeeProfessions = (groups: Array<string>) => {
-    return groups.some(group => PROFESSIONS_GROUP.indexOf(group) !== -1);
+    return groups.includes(ROLES_AND_PROFESSIONS_MASTER);
 }
 
 export const isUserCanSeeCharacteristic = (groups: Array<string>) => {
