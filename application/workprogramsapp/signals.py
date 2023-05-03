@@ -16,7 +16,8 @@ from workprogramsapp.notifications.models import ExpertiseNotification, Notifica
 
 def populate_models(sender, **kwargs):
     list_of_groups = ["rpd_developer", "education_plan_developer", "op_leader", "roles_and_professions_master",
-                      "student", "expertise_master", "academic_plan_developer", "external_user", "blockmodule_editor"]
+                      "student", "expertise_master", "academic_plan_developer", "external_user", "blockmodule_editor",
+                      "items_editor"]
     for group in list_of_groups:
         Group.objects.get_or_create(name=group)
 
@@ -83,6 +84,12 @@ def expertise_notificator(sender, instance, created, **kwargs):
         for user in users:
             ExpertiseNotification.objects.create(expertise=instance, user=user,
                                                  message=f'Экспертиза для {name_of_object} "{wp_exp.title}" поменяла свой статус на "{instance.get_expertise_status_display()}')
+
+    if instance.expertise_status == 'AC':
+        read_notifications_array = [False, False, False, False, False, False, False, False]
+        wp_exp.read_notifications = str(read_notifications_array).replace('[', '').replace(']', '')
+        wp_exp.save()
+
 
     # isu_client_credentials_request('https://dev.disc.itmo.su/api/v1/disciplines/:disc_id?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(status=instance.expertise_status, wp_id=wp_exp.id))
 
