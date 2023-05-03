@@ -42,3 +42,7 @@ export const isUserCanSeeCharacteristic = (groups: Array<string>) => {
 export const isUserCanSeeEducationalModules = (groups: Array<string>) => {
     return groups.some(group => group === BLOCK_MODULE_EDITOR);
 }
+
+export const isUserExpertiseMaster = (groups: Array<string>) => {
+    return groups.includes(EXPERTISE_MASTER);
+}
