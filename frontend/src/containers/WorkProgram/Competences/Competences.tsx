@@ -32,7 +32,7 @@ export default React.memo(() => {
   const dispatch = useDispatch()
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
   const [isOpenUpdateZunDialog, setIsOpenUpdateZunDialog] = useState<any>(false)
-  const [changeCompetence, setChangeCompetence] = useState('1')
+  const [tab, setTab] = useState('1')
   const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
 
   const competencesList1 = useSelector((state: rootState) => getApWithCompetencesAndIndicatorsToWp(state))
@@ -61,13 +61,13 @@ export default React.memo(() => {
   }
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setChangeCompetence(newValue);
+    setTab(newValue);
   };
 
   return (
     <>
     <Box sx={{ width: '100%', typography: 'body1' }}>
-      <TabContext value={changeCompetence}>
+      <TabContext value={tab}>
         <Box 
             sx={{ borderBottom: 1, borderColor: 'divider' }} 
             className={classes.workProgramButtonPanel}
@@ -183,10 +183,6 @@ export default React.memo(() => {
         </TabPanel>
 
         <TabPanel value="2" className={classes.workProgramTabPanel}>
-
-          <Typography className={classes.subTitle}>
-            Компетенции
-          </Typography>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -209,63 +205,73 @@ export default React.memo(() => {
             </TableHead>
             <TableBody>
               {competencesList1.map((syllabus: any) => {
-                  return syllabus.competences.map((competences: any, index: number) => {
-                    const addIndicatorButton = (
-                      <div className={classes.smallButton}
-                          onClick={() => {
-                            setIsOpenIndicatorDialog(true)
-                            setDialogCompetence({
-                              label: competences.name,
-                              value: competences.id,
-                            })
-                          }}
-                      >
-                        <AddIcon/> Добавить индикатор
-                      </div>)
+                return syllabus.competences.map((competence: any, index: number) => {
+                  const addIndicatorButton = (
+                    <div className={classes.smallButton}
+                        onClick={() => {
+                          setIsOpenIndicatorDialog(true)
+                          setDialogCompetence({
+                            label: competence.name,
+                            value: competence.id,
+                          })
+                        }}
+                    >
+                      <AddIcon/> Добавить индикатор
+                    </div>
+                  )
+                  const zuns = competence.zuns
 
-                      return (
-                        <TableRow key={syllabus.id}>
-                      {index === 0 ?
-                        <TableCell rowSpan={syllabus?.competences.length} className={classes.cell}>
+                  if (zuns.length === 0) {
+                    return (
+                      <TableRow>
+                        <TableCell className={classes.cell}>
                           {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
                         </TableCell>
-                        : <></>
+                        <TableCell className={classes.cell}>
+                          {competence?.number} {competence?.name}
+                          {addIndicatorButton}
+                        </TableCell>
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                      </TableRow>
+                    )
+                  }
+
+                  return zuns.map((zun: any, index: number) => (
+                    <TableRow>
+                      {index === 0 ?
+                        <>
+                          <TableCell rowSpan={zuns.length} className={classes.cell}>
+                            {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
+                          </TableCell>
+                          <TableCell rowSpan={zuns.length} className={classes.cell}>
+                            {competence?.number} {competence?.name}
+                            {addIndicatorButton}
+                          </TableCell>
+                        </>
+                        : null
                       }
                       <TableCell className={classes.cell}>
-                          {competences?.number} {competences?.name}
-                          {addIndicatorButton}
+                        {zun.indicator.number} {zun.indicator.name}
+                        <div className={classes.smallButton}
+                             onClick={() => deleteZun(zun.id)}
+                        >
+                          Удалить индикатор
+                        </div>
                       </TableCell>
-                      <TableCell className={classes.cell}>
-                        {competences.zuns.map((zuns: any) => (
-                          <div >
-                            {zuns.indicator.number} {zuns.indicator.name}
-                            <div className={classes.smallButton}
-                                onClick={() => deleteZun(zuns.id)}
-                            >
-                              Удалить индикатор
-                            </div>
-                          </div>
-                        ))}
+                      <TableCell>
+                        {zun.items?.[0]?.name}
                       </TableCell>
-                      <TableCell className={classes.cell}>
-                        {competences?.zuns.map((zuns: any) => (
-                          <div >
-                            {zuns?.items[0]?.name}
-                          </div>
-                        ))}
-                      </TableCell>
-                      <TableCell className={classes.cell}>
-                        {competences?.zuns.map((zun: any) => (
-                          <>
-                          {[zun?.knowledge, zun?.skills, zun?.attainments].filter(item => Boolean(item)).join(' / ')}
-                            <IconButton onClick={() => setIsOpenUpdateZunDialog(zun)}>
-                              <EditIcon />
-                            </IconButton>
-                          </>
-                        ))}
+                      <TableCell>
+                        {[zun?.knowledge, zun?.skills, zun?.attainments].filter(item => Boolean(item)).join(' / ')}
+                        <IconButton onClick={() => setIsOpenUpdateZunDialog(zun)}>
+                          <EditIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
-                      )})
+                  ))
+                })
               })}
             </TableBody>
           </Table>
