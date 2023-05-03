@@ -14,6 +14,8 @@ export const initialState: workProgramState = {
     [fields.WORK_PROGRAM_EVALUATION_TOOL]: {},
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOLS]: [],
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL]: {},
+    [fields.AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP]: [],
+    [fields.ALL_COMPETENCES_AND_INDICATORS_FOR_WP]: [],
     [fields.WORK_PROGRAM_RESULTS]: [],
     [fields.WORK_PROGRAM_COMMENTS]: [],
     [fields.DIALOGS]: {
@@ -44,6 +46,16 @@ const setWorkProgram = (state: workProgramState, {payload}: any): workProgramSta
 const setWorkProgramEvaluationTools = (state: workProgramState, {payload}: any): workProgramState => ({
     ...state,
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: payload
+});
+
+const setApWithCompetencesAndIndicatorsToWp = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    [fields.AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP]: payload
+});
+
+const setAllCompetencesAndIndicatorsForWp = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    [fields.ALL_COMPETENCES_AND_INDICATORS_FOR_WP]: payload
 });
 
 const setWorkProgramEvaluationTool = (state: workProgramState, {payload}: any): workProgramState => ({
@@ -100,6 +112,9 @@ export const reducer = createReducer(initialState, {
     [actions.closeDialog.type]: closeDialog,
 
     [actions.setComments.type]: setComments,
+
+    [actions.setApWithCompetencesAndIndicatorsToWp.type]: setApWithCompetencesAndIndicatorsToWp,
+    [actions.setAllCompetencesAndIndicatorsForWp.type]: setAllCompetencesAndIndicatorsForWp,
 
     [actions.setWorkProgramEvaluationTools.type]: setWorkProgramEvaluationTools,
     [actions.setWorkProgramEvaluationTool.type]: setWorkProgramEvaluationTool,

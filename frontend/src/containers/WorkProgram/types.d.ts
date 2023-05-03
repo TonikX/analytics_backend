@@ -68,6 +68,11 @@ export interface WorkProgramActions {
     getWorkProgramEvaluationTool: any;
     setWorkProgramEvaluationTool: any;
 
+    getAllCompetencesAndIndicatorsForWp: any;
+    getApWithCompetencesAndIndicatorsToWp: any;
+    setAllCompetencesAndIndicatorsForWp: any;
+    setApWithCompetencesAndIndicatorsToWp: any;
+
     deleteIntermediateCertification: any;
     addIntermediateCertification: any;
     changeIntermediateCertification: any;
@@ -88,6 +93,8 @@ export interface workProgramState {
     [fields.WORK_PROGRAM]: any;
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<EvaluationToolType>;
     [fields.WORK_PROGRAM_EVALUATION_TOOL]: EvaluationToolType|{};
+    [fields.AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP]: any;
+    [fields.ALL_COMPETENCES_AND_INDICATORS_FOR_WP]: any;
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL]: IntermediateCertificationType|{};
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOLS]: Array<IntermediateCertificationType>;
     [fields.WORK_PROGRAM_RESULTS]: Array<any>;

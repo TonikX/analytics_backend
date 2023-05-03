@@ -11,7 +11,7 @@ import {
     getWorkProgramId
 } from './getters';
 
-import {fetchingTypes, WorkProgramGeneralFields} from "./enum";
+import {fetchingTypes} from "./enum";
 
 import sectionLogics from './logics/sections.logics';
 import topicLogics from './logics/topics.logics';
@@ -89,6 +89,54 @@ const getWorkProgramEvaluationTools = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_WORK_PROGRAM_EVALUATION_TOOLS}));
+                return done();
+            });
+    }
+});
+
+const getApWithCompetencesAndIndicatorsToWp = createLogic({
+    type: workProgramActions.getApWithCompetencesAndIndicatorsToWp.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP}));
+
+        service.getApWithCompetencesAndIndicatorsToWp(workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.setApWithCompetencesAndIndicatorsToWp(res.data));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP}));
+                return done();
+            });
+    }
+});
+
+const getAllCompetencesAndIndicatorsForWp = createLogic({
+    type: workProgramActions.getAllCompetencesAndIndicatorsForWp.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState();
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_ALL_COMPETENCES_AND_INDICATORS_FOR_WP}));
+
+        service.getAllCompetencesAndIndicatorsForWp(workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.setAllCompetencesAndIndicatorsForWp(res.data.competences));
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_ALL_COMPETENCES_AND_INDICATORS_FOR_WP}));
                 return done();
             });
     }
@@ -280,6 +328,8 @@ export default [
     getWorkProgram,
     saveWorkProgram,
     getWorkProgramEvaluationTools,
+    getApWithCompetencesAndIndicatorsToWp,
+    getAllCompetencesAndIndicatorsForWp,
     cloneWorkProgram,
     sendToExpertise,
     returnWorkProgramToWork,
