@@ -88,6 +88,7 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
     queryset = ZunPractice.objects.all()
     serializer_class = ZunPracticeForManyCreateSerializer
     http_method_names = ['post', 'delete', 'patch']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
     def create(self, request, *args, **kwargs):
@@ -169,6 +170,8 @@ class ZunPracticeManyForAllGhViewSet(mixins.CreateModelMixin,
     queryset = ZunPractice.objects.all()
     serializer_class = ZunPracticeForManyCreateSerializer
     http_method_names = ['post', 'delete']
+    permission_classes = [IsRpdDeveloperOrReadOnly]
+
 
     def create(self, request, *args, **kwargs):
         """
