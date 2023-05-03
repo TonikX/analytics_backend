@@ -54,7 +54,7 @@ import {
     isUserCanSeeCharacteristic, isUserCanSeeEducationalModules,
     isUserCanSeeProfessions,
     isUserInExpertiseGroup,
-    isUserRpdDev
+    isUserInItemsEditorGroup
 } from "../../common/userRights";
 
 export const getMockMenu = (menuArr: Array<number>): Array<any> => {
@@ -317,7 +317,7 @@ export const getMockMenu = (menuArr: Array<number>): Array<any> => {
 }
 
 export default (groups: Array<string>) => {
-    const firstMenu = isUserRpdDev(groups) ?
+    const firstMenu = isUserInItemsEditorGroup(groups) ?
         [
             {
                 title: 'Предметные области',
@@ -450,9 +450,6 @@ export default (groups: Array<string>) => {
             icon: ProfessionsSkillsIcon,
             selectedIcon: ProfessionsSkillsSelectedIcon,
         },
-    ] : [];
-
-    const fifthMenu = [
         {
             title: 'Подбор дисциплин',
             link: appRouter.getSelectDisciplineRoute(),
@@ -471,7 +468,8 @@ export default (groups: Array<string>) => {
             icon: WorkProgramInDirectionIcon,
             selectedIcon: WorkProgramInDirectionSelectedIcon,
         }
-    ];
+    ] : [];
+
 
     const sixthMenu = [{
         title: 'Отчеты',
@@ -526,7 +524,6 @@ export default (groups: Array<string>) => {
         menu.push(fourthMenu);
     }
 
-    menu.push(fifthMenu);
     menu.push(sixthMenu);
 
     return menu;

@@ -21,7 +21,8 @@ const saveZUN = createLogic({
 
         service.saveZUN(action.payload, workProgramId)
             .then((res) => {
-                dispatch(workProgramActions.getWorkProgram());
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -44,7 +45,8 @@ const deleteZUN = createLogic({
 
         service.deleteZUN(action.payload)
             .then((res) => {
-                dispatch(workProgramActions.getWorkProgram());
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -65,7 +67,8 @@ const updateZUNFull = createLogic({
 
         service.updateZUNFull(action.payload)
             .then((res) => {
-                dispatch(workProgramActions.getWorkProgram());
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -86,7 +89,8 @@ const updateZUN = createLogic({
 
         service.updateZUN(action.payload, getWorkProgramId(getState()))
             .then((res) => {
-                dispatch(workProgramActions.getWorkProgram());
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {

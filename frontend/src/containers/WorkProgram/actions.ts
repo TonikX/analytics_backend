@@ -41,6 +41,11 @@ const getWorkProgramEvaluationTool = createAction('GET_WORK_PROGRAM_EVALUATION_T
 const setWorkProgramEvaluationTool = createAction('SET_WORK_PROGRAM_EVALUATION_TOOL');
 const setWorkProgramEvaluationTools = createAction('SET_WORK_PROGRAM_EVALUATION_TOOLS');
 
+const getApWithCompetencesAndIndicatorsToWp = createAction('GET_AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP');
+const getAllCompetencesAndIndicatorsForWp = createAction('GET_ALL_COMPETENCES_AND_INDICATORS_FOR_WP');
+const setApWithCompetencesAndIndicatorsToWp = createAction('SET_AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP');
+const setAllCompetencesAndIndicatorsForWp = createAction('SET_ALL_COMPETENCES_AND_INDICATORS_FOR_WP');
+
 const deleteEvaluationTool = createAction('WORK_PROGRAM_DELETE_EVALUATION_TOOL');
 const addEvaluationTool = createAction('WORK_PROGRAM_ADD_EVALUATION_TOOL');
 const changeEvaluationTool = createAction('WORK_PROGRAM_CHANGE_EVALUATION_TOOL');
@@ -110,6 +115,11 @@ const actions: WorkProgramActions = {
     setWorkProgramEvaluationTools,
     getWorkProgramEvaluationTool,
     setWorkProgramEvaluationTool,
+
+    getAllCompetencesAndIndicatorsForWp,
+    setAllCompetencesAndIndicatorsForWp,
+    getApWithCompetencesAndIndicatorsToWp,
+    setApWithCompetencesAndIndicatorsToWp,
 
     deleteEvaluationTool,
     addEvaluationTool,

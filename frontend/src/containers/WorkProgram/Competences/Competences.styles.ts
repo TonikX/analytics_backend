@@ -35,4 +35,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     alignItems: 'center'
   },
+  workProgramButtonPanel: {
+    display: 'flex'
+  },
+  workProgramTabPanel: {
+    padding: '24px 0 !important'
+  }
 }))
