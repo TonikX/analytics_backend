@@ -16,9 +16,9 @@ from rest_framework.views import APIView
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from workprogramsapp.isu_merge.academic_plan_headers import process_headers
-from workprogramsapp.isu_merge.academic_plan_update.academic_plan_excel_creator import AcademicPlanExcelCreator
-from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
-from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuService, IsuUser
+from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_excel_creator import AcademicPlanExcelCreator
+from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_processor import AcademicPlanUpdateProcessor
+from workprogramsapp.isu_merge.academic_plan_update_2023.isu_service import IsuService, IsuUser
 from workprogramsapp.isu_merge.filterset import HistoryFilter
 from workprogramsapp.isu_merge.post_to_isu.ap_to_isu import ap_isu_generate_dict
 from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import post_wp_to_isu, post_practice_to_isu, \

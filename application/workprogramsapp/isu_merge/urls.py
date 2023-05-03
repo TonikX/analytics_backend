@@ -14,6 +14,7 @@ urlpatterns = [
 
     # --Общая характеристика
     path('api/isu_v1/upload/csv/', FileUploadOldVersionAPIView.as_view()),
+    #path('api/isu_v2/academic-plans/update', UpdateAcademicPlansView.as_view()),
     path('api/isu_v2/academic-plans/update', UpdateAcademicPlansView.as_view()),
     path('api-servises/isu_changeparser', ChangeParser),
     path('api/isu_v2/academic-plans/excel', AcademicPlanUpdateExcelCreatorView.as_view()),
