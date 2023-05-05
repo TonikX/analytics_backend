@@ -101,8 +101,8 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     handleClose()
   }, [indicator, competence, results, plans, knowledge, skills, attainments])
 
-  const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0 || results.length === 0),
-    [indicator, competence, results, plans]
+  const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0),
+    [indicator, competence]
   )
 
   useEffect(() => {

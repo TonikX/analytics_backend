@@ -12,7 +12,7 @@ const getStateData = (state: rootState): workProgramState => get(state, GENERAL_
 export const getWorkProgramComments = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_COMMENTS, {});
 
 export const getWorkProgram = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM, {});
-export const getWorkProgramResults = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_RESULTS, []);
+export const getWorkProgramResults = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_RESULTS, []);
 export const getWorkProgramEvaluationToolsList = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOLS, []);
 export const getWorkProgramEvaluationTool = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOL, {});
 export const getApWithCompetencesAndIndicatorsToWp = (state: rootState) => get(getStateData(state), fields.AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP, {});
@@ -60,6 +60,7 @@ export const getAllSectionsForSelect = (state: rootState) => {
 };
 export const getResultsForSelect = (state: rootState) => {
     const allResults = getWorkProgramResults(state);
+    console.log(allResults)
     //@ts-ignore
     return allResults.map((result: any) => ({
         value: get(result, 'id'),

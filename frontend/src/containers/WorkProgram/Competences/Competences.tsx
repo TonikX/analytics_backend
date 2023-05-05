@@ -279,23 +279,21 @@ export default React.memo(() => {
         </TabPanel>
       </TabContext>
     </Box>
-
-      <IndicatorsDialog
-        isOpen={isOpenIndicatorDialog}
-        handleClose={handleCloseDialog}
-        defaultCompetence={dialogCompetence}
-        workProgramId={workProgramId}
-      />
-      {isOpenUpdateZunDialog ?
-        <UpdateZunDialog
-          isOpen
-          handleClose={() => setIsOpenUpdateZunDialog(false)}
-          zunId={isOpenUpdateZunDialog.id}
-          defaultAttainments={isOpenUpdateZunDialog?.attainments}
-          defaultSkills={isOpenUpdateZunDialog?.skills}
-          defaultKnowledge={isOpenUpdateZunDialog?.knowledge}
-        /> : null
-      }
-    </>
-  )
+    <IndicatorsDialog
+      isOpen={isOpenIndicatorDialog}
+      handleClose={handleCloseDialog}
+      defaultCompetence={dialogCompetence}
+      workProgramId={workProgramId}
+    />
+    {isOpenUpdateZunDialog ?
+      <UpdateZunDialog
+        isOpen
+        handleClose={() => setIsOpenUpdateZunDialog(false)}
+        zunId={isOpenUpdateZunDialog.id}
+        defaultAttainments={isOpenUpdateZunDialog?.attainments}
+        defaultSkills={isOpenUpdateZunDialog?.skills}
+        defaultKnowledge={isOpenUpdateZunDialog?.knowledge}
+      /> : null
+    }
+  </>)
 })
