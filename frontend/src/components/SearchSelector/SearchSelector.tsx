@@ -116,6 +116,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
                                disabled={disabled}
                                error={Boolean(errorMessage)}
                                helperText={errorMessage}
+                               autoComplete="off"
                     />
                     <AutoSizer style={{width: '100%'}}>
                         {({width}: any) => (
