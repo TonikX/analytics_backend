@@ -148,12 +148,21 @@ const SortableList = SortableContainer((props:any) => {
 
 
 const RenderBlockOfWP = (props:any) => {
+  const dispatch = useDispatch();
   //@ts-ignore
   const {classes} = props;
   const {detailPlan, blockOfWorkPrograms, level} = props
   const qualification = get(detailPlan, 'academic_plan_in_field_of_study[0].qualification', '');
   const maxSem = qualification === BACHELOR_QUALIFICATION ? 8 : 4;
 
+  const handleDownloadFile = (workProgramId: number) => () => {
+    dispatch(actions.openDownloadModal({
+      [DownloadFileModalFields.ACADEMIC_PLAN_ID]: detailPlan[EducationalPlanFields.ID],
+      [DownloadFileModalFields.ID]: workProgramId,
+    }));
+
+    dispatch(actions.getDirectionsDependedOnWorkProgram(workProgramId));
+  }
   return (
     <>
       {blockOfWorkPrograms?.map((blockOfWorkProgram: any) => {
@@ -253,19 +262,6 @@ const RenderBlockOfWP = (props:any) => {
       })}
     </>
   )
-}
-
-
-const handleDownloadFile = (workProgramId: number) => () => {
-  const detailPlan:any  = useSelector((state:any) => getEducationalPlanDetail(state));
-  const dispatch = useDispatch();
-
-  dispatch(actions.openDownloadModal({
-    [DownloadFileModalFields.ACADEMIC_PLAN_ID]: detailPlan[EducationalPlanFields.ID],
-    [DownloadFileModalFields.ID]: workProgramId,
-  }));
-
-  dispatch(actions.getDirectionsDependedOnWorkProgram(workProgramId));
 }
 
 const getStatus = (statusCode: string) => {

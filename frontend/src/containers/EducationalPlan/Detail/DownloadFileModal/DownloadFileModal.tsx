@@ -137,7 +137,7 @@ class DownloadFileModal extends React.PureComponent<DownloadFileModalProps> {
                 }}
             >
                 <DialogTitle> Скачать рабочую программу </DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <FormControl className={classes.selectorWrap}>
                         <InputLabel shrink id="section-label">
                             Направление *
