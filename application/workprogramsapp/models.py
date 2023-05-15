@@ -556,6 +556,14 @@ class Department(models.Model):
     mini_titile = models.CharField(max_length=512, verbose_name="Краткое название факультета", blank=True, null=True)
     dean = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Декан", blank=True,
                              null=True)
+    # Поля из сервиса расписаний
+    isu_id = models.IntegerField(verbose_name="id в ISU", blank=True, null=True)
+    service_id = models.IntegerField(verbose_name="id в апи-сервисе", blank=True, null=True)
+    title_service = models.CharField(max_length=512, verbose_name="Название факультета из сервиса расписаний",
+                                     blank=True, null=True)
+    activity_type = models.CharField(max_length=512, verbose_name="тип деятельности", blank=True, null=True)
+    version = models.IntegerField(verbose_name="Версия обновления", blank=True, null=True)
+    updated_at = models.DateTimeField(verbose_name="Дата обновления", blank=True, null=True)
 
     def __str__(self):
         return str(self.title)
