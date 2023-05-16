@@ -235,6 +235,24 @@ class ZunManyForAllGhViewSet(viewsets.ModelViewSet):
             serializer.save(wp_in_fs=wp_in_fs)
         return Response(status=status.HTTP_201_CREATED)
 
+    def update(self, request, *args, **kwargs):
+        for_all = request.data.get("for_all")
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if for_all:
+            wp = WorkProgram.objects.get(zuns_for_wp=instance.wp_in_fs)
+            Zun.objects.filter(wp_in_fs__work_program=wp, skills=instance.skills,
+                               attainments=instance.attainments,
+                               knowledge=instance.knowledge, indicator_in_zun__id=instance.indicator_in_zun.id).update(
+                skills=request.data["skills"], attainments=request.data["attainments"],
+                knowledge=request.data["knowledge"])
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        else:
+            return Response({"message": "failed", "details": serializer.errors})
+
 
 
 class CompetenceCreateView(generics.CreateAPIView):
