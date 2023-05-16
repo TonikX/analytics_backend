@@ -353,6 +353,7 @@ class WorkProgramService extends AnalyticsService{
             knowledge,
             skills,
             attainments,
+            for_all: true,
         });
     }
 

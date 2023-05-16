@@ -18,7 +18,7 @@ const saveZUN = createLogic({
         const workProgramId = getWorkProgramId(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
-
+        
         service.saveZUN(action.payload, workProgramId)
             .then((res) => {
                 dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
@@ -84,7 +84,7 @@ const updateZUN = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ZUN}));
-
+        
         service.updateZUN(action.payload, getWorkProgramId(getState()))
             .then((res) => {
                 dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
