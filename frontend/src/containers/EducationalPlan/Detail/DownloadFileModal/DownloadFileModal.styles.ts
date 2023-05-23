@@ -17,7 +17,11 @@ export default (theme: Theme) => createStyles({
     dialog: {
         padding: 20,
     },
+    dialogContent: {
+        padding: '10px 24px 20px 24px !important',
+    },
     selectorWrap: {
+        width: '100%',
         '& .MuiInputLabel-shrink': {
             transform: 'translate(14px, -6.5px) scale(0.75) !important',
         },

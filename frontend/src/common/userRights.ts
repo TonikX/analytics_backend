@@ -6,7 +6,7 @@ export const ROLES_AND_PROFESSIONS_MASTER = "roles_and_professions_master";
 
 export const OP_LEADER = "op_leader";
 export const OP_DEVELOPER = "op_developer";
-export const RPD_DEVELOPER = "rpd_developer";
+export const ITEMS_EDITOR = "items_editor";
 export const ACADEMIC_PLAN_DEVELOPER = "academic_plan_developer";
 export const EDUCATION_PLAN_DEVELOPER = "education_plan_developer";
 export const BLOCK_MODULE_EDITOR = "blockmodule_editor";
@@ -27,12 +27,12 @@ export const isUserInOpGroup = (groups: Array<string>) => {
     return groups.some(group => OP_GROUP.indexOf(group) !== -1);
 }
 
-export const isUserRpdDev = (groups: Array<string>) => {
-    return groups.some(group => group === RPD_DEVELOPER);
+export const isUserInItemsEditorGroup = (groups: Array<string>) => {
+    return groups.some(group => group === ITEMS_EDITOR);
 }
 
 export const isUserCanSeeProfessions = (groups: Array<string>) => {
-    return groups.some(group => PROFESSIONS_GROUP.indexOf(group) !== -1);
+    return groups.includes(ROLES_AND_PROFESSIONS_MASTER);
 }
 
 export const isUserCanSeeCharacteristic = (groups: Array<string>) => {
@@ -41,4 +41,8 @@ export const isUserCanSeeCharacteristic = (groups: Array<string>) => {
 
 export const isUserCanSeeEducationalModules = (groups: Array<string>) => {
     return groups.some(group => group === BLOCK_MODULE_EDITOR);
+}
+
+export const isUserExpertiseMaster = (groups: Array<string>) => {
+    return groups.includes(EXPERTISE_MASTER);
 }

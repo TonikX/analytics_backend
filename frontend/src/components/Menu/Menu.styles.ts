@@ -14,7 +14,7 @@ export default (theme: Theme) => createStyles({
     backgroundColor: '#f4f4f4'
   },
   menuList: {
-    padding: 0
+    paddingBottom: '80px !important',
   },
   menuItem: {
     // @ts-ignore

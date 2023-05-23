@@ -13,7 +13,8 @@ import Tooltip from "@mui/material/Tooltip/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
 interface IndicatorsProps {
-    workProgramId: number;
+    workProgramId?: number;
+    practiceId?: number;
     isOpen: boolean;
     defaultCompetence?: {
         value: number;
@@ -32,7 +33,7 @@ interface IndicatorsProps {
     onDeleteZun: (id: number) => void;
 }
 
-export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workProgramId, addedIndicators, onDeleteZun}: IndicatorsProps) => {
+export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, practiceId, workProgramId, addedIndicators, onDeleteZun}: IndicatorsProps) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [competence, setCompetence] = useState<{ value: number; label: string }>({value: 0, label: ''});
@@ -52,7 +53,10 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workP
 
     const removeIndicator = (value: number) => {
         onDeleteZun(value);
-        dispatch(actions.deleteZun(value));
+        dispatch(actions.deleteZun({
+            practice_id: practiceId,
+            id: value,
+        }));
     };
 
     const addCompetence = (value: number, label: string) => {
@@ -66,6 +70,7 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, workP
         dispatch(actions.saveZun({
             indicator: indicator.value,
             workprogram_id: workProgramId,
+            practice_id: practiceId,
             onlyCurrentGh: onlyCurrentGh,
         }));
         close()

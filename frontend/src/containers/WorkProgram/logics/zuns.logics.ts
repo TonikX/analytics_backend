@@ -18,10 +18,11 @@ const saveZUN = createLogic({
         const workProgramId = getWorkProgramId(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
-
+        
         service.saveZUN(action.payload, workProgramId)
             .then((res) => {
-                dispatch(workProgramActions.getWorkProgram());
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -38,13 +39,12 @@ const deleteZUN = createLogic({
     type: workProgramActions.deleteZUN.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const state = getState()
-
         dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_ZUN}));
 
         service.deleteZUN(action.payload)
             .then((res) => {
-                dispatch(workProgramActions.getWorkProgram());
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -65,7 +65,8 @@ const updateZUNFull = createLogic({
 
         service.updateZUNFull(action.payload)
             .then((res) => {
-                dispatch(workProgramActions.getWorkProgram());
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -83,10 +84,11 @@ const updateZUN = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ZUN}));
-
+        
         service.updateZUN(action.payload, getWorkProgramId(getState()))
             .then((res) => {
-                dispatch(workProgramActions.getWorkProgram());
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {

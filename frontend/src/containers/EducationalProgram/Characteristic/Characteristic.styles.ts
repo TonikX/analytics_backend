@@ -124,5 +124,8 @@ export default (theme: Theme) => createStyles({
   },
   checkbox: {
     marginRight: '5px'
+  },
+  dowloadFileButtonPosition: {
+    marginLeft: 'auto'
   }
 });

@@ -28,6 +28,14 @@ class WorkProgramService extends AnalyticsService{
         return this.get(`/api/toolsinworkprogram/${id}`);
     }
 
+    getApWithCompetencesAndIndicatorsToWp(id: string){
+        return this.get(`/api/competence/get_all_ap_with_competences_and_indicators_to_wp/${id}`);
+    }
+
+    getAllCompetencesAndIndicatorsForWp(id: string){
+        return this.get(`/api/competence/get_all_competences_and_indicators_for_wp/${id}`);
+    }
+
     cloneWorkProgram(id: string){
         const formData = new FormData();
 
@@ -345,6 +353,7 @@ class WorkProgramService extends AnalyticsService{
             knowledge,
             skills,
             attainments,
+            for_all: true,
         });
     }
 

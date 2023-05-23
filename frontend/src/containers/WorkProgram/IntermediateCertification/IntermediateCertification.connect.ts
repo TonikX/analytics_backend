@@ -10,11 +10,13 @@ import {
 } from '../getters';
 
 import {rootState} from "../../../store/reducers";
+import {isUserExpertiseMaster, isUserInExpertiseGroup} from "../../../common/userRights";
+import {getUserGroups} from "../../../layout/getters";
 
 const mapStateToProps = (state:rootState) => {
     return {
         intermediateCertificationList: getWorkProgramIntermediateCertificationList(state),
-        isCanEdit: isCanEdit(state),
+        isCanEdit: isCanEdit(state) || isUserExpertiseMaster(getUserGroups(state)),
         inChangeBlock: getWorkProgramField(state, 'work_program_in_change_block'),
         hasCourseProject: getWorkProgramField(state, 'have_course_project'),
         hasDiffPass: getWorkProgramField(state, 'have_course_project'),

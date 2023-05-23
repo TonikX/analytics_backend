@@ -12,9 +12,11 @@ const getStateData = (state: rootState): workProgramState => get(state, GENERAL_
 export const getWorkProgramComments = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_COMMENTS, {});
 
 export const getWorkProgram = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM, {});
-export const getWorkProgramResults = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_RESULTS, []);
+export const getWorkProgramResults = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_RESULTS, []);
 export const getWorkProgramEvaluationToolsList = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOLS, []);
 export const getWorkProgramEvaluationTool = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_EVALUATION_TOOL, {});
+export const getApWithCompetencesAndIndicatorsToWp = (state: rootState) => get(getStateData(state), fields.AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP, {});
+export const getAllCompetencesAndIndicatorsForWp = (state: rootState) => get(getStateData(state), fields.ALL_COMPETENCES_AND_INDICATORS_FOR_WP, {});
 export const getWorkProgramCompetences = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_COMPETENCES, []);
 export const getWorkProgramIntermediateCertificationList = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOLS, []);
 export const getWorkProgramIntermediateCertification = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL, {});
@@ -58,6 +60,7 @@ export const getAllSectionsForSelect = (state: rootState) => {
 };
 export const getResultsForSelect = (state: rootState) => {
     const allResults = getWorkProgramResults(state);
+    console.log(allResults)
     //@ts-ignore
     return allResults.map((result: any) => ({
         value: get(result, 'id'),

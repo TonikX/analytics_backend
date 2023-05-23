@@ -1,6 +1,7 @@
 import AnalyticsService from "../../service/analytics-service";
 import {SortingType, Types} from "../../components/SortingButton/types";
 import {CompetenceTableType, EducationProgramFields} from "./enum";
+import appConfigService from '../../config/app-config-service';
 import {
   CharacteristicAddCompetenceActionType,
   CharacteristicAddIndicatorActionType, CharacteristicAddProfessionalStandardActionType,
@@ -29,6 +30,14 @@ class Service extends AnalyticsService{
     return this.post(`/api/gh_check/${id}`, {
       new_status: 'on_work'
     });
+  }
+
+  getDownloadFileGeneralCharacteristic(id: number){
+    return (`${appConfigService.getApiBasePath()}/api/export/general_characteristic/${id}`);
+  }
+
+  getDownloadFileCompetenceMatrix(id: number){
+    return (`${appConfigService.getApiBasePath()}/api/export/competence_matrix/${id}`);
   }
 
   deleteEducationProgram(id: number){
@@ -194,28 +203,50 @@ class Service extends AnalyticsService{
     return this.get(`/api/general_characteristic/competence_matrix/${id}`);
   }
 
-  saveZUN({indicator, workprogram_id, gh_id}: any){
-    return this.post(`/api/zun/many_create/`,{
-      workprogram_id,
+  saveZUN({indicator, workprogram_id, gh_id, practice_id}: any){
+    const payload = {
       gh_id,
       zun: {
         indicator_in_zun: indicator,
         items: []
       }
+    }
+    if (practice_id !== -1) {
+      return this.post(`/api/zun/practice-many/`,{
+        practice_id: practice_id,
+        ...payload
+      });
+    }
+    return this.post(`/api/zun/many_create/`,{
+      workprogram_id,
+      ...payload
     });
   }
 
-  saveZunAllGh({indicator, workprogram_id}: any){
-    return this.post(`/api/zun/many_create_for_all_gh/`,{
-      workprogram_id,
+  saveZunAllGh({indicator, workprogram_id, practice_id}: any){
+    const payload = {
       zun: {
         indicator_in_zun: indicator,
         items: []
       }
+    }
+    if (practice_id !== -1) {
+      return this.post(`/api/zun/practice-many_create_for_all_gh/`,{
+        practice_id: practice_id,
+        ...payload,
+      });
+    }
+
+    return this.post(`/api/zun/many_create_for_all_gh/`,{
+      workprogram_id,
+      ...payload,
     });
   }
 
-  deleteZUN(compentenceId: number){
+  deleteZUN(compentenceId: number, practice_id: number){
+    if (practice_id !== -1) {
+      return this.delete(`/api/zun/practice-many/${compentenceId}/`);
+    }
     return this.delete(`/api/zun/many_create/${compentenceId}/`);
   }
 
