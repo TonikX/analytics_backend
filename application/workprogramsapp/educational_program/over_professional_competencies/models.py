@@ -31,7 +31,7 @@ class OverProfCompetencesInGroupOfGeneralCharacteristic(models.Model):
                                     related_name="competence_in_group_of_over_prof_competences")
     # labor_functions = models.CharField(max_length=512, verbose_name="Трудовая функция")
     competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Компетенция",
-                                   blank=True, null=True)
+                                   blank=True, null=True, related_name="group_over")
 
     def __str__(self):
         return str(self.group_of_pk) + '/' + str(self.competence)
