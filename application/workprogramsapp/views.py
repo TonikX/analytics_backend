@@ -39,7 +39,7 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
-    WorkProgramArchiveUpdateSerializer, EvaluationToolListSerializer
+    WorkProgramArchiveUpdateSerializer, EvaluationToolListSerializer, CompetenceWithStandardSerializer
 from .serializers import BibliographicReferenceSerializer, \
     WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
@@ -262,12 +262,60 @@ class CompetenceCreateView(generics.CreateAPIView):
 
 
 class CompetencesListView(generics.ListAPIView):
-    serializer_class = CompetenceSerializer
+    serializer_class = CompetenceWithStandardSerializer
     queryset = Competence.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     filterset_class = CompetenceFilter
     search_fields = ['name', 'number']
     permission_classes = [IsRpdDeveloperOrReadOnly]
+    ap_id = openapi.Parameter('ap_id', openapi.IN_QUERY,
+                              description="выводит все компетенции по айди Impmplementation-a входящие в связанный ОХ",
+                              type=openapi.TYPE_INTEGER)
+
+    in_standard = openapi.Parameter('ap_id', openapi.IN_QUERY,
+                              description="Выводит все ПК или компетенции, входящие в Образовательные стандарты",
+                              type=openapi.TYPE_BOOLEAN)
+
+    @swagger_auto_schema(
+        manual_parameters=[ap_id, in_standard])
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        ap_id = self.request.GET.get('ap_id')
+        in_standard = self.request.GET.get('in_standard')
+
+        if ap_id:
+            key_filter = Q(
+                group_key__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__id=ap_id)
+            over_filter = Q(
+                group_over__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__id=ap_id)
+            general_filter = Q(
+                group_general__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__id=ap_id)
+            pk_filter = Q(pk_group__group_of_pk__general_characteristic__educational_program__id=ap_id)
+            queryset = queryset.filter(key_filter | over_filter | general_filter | pk_filter)
+
+        if in_standard:
+            key_filter = Q(group_key__group_of_pk__educational_standard__isnull=False)
+            over_filter = Q(group_over__group_of_pk__educational_standard__isnull=False)
+            general_filter = Q(
+                group_general__group_of_pk__educational_standard__isnull=False)
+            pk_filter = Q(number__icontains="ПК")
+            queryset = queryset.filter(key_filter | over_filter | general_filter | pk_filter)
+
+        queryset = queryset.filter().distinct()
+        queryset = self.filter_queryset(queryset.all())
+
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class CompetenceListView(APIView):
