@@ -461,6 +461,7 @@ class GeneralCharacteristics(models.Model):
     format_choices = (
         ('online', 'online'),
         ('offline', 'offline'),
+        ('mixed', 'mixed'),
     )
 
     check_status = (

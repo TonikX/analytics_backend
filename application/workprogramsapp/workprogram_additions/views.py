@@ -230,6 +230,10 @@ def WorkProgramShortInfo(request, isu_id):
         work_program = WorkProgram.objects.get(discipline_code=str(isu_id))
         newdata.update(
             {"title": work_program.title})
+        newdata.update(
+            {"moodle": work_program.moodle_link})
+        newdata.update(
+            {"description": work_program.description})
         try:
             status = Expertise.objects.get(work_program=work_program).get_expertise_status_display()
             if not status:

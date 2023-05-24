@@ -272,7 +272,7 @@ class CompetencesListView(generics.ListAPIView):
                               description="выводит все компетенции по айди Impmplementation-a входящие в связанный ОХ",
                               type=openapi.TYPE_INTEGER)
 
-    in_standard = openapi.Parameter('ap_id', openapi.IN_QUERY,
+    in_standard = openapi.Parameter('in_standard', openapi.IN_QUERY,
                               description="Выводит все ПК или компетенции, входящие в Образовательные стандарты",
                               type=openapi.TYPE_BOOLEAN)
 
