@@ -52,6 +52,7 @@ export default class BaseService {
     };
 
     createInstance = (): AxiosInstance => {
+        console.log('AppConfig.getApiBasePath()', AppConfig.getApiBasePath())
         const _axios = axiosLib.create({
             baseURL: AppConfig.getApiBasePath(),
         });

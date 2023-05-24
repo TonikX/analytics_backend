@@ -37,7 +37,7 @@ class PkCompetencesInGroupOfGeneralCharacteristic(models.Model):
                                     related_name="competence_in_group_of_pk_competences")
     # general_characteristic = models.ForeignKey('GeneralCharacteristics', on_delete=models.CASCADE, verbose_name="Общая характеристика", blank=True, null=True)
     competence = models.ForeignKey('Competence', on_delete=models.CASCADE, verbose_name="Компетенция", blank=True,
-                                   null=True)
+                                   null=True, related_name='pk_group')
     professional_standard = models.ForeignKey('ProfessionalStandard', on_delete=models.SET_NULL,
                                               verbose_name="Профессиональный стандарт", blank=True, null=True)
     generalized_labor_functions = models.ManyToManyField('GeneralizedLaborFunctions',

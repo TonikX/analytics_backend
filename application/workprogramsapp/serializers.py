@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Group
+from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.fields import BooleanField
 
@@ -9,6 +10,7 @@ from onlinecourse.serializers import OnlineCourseSerializer
 # from gia_practice_app.GIA.serializers import GIASerializer, GIAPrimitiveSerializer
 # from gia_practice_app.Practice.serializers import PracticeSerializer, PracticePrimitiveSerializer
 from .disciplineblockmodules.ze_module_logic import recursion_module, recursion_module_per_ze
+from .educational_program.educational_standart.models import EducationalStandard
 from .expertise.common_serializers import ShortExpertiseSerializer
 from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
@@ -55,6 +57,30 @@ class IndicatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Indicator
         fields = ['id', 'number', 'name', 'competence']
+
+
+class EducationalStandardListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EducationalStandard
+        fields = ['id', 'name', 'standard_date']
+
+
+class CompetenceWithStandardSerializer(serializers.ModelSerializer):
+    """Сериализатор Компетенций"""
+    educational_standard = serializers.SerializerMethodField()
+
+    def get_educational_standard(self, instance):
+        key_filter = Q(group_of_key_competences__competence_in_group_of_key_competences__competence=instance)
+        over_filter = Q(
+            group_of_over_prof_competences__competence_in_group_of_over_prof_competences__competence=instance)
+        general_filter = Q(
+            group_of_general_prof_competences__competence_in_group_of_general_prof_competences__competence=instance)
+        return EducationalStandardListSerializer(
+            instance=EducationalStandard.objects.filter(key_filter | over_filter | general_filter).distinct(), many=True).data
+
+    class Meta:
+        model = Competence
+        fields = ['id', 'number', 'name', 'educational_standard']
 
 
 class CompetenceSerializer(serializers.ModelSerializer):

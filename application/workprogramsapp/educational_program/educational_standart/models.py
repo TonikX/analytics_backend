@@ -34,7 +34,7 @@ class EducationalStandard(models.Model):
     """
     name = models.CharField(max_length=512, verbose_name="Наименование образовательного стандарта")
     standard_date = models.PositiveIntegerField(
-        default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True,
+        default=current_year(), blank=True, null=True,
         verbose_name="Дата образовательного стандарта")
 
     def __str__(self):
