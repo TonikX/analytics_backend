@@ -29,7 +29,13 @@ import SearchSelector from "../../../components/SearchSelector";
 import {FirstStepProps} from './types';
 import {WorkProgramGeneralFields} from "../enum";
 import {FULL_DATE_FORMAT, getUserFullName} from "../../../common/utils";
-import {languageObject, specializationObject, languageArray, implementationFormats} from "../constants";
+import {
+  languageObject,
+  specializationObject,
+  languageArray,
+  implementationFormats,
+  implementationFormatsObject
+} from "../constants";
 import {UserFields} from "../../../layout/enum";
 
 import connect from './FirstStep.connect';
@@ -388,6 +394,10 @@ class FirstStep extends React.Component<FirstStepProps> {
             реализации:</b> {languageObject[state[WorkProgramGeneralFields.LANGUAGE]]} </Typography>
           }
 
+          {!isCanEdit && state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT] &&
+              <Typography className={classes.textItem}><b>Формат
+                реализации:</b> {implementationFormatsObject[state[WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]]} </Typography>
+          }
 
           {!isCanEdit &&
           <>

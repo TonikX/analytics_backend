@@ -575,13 +575,14 @@ class Characteristic extends React.Component<CharacteristicProps> {
             metaList={[
               {value: 'online', label: 'Онлайн'},
               {value: 'offline', label: 'Офлайн'},
+              {value: 'mixed', label: 'Смешанный'},
             ]}
             wrapClass={classes.formatRealizationWrapSelector}
             disabled={!canEdit}
           />
           {this.renderRealizationTypeSelect()}
           <br/>
-          {this.renderTypeOP()}
+          {/*this.renderTypeOP()*/}
           <br/>
 
           <Typography>
@@ -734,7 +735,7 @@ class Characteristic extends React.Component<CharacteristicProps> {
             </Button>
           ) : null}
         </div>
-        
+
         <Paper className={classes.root}>
           <Stepper activeStep={activeStep}
                    orientation="vertical"

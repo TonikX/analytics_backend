@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import get from 'lodash/get'
+import {Link} from 'react-router-dom'
 
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -19,6 +20,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 
 import { rootState } from '../../../store/reducers'
+import {appRouter} from "../../../service/router-service";
 
 import actions from '../actions'
 import {getApWithCompetencesAndIndicatorsToWp, getAllCompetencesAndIndicatorsForWp, getWorkProgramId} from '../getters'
@@ -68,8 +70,8 @@ export default React.memo(() => {
     <>
     <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={tab}>
-        <Box 
-            sx={{ borderBottom: 1, borderColor: 'divider' }} 
+        <Box
+            sx={{ borderBottom: 1, borderColor: 'divider' }}
             className={classes.workProgramButtonPanel}
         >
           <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -99,7 +101,7 @@ export default React.memo(() => {
                   Результаты
                 </TableCell>
                 <TableCell className={classes.header}>
-                  Учебный план
+                  Образовательная программа / Направление подготовки
                 </TableCell>
                 <TableCell className={classes.header}>
                   ЗУН
@@ -163,7 +165,10 @@ export default React.memo(() => {
                       {get(zun, 'educational_program', []).map((educationalProgram: any) =>
                           get(educationalProgram, 'field_of_study', []).map((fieldOfStudy: any) => (
                             <div key={fieldOfStudy.id}>
-                              {get(fieldOfStudy, 'number', '')} {get(fieldOfStudy, 'title', '')}
+                              <Link to={appRouter.getPlanDetailLink(educationalProgram.academic_plan.id)} target="_blank">
+                                {get(fieldOfStudy, 'number', '')} {get(fieldOfStudy, 'title', '')}
+                                /
+                                {educationalProgram.title}</Link>
                             </div>
                           ))
                       )}
@@ -187,7 +192,7 @@ export default React.memo(() => {
             <TableHead>
               <TableRow>
                 <TableCell className={classes.header}>
-                  Учебный план
+                  Образовательная программа / Направление подготовки
                 </TableCell>
                 <TableCell className={classes.header}>
                   Компетенция
@@ -225,7 +230,11 @@ export default React.memo(() => {
                     return (
                       <TableRow>
                         <TableCell className={classes.cell}>
-                          {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
+                          <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
+                            {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
+                            /
+                            {syllabus?.title}
+                          </Link>
                         </TableCell>
                         <TableCell className={classes.cell}>
                           {competence?.number} {competence?.name}
@@ -243,7 +252,11 @@ export default React.memo(() => {
                       {index === 0 ?
                         <>
                           <TableCell rowSpan={zuns.length} className={classes.cell}>
-                            {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
+                            <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
+                              {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
+                              /
+                              {syllabus?.title}
+                            </Link>
                           </TableCell>
                           <TableCell rowSpan={zuns.length} className={classes.cell}>
                             {competence?.number} {competence?.name}

@@ -50,6 +50,11 @@ export const implementationFormats = [
     },
 ];
 
+export const implementationFormatsObject = {
+    [ImplementationFormatsEnum.ONLINE]: 'Онлайн',
+    [ImplementationFormatsEnum.MIXED]: 'Смешанный',
+    [ImplementationFormatsEnum.OFFLINE]: 'Оффлайн'
+}
 
 const ENGLISH = 'en';
 const RUSSIAN = 'ru';
