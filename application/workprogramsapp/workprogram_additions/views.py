@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 # Права доступа
+from gia_practice_app.GIA.models import GIA
+from gia_practice_app.Practice.models import Practice
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit
 # Сериализаторы
@@ -239,6 +241,50 @@ def WorkProgramShortInfo(request, isu_id):
         newdata.update({"wp_url": f"https://op.itmo.ru/work-program/{work_program.id}"})
         return Response(newdata)
     except WorkProgram.DoesNotExist:
+        raise Http404
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def PracticeShortInfo(request, isu_id):
+    newdata = {}
+
+    try:
+        practice = Practice.objects.get(discipline_code=isu_id)
+        newdata.update(
+            {"title": practice.title})
+        try:
+            status = Expertise.objects.get(practice=practice).get_expertise_status_display()
+            if not status:
+                status = "В работе"
+            newdata.update(
+                {"expertise_status": status})
+        except Expertise.DoesNotExist:
+            newdata.update({"expertise_status": "В работе"})
+        newdata.update({"wp_url": f"https://op.itmo.ru/practice/{practice.id}"})
+        return Response(newdata)
+    except Practice.DoesNotExist:
+        raise Http404
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def GIAShortInfo(request, isu_id):
+    newdata = {}
+
+    try:
+        gia = GIA.objects.get(discipline_code=isu_id)
+        newdata.update(
+            {"title": gia.title})
+        try:
+            status = Expertise.objects.get(gia=gia).get_expertise_status_display()
+            if not status:
+                status = "В работе"
+            newdata.update(
+                {"expertise_status": status})
+        except Expertise.DoesNotExist:
+            newdata.update({"expertise_status": "В работе"})
+        newdata.update({"wp_url": f"https://op.itmo.ru/gia/{gia.id}"})
+        return Response(newdata)
+    except Practice.DoesNotExist:
         raise Http404
 
 
