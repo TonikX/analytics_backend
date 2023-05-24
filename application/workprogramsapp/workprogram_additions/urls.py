@@ -3,7 +3,8 @@ from django.urls.conf import path
 from rest_framework.routers import DefaultRouter
 
 from .views import AdditionalMaterialSet, StructuralUnitSet, UserStructuralUnitSet, CompetencesSet, \
-    ChangeSemesterInEvaluationsCorrect, WorkProgramShortInfo, WorkProgramItemsPrerequisitesView
+    ChangeSemesterInEvaluationsCorrect, WorkProgramShortInfo, WorkProgramItemsPrerequisitesView, PracticeShortInfo, \
+    GIAShortInfo
 
 router = DefaultRouter()
 router.register(r'api/general_ch/additional_material_in_topic_of_rpd',
@@ -20,6 +21,8 @@ urlpatterns = [
 
     path('api/workprogram/make_evaluation_tools_correct', ChangeSemesterInEvaluationsCorrect),
     path('api/workprogram/isu/<int:isu_id>', WorkProgramShortInfo),
+    path('api/practice/isu/<int:isu_id>', PracticeShortInfo),
+    path('api/gia/isu/<int:isu_id>', GIAShortInfo),
     path('api/workprogram/items_isu/<int:isu_id>', WorkProgramItemsPrerequisitesView.as_view()),
 
 
