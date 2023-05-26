@@ -38,6 +38,7 @@ export const getAllCount = (state: rootState) => get(getStateData(state), fields
 export const getCurrentPage = (state: rootState) => get(getStateData(state), fields.CURRENT_PAGE, 1);
 export const getSearchQuery = (state: rootState) => get(getStateData(state), fields.SEARCH_QUERY, '');
 export const getSearchCodeQuery = (state: rootState) => get(getStateData(state), fields.SEARCH_CODE, '');
+export const getFilterOnlyWithStandard = (state: rootState) => get(getStateData(state), fields.FILTER_ONLY_WITH_STANDARD, false);
 
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');

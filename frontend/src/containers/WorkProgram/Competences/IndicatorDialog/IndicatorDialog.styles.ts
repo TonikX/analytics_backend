@@ -28,6 +28,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
       whiteSpace: 'initial !important'
     }
   },
+  onlyWithStandardSwitcher: {
+    marginBottom: '20px',
+  },
   info: {
     marginTop: '10px',
     cursor: 'pointer',

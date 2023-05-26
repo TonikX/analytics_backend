@@ -12,8 +12,12 @@ import ResultsSelector from '../../Results/ResultsSeletor'
 import PlanSelector from '../../../EducationalPlan/WorkProgramPlansSelector'
 import { useStyles } from './IndicatorDialog.styles'
 import actions from '../../actions'
+import competenceActions from '../../../Competences/actions'
 import {useDispatch} from 'react-redux'
 import Tooltip from "@mui/material/Tooltip/Tooltip";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 interface IndicatorsProps {
   workProgramId: number;
@@ -105,6 +109,11 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     [indicator, competence]
   )
 
+  const changeFilterOnlyWithStandard = (e:any) => {
+    dispatch(competenceActions.changeFilterOnlyWithStandard(e.target.checked))
+    dispatch(competenceActions.getCompetences())
+  }
+
   useEffect(() => {
     setIndicator({value: 0, label: ''})
   }, [competence])
@@ -131,6 +140,9 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       }}
     >
       <DialogTitle className={classes.title}> {isEditMode ? 'Редактирование' : 'Добавление'} индикатора ко всем связным ОХ</DialogTitle>
+      <FormGroup className={classes.onlyWithStandardSwitcher}>
+        <FormControlLabel onChange={changeFilterOnlyWithStandard} control={<Switch />} label="Вывести только компетенции, входящие в образовательные стандарт" />
+      </FormGroup>
       <CompetenceSelector
         onChange={addCompetence}
         value={competence.value}
