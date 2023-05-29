@@ -4,11 +4,11 @@ import {SortingType, Types} from "../../components/SortingButton/types";
 import {IndicatorsFields} from "../Indicators/enum";
 
 class CompetenceService extends AnalyticsService{
-    getCompetences(currentPage: number, searchQuery: string, codeQuery:string, sortingField: string, sortingMode: SortingType, competenceType: string, filterOnlyWithStandard: boolean){
+    getCompetences(currentPage: number, searchQuery: string, codeQuery:string, sortingField: string, sortingMode: SortingType, competenceType: string, filterOnlyWithStandard: boolean, filterAcademicPlan: number | undefined){
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';
         const type = competenceType ? `&type=${competenceType}` : ''
 
-        return this.get(`/api/competences?page=${currentPage}&search=${searchQuery}&number=${codeQuery}&ordering=${sortingSymbol}${sortingField}${type}&in_standard=${filterOnlyWithStandard}`);
+        return this.get(`/api/competences?page=${currentPage}&search=${searchQuery}&number=${codeQuery}&ordering=${sortingSymbol}${sortingField}${type}&in_standard=${filterOnlyWithStandard}${filterAcademicPlan ? `&ap_id=${filterAcademicPlan}` : ''}`);
     }
 
     deleteCompetence(id: number){

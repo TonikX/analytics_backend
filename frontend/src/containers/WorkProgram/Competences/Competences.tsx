@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import get from 'lodash/get'
 import {Link} from 'react-router-dom'
+import classNames from "classnames";
 
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
-import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add'
@@ -94,7 +94,7 @@ export default React.memo(() => {
                 <TableCell className={classes.header}>
                   Компетенция
                 </TableCell>
-                <TableCell className={classes.header}>
+                <TableCell className={classNames(classes.header, classes.bigCell)}>
                   Индикатор
                 </TableCell>
                 <TableCell className={classes.header}>
@@ -103,7 +103,7 @@ export default React.memo(() => {
                 <TableCell className={classes.header}>
                   Образовательная программа / Направление подготовки
                 </TableCell>
-                <TableCell className={classes.header}>
+                <TableCell className={classNames(classes.header, classes.bigCell)}>
                   ЗУН
                 </TableCell>
               </TableRow>
@@ -197,13 +197,13 @@ export default React.memo(() => {
                 <TableCell className={classes.header}>
                   Компетенция
                 </TableCell>
-                <TableCell className={classes.header}>
+                <TableCell className={classNames(classes.header, classes.bigCell)}>
                   Индикатор
                 </TableCell>
                 <TableCell className={classes.header}>
                   Результаты
                 </TableCell>
-                <TableCell className={classes.header}>
+                <TableCell className={classNames(classes.header, classes.bigCell)}>
                   ЗУН
                 </TableCell>
               </TableRow>

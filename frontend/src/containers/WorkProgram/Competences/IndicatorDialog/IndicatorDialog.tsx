@@ -13,11 +13,15 @@ import PlanSelector from '../../../EducationalPlan/WorkProgramPlansSelector'
 import { useStyles } from './IndicatorDialog.styles'
 import actions from '../../actions'
 import competenceActions from '../../../Competences/actions'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
+import {rootState} from "../../../../store/reducers";
+import {getApWithCompetencesAndIndicatorsToWp} from "../../getters";
+import {getFilterAcademicPlan} from "../../../Competences/getters";
 
 interface IndicatorsProps {
   workProgramId: number;
@@ -114,6 +118,23 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     dispatch(competenceActions.getCompetences())
   }
 
+  const filterAcademicPlan = useSelector((state: rootState) => getFilterAcademicPlan(state))
+
+  const changeFilterAcademicPlan = (planId: number) => {
+    dispatch(competenceActions.changeFilterAcademicPlan(planId))
+    dispatch(competenceActions.getCompetences())
+  }
+
+  const competencesList1 = useSelector((state: rootState) => getApWithCompetencesAndIndicatorsToWp(state))
+  const epForSelect = competencesList1.map((plan:any) => {
+    return (
+        {
+          value: plan.id,
+          label: plan.title,
+        }
+    )
+  })
+
   useEffect(() => {
     setIndicator({value: 0, label: ''})
   }, [competence])
@@ -143,6 +164,12 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       <FormGroup className={classes.onlyWithStandardSwitcher}>
         <FormControlLabel onChange={changeFilterOnlyWithStandard} control={<Switch />} label="Вывести только компетенции, входящие в образовательные стандарт" />
       </FormGroup>
+      <SimpleSelector label="Вывести только компетенции, связанные с общей характеристикой указанной ОХ"
+                      value={filterAcademicPlan}
+                      onChange={changeFilterAcademicPlan}
+                      metaList={epForSelect}
+                      wrapClass={classes.selectorWrap}
+      />
       <CompetenceSelector
         onChange={addCompetence}
         value={competence.value}

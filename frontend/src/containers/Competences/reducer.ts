@@ -16,6 +16,7 @@ export const initialState: competenceState = {
     [fields.SEARCH_QUERY]: '',
     [fields.SEARCH_CODE]: '',
     [fields.FILTER_ONLY_WITH_STANDARD]: false,
+    [fields.FILTER_ACADEMIC_PLAN]: undefined,
     [fields.INDICATORS]: [],
     [fields.COMPETENCE]: {},
     [fields.COMPETENCE_LIST]: [],
@@ -53,6 +54,11 @@ const changeCodeQuery = (state: competenceState, {payload}: any): competenceStat
 const changeFilterOnlyWithStandard = (state: competenceState, {payload}: any): competenceState => ({
     ...state,
     [fields.FILTER_ONLY_WITH_STANDARD]: payload,
+});
+
+const changeFilterAcademicPlan = (state: competenceState, {payload}: any): competenceState => ({
+    ...state,
+    [fields.FILTER_ACADEMIC_PLAN]: payload,
 });
 
 const changeCurrentPage = (state: competenceState, {payload}: any): competenceState => ({
@@ -98,6 +104,7 @@ export const reducer = createReducer(initialState, {
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCodeQuery.type]: changeCodeQuery,
     [actions.changeFilterOnlyWithStandard.type]: changeFilterOnlyWithStandard,
+    [actions.changeFilterAcademicPlan.type]: changeFilterAcademicPlan,
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,
     [actions.changeSorting.type]: changeSorting,

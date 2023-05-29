@@ -13,7 +13,8 @@ import {
   getSortingField,
   getSortingMode,
   getSearchCodeQuery,
-  getFilterOnlyWithStandard
+  getFilterOnlyWithStandard,
+  getFilterAcademicPlan
 } from "./getters";
 import {IndicatorsFields} from "../Indicators/enum";
 
@@ -33,10 +34,11 @@ const getCompetences = createLogic({
     const sortingField = getSortingField(state);
     const sortingMode = getSortingMode(state);
     const filterOnlyStandard = getFilterOnlyWithStandard(state);
+    const filterAcademicPlan = getFilterAcademicPlan(state);
 
     dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COMPETENCES}));
 
-    service.getCompetences(currentPage, searchQuery, codeQuery, sortingField, sortingMode, competenceType, filterOnlyStandard)
+    service.getCompetences(currentPage, searchQuery, codeQuery, sortingField, sortingMode, competenceType, filterOnlyStandard, filterAcademicPlan)
       .then((res) => {
         const competences = get(res, 'data.results', []);
         const allPages = Math.ceil(get(res, 'data.count', 0));

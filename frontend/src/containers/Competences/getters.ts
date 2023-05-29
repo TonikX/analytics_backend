@@ -39,7 +39,7 @@ export const getCurrentPage = (state: rootState) => get(getStateData(state), fie
 export const getSearchQuery = (state: rootState) => get(getStateData(state), fields.SEARCH_QUERY, '');
 export const getSearchCodeQuery = (state: rootState) => get(getStateData(state), fields.SEARCH_CODE, '');
 export const getFilterOnlyWithStandard = (state: rootState) => get(getStateData(state), fields.FILTER_ONLY_WITH_STANDARD, false);
-
+export const getFilterAcademicPlan = (state: rootState) => get(getStateData(state), fields.FILTER_ACADEMIC_PLAN, undefined);
 export const getSorting = (state: rootState) => get(getStateData(state), fields.SORTING, {});
 export const getSortingField = (state: rootState) => get(getSorting(state), fields.SORTING_FIELD, '');
 export const getSortingMode = (state: rootState): SortingType => get(getSorting(state), fields.SORTING_MODE, Types.ASC);

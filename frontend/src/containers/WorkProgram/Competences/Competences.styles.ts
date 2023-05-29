@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginTop: '10px'
   },
   cell: {
-    width: '25%'
+    width: '10%',
   },
   header: {
     background: `${theme.palette.primary.main} !important`,
@@ -39,6 +39,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex'
   },
   workProgramTabPanel: {
-    padding: '24px 0 !important'
+    padding: '24px 0 !important',
+  },
+  bigCell: {
+    width: '35%',
   }
 }))
