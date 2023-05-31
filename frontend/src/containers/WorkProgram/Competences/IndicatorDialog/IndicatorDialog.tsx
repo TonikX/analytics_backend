@@ -20,7 +20,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
 import {rootState} from "../../../../store/reducers";
-import {getApWithCompetencesAndIndicatorsToWp} from "../../getters";
+import {getWorkProgramField} from "../../getters";
 import {getFilterAcademicPlan} from "../../../Competences/getters";
 
 interface IndicatorsProps {
@@ -125,15 +125,25 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     dispatch(competenceActions.getCompetences())
   }
 
-  const competencesList1 = useSelector((state: rootState) => getApWithCompetencesAndIndicatorsToWp(state))
-  const epForSelect = competencesList1.map((plan:any) => {
-    return (
+  const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
+
+  const epForSelect = epList && epList.reduce((plans:any, currentPlan:any) => {
+    const academicPlan = currentPlan?.discipline_block_module?.descipline_block[0]?.academic_plan;
+    if (academicPlan === undefined) {
+      return plans;
+    }
+
+    return ([
+          ...plans,
         {
-          value: plan.id,
-          label: plan.title,
+          value: academicPlan?.id,
+          label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
+                 `,
         }
-    )
-  })
+      ])
+  }, [])
 
   useEffect(() => {
     setIndicator({value: 0, label: ''})
