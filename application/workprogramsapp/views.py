@@ -302,7 +302,7 @@ class CompetencesListView(generics.ListAPIView):
             over_filter = Q(group_over__group_of_pk__educational_standard__isnull=False)
             general_filter = Q(
                 group_general__group_of_pk__educational_standard__isnull=False)
-            pk_filter = Q(number__icontains="ПК")
+            # pk_filter = Q(number__icontains="ПК")
             queryset = queryset.filter(key_filter | over_filter | general_filter | pk_filter)
 
         queryset = queryset.filter().distinct()

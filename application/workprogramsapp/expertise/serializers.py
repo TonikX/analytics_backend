@@ -119,7 +119,7 @@ class ExpertiseSerializer(serializers.ModelSerializer):
                                                                                                      read_only=True)
         self.fields['practice'] = PracticeShortForExpertiseSerializerWithStructUnitWithEditors(many=False,
                                                                                                read_only=True)
-        self.fields['GIA'] = GIAShortForExpertiseSerializerWithStructUnitWithEditors(many=False,
+        self.fields['giaq'] = GIAShortForExpertiseSerializerWithStructUnitWithEditors(many=False,
                                                                                      read_only=True)
         self.fields['experts'] = serializers.SerializerMethodField()
         self.fields['expertse_users_in_rpd'] = UserExpertiseForExpertiseSerializer(many=True, read_only=True)
