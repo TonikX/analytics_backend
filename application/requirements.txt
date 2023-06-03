@@ -29,7 +29,7 @@ django-summernote==0.8.11.4
 django-super-deduper==0.1.4
 django-tables2==2.2.1
 django-templated-mail==1.1.1
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 djangorestframework-jsonapi==3.0.0
 djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==4.6.0
