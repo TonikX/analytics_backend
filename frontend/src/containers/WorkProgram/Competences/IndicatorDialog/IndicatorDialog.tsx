@@ -49,6 +49,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
   const [skills, changeSkills] = useState('')
   const [attainments, changeAttainments] = useState('')
 
+  const [saveForPlans, setSaveForPlans] = useState(false)
   const addIndicator = (value: number, label: string) => {
     setIndicator({
       value,
@@ -109,13 +110,28 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     handleClose()
   }, [indicator, competence, results, plans, knowledge, skills, attainments])
 
-  const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0),
-    [indicator, competence]
-  )
+  const saveZunForThisEP = useCallback(() => {
+    dispatch(actions.saveZUNforThisEP({
+      indicator: indicator.value,
+      results: results.map(item => item.value),
+      plans: plans.map(item => item.value),
+      knowledge,
+      skills,
+      attainments,
+    }))
+    handleClose()
+  }, [indicator, competence, results, plans, knowledge, skills, attainments])
+
+  const disableButton = useMemo(() => (
+      (saveForPlans ? plans.length === 0 : false) || indicator.value === 0 || competence.value === 0
+  ),[plans, saveForPlans, indicator, competence])
 
   const changeFilterOnlyWithStandard = (e:any) => {
     dispatch(competenceActions.changeFilterOnlyWithStandard(e.target.checked))
     dispatch(competenceActions.getCompetences())
+  }
+  const changeSaveForPlans = (e:any) => {
+    setSaveForPlans(e.target.checked)
   }
 
   const filterAcademicPlan = useSelector((state: rootState) => getFilterAcademicPlan(state))
@@ -171,7 +187,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       }}
     >
       <DialogTitle className={classes.title}> {isEditMode ? 'Редактирование' : 'Добавление'} индикатора ко всем связным ОХ</DialogTitle>
-      <FormGroup className={classes.onlyWithStandardSwitcher}>
+      <FormGroup className={classes.switcher}>
         <FormControlLabel onChange={changeFilterOnlyWithStandard} control={<Switch />} label="Вывести только компетенции, входящие в образовательные стандарт" />
       </FormGroup>
       <SimpleSelector label="Вывести только компетенции, связанные с общей характеристикой указанной ОХ"
@@ -207,18 +223,25 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
           <Chip key={`result-${result.value}`} className={classes.chip} onDelete={() => removeResult(result.value)} label={result.label} />
         ))}
       </div>
-      {/*<PlanSelector*/}
-      {/*  label="Учебный план и образовательная программа"*/}
-      {/*  onChange={addPlan}*/}
-      {/*  valueLabel=""*/}
-      {/*  value={0}*/}
-      {/*  workProgramId={workProgramId}*/}
-      {/*/>*/}
-      {/*<div className={classes.chipsList}>*/}
-      {/*  {plans.map(plan => (*/}
-      {/*    <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />*/}
-      {/*  ))}*/}
-      {/*</div>*/}
+      <FormGroup className={classes.switcher}>
+        <FormControlLabel onChange={changeSaveForPlans} control={<Switch />} label="Сохранить для конкретных УП" />
+      </FormGroup>
+      {saveForPlans ? (
+        <>
+          <PlanSelector
+              label="Учебный план и образовательная программа"
+              onChange={addPlan}
+              valueLabel=""
+              value={0}
+              workProgramId={workProgramId}
+          />
+          <div className={classes.chipsList}>
+            {plans.map(plan => (
+                <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />
+            ))}
+          </div>
+        </>
+      ) : null}
       <TextField
         label="Знания"
         onChange={(e) => changeKnowledge(e.currentTarget.value)}
@@ -245,7 +268,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
                   variant="text">
             Отмена
           </Button>
-          <Button onClick={saveZun}
+          <Button onClick={saveForPlans ? saveZunForThisEP : saveZun}
                   variant="contained"
                   disabled={disableButton}
                   color="primary">
