@@ -227,12 +227,34 @@ class ZunManyForAllGhViewSet(viewsets.ModelViewSet):
               "items": []
                 }
             }
+
+        OR
+            {
+            "workprogram_id": 1 - ссылка на РПД
+            "zun": [
+            {
+              "indicator_in_zun": 85,
+              "items": []
+            },
+            {
+              "indicator_in_zun": 85,
+              "items": []
+            }
+                ]
         """
         wp_in_fss = WorkProgramInFieldOfStudy.objects.filter(work_program__id=int(request.data.get('workprogram_id'))).distinct()
         for wp_in_fs in wp_in_fss:
-            serializer = self.get_serializer(data=request.data['zun'])
-            serializer.is_valid(raise_exception=True)
-            serializer.save(wp_in_fs=wp_in_fs)
+            zun_obj=request.data['zun']
+            print(type(zun_obj))
+            if type(zun_obj) is list:
+                for zun in zun_obj:
+                    serializer = self.get_serializer(data=zun)
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save(wp_in_fs=wp_in_fs)
+            else:
+                serializer = self.get_serializer(data=request.data['zun'])
+                serializer.is_valid(raise_exception=True)
+                serializer.save(wp_in_fs=wp_in_fs)
         return Response(status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
