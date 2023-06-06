@@ -6,3 +6,5 @@ def discipline_block_module_object_relations_updater(discipline_block_module_obj
     for module in DisciplineBlockModuleInIsu.objects.filter(module=discipline_block_module_object):
         print('_____________________________-')
         print(module)
+        pri
+wqq
