@@ -168,9 +168,10 @@ class ZunManyViewSet(viewsets.ModelViewSet):
                 }
             }
         """
-        aps = AcademicPlan.objects.filter(
-            academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=int(
-                request.data.get('gh_id')))
+        if request.data.get('iap_id') is not None:
+            aps = AcademicPlan.objects.filter(academic_plan_in_field_of_study__id = int(request.data.get('iap_id')))
+        else:
+            aps = AcademicPlan.objects.filter(academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=int(request.data.get('gh_id')))
         wp_in_fss = WorkProgramInFieldOfStudy.objects.filter(
             Q(work_program__id=int(request.data.get('workprogram_id')),
               work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__in=aps) |
