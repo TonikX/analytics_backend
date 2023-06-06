@@ -195,9 +195,17 @@ class ZunManyViewSet(viewsets.ModelViewSet):
               work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps)
         ).distinct()
         for wp_in_fs in wp_in_fss:
-            serializer = self.get_serializer(data=request.data['zun'])
-            serializer.is_valid(raise_exception=True)
-            serializer.save(wp_in_fs=wp_in_fs)
+            zun_obj = request.data['zun']
+            print(type(zun_obj))
+            if type(zun_obj) is list:
+                for zun in zun_obj:
+                    serializer = self.get_serializer(data=zun)
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save(wp_in_fs=wp_in_fs)
+            else:
+                serializer = self.get_serializer(data=request.data['zun'])
+                serializer.is_valid(raise_exception=True)
+                serializer.save(wp_in_fs=wp_in_fs)
         return Response(status=status.HTTP_201_CREATED)
 
 
