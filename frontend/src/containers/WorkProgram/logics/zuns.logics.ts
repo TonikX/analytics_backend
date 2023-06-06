@@ -18,8 +18,33 @@ const saveZUN = createLogic({
         const workProgramId = getWorkProgramId(state);
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
-        
+
         service.saveZUN(action.payload, workProgramId)
+            .then((res) => {
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN}));
+                return done();
+            });
+    }
+});
+
+const saveZUNforThisEP = createLogic({
+    type: workProgramActions.saveZUNforThisEP.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const state = getState()
+        const workProgramId = getWorkProgramId(state);
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN_FOR_THIS_EP}));
+
+        service.saveZUNforThisEP(action.payload, workProgramId)
             .then((res) => {
                 dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
                 dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
@@ -84,7 +109,7 @@ const updateZUN = createLogic({
     latest: true,
     process({getState, action}: any, dispatch, done) {
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ZUN}));
-        
+
         service.updateZUN(action.payload, getWorkProgramId(getState()))
             .then((res) => {
                 dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
@@ -106,4 +131,5 @@ export default [
     deleteZUN,
     updateZUNFull,
     updateZUN,
+    saveZUNforThisEP
 ];

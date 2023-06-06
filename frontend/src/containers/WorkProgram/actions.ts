@@ -72,10 +72,13 @@ const deleteZUN = createAction('WORK_PROGRAM_DELETE_ZUN');
 const updateZUN = createAction('WORK_PROGRAM_UPDATE_ZUN');
 const updateZUNFull = createAction('WORK_PROGRAM_UPDATE_ZUN_FULL');
 
+const saveZUNforThisEP = createAction('WORK_PROGRAM_SAVE_ZUN_THIS_EP');
+
 const pageDown = createAction('WORK_PROGRAM_PAGE_DOWN');
 
 const actions: WorkProgramActions = {
     saveZUN,
+    saveZUNforThisEP,
     deleteZUN,
     updateZUNFull,
     updateZUN,

@@ -19,6 +19,7 @@ export interface WorkProgramActions {
     pageDown: any;
 
     saveZUN: any;
+    saveZUNforThisEP: any;
     deleteZUN: any;
     updateZUNFull: any;
     updateZUN: any;

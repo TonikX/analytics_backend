@@ -27,7 +27,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   chipsList: {
     display: 'flex',
     marginTop: '10px',
-    marginBottom: '30px',
+    marginBottom: '10px',
     flexWrap: 'wrap'
   },
   chip: {
@@ -37,7 +37,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
       whiteSpace: 'initial !important'
     }
   },
-  onlyWithStandardSwitcher: {
+  switcher: {
     marginBottom: '20px',
   },
   info: {
