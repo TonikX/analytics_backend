@@ -44,7 +44,7 @@ class EducationalStandardsService extends AnalyticsService {
         formData.append(EducationalStandardFields.TITLE, EducationalStandard[EducationalStandardFields.TITLE]);
         formData.append(EducationalStandardFields.YEAR, EducationalStandard[EducationalStandardFields.YEAR]);
 
-        return this.put(`/api/educational_standarts/update/${id}`, formData);
+        return this.patch(`/api/educational_standarts/update/${id}`, formData);
     }
 
     educationalStandardSaveCompetence({groupId, type, competenceId}: EducationalStandardAddCompetenceActionType){
