@@ -350,7 +350,7 @@ class WorkProgramService extends AnalyticsService{
     saveZUNforThisEP({indicator, plans, results, knowledge, skills, attainments}: any, wpId: any){
         return this.post(`/api/zun/many_create/`,{
             workprogram_id: wpId,
-            wpa_in_fss: plans,
+            iap_id: plans,
             zun: {
                 indicator_in_zun: indicator,
                 items: results,

@@ -82,16 +82,19 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
   }, [results])
 
   const addPlan = useCallback((value: number, label: string) => {
-    if (plans.find(item => item.value === value)) return
-    if (value) {
-      setPlans([
-        ...plans,
-        {
-          value,
-          label
-        }
-      ])
-    }
+    setPlans([{
+      value, label
+    }])
+    // if (plans.find(item => item.value === value)) return
+    // if (value) {
+    //   setPlans([
+    //     ...plans,
+    //     {
+    //       value,
+    //       label
+    //     }
+    //   ])
+    // }
   }, [plans])
 
   const removePlan = useCallback((value: number) => {
@@ -114,7 +117,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     dispatch(actions.saveZUNforThisEP({
       indicator: indicator.value,
       results: results.map(item => item.value),
-      plans: plans.map(item => item.value),
+      plans: plans[0].value,
       knowledge,
       skills,
       attainments,
@@ -224,22 +227,23 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
         ))}
       </div>
       <FormGroup className={classes.switcher}>
-        <FormControlLabel onChange={changeSaveForPlans} control={<Switch />} label="Сохранить для конкретных УП" />
+        <FormControlLabel onChange={changeSaveForPlans} control={<Switch />} label="Сохранить для конкретного УП" />
       </FormGroup>
       {saveForPlans ? (
         <>
           <PlanSelector
               label="Учебный план и образовательная программа"
               onChange={addPlan}
-              valueLabel=""
-              value={0}
+              valueLabel={plans[0]?.label}
+              value={plans[0]?.value}
               workProgramId={workProgramId}
+              className={classes.marginBottom30}
           />
-          <div className={classes.chipsList}>
-            {plans.map(plan => (
-                <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />
-            ))}
-          </div>
+          {/*<div className={classes.chipsList}>*/}
+          {/*  {plans.map(plan => (*/}
+          {/*      <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />*/}
+          {/*  ))}*/}
+          {/*</div>*/}
         </>
       ) : null}
       <TextField
