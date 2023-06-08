@@ -17,6 +17,7 @@ from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from workprogramsapp.isu_merge.academic_plan_headers import process_headers
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_excel_creator import AcademicPlanExcelCreator
+from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_updater import process_modules
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_processor import AcademicPlanUpdateProcessor
 from workprogramsapp.isu_merge.academic_plan_update_2023.isu_service import IsuService, IsuUser
 from workprogramsapp.isu_merge.filterset import HistoryFilter
@@ -963,3 +964,18 @@ class SendGIAToISU(APIView):
         else:
             status_response = 500
             return Response(data={"error": "error when creating gia"}, status=status_response)
+
+
+class UpdateModulesRelationships(APIView):
+
+    def get(self, request):
+        isu_service = IsuService(
+            IsuUser(
+                settings.ISU["ISU_CLIENT_ID"],
+                settings.ISU["ISU_CLIENT_SECRET"]
+            )
+        )
+        modules = isu_service.get_modules()
+        modules_updated = process_modules(modules)
+
+        return Response(data={"plans_created"}, status=200)
