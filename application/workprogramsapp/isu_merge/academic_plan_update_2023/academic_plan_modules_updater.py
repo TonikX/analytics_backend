@@ -20,19 +20,28 @@ def process_modules(modules: list):
         if DisciplineBlockModuleInIsu.objects.filter(isu_id=isu_module['id'],
                                                      isu_father_id=isu_module['parent_id']).exists():
             print('--- Link information available')
+            updated_module = DisciplineBlockModuleInIsu.objects.filter(isu_id=isu_module['id'],
+                                                                       isu_father_id=isu_module['parent_id']). \
+                first().module
+            print('--- updated_module', updated_module)
         else:
+
+            new_module = DisciplineBlockModule.objects.create(name=isu_module['name'])
             isu_module_in_db = DisciplineBlockModuleInIsu.objects.create(
                 isu_id=isu_module['id'],
                 isu_father_id=isu_module['parent_id'],
-                )
-            new_module = DisciplineBlockModule.create(name=isu_module['name'])
-            print(DisciplineBlockModuleInIsu.objects.filter(isu_id=isu_module['parent_id']).first())
+                module=new_module
+            )
             if DisciplineBlockModuleInIsu.objects.filter(isu_id=isu_module['parent_id']).exists():
-                father_module = DisciplineBlockModuleInIsu.objects.filter(isu_id=isu_module['parent_id']).\
+                isu_father_module = DisciplineBlockModuleInIsu.objects.filter(isu_id=isu_module['parent_id']). \
                     first()
-                father_module.childs.add(new_module)
+                isu_father_module.module.childs.add(new_module)
                 print('--- Trying to USE a child')
             else:
-                father_module = DisciplineBlockModuleInIsu.objects.create(isu_id=isu_module['parent_id'])
-                father_module.childs.add(new_module)
+                new_father_module = DisciplineBlockModule.objects.create()
+                new_father_module.childs.add(new_module)
+                isu_father_module = DisciplineBlockModuleInIsu.objects.create(isu_id=isu_module['parent_id'], module=new_father_module)
                 print('--- Trying to create a child')
+            updated_module = new_module
+
+        # ToDo: Далее работает с updated_module.

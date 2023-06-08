@@ -794,7 +794,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return ('ид: ' + str(self.id) + str(self.name) + '/ Блок:' + str(self.descipline_block))
+        return 'ID: ' + str(self.name) + '/ Name:' + str(self.name)
 
     def clone_module(module_id):
         module = DisciplineBlockModule.objects.get(pk=module_id)
@@ -1439,7 +1439,8 @@ class DisciplineBlockModuleInIsu(models.Model):
     module = models.ForeignKey(DisciplineBlockModule, on_delete=models.CASCADE, related_name="isu_module")
     isu_id = models.IntegerField(verbose_name="ИСУ ид модуля")
     isu_father_id = models.IntegerField(verbose_name="ИСУ ид родителя", blank=True, null=True)
-    academic_plan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, related_name="module_isu_in_plan")
+    academic_plan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, related_name="module_isu_in_plan",
+                                      blank=True, null=True)
 
 
 class IsuObjectsSendLogger(models.Model):
