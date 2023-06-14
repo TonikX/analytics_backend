@@ -20,7 +20,7 @@ import {parseInt} from "lodash";
 export const getValidationErrors = (state: rootState): string[] => {
 
     const rules = [
-        addPlanError,
+        // addPlanError,
         addAuthorsErrors,
         addDescriptionErrors,
         addSectionErrors,
