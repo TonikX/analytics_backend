@@ -168,7 +168,7 @@ export default React.memo(() => {
                               <Link to={appRouter.getPlanDetailLink(educationalProgram.academic_plan.id)} target="_blank">
                                 {get(fieldOfStudy, 'number', '')} {get(fieldOfStudy, 'title', '')}
                                 /
-                                {educationalProgram.title}</Link>
+                                {educationalProgram.title} ({educationalProgram?.year})</Link>
                             </div>
                           ))
                       )}
@@ -255,7 +255,8 @@ export default React.memo(() => {
                             <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
                               {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
                               /
-                              {syllabus?.title}
+                              {syllabus?.title} ({syllabus?.year})
+
                             </Link>
                           </TableCell>
                           <TableCell rowSpan={zuns.length} className={classes.cell}>
