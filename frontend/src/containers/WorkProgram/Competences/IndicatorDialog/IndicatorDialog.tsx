@@ -250,7 +250,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
         Нажимая кнопку "Сохранить", Вы сохраняете ЗУН в рпд с привязкой к каждому УП, с которым связана РПД (Если ЗУН пустой или имеет такое же содержание, как данный). Если Вы не хотите добавлять ЗУН для всех связных УП, Вам необходимо нажать селектор "Сохранить для конкретного УП" и выбрать нужную УП.
       </Typography>
 
-      <FormGroup className={classes.switcher}>
+      <FormGroup className={saveForPlans ? classes.switcher : undefined}>
         <FormControlLabel onChange={changeSaveForPlans} control={<Switch />} label="Сохранить для конкретного УП" />
       </FormGroup>
       {saveForPlans ? (
@@ -261,7 +261,6 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
                 valueLabel={plans[0]?.label}
                 value={plans[0]?.value}
                 workProgramId={workProgramId}
-                className={classes.marginBottom30}
             />
             {/*<div className={classes.chipsList}>*/}
             {/*  {plans.map(plan => (*/}
