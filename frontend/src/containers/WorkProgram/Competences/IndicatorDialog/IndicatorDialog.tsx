@@ -22,6 +22,7 @@ import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector
 import {rootState} from "../../../../store/reducers";
 import {getWorkProgramField} from "../../getters";
 import {getFilterAcademicPlan} from "../../../Competences/getters";
+import Typography from "@mui/material/Typography";
 
 interface IndicatorsProps {
   workProgramId: number;
@@ -226,26 +227,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
           <Chip key={`result-${result.value}`} className={classes.chip} onDelete={() => removeResult(result.value)} label={result.label} />
         ))}
       </div>
-      <FormGroup className={classes.switcher}>
-        <FormControlLabel onChange={changeSaveForPlans} control={<Switch />} label="Сохранить для конкретного УП" />
-      </FormGroup>
-      {saveForPlans ? (
-        <>
-          <PlanSelector
-              label="Учебный план и образовательная программа"
-              onChange={addPlan}
-              valueLabel={plans[0]?.label}
-              value={plans[0]?.value}
-              workProgramId={workProgramId}
-              className={classes.marginBottom30}
-          />
-          {/*<div className={classes.chipsList}>*/}
-          {/*  {plans.map(plan => (*/}
-          {/*      <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />*/}
-          {/*  ))}*/}
-          {/*</div>*/}
-        </>
-      ) : null}
+
       <TextField
         label="Знания"
         onChange={(e) => changeKnowledge(e.currentTarget.value)}
@@ -263,6 +245,31 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
         onChange={(e) => changeAttainments(e.currentTarget.value)}
         variant="outlined"
       />
+
+      <Typography className={classes.indicatorDialiogInfoMassage}>
+        Нажимая кнопку "Сохранить", Вы сохраняете ЗУН в рпд с привязкой к каждому УП, с которым связана РПД (Если ЗУН пустой или имеет такое же содержание, как данный). Если Вы не хотите добавлять ЗУН для всех связных УП, Вам необходимо нажать селектор "Сохранить для конкретного УП" и выбрать нужную УП.
+      </Typography>
+
+      <FormGroup className={classes.switcher}>
+        <FormControlLabel onChange={changeSaveForPlans} control={<Switch />} label="Сохранить для конкретного УП" />
+      </FormGroup>
+      {saveForPlans ? (
+          <>
+            <PlanSelector
+                label="Учебный план и образовательная программа"
+                onChange={addPlan}
+                valueLabel={plans[0]?.label}
+                value={plans[0]?.value}
+                workProgramId={workProgramId}
+                className={classes.marginBottom30}
+            />
+            {/*<div className={classes.chipsList}>*/}
+            {/*  {plans.map(plan => (*/}
+            {/*      <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />*/}
+            {/*  ))}*/}
+            {/*</div>*/}
+          </>
+      ) : null}
       <div className={classes.footer}>
         <Tooltip title="При выборе результатов и учебного плана с ОП можно выбрать несколько объектов, выбирая их по очереди">
           <InfoIcon className={classes.info}/>

@@ -37,6 +37,9 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
       whiteSpace: 'initial !important'
     }
   },
+  indicatorDialiogInfoMassage: {
+    margin: '20px 0 !important',
+  },
   switcher: {
     marginBottom: '20px',
   },
