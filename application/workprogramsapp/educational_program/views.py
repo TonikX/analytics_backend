@@ -507,9 +507,14 @@ def gh_check(request, gh_id):
 def get_all_ap_with_competences_and_indicators(request, wp_id):
     """
 
-    В GET-параметры можно передать ap_id - id объекта ImplementationAcademicPlan для фильтрации
+    В GET-параметры можно передать
+    ap_id - id объекта AcademicPlan для фильтрации
+    imp_id - id объекта ImplementationAcademicPlan для фильтрации
+    year - фильтр по годам УП
     """
     ap_id = request.GET.get("ap_id")
+    imp_id = request.GET.get("imp_id")
+    year = request.GET.get("year")
     ap_list_dict = []
     competences = Competence.objects.filter(
         indicator_in_competencse__zun__wp_in_fs__work_program__id=wp_id).distinct()
@@ -533,8 +538,12 @@ def get_all_ap_with_competences_and_indicators(request, wp_id):
             modules = DisciplineBlockModule.objects.filter(
                 change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)
             queryset = ImplementationAcademicPlan.get_all_imp_by_modules(modules=modules).distinct()
+            if imp_id:
+                queryset = queryset.filter(academic_plan__id=imp_id)
             if ap_id:
-                queryset=queryset.filter(pk=ap_id)
+                queryset = queryset.filter(academic_plan__id=ap_id)
+            if year:
+                queryset = queryset.filter(year=year)
             for ap in queryset:
                 dict_with_ap = None
                 for ap_dict in ap_list_dict:

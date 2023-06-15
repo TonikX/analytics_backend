@@ -256,6 +256,10 @@ def PracticeShortInfo(request, isu_id):
         practice = Practice.objects.get(discipline_code=isu_id)
         newdata.update(
             {"title": practice.title})
+        newdata.update(
+            {"moodle": None})
+        newdata.update(
+            {"description": None})
         try:
             status = Expertise.objects.get(practice=practice).get_expertise_status_display()
             if not status:
@@ -278,6 +282,10 @@ def GIAShortInfo(request, isu_id):
         gia = GIA.objects.get(discipline_code=isu_id)
         newdata.update(
             {"title": gia.title})
+        newdata.update(
+            {"moodle": None})
+        newdata.update(
+            {"description": None})
         try:
             status = Expertise.objects.get(gia=gia).get_expertise_status_display()
             if not status:
