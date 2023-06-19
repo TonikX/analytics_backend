@@ -18,6 +18,8 @@ class IsuService:
         self.auth_url = "https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token"
         self.academic_plan_url = "https://disc.itmo.su/api/v1/academic_plans"
         self.academic_plan_headers_url = "https://disc.itmo.su/api/v1/academic_plans_heading"
+        self.wp_bank = "https://disc.itmo.su/api/v1/disciplines"
+        self.wp_hours = "https://disc.itmo.su/api/v1/disciplines_volumes"
         self.grant_type = "client_credentials"
 
     def get_access_token(self, add_headers=None):
@@ -61,3 +63,26 @@ class IsuService:
         # print(response.json()['result'])
 
         return response.json()['result']
+
+    def get_wp_from_bank(self):
+        self.__check_token__()
+        headers = {'Content-Type': "application/json", 'Authorization': "Token " + self.token}
+        url = self.wp_bank
+        response = requests.get(url, headers=headers)
+
+        if response.status_code != 200:
+            return
+
+        return response.json()['result']
+
+    def get_wp_hours(self, isu_id):
+        self.__check_token__()
+        headers = {'Content-Type': "application/json", 'Authorization': "Token " + self.token}
+        url = self.wp_hours + "/" + isu_id
+        response = requests.get(url, headers=headers)
+
+        if response.status_code != 200:
+            return
+
+        return response.json()['result']
+
