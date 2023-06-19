@@ -23,6 +23,7 @@ import {rootState} from "../../../../store/reducers";
 import {getWorkProgramField} from "../../getters";
 import {getFilterAcademicPlan} from "../../../Competences/getters";
 import Typography from "@mui/material/Typography";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 interface IndicatorsProps {
   workProgramId: number;
@@ -39,11 +40,21 @@ interface IndicatorsProps {
   handleClose: () => void;
 }
 
+type Indicator = {
+  value: number;
+  label: string;
+  results: {
+    value: number;
+    label: string;
+  }[]
+}
+
 export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId }: IndicatorsProps) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [competence, setCompetence] = useState<{value: number; label: string}>({value: 0, label: ''})
   const [indicator, setIndicator] = useState<{value: number; label: string}>({value: 0, label: ''})
+  const [indicators, setIndicators] = useState<Indicator[]>([])
   const [results, setResults] = useState<Array<{value: number; label: string}>>([])
   const [plans, setPlans] = useState<Array<{value: number; label: string}>>([])
   const [knowledge, changeKnowledge] = useState('')
@@ -52,10 +63,15 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
 
   const [saveForPlans, setSaveForPlans] = useState(false)
   const addIndicator = (value: number, label: string) => {
-    setIndicator({
-      value,
-      label
-    })
+    if (indicators.find((indicator) => indicator.value === value)) return
+    setIndicators([
+      ...indicators,
+      {
+        value,
+        label,
+        results: []
+      }
+    ])
   }
 
   const addCompetence = (value: number, label: string) => {
@@ -65,22 +81,48 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     })
   }
 
-  const addResult = useCallback((value: number, label: string) => {
+  const addResult = useCallback((indicatorIndex: number) => (value: number, label: string) => {
+    const currentIndicator = indicators[indicatorIndex]
+    const {results} = currentIndicator
     if (results.find(item => item.value === value)) return
-    if (value) {
-      setResults([
-        ...results,
-        {
-          value,
-          label
-        }
-      ])
-    }
-  }, [results])
 
-  const removeResult = useCallback((value: number) => {
-    setResults(results.filter(result => result.value !== value))
-  }, [results])
+    if (value) {
+      setIndicators(indicators.map((indicator, index) => {
+        if (index === indicatorIndex) {
+          return {
+            ...indicator,
+            results: [
+              ...indicator.results,
+              {
+                value,
+                label
+              }
+            ]
+          }
+        }
+        return indicator
+      }))
+    }
+  }, [results, indicators])
+
+  const removeResult = useCallback((value: number, indicatorIndex) => {
+    if (value) {
+      setIndicators(indicators.map((indicator, index) => {
+        if (index === indicatorIndex) {
+          return {
+            ...indicator,
+            results: indicator.results.filter((result) => result.value !== value)
+          }
+        }
+        return indicator
+      }))
+    }  }, [results])
+
+  const removeIndicator = useCallback((indicatorIndex) => {
+      setIndicators(indicators.filter((indicator, index) => (
+        index !== indicatorIndex
+      )))
+    }, [indicators])
 
   const addPlan = useCallback((value: number, label: string) => {
     setPlans([{
@@ -211,22 +253,34 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       <IndicatorSelector
         onChange={addIndicator}
         value={0}
+        valueLabel={''}
         label="Индикатор"
-        className={classes.marginBottom30}
+        className={indicators.length ? undefined : classes.marginBottom30}
         competenceId={competence.value}
         disabled={competence.value === 0 || Boolean(defaultIndicator)}
+        cleanLabelAfterSelect
       />
-      <ResultsSelector
-        label="Результат"
-        onChange={addResult}
-        valueLabel=""
-        value={0}
-      />
-      <div className={classes.chipsList}>
-        {results.map(result => (
-          <Chip key={`result-${result.value}`} className={classes.chip} onDelete={() => removeResult(result.value)} label={result.label} />
-        ))}
-      </div>
+      {indicators.length ? <Typography fontSize={18} style={{margin: '15px 0px 10px'}}>Индикаторы<br/></Typography> : null}
+      {indicators.map((indicator, index) => (
+        <>
+          <Typography style={{marginBottom: 10}}>
+            {index + 1}. {indicator.label}
+            <DeleteIcon className={classes.deleteIndicatorIcon} onClick={() => removeIndicator(index)} />
+          </Typography>
+          <ResultsSelector
+            label="Результат"
+            onChange={addResult(index)}
+            valueLabel=""
+            value={0}
+            cleanLabelAfterSelect
+          />
+          <div className={classes.chipsList}>
+            {indicator.results.map(result => (
+              <Chip key={`result-${result.value}`} className={classes.chip} onDelete={() => removeResult(result.value, index)} label={result.label} />
+            ))}
+          </div>
+        </>
+      ))}
 
       <TextField
         label="Знания"

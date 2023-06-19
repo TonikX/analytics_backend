@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import get from 'lodash/get'
 import {Link} from 'react-router-dom'
@@ -32,6 +32,7 @@ import { useStyles } from './Competences.styles'
 
 export default React.memo(() => {
   const dispatch = useDispatch()
+  const isFirstEnterSecondTab = useRef(true)
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
   const [isOpenUpdateZunDialog, setIsOpenUpdateZunDialog] = useState<any>(false)
   const [tab, setTab] = useState('1')
@@ -53,7 +54,6 @@ export default React.memo(() => {
 
   useEffect(() => {
     if (workProgramId) {
-      dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
       dispatch(actions.getAllCompetencesAndIndicatorsForWp())
     }
   }, [workProgramId]);
@@ -63,6 +63,10 @@ export default React.memo(() => {
   }
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    if (isFirstEnterSecondTab.current) {
+      dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
+      isFirstEnterSecondTab.current = false
+    }
     setTab(newValue);
   };
 
@@ -210,7 +214,11 @@ export default React.memo(() => {
             </TableHead>
             <TableBody>
               {competencesList1.map((syllabus: any) => {
-                return syllabus.competences.map((competence: any, index: number) => {
+                const allZunsIntoSyllabusCount = syllabus.competences.reduce((count: number, competence: any) => {
+                  return count + competence.zuns.length || 0
+                }, 0)
+
+                return syllabus.competences.map((competence: any, competenceIndex: number) => {
                   const addIndicatorButton = (
                     <div className={classes.smallButton}
                         onClick={() => {
@@ -229,13 +237,16 @@ export default React.memo(() => {
                   if (zuns.length === 0) {
                     return (
                       <TableRow>
-                        <TableCell className={classes.cell}>
-                          <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
-                            {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
-                            /
-                            {syllabus?.title}
-                          </Link>
-                        </TableCell>
+                        {competenceIndex === 0 ? (
+                          <TableCell className={classes.cell} rowSpan={allZunsIntoSyllabusCount}>
+                            <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
+                              {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
+                              /
+                              {syllabus?.title}
+                            </Link>
+                          </TableCell>
+                        ) : null }
+
                         <TableCell className={classes.cell}>
                           {competence?.number} {competence?.name}
                           {addIndicatorButton}
@@ -249,21 +260,20 @@ export default React.memo(() => {
 
                   return zuns.map((zun: any, index: number) => (
                     <TableRow>
+                      {competenceIndex === 0 && index === 0 ? (
+                        <TableCell rowSpan={allZunsIntoSyllabusCount} className={classes.cell}>
+                          <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
+                            {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
+                            /
+                            {syllabus?.title} ({syllabus?.year})
+                          </Link>
+                        </TableCell>
+                      ) : null}
                       {index === 0 ?
-                        <>
-                          <TableCell rowSpan={zuns.length} className={classes.cell}>
-                            <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
-                              {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
-                              /
-                              {syllabus?.title} ({syllabus?.year})
-
-                            </Link>
-                          </TableCell>
-                          <TableCell rowSpan={zuns.length} className={classes.cell}>
-                            {competence?.number} {competence?.name}
-                            {addIndicatorButton}
-                          </TableCell>
-                        </>
+                        <TableCell rowSpan={zuns.length} className={classes.cell}>
+                          {competence?.number} {competence?.name}
+                          {addIndicatorButton}
+                        </TableCell>
                         : null
                       }
                       <TableCell className={classes.cell}>
@@ -293,12 +303,15 @@ export default React.memo(() => {
         </TabPanel>
       </TabContext>
     </Box>
-    <IndicatorsDialog
-      isOpen={isOpenIndicatorDialog}
-      handleClose={handleCloseDialog}
-      defaultCompetence={dialogCompetence}
-      workProgramId={workProgramId}
-    />
+    {isOpenIndicatorDialog ?
+      <IndicatorsDialog
+        isOpen={isOpenIndicatorDialog}
+        handleClose={handleCloseDialog}
+        defaultCompetence={dialogCompetence}
+        workProgramId={workProgramId}
+      />
+      : null
+    }
     {isOpenUpdateZunDialog ?
       <UpdateZunDialog
         isOpen

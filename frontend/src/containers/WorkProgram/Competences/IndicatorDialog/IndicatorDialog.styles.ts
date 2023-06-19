@@ -43,6 +43,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   switcher: {
     marginBottom: '20px',
   },
+  deleteIndicatorIcon: {
+    position: "absolute",
+    cursor: 'pointer',
+  },
   info: {
     marginTop: '10px',
     cursor: 'pointer',
