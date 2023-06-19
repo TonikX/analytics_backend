@@ -34,10 +34,19 @@ class Command(BaseCommand):
                         realisation_format = "mixed"
                     elif wp_dict["format_id"] == 3:
                         realisation_format = "online"
-                    try:
-                        department = StructuralUnit.objects.get(id=wp_dict["dep_id"])
-                    except:
-                        pass
+
+                    department_by_id = StructuralUnit.objects.filter(isu_id=wp_dict["dep_id"])
+                    if department_by_id.exists():
+                        department = department_by_id.first()
+                    else:
+                        department_by_name = StructuralUnit.objects.filter(title=wp_dict["dep_name"])
+                        if department_by_name.exists():
+                            department = department_by_name.first()
+                        else:
+                            department_by_short_name = StructuralUnit.objects.filter(
+                                short_name=wp_dict["dep_short_name"])
+                            if department_by_short_name.exists():
+                                department = department_by_short_name.first()
 
                     try:
                         discipline_hours = isu_logger.get_wp_hours(str(wp_dict["id"]))[0]
