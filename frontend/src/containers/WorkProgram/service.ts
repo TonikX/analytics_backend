@@ -333,31 +333,19 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
-    saveZUN({indicator, plans, results, knowledge, skills, attainments}: any, wpId: any){
+    saveZUN({indicators}: any, wpId: any){
         return this.post(`/api/zun/many_create_for_all_gh/`,{
             workprogram_id: wpId,
             // wpa_in_fss: plans,
-            zun: {
-                indicator_in_zun: indicator,
-                items: results,
-                knowledge,
-                skills,
-                attainments,
-            },
+            zun: indicators,
         });
     }
 
-    saveZUNforThisEP({indicator, plans, results, knowledge, skills, attainments}: any, wpId: any){
+    saveZUNforThisEP({indicators, plans}: any, wpId: any){
         return this.post(`/api/zun/many_create/`,{
             workprogram_id: wpId,
             iap_id: plans,
-            zun: {
-                indicator_in_zun: indicator,
-                items: results,
-                knowledge,
-                skills,
-                attainments,
-            },
+            zun: indicators
         });
     }
 
