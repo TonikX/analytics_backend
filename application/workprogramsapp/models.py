@@ -694,8 +694,9 @@ class ImplementationAcademicPlan(models.Model):
     def get_all_imp_by_modules(modules):
         imp_list = ImplementationAcademicPlan.objects.none()
         for module in modules:
-            if module.father_module.all():
-                imp_list = imp_list|ImplementationAcademicPlan.get_all_imp_by_modules(module.father_module.all())
+            fathers = module.father_module.prefetch_related("father_module")
+            if fathers:
+                imp_list = imp_list|ImplementationAcademicPlan.get_all_imp_by_modules(fathers)
             else:
                 imp_list = imp_list | ImplementationAcademicPlan.objects.filter(
                     academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block=module)
