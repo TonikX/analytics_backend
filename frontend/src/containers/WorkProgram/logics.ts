@@ -8,7 +8,10 @@ import workProgramActions from './actions';
 import Service from './service';
 import {
     getWorkProgramUserExpertiseId,
-    getWorkProgramId
+    getWorkProgramId,
+    getWorkProgramCompetenceFiltersYear,
+    getWorkProgramCompetenceFiltersAP,
+    getWorkProgramCompetenceFiltersImp
 } from './getters';
 
 import {fetchingTypes} from "./enum";
@@ -101,9 +104,13 @@ const getApWithCompetencesAndIndicatorsToWp = createLogic({
         const state = getState();
         const workProgramId = getWorkProgramId(state);
 
+        const filtersYear = getWorkProgramCompetenceFiltersYear(state)
+        const filtersAp = getWorkProgramCompetenceFiltersAP(state)
+        const filtersImp = getWorkProgramCompetenceFiltersImp(state)
+
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP}));
 
-        service.getApWithCompetencesAndIndicatorsToWp(workProgramId)
+        service.getApWithCompetencesAndIndicatorsToWp(workProgramId, filtersYear, filtersAp, filtersImp)
             .then((res) => {
                 dispatch(workProgramActions.setApWithCompetencesAndIndicatorsToWp(res.data));
                 dispatch(actions.fetchingSuccess());

@@ -18,17 +18,34 @@ import Box from '@mui/material/Box';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
+import Typography from "@mui/material/Typography";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 import { rootState } from '../../../store/reducers'
 import {appRouter} from "../../../service/router-service";
 
 import actions from '../actions'
-import {getApWithCompetencesAndIndicatorsToWp, getAllCompetencesAndIndicatorsForWp, getWorkProgramId} from '../getters'
+import {
+  getApWithCompetencesAndIndicatorsToWp,
+  getAllCompetencesAndIndicatorsForWp,
+  getWorkProgramId,
+  getWorkProgramField,
+  getWorkProgramCompetenceFiltersYear,
+  getWorkProgramCompetenceFiltersImp,
+  getWorkProgramCompetenceFiltersAP
+} from '../getters'
 
 import IndicatorsDialog from './IndicatorDialog'
 import {UpdateZunDialog} from './UpdateZunDialog'
 
+import SimpleSelector from '../../../components/SimpleSelector';
+import DatePickerComponent from '../../../components/DatePicker';
+
 import { useStyles } from './Competences.styles'
+import {EducationalStandardFields} from "../../EducationalStandards/enum";
+import {YEAR_DATE_FORMAT} from "../../../common/utils";
 
 export default React.memo(() => {
   const dispatch = useDispatch()
@@ -53,7 +70,6 @@ export default React.memo(() => {
 
   useEffect(() => {
     if (workProgramId) {
-      dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
       dispatch(actions.getAllCompetencesAndIndicatorsForWp())
     }
   }, [workProgramId]);
@@ -65,6 +81,71 @@ export default React.memo(() => {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
   };
+
+  const filterImp = useSelector((state: rootState) => getWorkProgramCompetenceFiltersImp(state))
+  const filterAp = useSelector((state: rootState) => getWorkProgramCompetenceFiltersAP(state))
+
+  const filterMessage = !filterImp && !filterAp ? (
+    <Typography className={classes.filterMessage}>
+      Выберите имплементацию УП или УП, чтобы увидеть результаты
+    </Typography>
+  ) : null;
+
+  const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
+
+  const impList = epList && epList.reduce((plans:any, currentPlan:any) => {
+    const academicPlan = currentPlan?.discipline_block_module?.descipline_block[0]?.academic_plan;
+    const desciplineBlock = currentPlan?.discipline_block_module?.descipline_block[0];
+    if (academicPlan === undefined) {
+      return plans;
+    }
+
+    return ([
+      ...plans,
+      {
+        value: desciplineBlock?.id,
+        label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
+                 `,
+      }
+    ])
+  }, [])
+
+  const apList = epList && epList.reduce((plans:any, currentPlan:any) => {
+    const academicPlan = currentPlan?.discipline_block_module?.descipline_block[0]?.academic_plan;
+    if (academicPlan === undefined) {
+      return plans;
+    }
+
+    return ([
+      ...plans,
+      {
+        value: academicPlan?.id,
+        label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
+                 `,
+      }
+    ])
+  }, [])
+
+  const onChangeFilterYear = (value:any) => {
+    dispatch(actions.updateCompetenceFilterYear(value ? value.format(YEAR_DATE_FORMAT) : ''))
+    if (filterImp || filterAp) {
+      dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
+    }
+  }
+
+  const onChangeFilterIMP = (value:any) => {
+    dispatch(actions.updateCompetenceFilterIMP(value))
+    dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
+  }
+
+  const onChangeFilterAP = (value:any) => {
+    dispatch(actions.updateCompetenceFilterAP(value))
+    dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
+  }
 
   return (
     <>
@@ -87,6 +168,7 @@ export default React.memo(() => {
               Добавить ЗУН
           </Button>
         </Box>
+
         <TabPanel className={classes.workProgramTabPanel} value="1">
           <Table stickyHeader>
             <TableHead>
@@ -188,6 +270,41 @@ export default React.memo(() => {
         </TabPanel>
 
         <TabPanel value="2" className={classes.workProgramTabPanel}>
+
+          <div className={classes.competenceFilter}>
+            <div className={classes.competenceFilterDate}>
+              <DatePickerComponent
+                  label="Год"
+                  views={["year"]}
+                  onChange={onChangeFilterYear}
+                  format={YEAR_DATE_FORMAT}
+                  minDate={'1984'}
+                  maxDate={((new Date()).getFullYear() + 3).toString()}
+                  noMargin
+              />
+            </div>
+
+            <div className={classes.competenceFilterSelect}>
+              <SimpleSelector
+                  label="Имплементация УП"
+                  metaList={impList || []}
+                  onChange={onChangeFilterIMP}
+                  wrapClass={classes.selectorWrap}
+                  noMargin
+              />
+            </div>
+
+            <div className={classes.competenceFilterSelect}>
+              <SimpleSelector
+                  label="Учебный план"
+                  metaList={apList || []}
+                  onChange={onChangeFilterAP}
+                  wrapClass={classes.selectorWrap}
+                  noMargin
+              />
+            </div>
+          </div>
+
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -208,6 +325,7 @@ export default React.memo(() => {
                 </TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
               {competencesList1.map((syllabus: any) => {
                 return syllabus.competences.map((competence: any, index: number) => {
@@ -289,7 +407,7 @@ export default React.memo(() => {
               })}
             </TableBody>
           </Table>
-
+          {filterMessage}
         </TabPanel>
       </TabContext>
     </Box>

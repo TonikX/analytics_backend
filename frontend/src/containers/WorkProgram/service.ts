@@ -28,8 +28,9 @@ class WorkProgramService extends AnalyticsService{
         return this.get(`/api/toolsinworkprogram/${id}`);
     }
 
-    getApWithCompetencesAndIndicatorsToWp(id: string){
-        return this.get(`/api/competence/get_all_ap_with_competences_and_indicators_to_wp/${id}`);
+    getApWithCompetencesAndIndicatorsToWp(id: string, year: number|null, ap: number|null, imp:number|null){
+        const filtersString = `${year ? `year=${year}&` : ''}${ap ? `ap=${ap}` : ''}${imp ? `imp=${imp}` : ''}`
+        return this.get(`/api/competence/get_all_ap_with_competences_and_indicators_to_wp/${id}?${filtersString}`);
     }
 
     getAllCompetencesAndIndicatorsForWp(id: string){

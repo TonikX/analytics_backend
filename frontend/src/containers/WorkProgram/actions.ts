@@ -76,7 +76,15 @@ const saveZUNforThisEP = createAction('WORK_PROGRAM_SAVE_ZUN_THIS_EP');
 
 const pageDown = createAction('WORK_PROGRAM_PAGE_DOWN');
 
+const updateCompetenceFilterYear = createAction('UPDATE_COMPETENCE_FILTER_YEAR');
+const updateCompetenceFilterIMP = createAction('UPDATE_COMPETENCE_FILTER_IMP');
+const updateCompetenceFilterAP = createAction('UPDATE_COMPETENCE_FILTER_AP');
+
 const actions: WorkProgramActions = {
+    updateCompetenceFilterYear,
+    updateCompetenceFilterIMP,
+    updateCompetenceFilterAP,
+
     saveZUN,
     saveZUNforThisEP,
     deleteZUN,

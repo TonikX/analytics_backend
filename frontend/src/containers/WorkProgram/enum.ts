@@ -156,6 +156,8 @@ export enum fetchingTypes {
 
     GET_COMMENTS = 'GET_COMMENTS',
     CREATE_COMMENT = 'CREATE_COMMENT',
+
+    COMPETENCE_FILTER_IMP = 'COMPETENCE_FILTER_IMP',
 }
 
 export enum PrerequisiteFields {

@@ -12,6 +12,13 @@ export const initialState: workProgramState = {
     },
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: [],
     [fields.WORK_PROGRAM_EVALUATION_TOOL]: {},
+
+    competenceFilters: {
+        year: null,
+        imp: null,
+        ap: null
+    },
+
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOLS]: [],
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL]: {},
     [fields.AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP]: [],
@@ -68,6 +75,30 @@ const setIntermediateCertification = (state: workProgramState, {payload}: any): 
     [fields.WORK_PROGRAM_INTERMEDIATE_CERTIFICATION_TOOL]: payload
 });
 
+const updateCompetenceFilterYear = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    competenceFilters: {
+        ...state.competenceFilters,
+        year: payload,
+    }
+});
+
+const updateCompetenceFilterIMP = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    competenceFilters: {
+        ...state.competenceFilters,
+        imp: payload,
+    }
+});
+
+const updateCompetenceFilterAP = (state: workProgramState, {payload}: any): workProgramState => ({
+    ...state,
+    competenceFilters: {
+        ...state.competenceFilters,
+        ap: payload,
+    }
+});
+
 const setComments = (state: workProgramState, {payload}: any): workProgramState => ({
     ...state,
     [fields.WORK_PROGRAM_COMMENTS]: payload
@@ -119,5 +150,10 @@ export const reducer = createReducer(initialState, {
     [actions.setWorkProgramEvaluationTools.type]: setWorkProgramEvaluationTools,
     [actions.setWorkProgramEvaluationTool.type]: setWorkProgramEvaluationTool,
     [actions.setIntermediateCertification.type]: setIntermediateCertification,
+
+    [actions.updateCompetenceFilterYear.type]: updateCompetenceFilterYear,
+    [actions.updateCompetenceFilterIMP.type]: updateCompetenceFilterIMP,
+    [actions.updateCompetenceFilterAP.type]: updateCompetenceFilterAP,
+
     [actions.pageDown.type]: pageDown,
 });

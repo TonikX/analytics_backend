@@ -10,6 +10,10 @@ import {workProgramState} from './types';
 
 const getStateData = (state: rootState): workProgramState => get(state, GENERAL_PATH);
 export const getWorkProgramComments = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_COMMENTS, {});
+export const getWorkProgramCompetenceFilters = (state: rootState) => get(getStateData(state), 'competenceFilters', {});
+export const getWorkProgramCompetenceFiltersYear = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'year', null);
+export const getWorkProgramCompetenceFiltersAP = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'ap', null);
+export const getWorkProgramCompetenceFiltersImp = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'imp', null);
 
 export const getWorkProgram = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM, {});
 export const getWorkProgramResults = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_RESULTS, []);

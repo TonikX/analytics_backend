@@ -17,7 +17,7 @@ const DatePickerComponent = ({label, format, onChange, classes, value, noMargin,
 
     return (
         <DatePicker
-            value={moment(value)}
+            value={value ? moment(value) : undefined}
             onChange={handleChange}
             format={format || FULL_DATE_FORMAT}
             label={label}
