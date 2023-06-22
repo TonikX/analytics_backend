@@ -77,7 +77,7 @@ def generate_test(term: int, year: str, name: str):
 
 
 # TODO: Придумать как избавиться от этого хардкод-прикола
-def get_checkpoints_type(type):
+def get_checkpoints_type(type, get_name=False):
     types = [{
         "id": 27,
         "name": "Диф. зачет",
@@ -113,4 +113,20 @@ def get_checkpoints_type(type):
         }]
     for el in types:
         if el["type_here"] == type:
-            return el["id"]
+            if not get_name:
+                return el["id"]
+            else:
+                return el["name"]
+
+
+def generate_checkpoint_new(name, min, max, week, key, type_name):
+    temp = {
+        "name": name,
+        "min_grade": min,
+        "max_grade": max,
+        "week": week,
+        "key": key,
+        "type": type_name,
+    }
+
+    return temp
