@@ -19,9 +19,6 @@ import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import Typography from "@mui/material/Typography";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 
 import { rootState } from '../../../store/reducers'
 import {appRouter} from "../../../service/router-service";
@@ -32,7 +29,6 @@ import {
   getAllCompetencesAndIndicatorsForWp,
   getWorkProgramId,
   getWorkProgramField,
-  getWorkProgramCompetenceFiltersYear,
   getWorkProgramCompetenceFiltersImp,
   getWorkProgramCompetenceFiltersAP
 } from '../getters'
@@ -44,7 +40,6 @@ import SimpleSelector from '../../../components/SimpleSelector';
 import DatePickerComponent from '../../../components/DatePicker';
 
 import { useStyles } from './Competences.styles'
-import {EducationalStandardFields} from "../../EducationalStandards/enum";
 import {YEAR_DATE_FORMAT} from "../../../common/utils";
 
 export default React.memo(() => {
@@ -155,6 +150,10 @@ export default React.memo(() => {
   return (
     <>
     <Box sx={{ width: '100%', typography: 'body1' }}>
+      <Typography>
+        Вариант 1 - отображение всех компетенций их индикаторов и связанных с ними учебных планов <br/>
+        Вариант 2 - отображение компетенций и их индикаторов по выбранному учебному плану <br/>
+      </Typography>
       <TabContext value={tab}>
         <Box
             sx={{ borderBottom: 1, borderColor: 'divider' }}
