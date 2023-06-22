@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, {useState, useRef} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import get from 'lodash/get'
 import {Link} from 'react-router-dom'
@@ -30,7 +30,8 @@ import {
   getWorkProgramId,
   getWorkProgramField,
   getWorkProgramCompetenceFiltersImp,
-  getWorkProgramCompetenceFiltersAP
+  getWorkProgramCompetenceFiltersAP,
+  getWorkProgramCompetenceFiltersYear,
 } from '../getters'
 
 import IndicatorsDialog from './IndicatorDialog'
@@ -64,19 +65,13 @@ export default React.memo(() => {
     setIsOpenIndicatorDialog(true)
   }
 
-  useEffect(() => {
-    if (workProgramId) {
-      dispatch(actions.getAllCompetencesAndIndicatorsForWp())
-    }
-  }, [workProgramId]);
-
   const deleteZun = (zunId: number) => {
     dispatch(actions.deleteZUN(zunId))
   }
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     if (isFirstEnterSecondTab.current) {
-      dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
+      dispatch(actions.getAllCompetencesAndIndicatorsForWp())
       isFirstEnterSecondTab.current = false
     }
     setTab(newValue);
@@ -84,10 +79,11 @@ export default React.memo(() => {
 
   const filterImp = useSelector((state: rootState) => getWorkProgramCompetenceFiltersImp(state))
   const filterAp = useSelector((state: rootState) => getWorkProgramCompetenceFiltersAP(state))
+  const filterYear = useSelector((state: rootState) => getWorkProgramCompetenceFiltersYear(state))
 
-  const filterMessage = !filterImp && !filterAp ? (
+  const filterMessage = !filterAp ? (
     <Typography className={classes.filterMessage}>
-      Выберите имплементацию УП или УП, чтобы увидеть результаты
+      Выберите учебный план, чтобы увидеть результаты
     </Typography>
   ) : null;
 
@@ -114,7 +110,7 @@ export default React.memo(() => {
 
   const apList = epList && epList.reduce((plans:any, currentPlan:any) => {
     const academicPlan = currentPlan?.discipline_block_module?.descipline_block[0]?.academic_plan;
-    if (academicPlan === undefined) {
+    if (academicPlan === undefined || filterYear && +filterYear !== academicPlan?.academic_plan_in_field_of_study[0]?.year) {
       return plans;
     }
 
@@ -132,6 +128,7 @@ export default React.memo(() => {
 
   const onChangeFilterYear = (value:any) => {
     dispatch(actions.updateCompetenceFilterYear(value ? value.format(YEAR_DATE_FORMAT) : ''))
+    dispatch(actions.updateCompetenceFilterAP(null))
     if (filterImp || filterAp) {
       dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
     }
@@ -151,8 +148,8 @@ export default React.memo(() => {
     <>
     <Box sx={{ width: '100%', typography: 'body1' }}>
       <Typography>
-        Вариант 1 - отображение всех компетенций их индикаторов и связанных с ними учебных планов <br/>
-        Вариант 2 - отображение компетенций и их индикаторов по выбранному учебному плану <br/>
+        Вариант 1 - отображение компетенций и их индикаторов <b>по выбранному учебному плану</b> <br/>
+        Вариант 2 - отображение всех компетенций их индикаторов и связанных с ними учебных планов <br/>
       </Typography>
       <TabContext value={tab}>
         <Box
@@ -173,7 +170,7 @@ export default React.memo(() => {
           </Button>
         </Box>
 
-        <TabPanel className={classes.workProgramTabPanel} value="1">
+        <TabPanel className={classes.workProgramTabPanel} value="2">
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -273,7 +270,7 @@ export default React.memo(() => {
 
         </TabPanel>
 
-        <TabPanel value="2" className={classes.workProgramTabPanel}>
+        <TabPanel value="1" className={classes.workProgramTabPanel}>
 
           <div className={classes.competenceFilter}>
             <div className={classes.competenceFilterDate}>
@@ -288,15 +285,15 @@ export default React.memo(() => {
               />
             </div>
 
-            <div className={classes.competenceFilterSelect}>
-              <SimpleSelector
-                  label="Имплементация УП"
-                  metaList={impList || []}
-                  onChange={onChangeFilterIMP}
-                  wrapClass={classes.selectorWrap}
-                  noMargin
-              />
-            </div>
+            {/*<div className={classes.competenceFilterSelect}>*/}
+            {/*  <SimpleSelector*/}
+            {/*      label="Имплементация УП"*/}
+            {/*      metaList={impList || []}*/}
+            {/*      onChange={onChangeFilterIMP}*/}
+            {/*      wrapClass={classes.selectorWrap}*/}
+            {/*      noMargin*/}
+            {/*  />*/}
+            {/*</div>*/}
 
             <div className={classes.competenceFilterSelect}>
               <SimpleSelector
@@ -305,6 +302,8 @@ export default React.memo(() => {
                   onChange={onChangeFilterAP}
                   wrapClass={classes.selectorWrap}
                   noMargin
+                  value={filterAp ? filterAp : undefined}
+                  key={filterAp}
               />
             </div>
           </div>
