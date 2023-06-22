@@ -13,12 +13,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   title: {
     padding: 0,
-    marginBottom: '30px'
+    marginBottom: '30px',
   },
   footer: {
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: 20,
   }
 }));

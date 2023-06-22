@@ -350,13 +350,13 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
-    updateZUN({knowledge, skills, attainments, zunId}: any, wpId: any){
+    updateZUN({knowledge, skills, attainments, zunId, updateAllZuns}: any, wpId: any){
         return this.patch(`/api/zun/many_create_for_all_gh/${zunId}/`,{
             workprogram_id: wpId,
             knowledge,
             skills,
             attainments,
-            for_all: true,
+            for_all: updateAllZuns,
         });
     }
 
