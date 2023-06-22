@@ -34,7 +34,7 @@ class AcademicPlanExcelCreator:
 
         for academic_plan_id in ids:
             academic_plan_id = str(academic_plan_id)
-            academic_plan_json =  self.isu_service.get_academic_plan(academic_plan_id)
+            academic_plan_json = self.isu_service.get_academic_plan(academic_plan_id)
 
             line = [
                 academic_plan_json['id'],

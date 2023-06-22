@@ -196,40 +196,40 @@ class AcademicPlanUpdateProcessor:
         return work_program_object
 
     @staticmethod
-    @AcademicPlanUpdateAspect.academic_plan_changes_aspect
-    def __process_academic_plan__(implementation_academic_plan_object, isu_academic_plan_json, field_of_study):
-        if implementation_academic_plan_object is not None:
-            implementation_academic_plan_object.op_isu_id = int(isu_academic_plan_json['edu_program_id'])
-            implementation_academic_plan_object.ap_isu_id = int(isu_academic_plan_json['id'])
-            implementation_academic_plan_object.ns_id = int(isu_academic_plan_json['ns_id'])
-            implementation_academic_plan_object.title = isu_academic_plan_json['edu_program_name']
-            implementation_academic_plan_object.field_of_study.add(field_of_study)
-            implementation_academic_plan_object.save()
-        else:
-            implementation_academic_plan_object = ImplementationAcademicPlan(
-                title=isu_academic_plan_json['edu_program_name'],
-                year=isu_academic_plan_json['selection_year'],
-                language=AcademicPlanUpdateUtils.get_op_language(isu_academic_plan_json),
-                qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json)
-            )
-            implementation_academic_plan_object.op_isu_id = int(isu_academic_plan_json['edu_program_id'])
-            implementation_academic_plan_object.ap_isu_id = int(isu_academic_plan_json['id'])
-            implementation_academic_plan_object.ns_id = int(isu_academic_plan_json['ns_id'])
-            implementation_academic_plan_object.title = isu_academic_plan_json['edu_program_name']
-            implementation_academic_plan_object.save()
-            implementation_academic_plan_object.field_of_study.add(field_of_study)
-            implementation_academic_plan_object.save()
+    #@AcademicPlanUpdateAspect.academic_plan_changes_aspect
+    def __process_academic_plan__(isu_academic_plan_json):
+        # if implementation_academic_plan_object is not None:
+        #     implementation_academic_plan_object.op_isu_id = int(isu_academic_plan_json['edu_program_id'])
+        #     implementation_academic_plan_object.ap_isu_id = int(isu_academic_plan_json['id'])
+        #     implementation_academic_plan_object.ns_id = int(isu_academic_plan_json['ns_id'])
+        #     implementation_academic_plan_object.title = isu_academic_plan_json['edu_program_name']
+        #     implementation_academic_plan_object.field_of_study.add(field_of_study)
+        #     implementation_academic_plan_object.save()
+        # else:
+        #     implementation_academic_plan_object = ImplementationAcademicPlan(
+        #         title=isu_academic_plan_json['edu_program_name'],
+        #         year=isu_academic_plan_json['selection_year'],
+        #         language=AcademicPlanUpdateUtils.get_op_language(isu_academic_plan_json),
+        #         qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json)
+        #     )
+        #     implementation_academic_plan_object.op_isu_id = int(isu_academic_plan_json['edu_program_id'])
+        #     implementation_academic_plan_object.ap_isu_id = int(isu_academic_plan_json['id'])
+        #     implementation_academic_plan_object.ns_id = int(isu_academic_plan_json['ns_id'])
+        #     implementation_academic_plan_object.title = isu_academic_plan_json['edu_program_name']
+        #     implementation_academic_plan_object.save()
+        #     implementation_academic_plan_object.field_of_study.add(field_of_study)
+        #     implementation_academic_plan_object.save()
         if AcademicPlan.objects.filter(ap_isu_id=int(isu_academic_plan_json['id'])).exists():
             academic_plan_object = AcademicPlan.objects.get(ap_isu_id=int(isu_academic_plan_json['id']))
             # ToDo: Тут сделать удалитель привязок
-            implementation_academic_plan_object.academic_plan = academic_plan_object
-            implementation_academic_plan_object.save()
+            # implementation_academic_plan_object.academic_plan = academic_plan_object
+            # implementation_academic_plan_object.save()
         else:
             academic_plan_object = AcademicPlan()
             academic_plan_object.ap_isu_id = int(isu_academic_plan_json['id'])
-            implementation_academic_plan_object.academic_plan = academic_plan_object
-            implementation_academic_plan_object.save()
-        return academic_plan_object, implementation_academic_plan_object
+            # implementation_academic_plan_object.academic_plan = academic_plan_object
+            # implementation_academic_plan_object.save()
+        return academic_plan_object#, implementation_academic_plan_object
 
     @staticmethod
     @AcademicPlanUpdateAspect.discipline_block_changes_aspect
@@ -481,16 +481,16 @@ class AcademicPlanUpdateProcessor:
                 plan_id = str(plan_id)
 
                 old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
-                isu_academic_plan_json = self.isu_service.get_academic_plan(plan_id)
+                isu_academic_plan_json = self.isu_service.get_academic_plan_only_modules(plan_id)
                 # isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
                 if isu_academic_plan_json is not None:
-                    self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
+                    #self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
 
-                    field_of_study = self.__process_field_of_study__(isu_academic_plan_json)
+                    #field_of_study = self.__process_field_of_study__(isu_academic_plan_json)
 
-                    academic_plan = self.__process_academic_plan__(isu_academic_plan_json, field_of_study)
+                    academic_plan = self.__process_academic_plan__(isu_academic_plan_json)
                     block_to_del_ids = []
-                    for block in isu_academic_plan_json['disciplines_blocks']:
+                    for block in isu_academic_plan_json['structure']:
                         discipline_block_object = self.__process_discipline_block__(
                             block,
                             academic_plan,
@@ -498,7 +498,7 @@ class AcademicPlanUpdateProcessor:
                         )
                         block_to_del_ids.append(discipline_block_object.id)
                         block_modules_to_del_ids = []
-                        for module in block['discipline_modules']:
+                        for module in block['children']:
                             discipline_block_module_object = self \
                                 .__process_block_module__(
                                 module,

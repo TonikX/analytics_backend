@@ -17,6 +17,7 @@ class IsuService:
         self.isu_user = isu_user
         self.auth_url = "https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token"
         self.academic_plan_url = "https://disc.itmo.su/api/v1/academic_plans"
+        self.academic_plan_only_modules_url = "https://dev.api.itmo.su/study_plan_admin/api/study_plan"
         self.academic_plan_headers_url = "https://disc.itmo.su/api/v1/academic_plans_heading"
         self.modules_url = "https://references.itmo.su/api/v1/references/modules?limit=50000&offset=0"
         self.grant_type = "client_credentials"
@@ -76,4 +77,18 @@ class IsuService:
         #print(response.json()['result'])
 
         return response.json()['result']['data']
+
+
+    def get_academic_plan_only_modules(self, academic_plan_id):
+        self.__check_token__()
+        headers = {'Content-Type': "application/json", 'Authorization': "Token " + self.token}
+        url = self.academic_plan_only_modules_url + "/" + academic_plan_id
+        response = requests.get(url, headers=headers)
+
+        if response.status_code != 200:
+            # print("Error: academic plan fetch failed: ", response.status_code, academic_plan_id)
+            raise Exception("Error: academic plan fetch failed: id: {id}, responce_code: {code}" \
+                            .format(code=str(response.status_code), id=str(academic_plan_id)))
+
+        return response.json()['result']
 
