@@ -23,6 +23,7 @@ import {rootState} from "../../../../store/reducers";
 import {getWorkProgramField} from "../../getters";
 import {getFilterAcademicPlan} from "../../../Competences/getters";
 import Typography from "@mui/material/Typography";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 interface IndicatorsProps {
   workProgramId: number;
@@ -39,23 +40,55 @@ interface IndicatorsProps {
   handleClose: () => void;
 }
 
+type Indicator = {
+  value: number;
+  label: string;
+  results: {
+    value: number;
+    label: string;
+  }[];
+  knowledge: string;
+  skills: string;
+  attainments: string;
+}
+
+const getIndicatorsForSave = (indicators: Indicator[]) => (
+  indicators.map((indicator) => ({
+    indicator_in_zun: indicator.value,
+    items: indicator.results.map((result) => result.value),
+    knowledge: indicator.knowledge,
+    skills: indicator.skills,
+    attainments: indicator.attainments,
+  }))
+)
+
 export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId }: IndicatorsProps) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [competence, setCompetence] = useState<{value: number; label: string}>({value: 0, label: ''})
-  const [indicator, setIndicator] = useState<{value: number; label: string}>({value: 0, label: ''})
-  const [results, setResults] = useState<Array<{value: number; label: string}>>([])
+  const [indicators, setIndicators] = useState<Indicator[]>([])
   const [plans, setPlans] = useState<Array<{value: number; label: string}>>([])
-  const [knowledge, changeKnowledge] = useState('')
-  const [skills, changeSkills] = useState('')
-  const [attainments, changeAttainments] = useState('')
+
+  const changeZunFields = useCallback((indicatorIndex: number, zunField: 'skills'|'knowledge'|'attainments') => (e: any) => {
+    const updatedIndicators = indicators
+    updatedIndicators[indicatorIndex][zunField] = e.target.value
+    setIndicators(updatedIndicators)
+  }, [indicators])
 
   const [saveForPlans, setSaveForPlans] = useState(false)
   const addIndicator = (value: number, label: string) => {
-    setIndicator({
-      value,
-      label
-    })
+    if (indicators.find((indicator) => indicator.value === value)) return
+    setIndicators([
+      ...indicators,
+      {
+        value,
+        label,
+        results: [],
+        knowledge: '',
+        skills: '',
+        attainments: ''
+      }
+    ])
   }
 
   const addCompetence = (value: number, label: string) => {
@@ -65,22 +98,48 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     })
   }
 
-  const addResult = useCallback((value: number, label: string) => {
+  const addResult = useCallback((indicatorIndex: number) => (value: number, label: string) => {
+    const currentIndicator = indicators[indicatorIndex]
+    const {results} = currentIndicator
     if (results.find(item => item.value === value)) return
-    if (value) {
-      setResults([
-        ...results,
-        {
-          value,
-          label
-        }
-      ])
-    }
-  }, [results])
 
-  const removeResult = useCallback((value: number) => {
-    setResults(results.filter(result => result.value !== value))
-  }, [results])
+    if (value) {
+      setIndicators(indicators.map((indicator, index) => {
+        if (index === indicatorIndex) {
+          return {
+            ...indicator,
+            results: [
+              ...indicator.results,
+              {
+                value,
+                label
+              }
+            ]
+          }
+        }
+        return indicator
+      }))
+    }
+  }, [indicators])
+
+  const removeResult = useCallback((value: number, indicatorIndex) => {
+    if (value) {
+      setIndicators(indicators.map((indicator, index) => {
+        if (index === indicatorIndex) {
+          return {
+            ...indicator,
+            results: indicator.results.filter((result) => result.value !== value)
+          }
+        }
+        return indicator
+      }))
+    }  }, [indicators])
+
+  const removeIndicator = useCallback((indicatorIndex) => {
+      setIndicators(indicators.filter((indicator, index) => (
+        index !== indicatorIndex
+      )))
+    }, [indicators])
 
   const addPlan = useCallback((value: number, label: string) => {
     setPlans([{
@@ -102,33 +161,26 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     setPlans(plans.filter(plan => plan.value !== value))
   }, [plans])
 
+
+
   const saveZun = useCallback(() => {
     dispatch(actions.saveZUN({
-      indicator: indicator.value,
-      results: results.map(item => item.value),
-      plans: plans.map(item => item.value),
-      knowledge,
-      skills,
-      attainments,
+      indicators: getIndicatorsForSave(indicators),
     }))
     handleClose()
-  }, [indicator, competence, results, plans, knowledge, skills, attainments])
+  }, [indicators, plans])
 
   const saveZunForThisEP = useCallback(() => {
     dispatch(actions.saveZUNforThisEP({
-      indicator: indicator.value,
-      results: results.map(item => item.value),
+      indicators: getIndicatorsForSave(indicators),
       plans: plans[0].value,
-      knowledge,
-      skills,
-      attainments,
     }))
     handleClose()
-  }, [indicator, competence, results, plans, knowledge, skills, attainments])
+  }, [indicators, plans])
 
   const disableButton = useMemo(() => (
-      (saveForPlans ? plans.length === 0 : false) || indicator.value === 0 || competence.value === 0
-  ),[plans, saveForPlans, indicator, competence])
+      (saveForPlans ? plans.length === 0 : false) || indicators.length === 0
+  ),[plans, saveForPlans, indicators])
 
   const changeFilterOnlyWithStandard = (e:any) => {
     dispatch(competenceActions.changeFilterOnlyWithStandard(e.target.checked))
@@ -166,20 +218,10 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
   }, [])
 
   useEffect(() => {
-    setIndicator({value: 0, label: ''})
-  }, [competence])
-
-  useEffect(() => {
     if (defaultCompetence){
       setCompetence(defaultCompetence)
     }
   }, [defaultCompetence])
-
-  useEffect(() => {
-    if (defaultIndicator){
-      setIndicator(defaultIndicator)
-    }
-  }, [defaultIndicator])
 
   return (
     <Dialog
@@ -211,40 +253,53 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       <IndicatorSelector
         onChange={addIndicator}
         value={0}
+        valueLabel={''}
         label="Индикатор"
-        className={classes.marginBottom30}
+        className={indicators.length ? undefined : classes.marginBottom30}
         competenceId={competence.value}
         disabled={competence.value === 0 || Boolean(defaultIndicator)}
+        cleanLabelAfterSelect
       />
-      <ResultsSelector
-        label="Результат"
-        onChange={addResult}
-        valueLabel=""
-        value={0}
-      />
-      <div className={classes.chipsList}>
-        {results.map(result => (
-          <Chip key={`result-${result.value}`} className={classes.chip} onDelete={() => removeResult(result.value)} label={result.label} />
-        ))}
-      </div>
+      {indicators.length ? <Typography fontSize={18} style={{margin: '15px 0px 10px'}}>Индикаторы<br/></Typography> : null}
+      {indicators.map((indicator, index) => (
+        <React.Fragment key={indicator.value}>
+          <Typography style={{marginBottom: 10}}>
+            {index + 1}. {indicator.label}
+            <DeleteIcon className={classes.deleteIndicatorIcon} onClick={() => removeIndicator(index)} />
+          </Typography>
+          <ResultsSelector
+            label="Результат"
+            onChange={addResult(index)}
+            valueLabel=""
+            value={0}
+            cleanLabelAfterSelect
+          />
+          <div className={classes.chipsList}>
+            {indicator.results.map(result => (
+              <Chip key={`result-${result.value}`} className={classes.chip} onDelete={() => removeResult(result.value, index)} label={result.label} />
+            ))}
+          </div>
 
-      <TextField
-        label="Знания"
-        onChange={(e) => changeKnowledge(e.currentTarget.value)}
-        variant="outlined"
-        className={classes.marginBottom30}
-      />
-      <TextField
-        label="Умения"
-        onChange={(e) => changeSkills(e.currentTarget.value)}
-        variant="outlined"
-        className={classes.marginBottom30}
-      />
-      <TextField
-        label="Навыки"
-        onChange={(e) => changeAttainments(e.currentTarget.value)}
-        variant="outlined"
-      />
+          <TextField
+            label="Знания"
+            onChange={changeZunFields(index, 'knowledge')}
+            variant="outlined"
+            className={classes.marginBottom30}
+          />
+          <TextField
+            label="Умения"
+            onChange={changeZunFields(index, 'skills')}
+            variant="outlined"
+            className={classes.marginBottom30}
+          />
+          <TextField
+            label="Навыки"
+            onChange={changeZunFields(index, 'attainments')}
+            variant="outlined"
+            className={indicators.length === index + 1 ? undefined : classes.marginBottom30}
+          />
+        </React.Fragment>
+      ))}
 
       <Typography className={classes.indicatorDialiogInfoMassage}>
         Нажимая кнопку "Сохранить", Вы сохраняете ЗУН в рпд с привязкой к каждому УП, с которым связана РПД (Если ЗУН пустой или имеет такое же содержание, как данный). Если Вы не хотите добавлять ЗУН для всех связных УП, Вам необходимо нажать селектор "Сохранить для конкретного УП" и выбрать нужную УП.
