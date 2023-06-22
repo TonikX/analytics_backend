@@ -106,7 +106,7 @@ export interface workProgramState {
     [fields.DIALOGS]: {};
     [fields.WORK_PROGRAM_COMMENTS]: Array<any>; //todo: change type
     competenceFilters: {
-        year: null|number,
+        year: number,
         imp: null|number,
         ap: null|number
     },

@@ -282,6 +282,7 @@ export default React.memo(() => {
                   minDate={'2017'}
                   maxDate={((new Date()).getFullYear() + 3).toString()}
                   noMargin
+                  value={filterYear.toString()}
               />
             </div>
 
