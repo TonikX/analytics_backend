@@ -14,7 +14,7 @@ export const initialState: workProgramState = {
     [fields.WORK_PROGRAM_EVALUATION_TOOL]: {},
 
     competenceFilters: {
-        year: null,
+        year: 2023,
         imp: null,
         ap: null
     },

@@ -4,7 +4,7 @@ from datetime import datetime, date
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from workprogramsapp.bars_merge.bars_api_getter import get_educational_program_main, get_disciplines, \
@@ -12,11 +12,13 @@ from workprogramsapp.bars_merge.bars_api_getter import get_educational_program_m
 from workprogramsapp.bars_merge.bars_function_for_threading import generate_single_checkpoint, \
     academicNTCheckpointGenerator
 from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, get_checkpoints_type, \
-    generate_discipline, generate_checkpoint_plan, generate_fos
+    generate_discipline, generate_checkpoint_plan, generate_fos, generate_checkpoint_new
+from workprogramsapp.bars_merge.checkpoints_dict import checkpoint_correspondence
 from workprogramsapp.bars_merge.models import BarsEPAssociate, BarsWorkProgramsAssociate, HistoryOfSendingToBars, \
     AcceptedBarsInWp
 from workprogramsapp.bars_merge.serializers import BarsEPAssociateSerializer, BarsWorkProgramsAssociateSerializer, \
     HistoryOfSendingBarsSerializer
+from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.models import WorkProgram, FieldOfStudy, ImplementationAcademicPlan, EvaluationTool, \
     DisciplineSection, WorkProgramChangeInDisciplineBlockModule, СertificationEvaluationTool, \
     WorkProgramIdStrUpForIsu
@@ -316,7 +318,7 @@ def SendCheckpointsForAcceptedWP(request):
                     isu_wp_id = None
                 except TypeError:
                     isu_wp_id = None
-                    
+
                 for imp in implementation_of_academic_plan:
                     # создаем список направлений + уп с айдишниками ИСУ для БАРСа
                     try:
@@ -339,7 +341,8 @@ def SendCheckpointsForAcceptedWP(request):
 
                 # Если существует список УП, соответствует текущему семестру и не является специальной РПД
                 if imp_list and isu_wp_id and current_term % 2 == send_semester \
-                        and not (work_program.id in wp_for_many_terms_list or work_program.discipline_code in isu_bank_many_term):
+                        and not (
+                        work_program.id in wp_for_many_terms_list or work_program.discipline_code in isu_bank_many_term):
                     # Генерируем чекпоинт со всеми УП, прямыми и относиетльным семестром
 
                     request_text = generate_single_checkpoint(absolute_semester=current_term + 1,
@@ -370,7 +373,8 @@ def SendCheckpointsForAcceptedWP(request):
 
         # Выход из цикла по семестрам
         # Если РПД "особая" (реализуется в нескольких семестрах одновременно (как факультативы))
-        if (work_program.id in wp_for_many_terms_list or work_program.discipline_code in isu_bank_many_term) and minimal_sem_for_many_term != 0:
+        if (
+                work_program.id in wp_for_many_terms_list or work_program.discipline_code in isu_bank_many_term) and minimal_sem_for_many_term != 0:
             if not relative_bool:
                 count_relative = send_semester + 1
                 absolute_semester = send_semester + 1
@@ -404,7 +408,6 @@ def SendCheckpointsForAcceptedWP(request):
             all_sends.append(
                 {"status": request_status_code, "request": request_text, "response": request_response})
     return Response(all_sends)
-
 
 
 @api_view(['POST'])
@@ -477,3 +480,68 @@ def SetBarsPointerTrueToWP(request):
                                         zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__qualification="bachelor").distinct()
         wp.update(bars=True)
     return Response("Надеюсь, ничего не сломалось")
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def GetWPForBARS(request, isu_wp_id):
+    """
+    Передача конкретной РПД по айдишнику в БАРС
+    """
+    wp = WorkProgram.objects.get(discipline_code=str(isu_wp_id))
+    try:
+        exp = Expertise.objects.get(work_program=wp)
+        expertise_status_name = exp.get_expertise_status_display()
+        expertise_short_name = exp.expertise_status
+    except Expertise.DoesNotExist:
+        expertise_status_name = "В работе"
+        expertise_short_name = "WK"
+    wp_dict = {"id": wp.id,
+               "isu_id": int(wp.discipline_code),
+               "name": wp.title,
+               "additional_points": False if wp.extra_points == "0" or not wp.extra_points else True,
+               "expertise_status_name": expertise_status_name,
+               "expertise_short_name": expertise_short_name,
+               "terms": []}
+    for sem in range(wp.number_of_semesters):
+        term_dict = {"relative_term": sem + 1, "regular_checkpoints": [], "final_checkpoint": None,
+                     "course_project_checkpoint": None, "point_distribution": None}
+        evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__work_program__id=wp.id,
+                                                         semester=sem + 1)
+
+        certificate = СertificationEvaluationTool.objects.filter(work_program__id=wp.id,
+                                                                 semester=sem + 1)
+        print(certificate)
+        for cerf in certificate:
+            # Отдельно обрабатываем случай наличия курсовика
+            if int(cerf.type) == 4 or int(cerf.type) == 5:
+                course_project = generate_checkpoint_new(name=cerf.name, min=cerf.min, max=cerf.max, week=None,
+                                                         type_name="Курсовая Работа",
+                                                         key=False)
+                term_dict["course_project_checkpoint"] = course_project
+            else:
+                try:
+                    point_distribution = 100 - cerf.max
+                except TypeError:
+                    point_distribution = None
+                final_checkpoint = generate_checkpoint_new(name=cerf.name, min=cerf.min, max=cerf.max, week=None,
+                                                           type_name=get_checkpoints_type(int(cerf.type),
+                                                                                          get_name=True), key=False)
+                term_dict["point_distribution"] = point_distribution
+                term_dict["final_checkpoint"] = final_checkpoint
+
+        for tool in evaluation_tools:
+            checkpoint_name = None
+            if tool.type in checkpoint_correspondence:
+                checkpoint_name = tool.type
+            else:
+                for key, value in checkpoint_correspondence.items():
+                    if tool.type in value:
+                        checkpoint_name = key
+                        break
+
+            checkpoint_dict = {"name": tool.name, "min_grade": tool.min, "max_grade": tool.max, "week": tool.deadline,
+                               "key": tool.check_point, "type": checkpoint_name}
+            term_dict["regular_checkpoints"].append(checkpoint_dict)
+        wp_dict["terms"].append(term_dict)
+    return Response(wp_dict, status=200)

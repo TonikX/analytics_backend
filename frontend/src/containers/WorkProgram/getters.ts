@@ -11,7 +11,7 @@ import {workProgramState} from './types';
 const getStateData = (state: rootState): workProgramState => get(state, GENERAL_PATH);
 export const getWorkProgramComments = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM_COMMENTS, {});
 export const getWorkProgramCompetenceFilters = (state: rootState) => get(getStateData(state), 'competenceFilters', {});
-export const getWorkProgramCompetenceFiltersYear = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'year', null);
+export const getWorkProgramCompetenceFiltersYear = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'year', 2023);
 export const getWorkProgramCompetenceFiltersAP = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'ap', null);
 export const getWorkProgramCompetenceFiltersImp = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'imp', null);
 

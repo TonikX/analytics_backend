@@ -279,9 +279,10 @@ export default React.memo(() => {
                   views={["year"]}
                   onChange={onChangeFilterYear}
                   format={YEAR_DATE_FORMAT}
-                  minDate={'1984'}
+                  minDate={'2017'}
                   maxDate={((new Date()).getFullYear() + 3).toString()}
                   noMargin
+                  value={filterYear.toString()}
               />
             </div>
 
