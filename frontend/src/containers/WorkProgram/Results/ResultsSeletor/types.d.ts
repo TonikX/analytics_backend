@@ -6,4 +6,5 @@ export interface SelectorProps {
   className?: any;
   disabled?: boolean;
   valueLabel?: string;
+  cleanLabelAfterSelect?: boolean;
 }

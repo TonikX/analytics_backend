@@ -2,6 +2,15 @@ import {createStyles, makeStyles} from "@mui/styles";
 import {Theme} from "@mui/material";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
+  selectorWrap: {
+    width: '350px',
+    '& .MuiInputLabel-shrink': {
+      transform: 'translate(14px, -6.5px) scale(0.75) !important',
+    },
+    '& .MuiOutlinedInput-notchedOutline legend': {
+      width: '90px !important'
+    }
+  },
   smallButton: {
     cursor: 'pointer',
     color: theme.palette.primary.main,
@@ -25,6 +34,26 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     '&:hover': {
       color: theme.palette.primary.main,
     }
+  },
+  competenceFilter: {
+    display: 'flex',
+  },
+  competenceFilterDate: {
+    maxWidth: '250px',
+  },
+  competenceFilterSelect: {
+    marginLeft: '30px',
+    marginBottom: '20px',
+    '& label': {
+      backgroundColor: '#fff',
+      paddingRight: '10px'
+    }
+  },
+  filterMessage: {
+    fontSize: '24px !important',
+    textAlign: 'center',
+    marginTop: '20px !important',
+    display: 'block',
   },
   addZUNButton: {
     marginLeft: 'auto !important'

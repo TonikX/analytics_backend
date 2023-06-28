@@ -82,7 +82,7 @@ class SearchSelector extends React.Component<SearchSelectorProps> {
     };
 
     setItem = (value: ReactText, label: string) => (e: React.MouseEvent) => {
-        this.setState({searchText: label});
+        this.setState({searchText: this.props.cleanLabelAfterSelect ? '' : label});
         this.props.changeItem(value, label);
     }
 

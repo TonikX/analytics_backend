@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState, useRef} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import get from 'lodash/get'
 import {Link} from 'react-router-dom'
@@ -18,20 +18,34 @@ import Box from '@mui/material/Box';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
+import Typography from "@mui/material/Typography";
 
 import { rootState } from '../../../store/reducers'
 import {appRouter} from "../../../service/router-service";
 
 import actions from '../actions'
-import {getApWithCompetencesAndIndicatorsToWp, getAllCompetencesAndIndicatorsForWp, getWorkProgramId} from '../getters'
+import {
+  getApWithCompetencesAndIndicatorsToWp,
+  getAllCompetencesAndIndicatorsForWp,
+  getWorkProgramId,
+  getWorkProgramField,
+  getWorkProgramCompetenceFiltersImp,
+  getWorkProgramCompetenceFiltersAP,
+  getWorkProgramCompetenceFiltersYear,
+} from '../getters'
 
 import IndicatorsDialog from './IndicatorDialog'
 import {UpdateZunDialog} from './UpdateZunDialog'
 
+import SimpleSelector from '../../../components/SimpleSelector';
+import DatePickerComponent from '../../../components/DatePicker';
+
 import { useStyles } from './Competences.styles'
+import {YEAR_DATE_FORMAT} from "../../../common/utils";
 
 export default React.memo(() => {
   const dispatch = useDispatch()
+  const isFirstEnterSecondTab = useRef(true)
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
   const [isOpenUpdateZunDialog, setIsOpenUpdateZunDialog] = useState<any>(false)
   const [tab, setTab] = useState('1')
@@ -51,24 +65,92 @@ export default React.memo(() => {
     setIsOpenIndicatorDialog(true)
   }
 
-  useEffect(() => {
-    if (workProgramId) {
-      dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
-      dispatch(actions.getAllCompetencesAndIndicatorsForWp())
-    }
-  }, [workProgramId]);
-
   const deleteZun = (zunId: number) => {
     dispatch(actions.deleteZUN(zunId))
   }
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    if (isFirstEnterSecondTab.current) {
+      dispatch(actions.getAllCompetencesAndIndicatorsForWp())
+      isFirstEnterSecondTab.current = false
+    }
     setTab(newValue);
   };
+
+  const filterImp = useSelector((state: rootState) => getWorkProgramCompetenceFiltersImp(state))
+  const filterAp = useSelector((state: rootState) => getWorkProgramCompetenceFiltersAP(state))
+  const filterYear = useSelector((state: rootState) => getWorkProgramCompetenceFiltersYear(state))
+
+  const filterMessage = !filterAp ? (
+    <Typography className={classes.filterMessage}>
+      Выберите учебный план, чтобы увидеть результаты
+    </Typography>
+  ) : null;
+
+  const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
+
+  const impList = epList && epList.reduce((plans:any, currentPlan:any) => {
+    const academicPlan = currentPlan?.discipline_block_module?.descipline_block[0]?.academic_plan;
+    const desciplineBlock = currentPlan?.discipline_block_module?.descipline_block[0];
+    if (academicPlan === undefined) {
+      return plans;
+    }
+
+    return ([
+      ...plans,
+      {
+        value: desciplineBlock?.id,
+        label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
+                 `,
+      }
+    ])
+  }, [])
+
+  const apList = epList && epList.reduce((plans:any, currentPlan:any) => {
+    const academicPlan = currentPlan?.discipline_block_module?.descipline_block[0]?.academic_plan;
+    if (academicPlan === undefined || filterYear && +filterYear !== academicPlan?.academic_plan_in_field_of_study[0]?.year) {
+      return plans;
+    }
+
+    return ([
+      ...plans,
+      {
+        value: academicPlan?.id,
+        label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
+                 `,
+      }
+    ])
+  }, [])
+
+  const onChangeFilterYear = (value:any) => {
+    dispatch(actions.updateCompetenceFilterYear(value ? value.format(YEAR_DATE_FORMAT) : ''))
+    dispatch(actions.updateCompetenceFilterAP(null))
+    if (filterImp || filterAp) {
+      dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
+    }
+  }
+
+  const onChangeFilterIMP = (value:any) => {
+    dispatch(actions.updateCompetenceFilterIMP(value))
+    dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
+  }
+
+  const onChangeFilterAP = (value:any) => {
+    dispatch(actions.updateCompetenceFilterAP(value))
+    dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
+  }
 
   return (
     <>
     <Box sx={{ width: '100%', typography: 'body1' }}>
+      <Typography>
+        Вариант 1 - отображение компетенций и их индикаторов <b>по выбранному учебному плану</b> <br/>
+        Вариант 2 - отображение всех компетенций их индикаторов и связанных с ними учебных планов <br/>
+      </Typography>
       <TabContext value={tab}>
         <Box
             sx={{ borderBottom: 1, borderColor: 'divider' }}
@@ -87,7 +169,8 @@ export default React.memo(() => {
               Добавить ЗУН
           </Button>
         </Box>
-        <TabPanel className={classes.workProgramTabPanel} value="1">
+
+        <TabPanel className={classes.workProgramTabPanel} value="2">
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -168,7 +251,7 @@ export default React.memo(() => {
                               <Link to={appRouter.getPlanDetailLink(educationalProgram.academic_plan.id)} target="_blank">
                                 {get(fieldOfStudy, 'number', '')} {get(fieldOfStudy, 'title', '')}
                                 /
-                                {educationalProgram.title}</Link>
+                                {educationalProgram.title} ({educationalProgram?.year})</Link>
                             </div>
                           ))
                       )}
@@ -187,7 +270,45 @@ export default React.memo(() => {
 
         </TabPanel>
 
-        <TabPanel value="2" className={classes.workProgramTabPanel}>
+        <TabPanel value="1" className={classes.workProgramTabPanel}>
+
+          <div className={classes.competenceFilter}>
+            <div className={classes.competenceFilterDate}>
+              <DatePickerComponent
+                  label="Год"
+                  views={["year"]}
+                  onChange={onChangeFilterYear}
+                  format={YEAR_DATE_FORMAT}
+                  minDate={'2017'}
+                  maxDate={((new Date()).getFullYear() + 3).toString()}
+                  noMargin
+                  value={filterYear.toString()}
+              />
+            </div>
+
+            {/*<div className={classes.competenceFilterSelect}>*/}
+            {/*  <SimpleSelector*/}
+            {/*      label="Имплементация УП"*/}
+            {/*      metaList={impList || []}*/}
+            {/*      onChange={onChangeFilterIMP}*/}
+            {/*      wrapClass={classes.selectorWrap}*/}
+            {/*      noMargin*/}
+            {/*  />*/}
+            {/*</div>*/}
+
+            <div className={classes.competenceFilterSelect}>
+              <SimpleSelector
+                  label="Учебный план"
+                  metaList={apList || []}
+                  onChange={onChangeFilterAP}
+                  wrapClass={classes.selectorWrap}
+                  noMargin
+                  value={filterAp ? filterAp : undefined}
+                  key={filterAp}
+              />
+            </div>
+          </div>
+
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -208,9 +329,14 @@ export default React.memo(() => {
                 </TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
               {competencesList1.map((syllabus: any) => {
-                return syllabus.competences.map((competence: any, index: number) => {
+                const allZunsIntoSyllabusCount = syllabus.competences.reduce((count: number, competence: any) => {
+                  return count + competence.zuns.length || 0
+                }, 0)
+
+                return syllabus.competences.map((competence: any, competenceIndex: number) => {
                   const addIndicatorButton = (
                     <div className={classes.smallButton}
                         onClick={() => {
@@ -229,13 +355,16 @@ export default React.memo(() => {
                   if (zuns.length === 0) {
                     return (
                       <TableRow>
-                        <TableCell className={classes.cell}>
-                          <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
-                            {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
-                            /
-                            {syllabus?.title}
-                          </Link>
-                        </TableCell>
+                        {competenceIndex === 0 ? (
+                          <TableCell className={classes.cell} rowSpan={allZunsIntoSyllabusCount}>
+                            <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
+                              {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
+                              /
+                              {syllabus?.title}
+                            </Link>
+                          </TableCell>
+                        ) : null }
+
                         <TableCell className={classes.cell}>
                           {competence?.number} {competence?.name}
                           {addIndicatorButton}
@@ -249,20 +378,20 @@ export default React.memo(() => {
 
                   return zuns.map((zun: any, index: number) => (
                     <TableRow>
+                      {competenceIndex === 0 && index === 0 ? (
+                        <TableCell rowSpan={allZunsIntoSyllabusCount} className={classes.cell}>
+                          <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
+                            {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
+                            /
+                            {syllabus?.title} ({syllabus?.year})
+                          </Link>
+                        </TableCell>
+                      ) : null}
                       {index === 0 ?
-                        <>
-                          <TableCell rowSpan={zuns.length} className={classes.cell}>
-                            <Link to={appRouter.getPlanDetailLink(syllabus?.academic_plan?.id)} target="_blank">
-                              {syllabus?.field_of_study[0]?.number} {syllabus?.field_of_study[0]?.title}
-                              /
-                              {syllabus?.title}
-                            </Link>
-                          </TableCell>
-                          <TableCell rowSpan={zuns.length} className={classes.cell}>
-                            {competence?.number} {competence?.name}
-                            {addIndicatorButton}
-                          </TableCell>
-                        </>
+                        <TableCell rowSpan={zuns.length} className={classes.cell}>
+                          {competence?.number} {competence?.name}
+                          {addIndicatorButton}
+                        </TableCell>
                         : null
                       }
                       <TableCell className={classes.cell}>
@@ -288,16 +417,19 @@ export default React.memo(() => {
               })}
             </TableBody>
           </Table>
-
+          {filterMessage}
         </TabPanel>
       </TabContext>
     </Box>
-    <IndicatorsDialog
-      isOpen={isOpenIndicatorDialog}
-      handleClose={handleCloseDialog}
-      defaultCompetence={dialogCompetence}
-      workProgramId={workProgramId}
-    />
+    {isOpenIndicatorDialog ?
+      <IndicatorsDialog
+        isOpen={isOpenIndicatorDialog}
+        handleClose={handleCloseDialog}
+        defaultCompetence={dialogCompetence}
+        workProgramId={workProgramId}
+      />
+      : null
+    }
     {isOpenUpdateZunDialog ?
       <UpdateZunDialog
         isOpen

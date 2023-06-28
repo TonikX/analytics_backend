@@ -8,7 +8,7 @@ import actions from '../../actions'
 import { SelectorProps } from './types'
 import {getIndicatorsForSelector} from "../../getters";
 
-export default ({onChange, value, isReset, label, className, competenceId, disabled, valueLabel}: SelectorProps) => {
+export default ({onChange, value, isReset, label, className, competenceId, disabled, valueLabel, cleanLabelAfterSelect}: SelectorProps) => {
   const dispatch = useDispatch()
   const list = useSelector((state: rootState) => getIndicatorsForSelector(state))
 
@@ -39,6 +39,7 @@ export default ({onChange, value, isReset, label, className, competenceId, disab
       isReset={isReset}
       className={classNames({[className]: className})}
       disabled={disabled}
+      cleanLabelAfterSelect={cleanLabelAfterSelect}
     />
   )
 }

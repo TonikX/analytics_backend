@@ -20,8 +20,7 @@ const Selector = ({classes, label, value, onChange, noMargin, wrapClass, metaLis
     }
 
     return (
-        <FormControl className={classNames(wrapClass, {[classes.marginBottom30]: !noMargin})}
-                     error={!!errorMessage}>
+        <FormControl className={classNames(wrapClass, {[classes.marginBottom30]: !noMargin})} error={!!errorMessage}>
             <InputLabel shrink id="section-label">
                 {label}
             </InputLabel>

@@ -18,6 +18,10 @@ import {CommentType} from "../../components/Comments/types";
 export interface WorkProgramActions {
     pageDown: any;
 
+    updateCompetenceFilterYear: any,
+    updateCompetenceFilterIMP: any,
+    updateCompetenceFilterAP: any,
+
     saveZUN: any;
     saveZUNforThisEP: any;
     deleteZUN: any;
@@ -101,6 +105,11 @@ export interface workProgramState {
     [fields.WORK_PROGRAM_RESULTS]: Array<any>;
     [fields.DIALOGS]: {};
     [fields.WORK_PROGRAM_COMMENTS]: Array<any>; //todo: change type
+    competenceFilters: {
+        year: number,
+        imp: null|number,
+        ap: null|number
+    },
 }
 
 export type WorkProgramGeneralType = {

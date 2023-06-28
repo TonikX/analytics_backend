@@ -7,7 +7,7 @@ export interface DatePickerProps extends WithStyles<typeof styles> {
     noMargin?: boolean;
     format?: string;
     views?: Array<any>;
-    value: string;
+    value?: string;
     minDate?: string;
     maxDate?: string;
 }

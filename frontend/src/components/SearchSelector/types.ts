@@ -14,6 +14,7 @@ export interface SearchSelectorProps extends WithStyles<typeof styles> {
     isReset?: boolean;
     popperPlacement?: any; // возможно в новой версии нету этого
     errorMessage?: string;
+    cleanLabelAfterSelect?: boolean;
 }
 
 export type SelectorListType = Array<SelectorItemType>;

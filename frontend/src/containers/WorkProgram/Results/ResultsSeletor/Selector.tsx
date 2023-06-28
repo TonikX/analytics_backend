@@ -7,7 +7,7 @@ import { rootState } from '../../../../store/reducers'
 import { SelectorProps } from './types'
 import {getResultsForSelect} from "../../getters";
 
-export default ({onChange, value, isReset, label, className, disabled, valueLabel}: SelectorProps) => {
+export default ({onChange, value, isReset, label, className, disabled, valueLabel, cleanLabelAfterSelect}: SelectorProps) => {
   const list = useSelector((state: rootState) => getResultsForSelect(state))
 
   return (
@@ -21,6 +21,7 @@ export default ({onChange, value, isReset, label, className, disabled, valueLabe
       isReset={isReset}
       className={classNames({[className]: className})}
       disabled={disabled}
+      cleanLabelAfterSelect={cleanLabelAfterSelect}
     />
   )
 }
