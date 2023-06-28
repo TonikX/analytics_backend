@@ -16,6 +16,7 @@ services:
       - ./dbs/postgres-data-prod:/var/lib/postgresql
   cache:
     image: memcached
+    privileged: true
     ports:
       - "11211:11211"
     entrypoint:
