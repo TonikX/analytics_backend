@@ -30,7 +30,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = env('DEBUG') == True
-DEBUG = env('DEBUG')
+DEBUG = env('DEBUG') == True
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
@@ -334,7 +334,7 @@ CACHES = {
     }
 }
 
-if os.environ['DEBUG']:
+if os.environ['DEBUG'] == True:
     LOGGING = {
         'version': 1,
         'formatters': {
