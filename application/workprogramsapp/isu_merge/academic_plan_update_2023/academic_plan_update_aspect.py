@@ -92,11 +92,11 @@ class AcademicPlanUpdateAspect:
             isu_academic_plan_block_json, academic_plan_object, isu_academic_plan_json = args
 
             if DisciplineBlock.objects.filter(
-                    name=isu_academic_plan_block_json['block_name'],
+                    name=isu_academic_plan_block_json['name'],
                     academic_plan=academic_plan_object
             ).exists():
                 old_discipline_block_object = DisciplineBlock.objects.get(
-                    name=isu_academic_plan_block_json['block_name'],
+                    name=isu_academic_plan_block_json['name'],
                     academic_plan=academic_plan_object
                 )
             else:
@@ -121,14 +121,14 @@ class AcademicPlanUpdateAspect:
             isu_academic_plan_block_module_json, discipline_block_object, isu_academic_plan_json = args
             # print(isu_academic_plan_block_module_json)
             if DisciplineBlockModule.objects.filter(
-                    name=isu_academic_plan_block_module_json['module_name'],
-                    module_isu_id=isu_academic_plan_block_module_json['module_id '],
-                    descipline_block=discipline_block_object
+                    name=isu_academic_plan_block_module_json['name'],
+                    module_isu_id=isu_academic_plan_block_module_json['id'],
+                    #descipline_block=discipline_block_object
             ).exists():
                 old_discipline_block_module_object = DisciplineBlockModule.objects.get(
-                    name=isu_academic_plan_block_module_json['module_name'],
-                    module_isu_id=isu_academic_plan_block_module_json['module_id '],
-                    descipline_block=discipline_block_object
+                    name=isu_academic_plan_block_module_json['name'],
+                    module_isu_id=isu_academic_plan_block_module_json['id'],
+                    #descipline_block=discipline_block_object
                 )
             else:
                 old_discipline_block_module_object = None
@@ -139,14 +139,14 @@ class AcademicPlanUpdateAspect:
             print(updated_discipline_block_module_object)
 
             print('try to start')
-            discipline_block_module_object_relations_updater(updated_discipline_block_module_object)
+            #discipline_block_module_object_relations_updater(updated_discipline_block_module_object)
 
-            AcademicPlanUpdateLogger.log_changes(
-                isu_academic_plan_json["id"],
-                AcademicPlanUpdateLogger.LoggedObjectType.DISCIPLINE_BLOCK_MODULE,
-                old_discipline_block_module_object,
-                updated_discipline_block_module_object
-            )
+            # AcademicPlanUpdateLogger.log_changes(
+            #     isu_academic_plan_json["id"],
+            #     AcademicPlanUpdateLogger.LoggedObjectType.DISCIPLINE_BLOCK_MODULE,
+            #     old_discipline_block_module_object,
+            #     updated_discipline_block_module_object
+            # )
 
             return updated_discipline_block_module_object
 
