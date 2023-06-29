@@ -11,6 +11,8 @@ import actions from '../../../actions'
 import {useDispatch} from 'react-redux'
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 interface IndicatorsProps {
     workProgramId?: number;
@@ -36,6 +38,7 @@ interface IndicatorsProps {
 export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, practiceId, workProgramId, addedIndicators, onDeleteZun}: IndicatorsProps) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const [skipReload, setSkipReload] = useState(false);
     const [competence, setCompetence] = useState<{ value: number; label: string }>({value: 0, label: ''});
     const [indicator, setIndicator] = useState<{ value: number; label: string }>({value: 0, label: ''});
     const [onlyCurrentGh, setOnlyCurrentGh] = useState(true);
@@ -72,9 +75,10 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, pract
             workprogram_id: workProgramId,
             practice_id: practiceId,
             onlyCurrentGh: onlyCurrentGh,
+            skipReload,
         }));
         close()
-    }, [indicator, competence, onlyCurrentGh]);
+    }, [indicator, competence, onlyCurrentGh, skipReload]);
 
     const disableButton = useMemo(() => (indicator.value === 0 || competence.value === 0),
         [indicator, competence]
@@ -154,6 +158,11 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, pract
                     </MenuItem>
                 )}
             </Select>
+            <FormControlLabel
+              style={{marginTop: 10}}
+              control={<Checkbox checked={skipReload} onChange={(e, checked) => setSkipReload(checked)} />}
+              label="Не перезагружать страницу после добавления индикатора (изменения отобразятся после перезагрузки страницы вручную)"
+            />
             <DialogActions className={classes.actions}>
                 <Button onClick={close}
                         variant="text">

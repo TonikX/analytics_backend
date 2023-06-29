@@ -138,6 +138,7 @@ export interface CharacteristicProps extends withStyles<typeof characterisicStyl
     educationalProgramCharacteristic: any;
     canEdit: boolean;
     statusInfo: any;
+    location: any;
 }
 
 export type CharacteristicCreateGroupActionType = {

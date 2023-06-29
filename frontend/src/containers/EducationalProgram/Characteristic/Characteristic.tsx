@@ -36,8 +36,8 @@ import {CompetenceType} from "../../Competences/types";
 import {CompetenceFields} from "../../Competences/enum";
 import {IndicatorType} from "../../Indicators/types";
 import {IndicatorsFields} from "../../Indicators/enum";
-import {CompetenceTable} from "./CompetencesTable/CompetenceTable";
-import {ProfessionalCompetences} from "./ProfessionalCompetences/ProfessionalCompetences";
+import {CompetenceTable} from "./CompetencesTable";
+import {ProfessionalCompetences} from "./ProfessionalCompetences";
 import ForsitesProfessionalCompetences from "./ForsitesProfessionalCompetences";
 import MinorProfessionalCompetences from "./MinorProfessionalCompetences";
 import AreaOfActivity from "./AreaOfActivity";
@@ -66,11 +66,28 @@ class Characteristic extends React.Component<CharacteristicProps> {
   };
 
   componentDidMount() {
+    this.selectActiveStep()
     this.props.actions.getEducationalProgramCharacteristic(get(this.props, 'params.id'));
   }
 
-  handleStep = (number: number) => () => {
-    this.setState({activeStep: number})
+  componentDidUpdate(prevProps: CharacteristicProps) {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      this.selectActiveStep()
+    }
+  }
+
+  selectActiveStep = () => {
+    const locations = this.props.location.pathname.split('/')
+    const section = locations[locations.length - 1] - 1
+
+    this.setState({activeStep: section})
+  }
+
+  getCharacteristicId = () => get(this.props, 'params.id')
+
+  handleStep = (link: (id: number) => string) => {
+    // @ts-ignore
+    this.props.navigate(link(this.getCharacteristicId()))
   };
 
   handleChangeEducationProgramYear = (value: any) => {
@@ -742,13 +759,13 @@ class Characteristic extends React.Component<CharacteristicProps> {
                    nonLinear
                    className={classes.stepper}
           >
-            {steps.map((value, index) => {
+            {steps.map(({label, link}, index) => {
               return (
                 <Step key={index}>
-                  <StepButton onClick={this.handleStep(index)}
+                  <StepButton onClick={() => this.handleStep(link)}
                               style={{textAlign: 'left'}}
                   >
-                    {value}
+                    {label}
                   </StepButton>
                 </Step>
               );

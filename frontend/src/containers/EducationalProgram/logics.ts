@@ -175,7 +175,7 @@ const saveZun = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
 
         const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
-        const {indicator, workprogram_id, onlyCurrentGh, practice_id} = action.payload;
+        const {indicator, workprogram_id, onlyCurrentGh, practice_id, skipReload} = action.payload;
 
         if (onlyCurrentGh) {
           service.saveZUN({
@@ -185,7 +185,9 @@ const saveZun = createLogic({
             practice_id,
           })
               .then(() => {
-                dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                if (!skipReload) {
+                  dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                }
                 dispatch(actions.fetchingSuccess());
               })
               .catch((err) => {
@@ -202,7 +204,9 @@ const saveZun = createLogic({
             practice_id,
           })
               .then(() => {
-                dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                if (!skipReload) {
+                  dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                }
                 dispatch(actions.fetchingSuccess());
               })
               .catch((err) => {
