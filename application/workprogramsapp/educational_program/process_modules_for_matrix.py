@@ -35,12 +35,7 @@ def get_competences_practice(practice_in_fs):
             for item in items:
                 items_array.append({"id": item.id, "name": item.name})
             # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
-            queryset = ImplementationAcademicPlan.objects.filter(
-                academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb_for_practice__zun_in_practice__id=zun.id)
-            serializer = ImplementationAcademicPlanSerializer(queryset, many=True)
-            zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
-                               "attainments": zun.attainments, "indicator": indicator,
-                               "items": items_array, "educational_program": serializer.data,
+            zuns_array.append({"id": zun.id, "indicator": indicator,
                                "wp_in_fs": PracticeInFieldOfStudyCreateSerializer(
                                    PracticeInFieldOfStudy.objects.get(zun_in_practice=zun.id)).data["id"]})
         competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
@@ -68,8 +63,8 @@ def get_competences_wp(wp_in_fs):
             #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
             # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
 
-            zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
-                               "attainments": zun.attainments, "indicator": indicator,
+            zuns_array.append({"id": zun.id,
+                                "indicator": indicator,
                                "wp_in_fs": WorkProgramInFieldOfStudySerializerForCb(
                                    WorkProgramInFieldOfStudy.objects.get(zun_in_wp=zun.id)).data["id"]})
         competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
@@ -81,17 +76,17 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
     block_module_dict = {"name": block_module.name, "type": block_module.type,
                          "change_blocks_of_work_programs_in_modules": [], "childs": []}
     # block_dict["modules_in_discipline_block"].append(block_module_dict)
-    if block_module.childs.all().exists():
-        for child in block_module.childs.all():
+    childs = block_module.childs.prefetch_related("change_blocks_of_work_programs_in_modules", "childs")
+    if childs.exists():
+        for child in childs:
             lower_module = recursion_module_matrix(child, unique_wp, unique_gia, unique_practice, first_ap_iter)
             if lower_module["change_blocks_of_work_programs_in_modules"] or lower_module["childs"]:
                 block_module_dict["childs"].append(lower_module)
-    for change_block in WorkProgramChangeInDisciplineBlockModule.objects.filter(
-            discipline_block_module=block_module):
+    for change_block in block_module.change_blocks_of_work_programs_in_modules.prefetch_related("work_program", "practice", "gia"):
         change_block_dict = {"change_type": change_block.change_type,
                              "credit_units": change_block.credit_units, "work_program": [], "practice": [], 'gia': []}
         # block_module_dict["change_blocks_of_work_programs_in_modules"].append(change_block_dict)
-        for work_program in WorkProgram.objects.filter(work_program_in_change_block=change_block):
+        for work_program in change_block.work_program.all():
             if (work_program.id not in unique_wp) or first_ap_iter:
                 wp_in_fs = WorkProgramInFieldOfStudy.objects.get(work_program=work_program,
                                                                  work_program_change_in_discipline_block_module=change_block)
@@ -101,7 +96,7 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
             else:
                 pass
                 # print(work_program)
-        for practice in Practice.objects.filter(practice_in_change_block=change_block):
+        for practice in change_block.practice.all():
             if (practice.id not in unique_practice) or first_ap_iter:
                 practice_in_fs = PracticeInFieldOfStudy.objects.get(practice=practice,
                                                                     work_program_change_in_discipline_block_module=change_block)
@@ -112,7 +107,7 @@ def recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice
             else:
                 pass
                 # print(work_program)
-        for gia in GIA.objects.filter(gia_in_change_block=change_block):
+        for gia in change_block.gia.all():
             if (gia.id not in unique_gia) or first_ap_iter:
                 serializer = GIASmallSerializer(gia)
                 change_block_dict['gia'].append(serializer.data)
