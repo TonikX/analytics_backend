@@ -38,7 +38,7 @@ interface IndicatorsProps {
 export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, practiceId, workProgramId, addedIndicators, onDeleteZun}: IndicatorsProps) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [skipReload, setSkipReload] = useState(false);
+    const [skipReload, setSkipReload] = useState(true);
     const [competence, setCompetence] = useState<{ value: number; label: string }>({value: 0, label: ''});
     const [indicator, setIndicator] = useState<{ value: number; label: string }>({value: 0, label: ''});
     const [onlyCurrentGh, setOnlyCurrentGh] = useState(true);
@@ -161,7 +161,7 @@ export default ({isOpen, handleClose, defaultCompetence, defaultIndicator, pract
             <FormControlLabel
               style={{marginTop: 10}}
               control={<Checkbox checked={skipReload} onChange={(e, checked) => setSkipReload(checked)} />}
-              label="Не перезагружать страницу после добавления индикатора (изменения отобразятся после перезагрузки страницы вручную)"
+              label={<b style={{fontSize: 16}}>Не перезагружать страницу после добавления индикатора (изменения отобразятся после перезагрузки страницы вручную)</b>}
             />
             <DialogActions className={classes.actions}>
                 <Button onClick={close}

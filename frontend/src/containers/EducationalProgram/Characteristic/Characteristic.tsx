@@ -78,8 +78,10 @@ class Characteristic extends React.Component<CharacteristicProps> {
 
   selectActiveStep = () => {
     const locations = this.props.location.pathname.split('/')
+    if (locations.length === 3) {
+      return this.handleStep(steps[0].link)
+    }
     const section = locations[locations.length - 1] - 1
-
     this.setState({activeStep: section})
   }
 
