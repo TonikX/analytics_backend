@@ -715,6 +715,10 @@ class Characteristic extends React.Component<CharacteristicProps> {
     })
   };
 
+  handleUpdateMatrixTable = () => {
+    this.props.actions.getCompetenceMatrix(this.getEducationalProgramCharacteristicId())
+  }
+
   render() {
     //@ts-ignore
     const {classes} = this.props;
@@ -797,6 +801,10 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 </div>
               </div>
             </Typography>
+
+            {activeStep === steps.length - 1 ? (
+              <Button style={{marginBottom: 10}} onClick={this.handleUpdateMatrixTable}><b>Обновить таблицу</b></Button>
+            ) : null}
 
             {this.renderContent()}
           </div>
