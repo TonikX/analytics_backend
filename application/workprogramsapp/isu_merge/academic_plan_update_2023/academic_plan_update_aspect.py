@@ -160,10 +160,10 @@ class AcademicPlanUpdateAspect:
 
             # todo get() returned more than one WorkProgram -- it returned 11!
             if WorkProgram.objects.filter(
-                    discipline_code=str(isu_academic_plan_discipline_json['disc_id'])
+                    discipline_code=str(isu_academic_plan_discipline_json['id'])
             ).exists():
                 old_work_program_object = WorkProgram.objects.filter(
-                    discipline_code=str(isu_academic_plan_discipline_json['disc_id'])
+                    discipline_code=str(isu_academic_plan_discipline_json['id'])
                 )[0]
             else:
                 old_work_program_object = None

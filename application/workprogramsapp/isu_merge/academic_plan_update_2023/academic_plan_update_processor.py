@@ -97,102 +97,102 @@ class AcademicPlanUpdateProcessor:
 
             work_program_object.save()
 
-        def watchmaker(hours, ze):
-            ze = ze
-            sem = 0
-            all_ze_indexes_in_rpd = 0
-            # todo was  lecture_hours_v2 = [0, 0, 0, 0], with 10752 index out of range
-            lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ## print(lecture_hours_v2)
-            for i in hours:
-                ## print(hours)
-                if ze[all_ze_indexes_in_rpd] >= 1.0:
-                    lecture_hours_v2[sem] = i
-                    sem += 1
-                all_ze_indexes_in_rpd += 1
-
-            return str(lecture_hours_v2).strip("[]")
-
-        def structural_unit(isu_academic_plan_discipline_json):
-            if StructuralUnit.objects.filter(title=str(isu_academic_plan_discipline_json['discipline_doer'].strip())):
-                st_unit = \
-                    StructuralUnit.objects.filter(title=isu_academic_plan_discipline_json['discipline_doer'].strip())[0]
-                st_unit.isu_id = int(isu_academic_plan_discipline_json['discipline_doer_id'])
-                # print('Структурное подразделение записалось')
-                st_unit.save()
-            else:
-                # print(isu_academic_plan_discipline_json['discipline_doer'].strip())
-                # print(isu_academic_plan_discipline_json['discipline_doer_id'])
-                StructuralUnit.objects.create(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
-                                              isu_id=int(isu_academic_plan_discipline_json['discipline_doer_id']))
-                st_unit = StructuralUnit.objects.get(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
-                                                     isu_id=int(
-                                                         isu_academic_plan_discipline_json['discipline_doer_id']))
-                # print('Структурное подразделение выбралось')
-            return st_unit
-
-        def semesters(ze):
-            sem = 0
-            for i in ze:
-                if i > 0:
-                    sem += 1
-            return sem
-
-        ze = AcademicPlanUpdateUtils.get_ze(isu_academic_plan_discipline_json)
-        lec = AcademicPlanUpdateUtils.get_lec(isu_academic_plan_discipline_json)
-        prac = AcademicPlanUpdateUtils.get_prac(isu_academic_plan_discipline_json)
-        lab = AcademicPlanUpdateUtils.get_lab(isu_academic_plan_discipline_json)
-        consultation = AcademicPlanUpdateUtils.get_consultation(isu_academic_plan_discipline_json)
-
-        work_program_object.number_of_semesters = int(
-            semesters([float(x) for x in ze])
-        )
-
-        work_program_object.lecture_hours_v2 = watchmaker(
-            [float(x) for x in lec],
-            [float(x) for x in ze]
-        )
-
-        work_program_object.practice_hours_v2 = watchmaker(
-            [float(x) for x in prac],
-            [float(x) for x in ze]
-        )
-
-        work_program_object.consultation_v2 = watchmaker(
-            [float(x) for x in consultation],
-            [float(x) for x in ze]
-        )
-
-        work_program_object.lab_hours_v2 = watchmaker(
-            [float(x) for x in lab],
-            [float(x) for x in ze]
-        )
-
-        work_program_object.srs_hours_v2 = watchmaker(
-            [
-                float(x) for x in
-                AcademicPlanUpdateUtils.set_srs(
-                    AcademicPlanUpdateUtils.get_srs(
-                        ze,
-                        lec,
-                        prac,
-                        lab
-                    ),
-                    ze,
-                    lec,
-                    prac,
-                    lab,
-                    module_object.name
-                )
-            ],
-            [float(x) for x in ze]
-        )
-
-        work_program_object.discipline_code = str(isu_academic_plan_discipline_json['disc_id'])
-        if isu_academic_plan_discipline_json['discipline_doer'] and \
-                isu_academic_plan_discipline_json['discipline_doer_id'] is not None:
-            work_program_object.structural_unit = structural_unit(isu_academic_plan_discipline_json)
-        work_program_object.save()
+        # def watchmaker(hours, ze):
+        #     ze = ze
+        #     sem = 0
+        #     all_ze_indexes_in_rpd = 0
+        #     # todo was  lecture_hours_v2 = [0, 0, 0, 0], with 10752 index out of range
+        #     lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        #     ## print(lecture_hours_v2)
+        #     for i in hours:
+        #         ## print(hours)
+        #         if ze[all_ze_indexes_in_rpd] >= 1.0:
+        #             lecture_hours_v2[sem] = i
+        #             sem += 1
+        #         all_ze_indexes_in_rpd += 1
+        #
+        #     return str(lecture_hours_v2).strip("[]")
+        #
+        # def structural_unit(isu_academic_plan_discipline_json):
+        #     if StructuralUnit.objects.filter(title=str(isu_academic_plan_discipline_json['discipline_doer'].strip())):
+        #         st_unit = \
+        #             StructuralUnit.objects.filter(title=isu_academic_plan_discipline_json['discipline_doer'].strip())[0]
+        #         st_unit.isu_id = int(isu_academic_plan_discipline_json['discipline_doer_id'])
+        #         # print('Структурное подразделение записалось')
+        #         st_unit.save()
+        #     else:
+        #         # print(isu_academic_plan_discipline_json['discipline_doer'].strip())
+        #         # print(isu_academic_plan_discipline_json['discipline_doer_id'])
+        #         StructuralUnit.objects.create(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
+        #                                       isu_id=int(isu_academic_plan_discipline_json['discipline_doer_id']))
+        #         st_unit = StructuralUnit.objects.get(title=isu_academic_plan_discipline_json['discipline_doer'].strip(),
+        #                                              isu_id=int(
+        #                                                  isu_academic_plan_discipline_json['discipline_doer_id']))
+        #         # print('Структурное подразделение выбралось')
+        #     return st_unit
+        #
+        # def semesters(ze):
+        #     sem = 0
+        #     for i in ze:
+        #         if i > 0:
+        #             sem += 1
+        #     return sem
+        #
+        # ze = AcademicPlanUpdateUtils.get_ze(isu_academic_plan_discipline_json)
+        # lec = AcademicPlanUpdateUtils.get_lec(isu_academic_plan_discipline_json)
+        # prac = AcademicPlanUpdateUtils.get_prac(isu_academic_plan_discipline_json)
+        # lab = AcademicPlanUpdateUtils.get_lab(isu_academic_plan_discipline_json)
+        # consultation = AcademicPlanUpdateUtils.get_consultation(isu_academic_plan_discipline_json)
+        #
+        # work_program_object.number_of_semesters = int(
+        #     semesters([float(x) for x in ze])
+        # )
+        #
+        # work_program_object.lecture_hours_v2 = watchmaker(
+        #     [float(x) for x in lec],
+        #     [float(x) for x in ze]
+        # )
+        #
+        # work_program_object.practice_hours_v2 = watchmaker(
+        #     [float(x) for x in prac],
+        #     [float(x) for x in ze]
+        # )
+        #
+        # work_program_object.consultation_v2 = watchmaker(
+        #     [float(x) for x in consultation],
+        #     [float(x) for x in ze]
+        # )
+        #
+        # work_program_object.lab_hours_v2 = watchmaker(
+        #     [float(x) for x in lab],
+        #     [float(x) for x in ze]
+        # )
+        #
+        # work_program_object.srs_hours_v2 = watchmaker(
+        #     [
+        #         float(x) for x in
+        #         AcademicPlanUpdateUtils.set_srs(
+        #             AcademicPlanUpdateUtils.get_srs(
+        #                 ze,
+        #                 lec,
+        #                 prac,
+        #                 lab
+        #             ),
+        #             ze,
+        #             lec,
+        #             prac,
+        #             lab,
+        #             module_object.name
+        #         )
+        #     ],
+        #     [float(x) for x in ze]
+        # )
+        #
+        # work_program_object.discipline_code = str(isu_academic_plan_discipline_json['disc_id'])
+        # if isu_academic_plan_discipline_json['discipline_doer'] and \
+        #         isu_academic_plan_discipline_json['discipline_doer_id'] is not None:
+        #     work_program_object.structural_unit = structural_unit(isu_academic_plan_discipline_json)
+        # work_program_object.save()
         return work_program_object
 
     @staticmethod
@@ -290,10 +290,12 @@ class AcademicPlanUpdateProcessor:
                                 work_program_object,
                                 isu_academic_plan_discipline_json,
                                 isu_academic_plan_json):
-        if isu_academic_plan_discipline_json['is_optional']:
-            option = 'Optionally'
-        else:
-            option = 'Required'
+        # if isu_academic_plan_discipline_json['is_optional']:
+        #     option = 'Optionally'
+        # else:
+        #     option = 'Required'
+
+        option = 'Required'
 
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
@@ -473,12 +475,12 @@ class AcademicPlanUpdateProcessor:
              id__in=work_program_change_in_discipline_block_modules_not_for_del).delete()
 
     @staticmethod
-    def recursion_module_updater(self, module,
+    def recursion_module_updater(module,
                                  discipline_block_object,
                                  isu_academic_plan_json
                                  ):
         print('start')
-        discipline_block_module_object = self \
+        discipline_block_module_object = AcademicPlanUpdateProcessor \
             .__process_block_module__(
             module,
             isu_academic_plan_json,
@@ -489,15 +491,24 @@ class AcademicPlanUpdateProcessor:
         #block_modules_to_del_ids.append(discipline_block_module_object.id)
         disciplines_for_del_in_module = []
         work_program_change_in_discipline_block_modules_not_for_del = []
-        for isu_academic_plan_discipline_json in module['disciplines']:
-            work_program_object = self.__process_discipline__(
+        if module['type'] == "module":
+            for module in module['children']:
+                print('---- Module lvl 2')
+                father_module = AcademicPlanUpdateProcessor.recursion_module_updater(module, discipline_block_object,
+                                                              isu_academic_plan_json)
+
+
+        if module['type'] == "discipline":
+            isu_academic_plan_discipline_json = module
+            #for isu_academic_plan_discipline_json in module['contents']:
+            work_program_object = AcademicPlanUpdateProcessor.__process_discipline__(
                 isu_academic_plan_json,
                 isu_academic_plan_discipline_json,
                 discipline_block_module_object
             )
             work_program_in_field_of_study_object, \
             work_program_change_in_discipline_block_module_object = \
-                self.__process_linked_data__(
+                AcademicPlanUpdateProcessor.__process_linked_data__(
                     discipline_block_module_object,
                     work_program_object,
                     isu_academic_plan_discipline_json,
@@ -505,7 +516,7 @@ class AcademicPlanUpdateProcessor:
                 )
             # print('___')
             # print(work_program_in_field_of_study_object)
-            self.__process_work_program_id_str_up_for_isu__(
+            AcademicPlanUpdateProcessor.__process_work_program_id_str_up_for_isu__(
                 work_program_in_field_of_study_object,
                 isu_academic_plan_json,
                 isu_academic_plan_discipline_json
@@ -513,9 +524,9 @@ class AcademicPlanUpdateProcessor:
             work_program_change_in_discipline_block_modules_not_for_del.append(
                 work_program_change_in_discipline_block_module_object.id)
             disciplines_for_del_in_module.append(work_program_object.id)
-        self.__del_work_program_in_field_of_study__(discipline_block_module_object,
+        AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
                                                     disciplines_for_del_in_module)
-        self.__del_old_wpcbms_by_module__(discipline_block_module_object,
+        AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(discipline_block_module_object,
                                           work_program_change_in_discipline_block_modules_not_for_del)
         return discipline_block_module_object
 
@@ -551,12 +562,9 @@ class AcademicPlanUpdateProcessor:
 
                         for module in block['children']:
                             print('-- Module lvl 1')
-                            father_module = self.recursion_module_updater(self, module, discipline_block_object,
+                            father_module = self.recursion_module_updater(module, discipline_block_object,
                                                                      isu_academic_plan_json)
-                            for module in module['children']:
-                                print('---- Module lvl 2')
-                                father_module = self.recursion_module_updater(module, discipline_block_object,
-                                                                              isu_academic_plan_json)
+
 
                         # print(block_modules_to_del_ids)
                         self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
