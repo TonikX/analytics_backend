@@ -11,7 +11,8 @@ from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_u
     discipline_block_module_object_relations_updater
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
-    WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration
+    WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration, \
+    СertificationEvaluationTool
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -95,8 +96,99 @@ class AcademicPlanUpdateProcessor:
                 discipline_code=str(isu_academic_plan_discipline_json['id'])
             )
 
-            work_program_object.save()
+        last_sem = 1
+        #realisation_format = None
+        #department = None
+        """if wp_dict["format_id"] == 1:
+            realisation_format = "offline"
+        elif wp_dict["format_id"] == 2:
+            realisation_format = "mixed"
+        elif wp_dict["format_id"] == 3:
+            realisation_format = "online"""
 
+        def choose_department(isu_academic_plan_discipline_json):
+            department = None
+            department_obj = isu_academic_plan_discipline_json["department"]
+            department_by_id = StructuralUnit.objects.filter(isu_id=department_obj["department_id"])
+            if department_by_id.exists():
+                department = department_by_id.first()
+            else:
+                department_by_name = StructuralUnit.objects.filter(title=department_obj["department_name"])
+                if department_by_name.exists():
+                    department = department_by_name.first()
+                else:
+                    department_by_short_name = StructuralUnit.objects.filter(
+                        short_name=department_obj["short_name"])
+                    if department_by_short_name.exists():
+                        department = department_by_short_name.first()
+            return department
+
+        def process_hours(hours: list):
+            return ", ".join([str(hour) for hour in hours]) if hours else "0, 0, 0, 0"
+
+        practice_hours = [0, 0, 0, 0, 0, 0]
+        lecture_hours = [0, 0, 0, 0, 0, 0]
+        lab_hours = [0, 0, 0, 0, 0, 0]
+        cons_hours = [0, 0, 0, 0, 0, 0]
+        srs_hours = [0, 0, 0, 0, 0, 0]
+        ze_v_sem = [0, 0, 0, 0, 0, 0]
+        contact_hours = [0, 0, 0, 0, 0, 0]
+        certification_types = {5: '1', 9: '2', 6: '3', 7: '4', 8: '5'}
+        cerf_list = []
+
+        discipline_contents = list(isu_academic_plan_discipline_json["contents"].values())[0]
+        for sem_dict in discipline_contents:
+            fake_srs = 0
+            sem = sem_dict["order"]-1
+            srs_counter = 0
+            for type_dict in sem_dict["activity"]:
+                wt_id = type_dict["work_type_id"]
+                if wt_id == 0:
+                    continue
+                if wt_id == 1:
+                    lecture_hours[sem] = type_dict["volume"]
+                    srs_counter += type_dict["volume"]
+                elif wt_id == 2:
+                    lab_hours[sem] = type_dict["volume"]
+                    srs_counter += type_dict["volume"]
+                elif wt_id == 3:
+                    practice_hours[sem] = type_dict["volume"]
+                    srs_counter += type_dict["volume"]
+                elif wt_id == 12:
+                    cons_hours[sem] = type_dict["volume"]
+                    srs_counter += type_dict["volume"]
+                elif wt_id == 4:
+                    fake_srs = type_dict["volume"]
+                else:
+                    cerf = СertificationEvaluationTool(type=certification_types[wt_id],
+                                                                      semester=sem + 1)
+                    cerf_list.append(cerf)
+
+            srs_hours[sem] = round(fake_srs - 0.1 * (srs_counter), 2)
+            ze_v_sem[sem] = isu_academic_plan_discipline_json["credit_point"]
+            contact_hours[sem] = round(srs_counter * 1.1, 2)
+            last_sem = len(cerf_list)
+
+        work_program_object.description = isu_academic_plan_discipline_json["description"]
+        work_program_object.language = isu_academic_plan_discipline_json["lang_code"].lower()
+        work_program_object.structural_unit = choose_department(isu_academic_plan_discipline_json)
+
+        work_program_object.practice_hours_v2 = process_hours(practice_hours)
+        work_program_object.lecture_hours_v2 = process_hours(lecture_hours)
+        work_program_object.lab_hours_v2 = process_hours(lab_hours)
+        work_program_object.srs_hours_v2 = process_hours(srs_hours)
+        work_program_object.ze_v_sem = process_hours(ze_v_sem)
+        work_program_object.contact_hours_v2 = process_hours(contact_hours)
+        work_program_object.number_of_semesters = last_sem
+
+        for cerf_to_connect in cerf_list:
+            is_cerf_exist = СertificationEvaluationTool.objects.filter(work_program=work_program_object,
+                                                                       type=cerf_to_connect.type,
+                                                                       semester=cerf_to_connect.semester)
+            if not is_cerf_exist.exists():
+                cerf_to_connect.work_program = work_program_object
+                cerf_to_connect.save()
+        work_program_object.save()
         # def watchmaker(hours, ze):
         #     ze = ze
         #     sem = 0
@@ -368,9 +460,9 @@ class AcademicPlanUpdateProcessor:
                 work_program_in_field_of_study.save()
         else:
             work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule()
-            work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(
+            """work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(
                 AcademicPlanUpdateUtils.get_ze(
-                    isu_academic_plan_discipline_json))
+                    isu_academic_plan_discipline_json))"""
             work_program_change_in_discipline_block_module.change_type = option
             work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
             work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
@@ -579,5 +671,7 @@ class AcademicPlanUpdateProcessor:
                     academic_plan_update_configuration.updated_date_time = timezone.now()
                     academic_plan_update_configuration.save()
             except Exception as e:
+                import traceback
+                traceback.print_exc()
                 print(e)
                 capture_exception(e)
