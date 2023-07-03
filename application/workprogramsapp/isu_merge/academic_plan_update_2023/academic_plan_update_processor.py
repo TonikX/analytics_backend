@@ -90,9 +90,9 @@ class AcademicPlanUpdateProcessor:
         if work_program_object is None:
             work_program_object = WorkProgram(
                 title=isu_academic_plan_discipline_json['discipline_name'].strip(),
-                subject_code=isu_academic_plan_discipline_json['plan_order'],
+                #subject_code=isu_academic_plan_discipline_json['plan_order'],
                 qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
-                discipline_code=str(isu_academic_plan_discipline_json['disc_id'])
+                discipline_code=str(isu_academic_plan_discipline_json['id'])
             )
 
             work_program_object.save()
