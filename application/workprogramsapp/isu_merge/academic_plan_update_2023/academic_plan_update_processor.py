@@ -181,6 +181,8 @@ class AcademicPlanUpdateProcessor:
         work_program_object.contact_hours_v2 = process_hours(contact_hours)
         work_program_object.number_of_semesters = last_sem
 
+        work_program_object.save()
+
         for cerf_to_connect in cerf_list:
             is_cerf_exist = СertificationEvaluationTool.objects.filter(work_program=work_program_object,
                                                                        type=cerf_to_connect.type,
@@ -188,7 +190,7 @@ class AcademicPlanUpdateProcessor:
             if not is_cerf_exist.exists():
                 cerf_to_connect.work_program = work_program_object
                 cerf_to_connect.save()
-        work_program_object.save()
+
         # def watchmaker(hours, ze):
         #     ze = ze
         #     sem = 0
