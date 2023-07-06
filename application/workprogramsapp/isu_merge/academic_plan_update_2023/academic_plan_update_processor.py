@@ -90,8 +90,8 @@ class AcademicPlanUpdateProcessor:
         if work_program_object is None:
             work_program_object = WorkProgram(
                 title=isu_academic_plan_discipline_json['discipline_name'].strip(),
-                subject_code=isu_academic_plan_discipline_json['plan_order'],
-                qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
+                #subject_code=isu_academic_plan_discipline_json['plan_order'],
+                #qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
                 discipline_code=str(isu_academic_plan_discipline_json['disc_id'])
             )
 
@@ -300,23 +300,25 @@ class AcademicPlanUpdateProcessor:
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
 
+        print('try 2')
         if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
-                subject_code=AcademicPlanUpdateUtils.num_to_int(
-                    isu_academic_plan_discipline_json['plan_order'],
-                    isu_academic_plan_discipline_json['discipline_name']
-                )
+                # subject_code=AcademicPlanUpdateUtils.num_to_int(
+                #     isu_academic_plan_discipline_json['plan_order'],
+                #     isu_academic_plan_discipline_json['discipline_name']
+                # )
         ).exists()):
+            print('try 3')
             old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
-                subject_code=AcademicPlanUpdateUtils.num_to_int(
-                    isu_academic_plan_discipline_json['plan_order'],
-                    isu_academic_plan_discipline_json['discipline_name']
-                )
+                # subject_code=AcademicPlanUpdateUtils.num_to_int(
+                #     isu_academic_plan_discipline_json['plan_order'],
+                #     isu_academic_plan_discipline_json['discipline_name']
+                # )
             )
-
+            print('try 3.1')
             work_program_change_in_discipline_block_module = copy.deepcopy(
                 old_work_program_change_in_discipline_block_module)
             work_program_change_in_discipline_block_module.save()
@@ -368,15 +370,16 @@ class AcademicPlanUpdateProcessor:
                 work_program_in_field_of_study.save()
         else:
             work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule()
-            work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(
-                AcademicPlanUpdateUtils.get_ze(
-                    isu_academic_plan_discipline_json))
+            # ToDo: Починить ЗЕ тут
+            # work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(
+            #     AcademicPlanUpdateUtils.get_ze(
+            #         isu_academic_plan_discipline_json))
             work_program_change_in_discipline_block_module.change_type = option
             work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
-            work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
-                isu_academic_plan_discipline_json['plan_order'],
-                isu_academic_plan_discipline_json['discipline_name']
-            )
+            # work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
+            #     isu_academic_plan_discipline_json['plan_order'],
+            #     isu_academic_plan_discipline_json['discipline_name']
+            # )
             work_program_change_in_discipline_block_module.save()
             if WorkProgramInFieldOfStudy.objects.filter(
                     work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,

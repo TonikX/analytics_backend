@@ -23,7 +23,7 @@ class AcademicPlanUpdateAspect:
     def field_of_study_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_json = args[0]
-            #print(isu_academic_plan_json)
+            # print(isu_academic_plan_json)
             if FieldOfStudy.objects.filter(
                     number=isu_academic_plan_json['direction_code'],
                     title=isu_academic_plan_json['direction_name'],
@@ -123,12 +123,12 @@ class AcademicPlanUpdateAspect:
             if DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['name'],
                     module_isu_id=isu_academic_plan_block_module_json['id'],
-                    #descipline_block=discipline_block_object
+                    # descipline_block=discipline_block_object
             ).exists():
                 old_discipline_block_module_object = DisciplineBlockModule.objects.get(
                     name=isu_academic_plan_block_module_json['name'],
                     module_isu_id=isu_academic_plan_block_module_json['id'],
-                    #descipline_block=discipline_block_object
+                    # descipline_block=discipline_block_object
                 )
             else:
                 old_discipline_block_module_object = None
@@ -139,7 +139,7 @@ class AcademicPlanUpdateAspect:
             print(updated_discipline_block_module_object)
 
             print('try to start')
-            #discipline_block_module_object_relations_updater(updated_discipline_block_module_object)
+            # discipline_block_module_object_relations_updater(updated_discipline_block_module_object)
 
             # AcademicPlanUpdateLogger.log_changes(
             #     isu_academic_plan_json["id"],
@@ -172,12 +172,12 @@ class AcademicPlanUpdateAspect:
                 old_work_program_object, *args, **kwargs
             )
 
-            AcademicPlanUpdateLogger.log_changes(
-                isu_academic_plan_json["id"],
-                AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM,
-                old_work_program_object,
-                updated_work_program_object
-            )
+            # AcademicPlanUpdateLogger.log_changes(
+            #     isu_academic_plan_json["id"],
+            #     AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM,
+            #     old_work_program_object,
+            #     updated_work_program_object
+            # )
 
             return updated_work_program_object
 
@@ -194,19 +194,19 @@ class AcademicPlanUpdateAspect:
                 *args, **kwargs
             )
 
-            AcademicPlanUpdateLogger.log_changes(
-                isu_academic_plan_json["id"],
-                AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM_CHANGE_IN_DISCIPLINE_BLOCK_MODULE,
-                old_work_program_change_in_discipline_block_module_object,
-                updated_work_program_change_in_discipline_block_module_object
-            )
-
-            AcademicPlanUpdateLogger.log_changes(
-                isu_academic_plan_json["id"],
-                AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM_IN_FIELD_OF_STUDY,
-                old_work_program_in_field_of_study_object,
-                updated_work_program_in_field_of_study_object
-            )
+            # AcademicPlanUpdateLogger.log_changes(
+            #     isu_academic_plan_json["id"],
+            #     AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM_CHANGE_IN_DISCIPLINE_BLOCK_MODULE,
+            #     old_work_program_change_in_discipline_block_module_object,
+            #     updated_work_program_change_in_discipline_block_module_object
+            # )
+            #
+            # AcademicPlanUpdateLogger.log_changes(
+            #     isu_academic_plan_json["id"],
+            #     AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM_IN_FIELD_OF_STUDY,
+            #     old_work_program_in_field_of_study_object,
+            #     updated_work_program_in_field_of_study_object
+            # )
 
             return updated_work_program_in_field_of_study_object, updated_work_program_change_in_discipline_block_module_object
 
