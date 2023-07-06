@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 # Права доступа
+from rest_framework.status import HTTP_404_NOT_FOUND
+
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
@@ -296,8 +298,8 @@ def GIAShortInfo(request, isu_id):
             newdata.update({"expertise_status": "В работе"})
         newdata.update({"wp_url": f"https://op.itmo.ru/gia/{gia.id}"})
         return Response(newdata)
-    except Practice.DoesNotExist:
-        raise Http404
+    except GIA.DoesNotExist:
+        return Response({'status': 'gia not found'}, status=HTTP_404_NOT_FOUND)
 
 
 class WorkProgramItemsPrerequisitesView(generics.RetrieveAPIView):
