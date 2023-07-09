@@ -29,6 +29,7 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     def __get_old_academic_plan_by_id__(plan_id):
+        print('ap', AcademicPlan.objects.get(ap_isu_id=plan_id))
         return AcademicPlan.objects.get(ap_isu_id=plan_id)
 
     @staticmethod
@@ -92,7 +93,7 @@ class AcademicPlanUpdateProcessor:
             work_program_object = WorkProgram(
                 title=isu_academic_plan_discipline_json['name'].strip(),
                 #subject_code=isu_academic_plan_discipline_json['plan_order'],
-                qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
+                # qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
                 discipline_code=str(isu_academic_plan_discipline_json['id'])
             )
 
@@ -372,8 +373,9 @@ class AcademicPlanUpdateProcessor:
             discipline_block_module_object.save()
             # ToDo: Тут реализовать код обработки вложенности
             # discipline_block_module_object_relations_updater(discipline_block_module_object)
-            discipline_block_module_object.descipline_block.add(discipline_block_object)
-            discipline_block_module_object.save()
+
+            # discipline_block_module_object.descipline_block.add(discipline_block_object)
+            # discipline_block_module_object.save()
         # print(isu_academic_plan_block_module_json)
 
         return discipline_block_module_object
@@ -394,21 +396,23 @@ class AcademicPlanUpdateProcessor:
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
 
+        print('try 2')
         if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
-                subject_code=AcademicPlanUpdateUtils.num_to_int(
-                    isu_academic_plan_discipline_json['plan_order'],
-                    isu_academic_plan_discipline_json['discipline_name']
-                )
+                # subject_code=AcademicPlanUpdateUtils.num_to_int(
+                #     isu_academic_plan_discipline_json['plan_order'],
+                #     isu_academic_plan_discipline_json['discipline_name']
+                # )
         ).exists()):
+            print('try 3')
             old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
-                subject_code=AcademicPlanUpdateUtils.num_to_int(
-                    isu_academic_plan_discipline_json['plan_order'],
-                    isu_academic_plan_discipline_json['discipline_name']
-                )
+                # subject_code=AcademicPlanUpdateUtils.num_to_int(
+                #     isu_academic_plan_discipline_json['plan_order'],
+                #     isu_academic_plan_discipline_json['discipline_name']
+                # )
             )
 
             work_program_change_in_discipline_block_module = copy.deepcopy(
@@ -462,15 +466,16 @@ class AcademicPlanUpdateProcessor:
                 work_program_in_field_of_study.save()
         else:
             work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule()
-            """work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(
-                AcademicPlanUpdateUtils.get_ze(
-                    isu_academic_plan_discipline_json))"""
+            # ToDo: Починить ЗЕ тут
+            # work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(
+            #     AcademicPlanUpdateUtils.get_ze(
+            #         isu_academic_plan_discipline_json))
             work_program_change_in_discipline_block_module.change_type = option
             work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
-            work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
-                isu_academic_plan_discipline_json['plan_order'],
-                isu_academic_plan_discipline_json['discipline_name']
-            )
+            # work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
+            #     isu_academic_plan_discipline_json['plan_order'],
+            #     isu_academic_plan_discipline_json['discipline_name']
+            # )
             work_program_change_in_discipline_block_module.save()
             if WorkProgramInFieldOfStudy.objects.filter(
                     work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
@@ -571,26 +576,41 @@ class AcademicPlanUpdateProcessor:
     @staticmethod
     def recursion_module_updater(module,
                                  discipline_block_object,
-                                 isu_academic_plan_json
+                                 isu_academic_plan_json,
+                                 father_module=None
                                  ):
         print('start')
         discipline_block_module_object = AcademicPlanUpdateProcessor \
             .__process_block_module__(
             module,
             isu_academic_plan_json,
-            discipline_block_object
+            discipline_block_object,
 
         )
+
 
         #block_modules_to_del_ids.append(discipline_block_module_object.id)
         disciplines_for_del_in_module = []
         work_program_change_in_discipline_block_modules_not_for_del = []
         if module['type'] == "module":
-            for module in module['children']:
+            for children_module in module['children']:
                 print('---- Module lvl 2')
-                father_module = AcademicPlanUpdateProcessor.recursion_module_updater(module, discipline_block_object,
-                                                              isu_academic_plan_json)
+                children_module = AcademicPlanUpdateProcessor.recursion_module_updater(children_module, discipline_block_object,
+                                                              isu_academic_plan_json, module)
+            if father_module is not None:
+                print('Father')
+                discipline_block_module_object.childs.add(children_module)
+                discipline_block_module_object.save()
 
+
+        if father_module is not None:
+            print('Father')
+            # discipline_block_module_object.childs.add(children_module)
+            # discipline_block_module_object.save()
+        else:
+            print('Not Father')
+            discipline_block_module_object.descipline_block.add(discipline_block_object)
+            discipline_block_module_object.save()
 
         if module['type'] == "discipline":
             isu_academic_plan_discipline_json = module
@@ -610,11 +630,11 @@ class AcademicPlanUpdateProcessor:
                 )
             # print('___')
             # print(work_program_in_field_of_study_object)
-            AcademicPlanUpdateProcessor.__process_work_program_id_str_up_for_isu__(
-                work_program_in_field_of_study_object,
-                isu_academic_plan_json,
-                isu_academic_plan_discipline_json
-            )
+            # AcademicPlanUpdateProcessor.__process_work_program_id_str_up_for_isu__(
+            #     work_program_in_field_of_study_object,
+            #     isu_academic_plan_json,
+            #     isu_academic_plan_discipline_json
+            # )
             work_program_change_in_discipline_block_modules_not_for_del.append(
                 work_program_change_in_discipline_block_module_object.id)
             disciplines_for_del_in_module.append(work_program_object.id)
@@ -676,4 +696,4 @@ class AcademicPlanUpdateProcessor:
                 import traceback
                 traceback.print_exc()
                 print(e)
-                capture_exception(e)
+                #capture_exception(e)
