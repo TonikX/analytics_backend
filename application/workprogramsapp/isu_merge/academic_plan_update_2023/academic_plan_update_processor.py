@@ -90,7 +90,7 @@ class AcademicPlanUpdateProcessor:
                                module_object):
         if work_program_object is None:
             work_program_object = WorkProgram(
-                title=isu_academic_plan_discipline_json['discipline_name'].strip(),
+                title=isu_academic_plan_discipline_json['name'].strip(),
                 #subject_code=isu_academic_plan_discipline_json['plan_order'],
                 qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
                 discipline_code=str(isu_academic_plan_discipline_json['id'])
@@ -109,11 +109,11 @@ class AcademicPlanUpdateProcessor:
         def choose_department(isu_academic_plan_discipline_json):
             department = None
             department_obj = isu_academic_plan_discipline_json["department"]
-            department_by_id = StructuralUnit.objects.filter(isu_id=department_obj["department_id"])
+            department_by_id = StructuralUnit.objects.filter(isu_id=department_obj["id"])
             if department_by_id.exists():
                 department = department_by_id.first()
             else:
-                department_by_name = StructuralUnit.objects.filter(title=department_obj["department_name"])
+                department_by_name = StructuralUnit.objects.filter(title=department_obj["name"])
                 if department_by_name.exists():
                     department = department_by_name.first()
                 else:
@@ -141,8 +141,8 @@ class AcademicPlanUpdateProcessor:
             fake_srs = 0
             sem = sem_dict["order"]-1
             srs_counter = 0
-            for type_dict in sem_dict["activity"]:
-                wt_id = type_dict["work_type_id"]
+            for type_dict in sem_dict["activities"]:
+                wt_id = type_dict["workTypeId"]
                 if wt_id == 0:
                     continue
                 if wt_id == 1:
@@ -165,12 +165,12 @@ class AcademicPlanUpdateProcessor:
                     cerf_list.append(cerf)
 
             srs_hours[sem] = round(fake_srs - 0.1 * (srs_counter), 2)
-            ze_v_sem[sem] = isu_academic_plan_discipline_json["credit_point"]
+            ze_v_sem[sem] = isu_academic_plan_discipline_json["creditPoints"]
             contact_hours[sem] = round(srs_counter * 1.1, 2)
             last_sem = len(cerf_list)
 
         work_program_object.description = isu_academic_plan_discipline_json["description"]
-        work_program_object.language = isu_academic_plan_discipline_json["lang_code"].lower()
+        work_program_object.language = isu_academic_plan_discipline_json["langCode"].lower()
         work_program_object.structural_unit = choose_department(isu_academic_plan_discipline_json)
 
         work_program_object.practice_hours_v2 = process_hours(practice_hours)
