@@ -15,6 +15,7 @@ import {
   getEducationalProgramCharacteristic,
   getSortingMode
 } from "./getters";
+import generalActions from "../../layout/actions";
 
 const service = new Service();
 
@@ -187,8 +188,10 @@ const saveZun = createLogic({
               .then(() => {
                 if (!skipReload) {
                   dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                  dispatch(actions.fetchingSuccess());
+                } else {
+                  dispatch(generalActions.fetchingSuccess(['Вы добавили индикатор, но не перезагрузили страницу. Перезагрузите страницу, чтобы увидеть изменения']));
                 }
-                dispatch(actions.fetchingSuccess());
               })
               .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
@@ -206,8 +209,10 @@ const saveZun = createLogic({
               .then(() => {
                 if (!skipReload) {
                   dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+                  dispatch(actions.fetchingSuccess());
+                } else {
+                  dispatch(generalActions.fetchingSuccess(['Вы добавили индикатор, но не перезагрузили страницу. Перезагрузите страницу, чтобы увидеть изменения']));
                 }
-                dispatch(actions.fetchingSuccess());
               })
               .catch((err) => {
                 dispatch(actions.fetchingFailed(err));

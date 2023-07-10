@@ -94,7 +94,7 @@ class Layout extends React.Component {
 
         return (
           <LocalizationProvider dateAdapter={AdapterMoment}>
-                <SnackbarProvider maxSnack={3}>
+                <SnackbarProvider maxSnack={1}>
                     <ThemeProvider theme={theme}>
                         <AbsoluteLoader isFetching={fetching} />
                         <Notificator errors={errors} successMessages={successMessages} />
