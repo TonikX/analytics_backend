@@ -110,11 +110,11 @@ class AcademicPlanUpdateProcessor:
         def choose_department(isu_academic_plan_discipline_json):
             department = None
             department_obj = isu_academic_plan_discipline_json["department"]
-            department_by_id = StructuralUnit.objects.filter(isu_id=department_obj["department_id"])
+            department_by_id = StructuralUnit.objects.filter(isu_id=department_obj["id"])
             if department_by_id.exists():
                 department = department_by_id.first()
             else:
-                department_by_name = StructuralUnit.objects.filter(title=department_obj["department_name"])
+                department_by_name = StructuralUnit.objects.filter(title=department_obj["name"])
                 if department_by_name.exists():
                     department = department_by_name.first()
                 else:
@@ -142,8 +142,8 @@ class AcademicPlanUpdateProcessor:
             fake_srs = 0
             sem = sem_dict["order"]-1
             srs_counter = 0
-            for type_dict in sem_dict["activity"]:
-                wt_id = type_dict["work_type_id"]
+            for type_dict in sem_dict["activities"]:
+                wt_id = type_dict["workTypeId"]
                 if wt_id == 0:
                     continue
                 if wt_id == 1:
@@ -166,12 +166,12 @@ class AcademicPlanUpdateProcessor:
                     cerf_list.append(cerf)
 
             srs_hours[sem] = round(fake_srs - 0.1 * (srs_counter), 2)
-            ze_v_sem[sem] = isu_academic_plan_discipline_json["credit_point"]
+            ze_v_sem[sem] = isu_academic_plan_discipline_json["creditPoints"]
             contact_hours[sem] = round(srs_counter * 1.1, 2)
             last_sem = len(cerf_list)
 
         work_program_object.description = isu_academic_plan_discipline_json["description"]
-        work_program_object.language = isu_academic_plan_discipline_json["lang_code"].lower()
+        work_program_object.language = isu_academic_plan_discipline_json["langCode"].lower()
         work_program_object.structural_unit = choose_department(isu_academic_plan_discipline_json)
 
         work_program_object.practice_hours_v2 = process_hours(practice_hours)
@@ -182,14 +182,16 @@ class AcademicPlanUpdateProcessor:
         work_program_object.contact_hours_v2 = process_hours(contact_hours)
         work_program_object.number_of_semesters = last_sem
 
-        # for cerf_to_connect in cerf_list:
-        #     is_cerf_exist = СertificationEvaluationTool.objects.filter(work_program=work_program_object,
-        #                                                                type=cerf_to_connect.type,
-        #                                                                semester=cerf_to_connect.semester)
-        #     if not is_cerf_exist.exists():
-        #         cerf_to_connect.work_program = work_program_object
-        #         cerf_to_connect.save()
         work_program_object.save()
+
+        for cerf_to_connect in cerf_list:
+            is_cerf_exist = СertificationEvaluationTool.objects.filter(work_program=work_program_object,
+                                                                       type=cerf_to_connect.type,
+                                                                       semester=cerf_to_connect.semester)
+            if not is_cerf_exist.exists():
+                cerf_to_connect.work_program = work_program_object
+                cerf_to_connect.save()
+
         # def watchmaker(hours, ze):
         #     ze = ze
         #     sem = 0
@@ -412,7 +414,7 @@ class AcademicPlanUpdateProcessor:
                 #     isu_academic_plan_discipline_json['discipline_name']
                 # )
             )
-            print('try 3.1')
+
             work_program_change_in_discipline_block_module = copy.deepcopy(
                 old_work_program_change_in_discipline_block_module)
             work_program_change_in_discipline_block_module.save()
