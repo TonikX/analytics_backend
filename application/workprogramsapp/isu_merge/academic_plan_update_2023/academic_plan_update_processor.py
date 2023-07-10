@@ -573,9 +573,11 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     def recursion_module_updater(module,
-                                 discipline_block_object,
                                  isu_academic_plan_json,
-                                 father_module=None
+                                 discipline_block_object=None,
+                                 father_module=None,
+
+
                                  ):
         print('start')
         discipline_block_module_object = AcademicPlanUpdateProcessor \
@@ -593,20 +595,26 @@ class AcademicPlanUpdateProcessor:
         if module['type'] == "module":
             for children_module in module['children']:
                 print('---- Module lvl 2')
-                children_module = AcademicPlanUpdateProcessor.recursion_module_updater(children_module, discipline_block_object,
-                                                              isu_academic_plan_json, module)
+                module = children_module
+                father_module = module
+                children_module = AcademicPlanUpdateProcessor.recursion_module_updater(module,
+                                                              isu_academic_plan_json, None, father_module)
             if father_module is not None:
                 print('Father')
                 discipline_block_module_object.childs.add(children_module)
                 discipline_block_module_object.save()
 
 
-        if father_module is not None:
-            print('Father')
-            # discipline_block_module_object.childs.add(children_module)
-            # discipline_block_module_object.save()
-        else:
-            print('Not Father')
+        # if father_module is not None:
+        #     print('Father')
+        #     # discipline_block_module_object.childs.add(children_module)
+        #     # discipline_block_module_object.save()
+        # else:
+        #     print('Not Father', discipline_block_object)
+        #     discipline_block_module_object.descipline_block.add(discipline_block_object)
+        #     discipline_block_module_object.save()
+        if discipline_block_object is not None:
+            print('Not Father', discipline_block_object)
             discipline_block_module_object.descipline_block.add(discipline_block_object)
             discipline_block_module_object.save()
 
@@ -636,10 +644,10 @@ class AcademicPlanUpdateProcessor:
             work_program_change_in_discipline_block_modules_not_for_del.append(
                 work_program_change_in_discipline_block_module_object.id)
             disciplines_for_del_in_module.append(work_program_object.id)
-        AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
-                                                    disciplines_for_del_in_module)
-        AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(discipline_block_module_object,
-                                          work_program_change_in_discipline_block_modules_not_for_del)
+        # AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
+        #                                             disciplines_for_del_in_module)
+        # AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(discipline_block_module_object,
+        #                                   work_program_change_in_discipline_block_modules_not_for_del)
         return discipline_block_module_object
 
 
@@ -671,20 +679,19 @@ class AcademicPlanUpdateProcessor:
                         block_modules_to_del_ids = []
 
 
-
                         for module in block['children']:
                             print('-- Module lvl 1')
-                            father_module = self.recursion_module_updater(module, discipline_block_object,
-                                                                     isu_academic_plan_json)
+                            print('block', discipline_block_object)
+                            father_module = self.recursion_module_updater(module, isu_academic_plan_json, discipline_block_object)
 
 
                         # print(block_modules_to_del_ids)
-                        self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
-                                                   discipline_block_object)
+                        #self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
+                        #                           discipline_block_object)
 
                     # print(block_to_del_ids)
-                    self.__del_block__(block_to_del_ids, isu_academic_plan_json,
-                                       )
+                    #self.__del_block__(block_to_del_ids, isu_academic_plan_json,
+                    #                   )
 
                     academic_plan_update_configuration = AcademicPlanUpdateConfiguration.objects \
                         .get(academic_plan_id=plan_id)
