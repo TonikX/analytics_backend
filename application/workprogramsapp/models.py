@@ -1282,6 +1282,7 @@ class BibliographicReference(models.Model):
     publishing_type = models.CharField(max_length=1024, verbose_name="Тип публикации", blank=True, null=True)
     bib_reference = models.CharField(max_length=4096, verbose_name="Библиогарфическая ссылка", blank=True, null=True)
     description = models.CharField(max_length=5000, verbose_name="Описание", blank=True, null=True)
+    from_lan = models.BooleanField(verbose_name="Добавлено из ЭБС Лань", blank=True, null=True)
     # work_program = models.ManyToManyField('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа', related_name='discipline_sections')
 
 
