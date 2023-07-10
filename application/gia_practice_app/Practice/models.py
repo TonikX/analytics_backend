@@ -216,9 +216,9 @@ class ZunPractice(models.Model):
                                        related_name="zun_in_practice")
     indicator_in_zun = models.ForeignKey('workprogramsapp.Indicator', on_delete=models.CASCADE, blank=True, null=True,
                                          related_name="zun_practice")
-    knowledge = models.CharField(max_length=1024, blank=True, null=True)
-    skills = models.CharField(max_length=1024, blank=True, null=True)
-    attainments = models.CharField(max_length=1024, blank=True, null=True)
+    knowledge = models.CharField(max_length=10000, blank=True, null=True)
+    skills = models.CharField(max_length=10000, blank=True, null=True)
+    attainments = models.CharField(max_length=10000, blank=True, null=True)
     items = models.ManyToManyField('OutcomesOfPractice', verbose_name="Учебная сущность и уровень освоения",
                                    blank=True, null=True, related_name="item_in_practice")
     wp_in_fs_saved_fk_id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
