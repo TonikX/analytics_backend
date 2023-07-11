@@ -364,7 +364,6 @@ class AcademicPlanUpdateProcessor:
         if discipline_block_module_object is not None:
             return discipline_block_module_object
         else:
-            # print('модуль', isu_academic_plan_block_module_json)
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['name'],
                 module_isu_id=isu_academic_plan_block_module_json['id'],
@@ -372,11 +371,7 @@ class AcademicPlanUpdateProcessor:
             )
             discipline_block_module_object.save()
             # ToDo: Тут реализовать код обработки вложенности
-            # discipline_block_module_object_relations_updater(discipline_block_module_object)
 
-            # discipline_block_module_object.descipline_block.add(discipline_block_object)
-            # discipline_block_module_object.save()
-        # print(isu_academic_plan_block_module_json)
 
         return discipline_block_module_object
 
@@ -597,14 +592,15 @@ class AcademicPlanUpdateProcessor:
         if module['type'] == "module":
             for children_module in module['children']:
                 print('---- Module lvl 2')
+                save_module = module
                 module = children_module
-                father_module = module
+                father_module = save_module
                 children_module = AcademicPlanUpdateProcessor.recursion_module_updater(module,
                                                               isu_academic_plan_json, None, father_module)
-            if father_module is not None:
-                print('Father')
-                discipline_block_module_object.childs.add(children_module)
-                discipline_block_module_object.save()
+                if father_module is not None:
+                    print('Father')
+                    discipline_block_module_object.childs.add(children_module)
+                    discipline_block_module_object.save()
 
 
         # if father_module is not None:
