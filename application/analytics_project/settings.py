@@ -311,6 +311,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 URL_FRONT = env("URL_FRONT")
 AP_FILE_ROUTE = env('AP_FILE_ROUTE')
 ISU_URL_UPDATERS = env('ISU_URL_UPDATERS')
+LAN_TOKEN = env("LAN_TOKEN")
 sentry_sdk.init(
     dsn=env("SENTRY_URL"),
     integrations=[
