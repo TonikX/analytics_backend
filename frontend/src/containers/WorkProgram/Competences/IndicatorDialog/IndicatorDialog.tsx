@@ -199,14 +199,11 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
 
   const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
 
-  const epForSelect = epList && epList.reduce((plans:any, currentPlan:any) => {
-    const academicPlan = currentPlan?.discipline_block_module?.descipline_block[0]?.academic_plan;
-    if (academicPlan === undefined) {
-      return plans;
-    }
-
-    return ([
-          ...plans,
+  const epForSelect = epList && epList.reduce((fullPlans: any, currentPlan: any) => {
+    const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
+      const academicPlan = item?.academic_plan;
+      return ([
+        ...plans,
         {
           value: academicPlan?.id,
           label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
@@ -215,6 +212,12 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
                  `,
         }
       ])
+    }, [])
+
+    return [
+      ...fullPlans,
+      ...plans,
+    ]
   }, [])
 
   useEffect(() => {
