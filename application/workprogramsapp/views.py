@@ -312,20 +312,27 @@ class CompetencesListView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
+    def boolean(self, string):
+        if string.lower() in ["0", "no", "false"]:
+            response = False
+        if string.lower() in ["1", "yes", "true"]:
+            response = True
+        return response
+
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
 
         ap_id = self.request.GET.get('ap_id')
-        in_standard = self.request.GET.get('in_standard')
+        in_standard = self.boolean(self.request.GET.get('in_standard'))
 
         if ap_id:
             key_filter = Q(
-                group_key__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__id=ap_id)
+                group_key__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__academic_plan__id=ap_id)
             over_filter = Q(
-                group_over__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__id=ap_id)
+                group_over__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__academic_plan__id=ap_id)
             general_filter = Q(
-                group_general__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__id=ap_id)
-            pk_filter = Q(pk_group__group_of_pk__general_characteristic__educational_program__id=ap_id)
+                group_general__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__academic_plan__id=ap_id)
+            pk_filter = Q(pk_group__group_of_pk__general_characteristic__educational_program__academic_plan__id=ap_id)
             queryset = queryset.filter(key_filter | over_filter | general_filter | pk_filter)
 
         if in_standard:
@@ -333,7 +340,6 @@ class CompetencesListView(generics.ListAPIView):
             over_filter = Q(group_over__group_of_pk__educational_standard__isnull=False)
             general_filter = Q(
                 group_general__group_of_pk__educational_standard__isnull=False)
-            # pk_filter = Q(number__icontains="ПК")
             queryset = queryset.filter(key_filter | over_filter | general_filter)
 
         queryset = queryset.filter().distinct()
