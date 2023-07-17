@@ -64,12 +64,14 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
                 </AppBar>
 
                 <DialogContent className={classes.dialogContent}>
-                    <CKEditor
+                    {evaluationTool[EvaluationToolFields.DESCRIPTION] ? (
+                      <CKEditor
                         value={evaluationTool[EvaluationToolFields.DESCRIPTION]}
                         readOnly
                         height="calc(100vh - 280px)"
                         useFormulas
-                    />
+                      />
+                    ) : null}
                 </DialogContent>
 
                 <DialogActions className={classes.actions}>

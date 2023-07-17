@@ -154,9 +154,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
-    changeDescription = (event: any, editor: any) => {
+    changeDescription = (data: string) => {
         const {evaluationTool} = this.state;
-        const data = editor.getData();
 
         this.setState({
             evaluationTool: {

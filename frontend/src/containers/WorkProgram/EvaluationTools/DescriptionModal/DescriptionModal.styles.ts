@@ -5,7 +5,7 @@ export default (theme: Theme) => createStyles({
     //@ts-ignore
     root: {
         //@ts-ignore
-        zIndex: '1000 !important'
+        zIndex: '10000 !important'
     },
     nameInput: {
         marginTop: '24px'
@@ -38,7 +38,7 @@ export default (theme: Theme) => createStyles({
     },
     dialogContent: {
         display: 'flex',
-        padding: '20px 48px',
+        padding: '80px 48px 20px !important',
         overflowX: 'hidden',
         flexDirection: 'column'
     },
