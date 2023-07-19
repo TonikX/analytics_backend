@@ -577,19 +577,20 @@ class AcademicPlanUpdateProcessor:
 
                                  ):
         print('start')
-        discipline_block_module_object = AcademicPlanUpdateProcessor \
-            .__process_block_module__(
-            module,
-            isu_academic_plan_json,
-            discipline_block_object,
 
-        )
 
 
         #block_modules_to_del_ids.append(discipline_block_module_object.id)
         disciplines_for_del_in_module = []
         work_program_change_in_discipline_block_modules_not_for_del = []
         if module['type'] == "module":
+            discipline_block_module_object = AcademicPlanUpdateProcessor \
+                .__process_block_module__(
+                module,
+                isu_academic_plan_json,
+                discipline_block_object,
+
+            )
             for children_module in module['children']:
                 print('---- Module lvl 2')
                 save_module = module
@@ -603,18 +604,18 @@ class AcademicPlanUpdateProcessor:
                     discipline_block_module_object.save()
 
 
-        # if father_module is not None:
-        #     print('Father')
-        #     # discipline_block_module_object.childs.add(children_module)
-        #     # discipline_block_module_object.save()
-        # else:
-        #     print('Not Father', discipline_block_object)
-        #     discipline_block_module_object.descipline_block.add(discipline_block_object)
-        #     discipline_block_module_object.save()
-        if discipline_block_object is not None:
-            print('Not Father', discipline_block_object)
-            discipline_block_module_object.descipline_block.add(discipline_block_object)
-            discipline_block_module_object.save()
+            # if father_module is not None:
+            #     print('Father')
+            #     # discipline_block_module_object.childs.add(children_module)
+            #     # discipline_block_module_object.save()
+            # else:
+            #     print('Not Father', discipline_block_object)
+            #     discipline_block_module_object.descipline_block.add(discipline_block_object)
+            #     discipline_block_module_object.save()
+            if discipline_block_object is not None:
+                print('Not Father', discipline_block_object)
+                discipline_block_module_object.descipline_block.add(discipline_block_object)
+                discipline_block_module_object.save()
 
         if module['type'] == "discipline":
             isu_academic_plan_discipline_json = module
@@ -622,12 +623,12 @@ class AcademicPlanUpdateProcessor:
             work_program_object = AcademicPlanUpdateProcessor.__process_discipline__(
                 isu_academic_plan_json,
                 isu_academic_plan_discipline_json,
-                discipline_block_module_object
+                father_module
             )
             work_program_in_field_of_study_object, \
             work_program_change_in_discipline_block_module_object = \
                 AcademicPlanUpdateProcessor.__process_linked_data__(
-                    discipline_block_module_object,
+                    father_module,
                     work_program_object,
                     isu_academic_plan_discipline_json,
                     isu_academic_plan_json
