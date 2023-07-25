@@ -14,8 +14,6 @@ import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import {withStyles} from '@mui/styles';
 import MenuItem from "@mui/material/MenuItem";
-import DateIcon from "@mui/icons-material/DateRange";
-import IconButton from "@mui/material/IconButton";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import FormControl from "@mui/material/FormControl";
@@ -24,14 +22,17 @@ import Select from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormLabel from "@mui/material/FormLabel";
 import RadioGroup from "@mui/material/RadioGroup";
-import DatePicker from '@mui/lab/DatePicker';
+
+import DatePicker from "../../../components/DatePicker";
 
 import {EducationalPlanFields} from '../enum';
-import {FULL_DATE_FORMAT} from "../../../common/utils";
-import {specialization, years} from "../../WorkProgram/constants";
+import {FULL_DATE_FORMAT, YEAR_DATE_FORMAT} from "../../../common/utils";
+import {specialization} from "../../WorkProgram/constants";
 
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
+
+const currentDate = new Date();
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -42,7 +43,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
             [EducationalPlanFields.NUMBER]: '',
             [EducationalPlanFields.EDUCATION_FORM]: 'internal',
             [EducationalPlanFields.QUALIFICATION]: '',
-            [EducationalPlanFields.YEAR]: '2020/2021',
+            [EducationalPlanFields.YEAR]: currentDate.getFullYear(),
         },
     };
 
@@ -100,12 +101,22 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
+    changeYear = (value: Moment) => {
+        const {educationalPlan} = this.state;
+
+        this.setState({
+            educationalPlan: {
+                ...educationalPlan,
+                [EducationalPlanFields.YEAR]: value.format(YEAR_DATE_FORMAT)
+            }
+        })
+    }
+
     render() {
         const {isOpen, classes} = this.props;
         const {educationalPlan} = this.state;
 
         const disableButton = educationalPlan[EducationalPlanFields.PROFILE].length === 0
-            || get(educationalPlan[EducationalPlanFields.YEAR], 'length', 0) === 0
             || get(educationalPlan[EducationalPlanFields.QUALIFICATION], 'length', 0) === 0
         ;
 
@@ -184,49 +195,24 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         </Select>
                     </FormControl>
 
-                    <FormControl className={classNames(classes.selectorWrap, classes.marginBottom30)}>
-                        <InputLabel shrink>
-                            Год набора *
-                        </InputLabel>
-                        <Select
-                            variant="outlined"
-                            className={classes.selector}
-                            // @ts-ignore
-                            onChange={this.saveField(EducationalPlanFields.YEAR)}
-                            value={educationalPlan[EducationalPlanFields.YEAR]}
-                            fullWidth
-                            displayEmpty
-                            input={
-                                <OutlinedInput
-                                    notched
-                                    name="year"
-                                />
-                            }
-                        >
-                            {years.map(item =>
-                                <MenuItem value={item.value} key={`group-${item.value}`}>
-                                    {item.label}
-                                </MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
+
+                    <DatePicker
+                      value={educationalPlan[EducationalPlanFields.YEAR] + ''}
+                      onChange={(date: any) => this.changeYear(date)}
+                      label={'Год набора'}
+                      views={['year']}
+                      format={YEAR_DATE_FORMAT}
+                      minDate={'2018'}
+                      maxDate={(currentDate.getFullYear() + 3).toString()}
+                    />
 
                     <DatePicker
                         value={educationalPlan[EducationalPlanFields.APPROVAL_DATE]}
                         onChange={(date: any) => this.saveDate(date)}
-                        InputProps={{
-                            endAdornment: (
-                                <IconButton>
-                                    <DateIcon />
-                                </IconButton>
-                            ),
-                        }}
-                        inputVariant="outlined"
-                        className={classes.datePicker}
+                        // className={classes.datePicker}
                         format={FULL_DATE_FORMAT}
                         label={'Дата согласования'}
                     />
-
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}
