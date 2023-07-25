@@ -12,7 +12,7 @@ from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_u
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
     WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration, \
-    СertificationEvaluationTool
+    СertificationEvaluationTool, DisciplineBlockModuleInIsu
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -361,17 +361,25 @@ class AcademicPlanUpdateProcessor:
                                  isu_academic_plan_block_module_json,
                                  discipline_block_object,
                                  isu_academic_plan_json):
-        if discipline_block_module_object is not None:
-            return discipline_block_module_object
-        else:
+        if isu_academic_plan_block_module_json["type"] != "module":
+            print("Это не модуль")
+            return None
+        if discipline_block_module_object is None:
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['name'],
                 module_isu_id=isu_academic_plan_block_module_json['id'],
-                #order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
+                # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )
             discipline_block_module_object.save()
-            # ToDo: Тут реализовать код обработки вложенности
 
+        rules_ids = {1: "choose_n_from_m", 2: "all", 21: "any_quantity", 41: "by_credit_units",
+                     61: "no_more_than_n_credits"}
+        discipline_block_module_object.selection_rule = rules_ids[
+            isu_academic_plan_block_module_json["choiceParameterId"]]
+        discipline_block_module_object.selection_parametr = ", ".join(
+            [str(el) for el in isu_academic_plan_block_module_json["rules"]]) if isu_academic_plan_block_module_json[
+            "rules"] else None
+        discipline_block_module_object.save()
 
         return discipline_block_module_object
 
@@ -467,11 +475,14 @@ class AcademicPlanUpdateProcessor:
             #         isu_academic_plan_discipline_json))
             work_program_change_in_discipline_block_module.change_type = option
             work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
+            list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
+            work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
             # work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
             #     isu_academic_plan_discipline_json['plan_order'],
             #     isu_academic_plan_discipline_json['discipline_name']
             # )
             work_program_change_in_discipline_block_module.save()
+            print(work_program_change_in_discipline_block_module)
             if WorkProgramInFieldOfStudy.objects.filter(
                     work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
                     work_program=work_program_object
@@ -600,8 +611,9 @@ class AcademicPlanUpdateProcessor:
                                                               isu_academic_plan_json, None, father_module)
                 if father_module is not None:
                     print('Father')
-                    discipline_block_module_object.childs.add(children_module)
-                    discipline_block_module_object.save()
+                    if children_module:
+                        discipline_block_module_object.childs.add(children_module)
+                        discipline_block_module_object.save()
 
 
             # if father_module is not None:
