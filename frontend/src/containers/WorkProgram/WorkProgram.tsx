@@ -141,7 +141,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         Пререквизиты
                         <Tooltip
                             title={
-                                <span style={{ fontSize: '13px' }}>Пререквезит - объект, отражающий конкретное знание из конкретной области 
+                                <span style={{ fontSize: '13px' }}>Пререквезит - объект, отражающий конкретное знание из конкретной области
                                 (далее "учебная сущность"), которое должно быть у студента перед началом изучения курса.
                                 </span>
                             }
@@ -197,8 +197,8 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                         Результаты обучения
                         <Tooltip
                             title={
-                                <span style={{ fontSize: '13px' }}>Результат - объект, отражающий конкретное знание 
-                                из конкретной области (далее "учебная сущность"), которое сформируется у студента 
+                                <span style={{ fontSize: '13px' }}>Результат - объект, отражающий конкретное знание
+                                из конкретной области (далее "учебная сущность"), которое сформируется у студента
                                 после прохождения курса.
                                 </span>
                             }
@@ -323,7 +323,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
                             </ButtonGroup>
                         }
 
-                        
+
                         {canSendToIsu &&
                             <Button onClick={this.handleSendToIsu}>
                                 отправить в ИСУ

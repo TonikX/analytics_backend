@@ -2,7 +2,8 @@ from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_u
     discipline_block_module_object_relations_updater
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
-    WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration
+    WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration, \
+    DisciplineBlockModuleInIsu
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_utils import AcademicPlanUpdateUtils
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_logger import AcademicPlanUpdateLogger
 import copy
@@ -118,7 +119,8 @@ class AcademicPlanUpdateAspect:
     @staticmethod
     def discipline_block_module_changes_aspect(func):
         def wrapper(*args, **kwargs):
-            isu_academic_plan_block_module_json, discipline_block_object, isu_academic_plan_json, father_module = args
+            isu_academic_plan_block_module_json, isu_academic_plan_json, father_module = args
+            # discipline_block_object,
             # print(isu_academic_plan_block_module_json)
             if DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['name'],
