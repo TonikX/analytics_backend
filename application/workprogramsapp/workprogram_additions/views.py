@@ -153,8 +153,8 @@ def CopyContentOfWorkProgram(request):
 
         # old_wp.delete()
         new_wp.save()
-        serializer = WorkProgramSerializer(new_wp, many=False)
-        return Response(serializer.data)
+        #serializer = WorkProgramSerializer(new_wp, many=False)
+        return Response(data={"copied"}, status=200)
     except:
         return Response(status=400)
 
