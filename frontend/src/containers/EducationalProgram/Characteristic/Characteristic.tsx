@@ -614,18 +614,12 @@ class Characteristic extends React.Component<CharacteristicProps> {
       case 1:
         return <div className={classes.editorWrap}>
           <InputLabel className={classes.label}>Аннотация</InputLabel>
-          {canEdit ? (
-            <CKEditor
-              value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
-              onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
-              toolbarContainerId="toolbar-container"
-              readOnly={!canEdit}
-            />
-          ) : (
-            <Typography>
-              {get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
-            </Typography>
-          )}
+          <CKEditor
+            value={get(educationalProgramCharacteristic, EducationProgramCharacteristicFields.ANNOTATION, '')}
+            onBlur={this.handleChangeSKEEditorField(EducationProgramCharacteristicFields.ANNOTATION)}
+            toolbarContainerId="toolbar-container"
+            readOnly={!canEdit}
+          />
         </div>
       case 2:
         return (
