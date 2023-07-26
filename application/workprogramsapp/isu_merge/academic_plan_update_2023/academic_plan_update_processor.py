@@ -369,24 +369,26 @@ class AcademicPlanUpdateProcessor:
                                  isu_academic_plan_json,
                                  father_module
                                  ):
-        if isu_academic_plan_block_module_json["type"] != "module":
-            print("Это не модуль")
-            return None
-        if discipline_block_module_object is not None:
-            pass
-            # return discipline_block_module_object
-        else:
+
+        father_module_id = father_module.get("id") if father_module else None
+        if discipline_block_module_object is None:
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['name'],
                 module_isu_id=isu_academic_plan_block_module_json['id'],
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )
             discipline_block_module_object.save()
+
+        if not DisciplineBlockModuleInIsu.objects.filter(
+                module__name=isu_academic_plan_block_module_json['name'],
+                isu_id=isu_academic_plan_block_module_json['id'],
+                isu_father_id=father_module_id
+        ).exists():
             discipline_block_module_object_in_isu = DisciplineBlockModuleInIsu(
                 module=discipline_block_module_object,
                 isu_id=isu_academic_plan_block_module_json['id'],
-                isu_father_id=father_module['id'] if (father_module is not None) else None,
-                academic_plan=AcademicPlan.objects.filter(ap_isu_id = isu_academic_plan_json['id'])[0]
+                isu_father_id=father_module_id,
+                academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )
             discipline_block_module_object_in_isu.save()
@@ -396,8 +398,9 @@ class AcademicPlanUpdateProcessor:
         discipline_block_module_object.selection_rule = rules_ids[
             isu_academic_plan_block_module_json["choiceParameterId"]]
         discipline_block_module_object.selection_parametr = ", ".join(
-            [str(el) for el in isu_academic_plan_block_module_json["rules"]]) if isu_academic_plan_block_module_json[
-            "rules"] else None
+            [str(el) for el in isu_academic_plan_block_module_json["rules"]]) if \
+            isu_academic_plan_block_module_json[
+                "rules"] else None
         discipline_block_module_object.save()
 
         return discipline_block_module_object
@@ -436,6 +439,9 @@ class AcademicPlanUpdateProcessor:
                 #     isu_academic_plan_discipline_json['discipline_name']
                 # )
             )
+            list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
+            old_work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
+            old_work_program_change_in_discipline_block_module.save()
 
             work_program_change_in_discipline_block_module = copy.deepcopy(
                 old_work_program_change_in_discipline_block_module)
@@ -468,6 +474,9 @@ class AcademicPlanUpdateProcessor:
                     change_type=option,
                     work_program=work_program_object
                 )[0]
+            list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
+            old_work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
+            old_work_program_change_in_discipline_block_module.save()
             work_program_change_in_discipline_block_module = copy \
                 .deepcopy(old_work_program_change_in_discipline_block_module)
             if WorkProgramInFieldOfStudy.objects.filter(
@@ -496,6 +505,7 @@ class AcademicPlanUpdateProcessor:
             work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
             list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
             work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
+
             # work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
             #     isu_academic_plan_discipline_json['plan_order'],
             #     isu_academic_plan_discipline_json['discipline_name']
