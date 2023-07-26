@@ -2,7 +2,8 @@ from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_u
     discipline_block_module_object_relations_updater
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
-    WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration
+    WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration, \
+    DisciplineBlockModuleInIsu
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_utils import AcademicPlanUpdateUtils
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_logger import AcademicPlanUpdateLogger
 import copy
@@ -120,11 +121,11 @@ class AcademicPlanUpdateAspect:
         def wrapper(*args, **kwargs):
             isu_academic_plan_block_module_json, discipline_block_object, isu_academic_plan_json, father_module = args
             # print(isu_academic_plan_block_module_json)
-            if DisciplineBlockModule.objects.filter(
-                    name=isu_academic_plan_block_module_json['name'],
-                    isu_module__isu_id=isu_academic_plan_block_module_json['id'],
-                    # descipline_block=discipline_block_object
-            ).exists():
+            if DisciplineBlockModuleInIsu.objects.filter(
+                    module__name=isu_academic_plan_block_module_json['name'],
+                    isu_id=isu_academic_plan_block_module_json['id'],
+                    isu_father_id=father_module['id']).\
+            exists():
                 old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['name'],
                     isu_module__isu_id=isu_academic_plan_block_module_json['id'],
