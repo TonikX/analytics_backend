@@ -161,8 +161,6 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     setPlans(plans.filter(plan => plan.value !== value))
   }, [plans])
 
-
-
   const saveZun = useCallback(() => {
     dispatch(actions.saveZUN({
       indicators: getIndicatorsForSave(indicators),
@@ -196,7 +194,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     dispatch(competenceActions.changeFilterAcademicPlan(planId === filterAcademicPlan ? undefined : planId))
     dispatch(competenceActions.getCompetences())
   }
-
+  console.log('filterAcademicPlan', filterAcademicPlan)
   const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
 
   const epForSelect = epList && epList.reduce((fullPlans: any, currentPlan: any) => {
@@ -245,6 +243,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
                       onClickMenuItem={changeFilterAcademicPlan}
                       metaList={epForSelect}
                       wrapClass={classes.selectorWrap}
+                      key={filterAcademicPlan}
       />
       <CompetenceSelector
         onChange={addCompetence}
