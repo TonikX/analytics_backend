@@ -10,7 +10,7 @@ export const useStyles = makeStyles(() => createStyles({
       transform: 'translate(14px, -6.5px) scale(0.75) !important',
     },
     '& .MuiOutlinedInput-notchedOutline legend': {
-      width: '450px !important'
+      width: '321px !important'
     }
   },
   marginBottom30: {

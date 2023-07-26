@@ -186,7 +186,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
 
                     <FormControl className={classNames(classes.selectorWrap, classes.marginBottom30)}>
                         <InputLabel shrink>
-                            Год набора *
+                            Год набора * !!!!!!
                         </InputLabel>
                         <Select
                             variant="outlined"
@@ -226,7 +226,6 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                         format={FULL_DATE_FORMAT}
                         label={'Дата согласования'}
                     />
-
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button onClick={this.handleClose}

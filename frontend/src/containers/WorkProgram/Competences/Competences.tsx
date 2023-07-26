@@ -174,7 +174,7 @@ export default React.memo(() => {
               className={classes.addZUNButton}
               color="secondary"
             >
-              Добавить ЗУН
+              Добавить
           </Button>
         </Box>
 

@@ -235,11 +235,11 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
         paper: classes.dialog
       }}
     >
-      <DialogTitle className={classes.title}> {isEditMode ? 'Редактирование' : 'Добавление'} индикатора ко всем связным ОХ</DialogTitle>
+      <DialogTitle className={classes.title}> {isEditMode ? 'Редактирование' : 'Добавление'} компетенций и индикаторов</DialogTitle>
       <FormGroup className={classes.switcher}>
         <FormControlLabel onChange={changeFilterOnlyWithStandard} control={<Switch />} label="Вывести только компетенции, входящие в образовательные стандарт" />
       </FormGroup>
-      <SimpleSelector label="Вывести только компетенции, связанные с общей характеристикой указанной ОХ"
+      <SimpleSelector label="Вывести компетенции, связанные только с указанной ОХ"
                       value={filterAcademicPlan}
                       onChange={changeFilterAcademicPlan}
                       metaList={epForSelect}
@@ -305,7 +305,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       ))}
 
       <Typography className={classes.indicatorDialiogInfoMassage}>
-        Нажимая кнопку "Сохранить", Вы сохраняете ЗУН в рпд с привязкой к каждому УП, с которым связана РПД (Если ЗУН пустой или имеет такое же содержание, как данный). Если Вы не хотите добавлять ЗУН для всех связных УП, Вам необходимо нажать селектор "Сохранить для конкретного УП" и выбрать нужную УП.
+        Если хотите выбрать ОП для которой сохраняете компетенции и индикаторы, переключите бегунок ниже и выберите нужные. Если компетенции и индикаторы для всех ОП, просто нажмите сохранить.
       </Typography>
 
       <FormGroup className={saveForPlans ? classes.switcher : undefined}>
