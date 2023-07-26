@@ -376,10 +376,11 @@ class AcademicPlanUpdateProcessor:
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )
             discipline_block_module_object.save()
+            father_module_id = father_module.get("id") if father_module else None
             discipline_block_module_object_in_isu = DisciplineBlockModuleInIsu(
                 module=discipline_block_module_object,
                 isu_id=isu_academic_plan_block_module_json['id'],
-                isu_father_id=father_module['id'],
+                isu_father_id=father_module_id,
                 academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )
