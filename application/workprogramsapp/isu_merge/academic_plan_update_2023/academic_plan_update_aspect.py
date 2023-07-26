@@ -121,12 +121,11 @@ class AcademicPlanUpdateAspect:
         def wrapper(*args, **kwargs):
             isu_academic_plan_block_module_json, discipline_block_object, isu_academic_plan_json, father_module = args
             # print(isu_academic_plan_block_module_json)
-            father_module_id = father_module.get("id") if father_module else None
-            if DisciplineBlockModuleInIsu.objects.filter(
-                    module__name=isu_academic_plan_block_module_json['name'],
-                    isu_id=isu_academic_plan_block_module_json['id'],
-                    isu_father_id=father_module_id).\
-            exists():
+            if DisciplineBlockModule.objects.filter(
+                    name=isu_academic_plan_block_module_json['name'],
+                    isu_module__isu_id=isu_academic_plan_block_module_json['id'],
+                    # descipline_block=discipline_block_object
+            ).exists():
                 old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['name'],
                     isu_module__isu_id=isu_academic_plan_block_module_json['id'],
