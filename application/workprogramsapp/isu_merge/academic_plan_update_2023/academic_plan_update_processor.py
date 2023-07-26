@@ -369,6 +369,8 @@ class AcademicPlanUpdateProcessor:
                                  isu_academic_plan_json,
                                  father_module
                                  ):
+
+        father_module_id = father_module.get("id") if father_module else None
         if discipline_block_module_object is None:
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['name'],
@@ -380,9 +382,8 @@ class AcademicPlanUpdateProcessor:
         if not DisciplineBlockModuleInIsu.objects.filter(
                 module__name=isu_academic_plan_block_module_json['name'],
                 isu_id=isu_academic_plan_block_module_json['id'],
-                isu_father_id=father_module['id']
+                isu_father_id=father_module_id
         ).exists():
-            father_module_id = father_module.get("id") if father_module else None
             discipline_block_module_object_in_isu = DisciplineBlockModuleInIsu(
                 module=discipline_block_module_object,
                 isu_id=isu_academic_plan_block_module_json['id'],
