@@ -369,9 +369,7 @@ class AcademicPlanUpdateProcessor:
                                  isu_academic_plan_json,
                                  father_module
                                  ):
-        if discipline_block_module_object is not None:
-            return discipline_block_module_object
-        else:
+        if discipline_block_module_object is None:
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['name'],
                 isu_id=isu_academic_plan_block_module_json['id'],
@@ -386,7 +384,16 @@ class AcademicPlanUpdateProcessor:
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )
             discipline_block_module_object_in_isu.save()
-            # ToDo: Тут реализовать код обработки вложенности
+
+        rules_ids = {1: "choose_n_from_m", 2: "all", 21: "any_quantity", 41: "by_credit_units",
+                     61: "no_more_than_n_credits"}
+        discipline_block_module_object.selection_rule = rules_ids[
+            isu_academic_plan_block_module_json["choiceParameterId"]]
+        discipline_block_module_object.selection_parametr = ", ".join(
+            [str(el) for el in isu_academic_plan_block_module_json["rules"]]) if \
+            isu_academic_plan_block_module_json[
+                "rules"] else None
+        discipline_block_module_object.save()
 
         return discipline_block_module_object
 
