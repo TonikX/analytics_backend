@@ -24,8 +24,8 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
         <CKEditor
           config={config}
           initData={value}
-          onChange={(event) => onChange(event.editor.getData())}
-          onBlur={onBlur}
+          onChange={(event) => onChange?.(event.editor.getData())}
+          onBlur={(event) => onBlur?.(event.editor.getData())}
           onFocus={onFocus}
           readOnly={readOnly}
           onBeforeLoad={(CKEDITOR: any) => {
