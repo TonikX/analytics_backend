@@ -14,4 +14,5 @@ export interface QualificationSelectorProps extends WithStyles<typeof styles> {
         value: ReactText;
     }>;
     errorMessage?: ReactText;
+    onClickMenuItem?: (value: ReactText) => void
 }

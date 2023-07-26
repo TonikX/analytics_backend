@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState, useMemo} from 'react'
+import React, {useCallback, useEffect, useState, useMemo, ReactText} from 'react'
 import { Dialog } from '@mui/material'
 import Button from '@mui/material/Button'
 import DialogActions from '@mui/material/DialogActions'
@@ -192,8 +192,8 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
 
   const filterAcademicPlan = useSelector((state: rootState) => getFilterAcademicPlan(state))
 
-  const changeFilterAcademicPlan = (planId: number) => {
-    dispatch(competenceActions.changeFilterAcademicPlan(planId))
+  const changeFilterAcademicPlan = (planId: ReactText) => {
+    dispatch(competenceActions.changeFilterAcademicPlan(planId === filterAcademicPlan ? undefined : planId))
     dispatch(competenceActions.getCompetences())
   }
 
@@ -242,6 +242,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
       <SimpleSelector label="Вывести компетенции, связанные только с указанной ОХ"
                       value={filterAcademicPlan}
                       onChange={changeFilterAcademicPlan}
+                      onClickMenuItem={changeFilterAcademicPlan}
                       metaList={epForSelect}
                       wrapClass={classes.selectorWrap}
       />
