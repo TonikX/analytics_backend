@@ -2347,7 +2347,7 @@ class ZunUpdateView(generics.UpdateAPIView):
 
 
 @api_view(['POST'])
-@permission_classes((IsAdminUser,))
+@permission_classes((IsRpdDeveloperOrReadOnly,))
 def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы
