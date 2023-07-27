@@ -72,7 +72,7 @@ export const UpdateZunDialog = ({
   }, [results])
 
   const addResult = useCallback((value: any, label: string) => {
-    if (!value?.length || results.find(result => result.value === value)) return
+    if (typeof value === 'string' && !value?.length || results.find(result => result.value === value)) return
     changeResults([
       ...results,
       {value, label}
