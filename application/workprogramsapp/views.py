@@ -170,6 +170,7 @@ class ZunManyViewSet(viewsets.ModelViewSet):
             OR
             {
             "workprogram_id": 1 - ссылка на РПД
+            "gh_id": 1 новое - ссылка на ОХ
             "zun": [
             {
               "indicator_in_zun": 85,
@@ -180,6 +181,7 @@ class ZunManyViewSet(viewsets.ModelViewSet):
               "items": []
             }
                 ]
+            }
         """
         if request.data.get('iap_id') is not None:
             aps = AcademicPlan.objects.filter(academic_plan_in_field_of_study__id = int(request.data.get('iap_id')))
