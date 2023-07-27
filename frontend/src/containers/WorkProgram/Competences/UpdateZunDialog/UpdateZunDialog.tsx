@@ -71,8 +71,8 @@ export const UpdateZunDialog = ({
     changeResults(results.filter((result) => result.value !== resultId))
   }, [results])
 
-  const addResult = useCallback((value: number, label: string) => {
-    if (results.find(result => result.value === value)) return
+  const addResult = useCallback((value: any, label: string) => {
+    if (!value?.length || results.find(result => result.value === value)) return
     changeResults([
       ...results,
       {value, label}
