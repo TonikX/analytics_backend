@@ -123,6 +123,8 @@ def render_context(context, **kwargs):
     online_sections, url_online_course, evaluation_tools = [], [], []
     online_list_number = 0
 
+    if context['number_of_semesters'] == 0:
+        context['number_of_semesters'] = 1
     for i in context['discipline_sections']:
         print(context['discipline_sections'])
         online_names, topics_list = [], []
