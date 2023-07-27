@@ -12,8 +12,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginTop: '10px'
   },
   title: {
-    padding: 0,
-    marginBottom: '30px',
+    padding: '0px !important',
+    marginBottom: '10px !important',
   },
   footer: {
     display: 'flex',

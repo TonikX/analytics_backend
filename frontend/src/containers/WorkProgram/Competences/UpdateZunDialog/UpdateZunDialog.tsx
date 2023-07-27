@@ -20,9 +20,13 @@ interface Props {
   defaultSkills?: '';
   isEditMode?: boolean;
   handleClose: () => void;
+  indicator: {
+    name: string;
+    number: string;
+  }
 }
 
-export const UpdateZunDialog = ({ isOpen, defaultKnowledge = '', handleClose, defaultSkills = '', defaultAttainments = '', zunId }: Props) => {
+export const UpdateZunDialog = ({ indicator, isOpen, defaultKnowledge = '', handleClose, defaultSkills = '', defaultAttainments = '', zunId }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [knowledge, changeKnowledge] = useState<string>(defaultKnowledge)
@@ -50,7 +54,11 @@ export const UpdateZunDialog = ({ isOpen, defaultKnowledge = '', handleClose, de
         paper: classes.dialog
       }}
     >
-      <DialogTitle className={classes.title}> Редактирование ЗУНа</DialogTitle>
+      <DialogTitle className={classes.title}>Редактирование ЗУНа</DialogTitle>
+      <Typography>
+        <b>Индикатор:</b> {indicator.number} {indicator.name}
+      </Typography>
+      <br/>
       <TextField
         label="Знания"
         onChange={(e) => changeKnowledge(e.currentTarget.value)}

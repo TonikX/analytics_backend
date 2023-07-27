@@ -443,6 +443,7 @@ export default React.memo(() => {
         isOpen
         handleClose={() => setIsOpenUpdateZunDialog(false)}
         zunId={isOpenUpdateZunDialog.id}
+        indicator={isOpenUpdateZunDialog.indicator}
         defaultAttainments={isOpenUpdateZunDialog?.attainments}
         defaultSkills={isOpenUpdateZunDialog?.skills}
         defaultKnowledge={isOpenUpdateZunDialog?.knowledge}
