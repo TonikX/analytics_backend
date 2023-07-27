@@ -19,5 +19,18 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center',
-  }
+  },
+  chipsList: {
+    display: 'flex',
+    marginTop: '10px',
+    marginBottom: '10px',
+    flexWrap: 'wrap'
+  },
+  chip: {
+    marginRight: '10px !important',
+    marginBottom: '10px !important',
+    '& span': {
+      whiteSpace: 'initial !important'
+    }
+  },
 }));

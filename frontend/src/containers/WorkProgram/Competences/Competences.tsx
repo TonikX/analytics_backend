@@ -411,7 +411,7 @@ export default React.memo(() => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        {zun.items?.[0]?.name}
+                        {zun.items?.map((item: any) => item.name).join(', ')}
                       </TableCell>
                       <TableCell>
                         {[zun?.knowledge, zun?.skills, zun?.attainments].filter(item => Boolean(item)).join(' / ')}
@@ -442,6 +442,7 @@ export default React.memo(() => {
       <UpdateZunDialog
         isOpen
         handleClose={() => setIsOpenUpdateZunDialog(false)}
+        results={isOpenUpdateZunDialog.items}
         zunId={isOpenUpdateZunDialog.id}
         indicator={isOpenUpdateZunDialog.indicator}
         defaultAttainments={isOpenUpdateZunDialog?.attainments}

@@ -11,6 +11,13 @@ import actions from '../../actions'
 import {useDispatch} from 'react-redux'
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import ResultsSelector from "../../Results/ResultsSeletor/Selector";
+import Chip from "@mui/material/Chip";
+
+type Result = {
+  id: number,
+  name: string;
+}
 
 interface Props {
   zunId: number;
@@ -24,15 +31,29 @@ interface Props {
     name: string;
     number: string;
   }
+  results: Result[]
 }
 
-export const UpdateZunDialog = ({ indicator, isOpen, defaultKnowledge = '', handleClose, defaultSkills = '', defaultAttainments = '', zunId }: Props) => {
+export const UpdateZunDialog = ({
+  indicator,
+  isOpen,
+  defaultKnowledge = '',
+  handleClose,
+  defaultSkills = '',
+  defaultAttainments = '',
+  zunId,
+  results: defaultResults,
+}: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [knowledge, changeKnowledge] = useState<string>(defaultKnowledge)
   const [skills, changeSkills] = useState<string>(defaultSkills)
   const [attainments, changeAttainments] = useState<string>(defaultAttainments)
   const [updateAllZuns, changeUpdateAllZuns] = useState(false)
+  const [results, changeResults] = useState(defaultResults?.map((result) => ({
+    value: result.id,
+    label: result.name,
+  })))
 
   const saveZun = useCallback(() => {
     dispatch(actions.updateZUN({
@@ -41,9 +62,22 @@ export const UpdateZunDialog = ({ indicator, isOpen, defaultKnowledge = '', hand
       attainments,
       zunId,
       updateAllZuns,
+      items: results.map((result) => result.value)
     }))
     handleClose()
-  }, [knowledge, skills, attainments, updateAllZuns])
+  }, [knowledge, skills, attainments, updateAllZuns, results])
+
+  const removeResult = useCallback((resultId: number) => {
+    changeResults(results.filter((result) => result.value !== resultId))
+  }, [results])
+
+  const addResult = useCallback((value: number, label: string) => {
+    if (results.find(result => result.value === value)) return
+    changeResults([
+      ...results,
+      {value, label}
+    ])
+  }, [results])
 
   return (
     <Dialog
@@ -59,6 +93,18 @@ export const UpdateZunDialog = ({ indicator, isOpen, defaultKnowledge = '', hand
         <b>Индикатор:</b> {indicator.number} {indicator.name}
       </Typography>
       <br/>
+      <ResultsSelector
+        label="Результаты"
+        onChange={addResult}
+        valueLabel=""
+        value={0}
+        cleanLabelAfterSelect
+      />
+      <div className={classes.chipsList}>
+        {results.map(result => (
+          <Chip key={`result-${result.value}`} className={classes.chip} onDelete={() => removeResult(result.value)} label={result.label} />
+        ))}
+      </div>
       <TextField
         label="Знания"
         onChange={(e) => changeKnowledge(e.currentTarget.value)}
