@@ -167,6 +167,19 @@ class ZunManyViewSet(viewsets.ModelViewSet):
               "items": []
                 }
             }
+            OR
+            {
+            "workprogram_id": 1 - ссылка на РПД
+            "zun": [
+            {
+              "indicator_in_zun": 85,
+              "items": []
+            },
+            {
+              "indicator_in_zun": 85,
+              "items": []
+            }
+                ]
         """
         if request.data.get('iap_id') is not None:
             aps = AcademicPlan.objects.filter(academic_plan_in_field_of_study__id = int(request.data.get('iap_id')))
