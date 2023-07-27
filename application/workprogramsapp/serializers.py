@@ -857,11 +857,14 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
     fos_pk = serializers.IntegerField(source="academic_plan_in_field_of_study.field_of_study.id", write_only=True)
 
     def create(self, validated_data):
-        ap_in_fs = validated_data.pop('academic_plan_in_field_of_study')
-        fos_pk = ap_in_fs['field_of_study']['id']
-        ap = AcademicPlan.objects.create(**validated_data)
-        imp = ImplementationAcademicPlan.objects.create(academic_plan=ap)
-        imp.field_of_study.add(FieldOfStudy.objects.get(id=fos_pk))
+        try:
+            ap_in_fs = validated_data.pop('academic_plan_in_field_of_study')
+            fos_pk = ap_in_fs['field_of_study']['id']
+            ap = AcademicPlan.objects.create(**validated_data)
+            imp = ImplementationAcademicPlan.objects.create(academic_plan=ap)
+            imp.field_of_study.add(FieldOfStudy.objects.get(id=fos_pk))
+        except KeyError:
+            ap = AcademicPlan.objects.create(**validated_data)
         return ap
 
     class Meta:
