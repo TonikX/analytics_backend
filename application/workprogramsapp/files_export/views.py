@@ -131,7 +131,6 @@ def render_context(context, **kwargs):
         if i['contact_work'] is None:
             i['contact_work'] = ''
         else:
-            if context['number_of_semesters'] > 0:
             contact_work += float(i['contact_work']) / context['number_of_semesters']
             all_contact_work += float(i['contact_work'])
         if i['lecture_classes'] is None:
