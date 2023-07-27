@@ -176,12 +176,12 @@ const saveZun = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
 
         const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
-        const {indicator, workprogram_id, onlyCurrentGh, practice_id, skipReload} = action.payload;
+        const {indicators, workprogram_id, onlyCurrentGh, practice_id, skipReload} = action.payload;
 
         if (onlyCurrentGh) {
           service.saveZUN({
             gh_id: competenceMatrixId,
-            indicator,
+            indicators,
             workprogram_id,
             practice_id,
           })
@@ -202,7 +202,7 @@ const saveZun = createLogic({
               });
         } else {
           service.saveZunAllGh({
-            indicator,
+            indicators,
             workprogram_id,
             practice_id,
           })
@@ -232,7 +232,7 @@ const deleteZun = createLogic({
     dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_ZUN}));
 
     const competenceMatrixId = getEducationalProgramCharacteristicId(getState());
-    const {id, practice_id} = action.payload;
+    const {id, practice_id, skipReload} = action.payload;
 
     service.deleteZUN(id, practice_id)
       .then(() => {
@@ -243,7 +243,9 @@ const deleteZun = createLogic({
       })
       .then(() => {
         dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_ZUN}));
-        dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+        if (!skipReload) {
+          dispatch(educationalPlanActions.getCompetenceMatrix(competenceMatrixId));
+        }
         return done();
       })
   }

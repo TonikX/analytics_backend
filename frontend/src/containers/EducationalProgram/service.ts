@@ -203,13 +203,13 @@ class Service extends AnalyticsService{
     return this.get(`/api/general_characteristic/competence_matrix/${id}`);
   }
 
-  saveZUN({indicator, workprogram_id, gh_id, practice_id}: any){
+  saveZUN({indicators, workprogram_id, gh_id, practice_id}: any){
     const payload = {
       gh_id,
-      zun: {
-        indicator_in_zun: indicator,
+      zun: indicators.map((item: any) => ({
+        indicator_in_zun: item.value,
         items: []
-      }
+      }))
     }
     if (practice_id !== -1) {
       return this.post(`/api/zun/practice-many/`,{
@@ -223,12 +223,12 @@ class Service extends AnalyticsService{
     });
   }
 
-  saveZunAllGh({indicator, workprogram_id, practice_id}: any){
+  saveZunAllGh({indicators, workprogram_id, practice_id}: any){
     const payload = {
-      zun: {
-        indicator_in_zun: indicator,
+      zun: indicators.map((item: any) => ({
+        indicator_in_zun: item.value,
         items: []
-      }
+      }))
     }
     if (practice_id !== -1) {
       return this.post(`/api/zun/practice-many_create_for_all_gh/`,{

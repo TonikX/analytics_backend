@@ -25,8 +25,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         flexWrap: 'wrap'
     },
     chip: {
-        marginRight: '10px',
-        marginBottom: '10px',
+        marginRight: '10px !important',
+        marginBottom: '10px !important',
         '& span': {
             whiteSpace: 'initial !important'
         }

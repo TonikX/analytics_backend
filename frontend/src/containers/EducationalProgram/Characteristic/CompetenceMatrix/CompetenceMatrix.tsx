@@ -385,7 +385,8 @@ export default () => {
                 </Table>
             </TableContainer>
 
-            <IndicatorsDialog
+            {isOpen ? (
+              <IndicatorsDialog
                 isOpen={isOpen}
                 handleClose={resetDialog}
                 addedIndicators={indicators}
@@ -393,7 +394,8 @@ export default () => {
                 workProgramId={workProgramId}
                 practiceId={practiceId}
                 onDeleteZun={deleteZun}
-            />
+              />
+            ) : null}
         </div>
     )
 }
