@@ -803,14 +803,16 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         # except KeyError:
         #     data["can_edit"] = False
         # print(instance.academic_plan_in_field_of_study.filter()[0].editors)
+        editors = []
+        if instance.academic_plan_in_field_of_study.filter().exists():
+            editors = instance.academic_plan_in_field_of_study.filter()[0].editors.all()
         data["laboriousness"] = sum(
             [block["laboriousness"] if block["name"] != "Блок 4. Факультативные модули (дисциплины)" else 0 for block in
              data["discipline_blocks_in_academic_plan"]])
         if instance.on_check == 'on_check' and not bool(
                 self.context['request'].user.groups.filter(name="expertise_master")):
             data["can_edit"] = False
-        elif self.context['request'].user in instance.academic_plan_in_field_of_study.filter()[0].editors.all() and \
-                instance.on_check != 'verified':
+        elif self.context['request'].user in editors and instance.on_check != 'verified':
             data["can_edit"] = True
         elif self.context['request'].user.is_staff or bool(
                 self.context['request'].user.groups.filter(name="expertise_master")):
@@ -852,9 +854,23 @@ class AcademicPlanForRepresentationSerializer(serializers.ModelSerializer):
 
 
 class AcademicPlanCreateSerializer(serializers.ModelSerializer):
+    fos_pk = serializers.IntegerField(source="academic_plan_in_field_of_study.field_of_study.id", write_only=True)
+
+    def create(self, validated_data):
+        try:
+            ap_in_fs = validated_data.pop('academic_plan_in_field_of_study')
+            fos_pk = ap_in_fs['field_of_study']['id']
+            ap = AcademicPlan.objects.create(**validated_data)
+            imp = ImplementationAcademicPlan.objects.create(academic_plan=ap)
+            imp.field_of_study.add(FieldOfStudy.objects.get(id=fos_pk))
+        except KeyError:
+            ap = AcademicPlan.objects.create(**validated_data)
+        return ap
+
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'author']
+        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'author',
+                  'fos_pk']
 
 
 class WorkProgramShortForExperiseSerializer(serializers.ModelSerializer):

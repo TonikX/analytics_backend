@@ -21,7 +21,7 @@ def generate_contents(type_id, order=None, volume=None, ):
 def generate_response(url, headers, body, obj_name, obj_id, ap_id=None):
     # print(body)
     response = requests.post(url, headers=headers, data=json.dumps(body, ensure_ascii=False).encode('utf-8'))
-    # print(response.text)
+    print(response.text)
     try:
         IsuObjectsSendLogger.objects.create(obj_id=obj_id, obj_type=obj_name, generated_json=body,
                                             error_status=response.json()["error_code"], returned_data=response.json(),
@@ -277,13 +277,11 @@ def post_module_to_isu(token, module, parent_id, block, ap_id):
     return generate_response(url, headers, body, "module", module.id, ap_id)[0]
 
 
-def generate_wp_in_lower_module_for_ap_isu(disc_id, changeblock, module, isu_id_lower_module):
+def generate_wp_in_lower_module_for_ap_isu(disc_id, changeblock, module, isu_id_lower_module, required):
     replaceable = False
-    required = False
+    #required = False
     if changeblock.change_type != "Required":
         replaceable = True
-    if module.selection_rule == "all":
-        required = True
 
     return {"disc_id": disc_id,
             "module_id": isu_id_lower_module,
