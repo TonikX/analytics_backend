@@ -861,10 +861,12 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
             ap_in_fs = validated_data.pop('academic_plan_in_field_of_study')
             fos_pk = ap_in_fs['field_of_study']['id']
             ap = AcademicPlan.objects.create(**validated_data)
-            imp = ImplementationAcademicPlan.objects.create(academic_plan=ap)
+            imp = ImplementationAcademicPlan.objects.create(academic_plan=ap,
+                                                            title=validated_data.pop('educational_profile'))
             imp.field_of_study.add(FieldOfStudy.objects.get(id=fos_pk))
         except KeyError:
             ap = AcademicPlan.objects.create(**validated_data)
+            imp = ImplementationAcademicPlan.objects.create(academic_plan=ap)
         return ap
 
     class Meta:
