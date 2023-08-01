@@ -873,7 +873,7 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
         fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'author',
-                  'fos_pk']
+                  'fos_pk', 'qualification']
 
 
 class WorkProgramShortForExperiseSerializer(serializers.ModelSerializer):
