@@ -52,6 +52,7 @@ export enum fetchingTypes {
 
 export enum EducationalPlanFields {
   ID = 'id',
+  DIRECTION = 'fos_pk',
   STATUS = 'on_check',
   CAN_VALIDATE = 'can_validate',
   EDITORS = 'editors',
