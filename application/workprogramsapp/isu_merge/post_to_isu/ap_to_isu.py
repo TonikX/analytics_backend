@@ -11,7 +11,7 @@ from workprogramsapp.models import DisciplineBlock, WorkProgram, WorkProgramChan
 TOKEN = "xd"  # login fucntion here
 
 
-def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None):
+def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None, required = True):
     """
     from workprogramsapp.models import *
     from workprogramsapp.isu_merge.post_to_isu.ap_to_isu import *
@@ -22,6 +22,7 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None):
 
     """
     for module in modules:
+        required = required and (module.selection_rule == "all")
         id_created = None
         try:
             isu_module = DisciplineBlockModuleInIsu.objects.get(module=module, isu_father_id=father_id,
@@ -38,7 +39,7 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None):
                 #id_created = None
 
         if module.childs.all().exists():
-            recursion_ap_to_isu(module.childs.all(), lines_of_plan, block, ap, id_created)
+            recursion_ap_to_isu(module.childs.all(), lines_of_plan, block, ap, id_created, required)
         else:
             for changeblock in WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=module):
                 disc_id = None
@@ -77,7 +78,7 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None):
                         continue
                 lines_of_plan.append(
                     generate_wp_in_lower_module_for_ap_isu(module=module, changeblock=changeblock, disc_id=disc_id,
-                                                           isu_id_lower_module=id_created))
+                                                           isu_id_lower_module=id_created, required=required))
     return lines_of_plan
 
 
