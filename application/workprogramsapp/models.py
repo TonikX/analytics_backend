@@ -1030,7 +1030,7 @@ class AcademicPlanUpdateConfiguration(models.Model):
         verbose_name='Дата обновления'
     )
     updates_enabled = models.BooleanField(verbose_name="Обновления включены", blank=False, null=False)
-    over_23 = models.BooleanField(verbose_name="Новый план", blank=True, null=True)
+    over_23 = models.BooleanField(verbose_name="Новый план", blank=False, null=False, default=False)
 
     class Meta:
         ordering = ['id']
