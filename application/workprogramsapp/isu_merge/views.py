@@ -18,7 +18,7 @@ from gia_practice_app.Practice.models import Practice
 from workprogramsapp.isu_merge.academic_plan_headers import process_headers
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_excel_creator import AcademicPlanExcelCreator
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_updater import process_modules
-from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_processor import AcademicPlanUpdateProcessor
+from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
 from workprogramsapp.isu_merge.academic_plan_update_2023.isu_service import IsuService, IsuUser
 from workprogramsapp.isu_merge.filterset import HistoryFilter
 from workprogramsapp.isu_merge.post_to_isu.ap_to_isu import ap_isu_generate_dict
@@ -34,11 +34,20 @@ from workprogramsapp.serializers import AcademicPlanUpdateLogSerializer, Academi
     AcademicPlanUpdateSchedulerConfigurationSerializer
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
+from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_processor \
+    import AcademicPlanUpdateProcessor as AcademicPlanUpdateProcessor_2023
 
 class UpdateAcademicPlansView(APIView):
 
     def post(self, request):
         updater = AcademicPlanUpdateProcessor()
+        updater.update_academic_plans()
+        return Response(status=200)
+
+class UpdateAcademicPlans2023View(APIView):
+
+    def post(self, request):
+        updater = AcademicPlanUpdateProcessor_2023()
         updater.update_academic_plans()
         return Response(status=200)
 

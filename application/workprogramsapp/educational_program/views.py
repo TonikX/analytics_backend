@@ -618,3 +618,21 @@ def get_all_competences_and_indicators_for_wp(request, wp_id):
         competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
                                  "zuns": zuns_array})
     return Response({"competences": competences_dict})
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def zun_many_remove(request):
+    '''
+    EXAMPLE:
+
+    {
+        "zuns_to_delete": [1, 2, 3]
+    }
+    '''
+    zuns_to_delete = request.data.get("zuns_to_delete")
+
+    for zun in zuns_to_delete:
+        Zun.objects.get(id=zun).delete()
+
+    return Response({"message": "Зуны удалены"}, status=201)

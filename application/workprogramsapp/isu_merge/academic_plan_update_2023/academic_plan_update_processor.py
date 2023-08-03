@@ -738,7 +738,7 @@ class AcademicPlanUpdateProcessor:
             return work_program_object
 
     def update_academic_plans(self):
-        academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True).values_list(
+        academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True, over_23=True).values_list(
             'academic_plan_id', flat=True)
 
         for plan_id in academic_plans_ids:
