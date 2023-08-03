@@ -6,7 +6,7 @@ from workprogramsapp.educational_program.views import EducationalProgramCreateAP
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView, UploadCompetences, \
     GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix, ObjectsOfActivitySet, \
     academ_plan_check, UploadProfStandards, new_ordinal_numbers_for_modules_in_ap, gh_check, \
-    get_all_ap_with_competences_and_indicators, get_all_competences_and_indicators_for_wp
+    get_all_ap_with_competences_and_indicators, get_all_competences_and_indicators_for_wp, zun_many_remove
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
@@ -53,6 +53,7 @@ urlpatterns = [
          get_all_ap_with_competences_and_indicators),
     path('api/competence/get_all_competences_and_indicators_for_wp/<int:wp_id>',
          get_all_competences_and_indicators_for_wp),
+    path('api/competence/zun_many_remove', zun_many_remove),
 
     # --Матрица компетенций
     path('api/general_characteristic/competence_matrix/<int:gen_pk>', GetCompetenceMatrix),

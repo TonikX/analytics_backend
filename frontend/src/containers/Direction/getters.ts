@@ -14,9 +14,9 @@ const getStateData = (state: rootState): directionState => get(state, GENERAL_PA
 export const getEducationalProgram = (state: rootState): Array<DirectionType> => get(getStateData(state), fields.EDUCATIONAL_PROGRAM_LIST, []);
 
 export const getDirectionsForSelector = (state: rootState): SelectorListType =>
-    getEducationalProgram(state).map((competence: DirectionType) => ({
-        value: competence[DirectionFields.ID],
-        label: competence[DirectionFields.TITLE],
+    getEducationalProgram(state).map((direction: DirectionType) => ({
+        value: direction[DirectionFields.ID],
+        label: direction[DirectionFields.TITLE] + ' ' + direction[DirectionFields.NUMBER],
     }))
 
 export const getEducationalProgramDialog = (state: rootState) => get(getStateData(state), fields.EDUCATIONAL_PROGRAM_DIALOG, {});
