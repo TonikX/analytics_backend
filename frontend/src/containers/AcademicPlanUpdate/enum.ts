@@ -40,7 +40,6 @@ export enum AcademicPlanUpdateLogFields {
     NEW_VALUE = 'new_value',
     OLD_VALUE = 'old_value',
     UPDATED_DATE_TIME = 'updated_date_time',
-    OVER_23 = 'over_23'
 }
 
 export enum SchedulerConfigurationFields {

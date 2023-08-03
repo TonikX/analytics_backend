@@ -1,4 +1,4 @@
-import React, {SyntheticEvent} from 'react';
+import React from 'react';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
 import get from 'lodash/get';
@@ -41,7 +41,6 @@ import connect from './AcademicPlanUpdate.connect';
 import styles from './AcademicPlanUpdate.styles';
 import {AcademicPlanUpdateLogFields, SchedulerConfigurationFields, UpdatedAcademicPlanFields} from "./enum";
 import CreateModal from "./CreateModal/CreateModal";
-import {WorkProgramGeneralFields} from "../WorkProgram/enum";
 import Pagination from "@mui/lab/Pagination";
 import {FULL_DATE_FORMAT_WITH_TIME} from "../../common/utils";
 
@@ -110,7 +109,7 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
         }
     }
 
-    changeUpdateStatus = (id: number, updatesEnabled: boolean) => (event: SyntheticEvent): void => {
+    changeUpdateStatus = (id: number, updatesEnabled: boolean) => (): void => {
         updatesEnabled = !updatesEnabled
         this.props.actions.updateAcademicPlanConfiguration({
             [UpdatedAcademicPlanFields.ID]: id,
@@ -295,9 +294,6 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                                                 mode={logsSortingField === 'updated_date_time' ? logsSortingMode : ''}
                                             />
                                         </TableCell>
-                                        <TableCell className={classes.headCell}>
-                                            С 2023 года
-                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -309,7 +305,6 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                                             <TableCell>{log[AcademicPlanUpdateLogFields.OLD_VALUE]}</TableCell>
                                             <TableCell>{log[AcademicPlanUpdateLogFields.NEW_VALUE]}</TableCell>
                                             <TableCell>{moment(log[AcademicPlanUpdateLogFields.UPDATED_DATE_TIME]).format(FULL_DATE_FORMAT_WITH_TIME)}</TableCell>
-                                            <TableCell>{log[AcademicPlanUpdateLogFields.OVER_23] ? <CheckIcon /> : null}</TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>
@@ -319,8 +314,8 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                             <Table stickyHeader size='small'>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>
-                                            Id учебного плана
+                                        <TableCell className={classes.idPlanCell}>
+                                            Id УП
                                             <SortingButton
                                                 changeMode={this.changeSorting('academic_plan_id')}
                                                 mode={updatedPlansSortingField === 'academic_plan_id' ? updatedPlansSortingMode : ''}
@@ -347,21 +342,24 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                                                 mode={updatedPlansSortingField === 'updates_enabled' ? updatedPlansSortingMode : ''}
                                             />
                                         </TableCell>
+                                        <TableCell>
+                                            С 2023 года
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {updatedAcademicPlans.map(updatedPlan =>
                                         <TableRow key={updatedPlan[UpdatedAcademicPlanFields.ID]}>
-                                            <TableCell>{updatedPlan[UpdatedAcademicPlanFields.ACADEMIC_PLAN_ID]}</TableCell>
+                                            <TableCell className={classes.idPlanCell}>{updatedPlan[UpdatedAcademicPlanFields.ACADEMIC_PLAN_ID]}</TableCell>
                                             <TableCell>{updatedPlan[UpdatedAcademicPlanFields.ACADEMIC_PLAN_TITLE]}</TableCell>
-                                            <TableCell>{updatedPlan[UpdatedAcademicPlanFields.UPDATED_DATE_TIME]}</TableCell>
+                                            <TableCell>{moment(updatedPlan[UpdatedAcademicPlanFields.UPDATED_DATE_TIME]).format(FULL_DATE_FORMAT_WITH_TIME)}</TableCell>
                                             <TableCell>{
                                                 <Switch checked={updatedPlan[UpdatedAcademicPlanFields.UPDATES_ENABLED]}
                                                         onChange={this.changeUpdateStatus(updatedPlan[UpdatedAcademicPlanFields.ID], updatedPlan[UpdatedAcademicPlanFields.UPDATES_ENABLED])}
                                                         color="primary"
                                                 />
-
                                             }</TableCell>
+                                            <TableCell>{updatedPlan[UpdatedAcademicPlanFields.OVER_23] ? <CheckIcon /> : null}</TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>
@@ -373,13 +371,13 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
 
                 <div className={classes.footer}>
                     {this.state.currentTab ?
-                      <Pagination count={updatedPlansAllCount}
+                      <Pagination count={Math.ceil(updatedPlansAllCount / 10)}
                                   page={updatedPlansCurrentPage}
                                   onChange={this.handleChangePage}
                                   color="primary"
                       />
                         :
-                      <Pagination count={logsAllCount}
+                      <Pagination count={Math.ceil(logsAllCount / 10)}
                                   page={logsCurrentPage}
                                   onChange={this.handleChangePage}
                                   color="primary"

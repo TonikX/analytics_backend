@@ -2,8 +2,6 @@ import {AcademicPlanUpdateLogFields, fields, SchedulerConfigurationFields, Updat
 import {WithStyles} from '@mui/styles';
 import styles from "./WorkProgram.styles";
 import {SortingType} from "../../components/SortingButton/types";
-import {DirectionType} from "../Direction/types";
-import {WorkProgramGeneralType} from "../WorkProgram/types";
 
 export interface AcademicPlanUpdateActions {
     updateAcademicPlansFrom2023: any,
@@ -69,7 +67,6 @@ export type AcademicPlanUpdateLogType = {
     [AcademicPlanUpdateLogFields.OLD_VALUE]: string;
     [AcademicPlanUpdateLogFields.NEW_VALUE]: string;
     [AcademicPlanUpdateLogFields.UPDATED_DATE_TIME]: string;
-    [AcademicPlanUpdateLogFields.OVER_23]: boolean;
 };
 
 export type UpdatedAcademicPlanType = {
@@ -78,6 +75,7 @@ export type UpdatedAcademicPlanType = {
     [UpdatedAcademicPlanFields.ACADEMIC_PLAN_TITLE]: string;
     [UpdatedAcademicPlanFields.UPDATED_DATE_TIME]: string;
     [UpdatedAcademicPlanFields.UPDATES_ENABLED]: boolean;
+    [UpdatedAcademicPlanFields.OVER_23]: boolean;
 };
 
 export interface AcademicPlanUpdateProps extends WithStyles<typeof styles> {
