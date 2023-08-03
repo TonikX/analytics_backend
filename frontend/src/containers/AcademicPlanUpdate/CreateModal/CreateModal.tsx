@@ -14,13 +14,16 @@ import {withStyles} from '@mui/styles';
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
 import {UpdatedAcademicPlanFields} from "../enum";
+import FormControlLabel from "@mui/material/FormControlLabel/FormControlLabel";
+import {Checkbox} from "@mui/material";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
         academicPlanUpdateConfiguration: {
             [UpdatedAcademicPlanFields.ACADEMIC_PLAN_ID]: '',
             [UpdatedAcademicPlanFields.ACADEMIC_PLAN_TITLE]: '',
-            [UpdatedAcademicPlanFields.UPDATES_ENABLED]: false
+            [UpdatedAcademicPlanFields.UPDATES_ENABLED]: false,
+            [UpdatedAcademicPlanFields.OVER_23]: false
         }
     };
 
@@ -45,6 +48,17 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
         })
     }
 
+    handleChangeOver23 = (e: any, checked: boolean) => {
+        const {academicPlanUpdateConfiguration} = this.state;
+
+        this.setState({
+            academicPlanUpdateConfiguration: {
+                ...academicPlanUpdateConfiguration,
+                [UpdatedAcademicPlanFields.OVER_23]: checked
+            }
+        })
+    }
+
     render() {
         const {isOpen, classes} = this.props;
         const {academicPlanUpdateConfiguration} = this.state;
@@ -61,7 +75,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                 }}
             >
                 <DialogTitle> Добавить учебный план </DialogTitle>
-                <DialogContent>
+                <DialogContent className={classes.dialogContent}>
                     <TextField label="Id учебного плана"
                                onChange={this.saveField(UpdatedAcademicPlanFields.ACADEMIC_PLAN_ID)}
                                variant="outlined"
@@ -81,6 +95,15 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                                InputLabelProps={{
                                    shrink: true,
                                }}
+                    />
+                    <FormControlLabel
+                      control={(
+                        <Checkbox
+                          checked={academicPlanUpdateConfiguration[UpdatedAcademicPlanFields.OVER_23]}
+                          onChange={this.handleChangeOver23}
+                        />
+                      )}
+                      label="УП с 2023 года"
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>

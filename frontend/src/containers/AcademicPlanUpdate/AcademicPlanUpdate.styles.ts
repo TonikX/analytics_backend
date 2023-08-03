@@ -17,10 +17,10 @@ export default () => createStyles({
         }
     },
     additionalFunctionsWrap: {
-        width: '1350px',
+        // width: '1350px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
     },
     root: {
         padding: '20px 50px 20px 50px',
@@ -46,7 +46,27 @@ export default () => createStyles({
     },
     searchInput: {
         height: '40px',
-        minHeight: '40px'
+        minHeight: '40px',
+        marginLeft: 'auto',
+    },
+    button: {
+      height: '40px',
+    },
+    buttonsWrap: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    headCell: {
+        // width: '12%',
+    },
+    idPlanCell: {
+        width: '100px',
+    },
+    field: {
+        width: '200px',
+        height: '40px',
+        marginRight: '20px',
     },
     addIcon: {
         marginLeft: 'auto',

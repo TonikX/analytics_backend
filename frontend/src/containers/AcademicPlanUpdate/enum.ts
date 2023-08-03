@@ -26,6 +26,7 @@ export enum fetchingTypes {
     GET_UPDATED_ACADEMIC_PLANS = 'GET_UPDATED_ACADEMIC_PLANS',
     CREATE_ACADEMIC_PLAN_UPDATE_CONFIGURATION = 'CREATE_ACADEMIC_PLAN_UPDATE_CONFIGURATION',
     UPDATE_ACADEMIC_PLANS = 'UPDATE_ACADEMIC_PLANS',
+    UPDATE_ACADEMIC_PLANS_FROM_2023 = 'UPDATE_ACADEMIC_PLANS_FROM_2023',
     UPDATE_ACADEMIC_PLAN_UPDATE_CONFIGURATION = 'UPDATE_ACADEMIC_PLAN_UPDATE_CONFIGURATION',
     UPDATE_SCHEDULER_CONFIGURATION = 'UPDATE_SCHEDULER_CONFIGURATION',
     GET_SCHEDULER_CONFIGURATION = 'GET_SCHEDULER_CONFIGURATION'
@@ -38,7 +39,8 @@ export enum AcademicPlanUpdateLogFields {
     FIELD_NAME = 'field_name',
     NEW_VALUE = 'new_value',
     OLD_VALUE = 'old_value',
-    UPDATED_DATE_TIME = 'updated_date_time'
+    UPDATED_DATE_TIME = 'updated_date_time',
+    OVER_23 = 'over_23'
 }
 
 export enum SchedulerConfigurationFields {
@@ -51,6 +53,6 @@ export enum UpdatedAcademicPlanFields {
     ACADEMIC_PLAN_ID = 'academic_plan_id',
     ACADEMIC_PLAN_TITLE = 'academic_plan_title',
     UPDATES_ENABLED = 'updates_enabled',
-    UPDATED_DATE_TIME = 'updated_date_time'
-
+    UPDATED_DATE_TIME = 'updated_date_time',
+    OVER_23 = 'over_23',
 }

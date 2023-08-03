@@ -81,7 +81,6 @@ const getSchedulerConfiguration = createLogic({
 const updateAcademicPlans = createLogic({
     type: planActions.updateAcademicPlans.type,
     latest: true,
-
     process({getState, action}: any, dispatch, done) {
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ACADEMIC_PLANS}));
 
@@ -96,6 +95,28 @@ const updateAcademicPlans = createLogic({
             })
             .then(() => {
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_ACADEMIC_PLANS}));
+                return done();
+            });
+    }
+});
+
+const updateAcademicPlansFrom2023 = createLogic({
+    type: planActions.updateAcademicPlansFrom2023.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ACADEMIC_PLANS_FROM_2023}));
+
+        service.updateAcademicPlansFrom2023()
+            .then((res) => {
+                dispatch(planActions.getAcademicPlanUpdateLogs())
+                dispatch(planActions.getUpdatedAcademicPlans())
+                dispatch(actions.fetchingSuccess());
+            })
+            .catch((err) => {
+                dispatch(actions.fetchingFailed(err));
+            })
+            .then(() => {
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_ACADEMIC_PLANS_FROM_2023}));
                 return done();
             });
     }
@@ -232,6 +253,7 @@ const updateSchedulerConfiguration = createLogic({
 
 export default [
     getAcademicPlanUpdateLogs,
+    updateAcademicPlansFrom2023,
     updateAcademicPlans,
     getAcademicPlansExcel,
     getUpdatedAcademicPlans,

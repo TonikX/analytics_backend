@@ -10,6 +10,7 @@ const createNewAcademicPlanUpdateConfiguration = createAction('CREATE_NEW_ACADEM
 const openDialog = createAction('OPEN_UPDATED_ACADEMIC_PLAN_DIALOG');
 const closeDialog = createAction('CLOSE_UPDATED_ACADEMIC_PLAN_DIALOG');
 const updateAcademicPlans = createAction('UPDATE_ACADEMIC_PLANS');
+const updateAcademicPlansFrom2023 = createAction('UPDATE_ACADEMIC_PLANS_FROM_2023');
 const getUpdatedAcademicPlans = createAction('GET_UPDATED_ACADEMIC_PLANS');
 const setUpdatedAcademicPlans = createAction('SET_UPDATED_ACADEMIC_PLANS');
 const getAcademicPlansExcel = createAction('GET_ACADEMIC_PLANS_EXCEL');
@@ -30,6 +31,7 @@ const updatedPlansChangeSorting = createAction('UPDATED_PLANS_CHANGE_SORTING');
 
 
 const actions: AcademicPlanUpdateActions = {
+    updateAcademicPlansFrom2023,
     updateSchedulerConfiguration,
     setSchedulerConfiguration,
     getSchedulerConfiguration,

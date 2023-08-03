@@ -6,6 +6,7 @@ import {DirectionType} from "../Direction/types";
 import {WorkProgramGeneralType} from "../WorkProgram/types";
 
 export interface AcademicPlanUpdateActions {
+    updateAcademicPlansFrom2023: any,
     updateSchedulerConfiguration: any,
     setSchedulerConfiguration: any,
     getSchedulerConfiguration: any,
@@ -68,6 +69,7 @@ export type AcademicPlanUpdateLogType = {
     [AcademicPlanUpdateLogFields.OLD_VALUE]: string;
     [AcademicPlanUpdateLogFields.NEW_VALUE]: string;
     [AcademicPlanUpdateLogFields.UPDATED_DATE_TIME]: string;
+    [AcademicPlanUpdateLogFields.OVER_23]: boolean;
 };
 
 export type UpdatedAcademicPlanType = {
