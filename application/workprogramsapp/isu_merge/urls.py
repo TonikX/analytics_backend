@@ -7,7 +7,7 @@ from .views import FileUploadAPIView, FileUploadOldVersionAPIView, AcademicPlanU
     AcademicPlanUpdateConfigurationUpdateView, AcademicPlanUpdateConfigurationCreateAPIView, \
     AcademicPlanUpdateSchedulerConfigurationUpdateView, UpdateAcademicPlansView, UpdateAcademicPlansHeadersView, \
     SendAcademicPlansLinesToIsu, IsuHistoryListView, SendWorkProgramToISU, SendPracticeToISU, SendGIAToISU, \
-    UpdateModulesRelationships
+    UpdateModulesRelationships, UpdateAcademicPlans2023View
 from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_scheduler import AcademicPlanUpdateScheduler
 from .v_2.isu_change_parser import ChangeParser
 
@@ -15,8 +15,8 @@ urlpatterns = [
 
     # --Общая характеристика
     path('api/isu_v1/upload/csv/', FileUploadOldVersionAPIView.as_view()),
-    #path('api/isu_v2/academic-plans/update', UpdateAcademicPlansView.as_view()),
     path('api/isu_v2/academic-plans/update', UpdateAcademicPlansView.as_view()),
+    path('api/isu_v2/academic-plans_2023/update', UpdateAcademicPlans2023View.as_view()),
     path('api-servises/isu_changeparser', ChangeParser),
     path('api/isu_v2/academic-plans/excel', AcademicPlanUpdateExcelCreatorView.as_view()),
     path('api/isu_v2/logs', AcademicPlanUpdateLogsView.as_view()),

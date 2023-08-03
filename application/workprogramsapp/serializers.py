@@ -36,7 +36,7 @@ class AcademicPlanUpdateLogSerializer(serializers.ModelSerializer):
 class AcademicPlanUpdateConfigurationSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlanUpdateConfiguration
-        fields = ['id', 'academic_plan_id', 'academic_plan_title', 'updated_date_time', 'updates_enabled']
+        fields = ['id', 'academic_plan_id', 'academic_plan_title', 'updated_date_time', 'updates_enabled', 'over_23']
 
 
 class AcademicPlanUpdateConfigurationEditSerializer(serializers.ModelSerializer):
