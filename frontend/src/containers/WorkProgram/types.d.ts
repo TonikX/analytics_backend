@@ -28,6 +28,8 @@ export interface WorkProgramActions {
     updateZUNFull: any;
     updateZUN: any;
 
+    deleteIndicators: any;
+
     sendWorkProgramToArchive: any;
     sendWorkProgramToExpertise: any;
     sendWorkProgramToIsu: any;
