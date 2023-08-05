@@ -123,11 +123,11 @@ class AcademicPlanUpdateAspect:
                     module_isu_id=isu_academic_plan_block_module_json['module_id '],
                     descipline_block=discipline_block_object
             ).exists():
-                old_discipline_block_module_object = DisciplineBlockModule.objects.get(
+                old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['module_name'],
                     module_isu_id=isu_academic_plan_block_module_json['module_id '],
                     descipline_block=discipline_block_object
-                )
+                )[0]
             else:
                 old_discipline_block_module_object = None
             # print('old_discipline_block_module_object',  old_discipline_block_module_object)
