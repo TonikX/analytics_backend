@@ -170,7 +170,7 @@ class AcademicPlanUpdateProcessor:
             contact_hours[sem] = round(srs_counter * 1.1, 2)
             last_sem = len(cerf_list)
 
-        work_program_object.description = isu_academic_plan_discipline_json["description"]
+        #work_program_object.description = isu_academic_plan_discipline_json["description"]
         work_program_object.language = isu_academic_plan_discipline_json["langCode"].lower()
         work_program_object.structural_unit = choose_department(isu_academic_plan_discipline_json)
 
@@ -399,8 +399,7 @@ class AcademicPlanUpdateProcessor:
             isu_academic_plan_block_module_json["choiceParameterId"]]
         discipline_block_module_object.selection_parametr = ", ".join(
             [str(el) for el in isu_academic_plan_block_module_json["rules"]]) if \
-            isu_academic_plan_block_module_json[
-                "rules"] else None
+            isu_academic_plan_block_module_json["rules"] else None
         discipline_block_module_object.save()
 
         return discipline_block_module_object
