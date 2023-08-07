@@ -93,6 +93,7 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
 
     def create(self, request, *args, **kwargs):
         """
+        Вместо gh_id (id ОХ) можно передать iap_id - id ImplementationAcademicPlan
         Example:
             {
             "practice_id": 1 - ссылка на Практику
@@ -118,9 +119,13 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
                 ]
             }
         """
-        aps = AcademicPlan.objects.filter(
-            academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=int(
-                request.data.get('gh_id')))
+        if request.data.get('gh_id'):
+            aps = AcademicPlan.objects.filter(
+                academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=int(
+                    request.data.get('gh_id')))
+        if request.data.get('iap_id'):
+            aps = AcademicPlan.objects.filter(
+                academic_plan_in_field_of_study=int(request.data.get('iap_id')))
         wp_in_fss = PracticeInFieldOfStudy.objects.filter(
             Q(practice__id=int(request.data.get('practice_id')),
               work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__in=aps) |
