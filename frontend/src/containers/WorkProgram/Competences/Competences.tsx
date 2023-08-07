@@ -42,6 +42,7 @@ import DatePickerComponent from '../../../components/DatePicker';
 
 import { useStyles } from './Competences.styles'
 import {YEAR_DATE_FORMAT} from "../../../common/utils";
+import Checkbox from "@mui/material/Checkbox";
 
 export default React.memo(() => {
   const dispatch = useDispatch()
@@ -50,6 +51,7 @@ export default React.memo(() => {
   const [isOpenUpdateZunDialog, setIsOpenUpdateZunDialog] = useState<any>(false)
   const [tab, setTab] = useState('1')
   const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
+  const [checkedIndicators, setCheckedIndicators] = useState<number[]>([])
 
   const competencesList1 = useSelector((state: rootState) => getApWithCompetencesAndIndicatorsToWp(state))
   const competencesList2 = useSelector((state: rootState) => getAllCompetencesAndIndicatorsForWp(state))
@@ -59,6 +61,14 @@ export default React.memo(() => {
   const handleCloseDialog = () => {
     setDialogCompetence(undefined)
     setIsOpenIndicatorDialog(false)
+  }
+
+  const selectIndicator = (id: number, e: any) => {
+    if (e.target.checked) {
+      setCheckedIndicators([...checkedIndicators, id])
+    } else {
+      setCheckedIndicators(checkedIndicators.filter(checkedId => checkedId !== id))
+    }
   }
 
   const handleCreateZUN = () => {
@@ -152,9 +162,13 @@ export default React.memo(() => {
     dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
   }
 
+  const onDeleteIndicators = () => {
+    dispatch(actions.deleteIndicators(checkedIndicators))
+  }
+
   return (
     <>
-    <Box sx={{ width: '100%', typography: 'body1' }}>
+    <Box className={classes.competencesBlock} sx={{ width: '100%', typography: 'body1' }}>
       <Typography>
         Вариант 1 - отображение компетенций и их индикаторов <b>по выбранному учебному плану</b> <br/>
         Вариант 2 - отображение всех компетенций их индикаторов и связанных с ними учебных планов <br/>
@@ -168,14 +182,26 @@ export default React.memo(() => {
             <Tab label="Вариант 1" value="1" />
             <Tab label="Вариант 2" value="2" />
           </TabList>
-          <Button
+          <div className={classes.buttonZun}>
+            {checkedIndicators.length > 0 && (
+              <Button
+                onClick={onDeleteIndicators}
+                variant="outlined"
+                className={classes.addZUNButton}
+                color="secondary"
+              >
+                Удалить выбранные индикаторы
+              </Button>
+            )}
+            <Button
               onClick={handleCreateZUN}
               variant="outlined"
               className={classes.addZUNButton}
               color="secondary"
             >
               Добавить
-          </Button>
+            </Button>
+          </div>
         </Box>
 
         <TabPanel className={classes.workProgramTabPanel} value="2">
@@ -197,6 +223,7 @@ export default React.memo(() => {
                 <TableCell className={classNames(classes.header, classes.bigCell)}>
                   ЗУН
                 </TableCell>
+                <TableCell className={classNames(classes.header, classes.bigCell)} />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -270,6 +297,9 @@ export default React.memo(() => {
                         <EditIcon />
                       </IconButton>
                     </TableCell>
+                    <TableCell className={classes.cell}>
+                      <Checkbox checked={checkedIndicators.includes(zun.id)} onChange={(e) => selectIndicator(zun.id, e)}/>
+                    </TableCell>
                   </TableRow>
                 ))
               })}
@@ -335,6 +365,7 @@ export default React.memo(() => {
                 <TableCell className={classNames(classes.header, classes.bigCell)}>
                   ЗУН
                 </TableCell>
+                <TableCell className={classes.header} />
               </TableRow>
             </TableHead>
 
@@ -418,6 +449,9 @@ export default React.memo(() => {
                         <IconButton onClick={() => setIsOpenUpdateZunDialog(zun)}>
                           <EditIcon />
                         </IconButton>
+                      </TableCell>
+                      <TableCell className={classes.cell}>
+                        <Checkbox checked={checkedIndicators.includes(zun.id)} onChange={(e) => selectIndicator(zun.id, e)}/>
                       </TableCell>
                     </TableRow>
                   ))

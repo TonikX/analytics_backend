@@ -56,7 +56,14 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     display: 'block',
   },
   addZUNButton: {
-    marginLeft: 'auto !important'
+    marginLeft: '20px !important'
+  },
+  buttonZun: {
+    marginLeft: 'auto',
+    paddingTop: '10px'
+  },
+  competencesBlock: {
+    marginTop: '20px'
   },
   subTitle: {
     marginBottom: '6px !important',

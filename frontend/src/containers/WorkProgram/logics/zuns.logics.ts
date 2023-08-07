@@ -126,10 +126,33 @@ const updateZUN = createLogic({
     }
 });
 
+const deleteIndicators = createLogic({
+    type: workProgramActions.deleteIndicators.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_INDICATORS}));
+
+        service.deleteIndicators(action.payload)
+          .then((res) => {
+              dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+              dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.DELETE_INDICATORS}));
+              return done();
+          });
+    }
+});
+
 export default [
     saveZUN,
     deleteZUN,
     updateZUNFull,
     updateZUN,
-    saveZUNforThisEP
+    saveZUNforThisEP,
+    deleteIndicators,
 ];

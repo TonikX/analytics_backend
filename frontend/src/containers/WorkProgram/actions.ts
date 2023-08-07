@@ -80,6 +80,8 @@ const updateCompetenceFilterYear = createAction('UPDATE_COMPETENCE_FILTER_YEAR')
 const updateCompetenceFilterIMP = createAction('UPDATE_COMPETENCE_FILTER_IMP');
 const updateCompetenceFilterAP = createAction('UPDATE_COMPETENCE_FILTER_AP');
 
+const deleteIndicators = createAction('DELETE_INDICATORS');
+
 const actions: WorkProgramActions = {
     updateCompetenceFilterYear,
     updateCompetenceFilterIMP,
@@ -90,6 +92,7 @@ const actions: WorkProgramActions = {
     deleteZUN,
     updateZUNFull,
     updateZUN,
+    deleteIndicators,
 
     pageDown,
 
