@@ -95,12 +95,27 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
         """
         Example:
             {
-            "practice_id": 1 - ссылка на РПД
+            "practice_id": 1 - ссылка на Практику
             "gh_id": 1 новое - ссылка на ОХ
             "zun": {
               "indicator_in_zun": 85,
               "items": []
                 }
+            }
+             OR
+            {
+            "practice_id": 1 - ссылка на Практику
+            "gh_id": 1 новое - ссылка на ОХ
+            "zun": [
+            {
+              "indicator_in_zun": 85,
+              "items": []
+            },
+            {
+              "indicator_in_zun": 85,
+              "items": []
+            }
+                ]
             }
         """
         aps = AcademicPlan.objects.filter(
@@ -128,10 +143,18 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
             Q(practice__id=int(request.data.get('practice_id')),
               work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps)
         ).distinct()
+        print(wp_in_fss)
         for wp_in_fs in wp_in_fss:
-            serializer = self.get_serializer(data=request.data['zun'])
-            serializer.is_valid(raise_exception=True)
-            serializer.save(practice_in_fs=wp_in_fs)
+            zun_obj = request.data['zun']
+            if type(zun_obj) is list:
+                for zun in zun_obj:
+                    serializer = self.get_serializer(data=zun)
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save(practice_in_fs=wp_in_fs)
+            else:
+                serializer = self.get_serializer(data=request.data['zun'])
+                serializer.is_valid(raise_exception=True)
+                serializer.save(practice_in_fs=wp_in_fs)
         return Response(status=status.HTTP_201_CREATED)
 
 
