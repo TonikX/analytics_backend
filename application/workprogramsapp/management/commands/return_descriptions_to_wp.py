@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         csv_path = "workprogramsapp/management/commands/files/wp_detail_202308041339.csv"
-        wp_descriptions = pd.read_csv(csv_path)
+        wp_descriptions = pd.read_csv(csv_path, sep=";")
         counter_done = 0
         for i in range(len(wp_descriptions)):
             try:
