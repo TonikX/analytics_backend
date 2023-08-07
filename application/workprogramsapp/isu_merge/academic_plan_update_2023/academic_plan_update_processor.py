@@ -701,8 +701,11 @@ class AcademicPlanUpdateProcessor:
             return discipline_block_module_object
 
         elif module['type'] == "discipline":
+            if father_module == None:
+                return None
             isu_academic_plan_discipline_json = module
             # for isu_academic_plan_discipline_json in module['contents']:
+            print("---------------", father_module['name'], father_module['id'])
             father_module_object = DisciplineBlockModule.objects.filter(
                 name=father_module['name'],
                 isu_module__isu_id=father_module['id'],
