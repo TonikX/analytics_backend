@@ -1027,7 +1027,8 @@ class AcademicPlanUpdateConfiguration(models.Model):
         editable=True,
         blank=False,
         null=True,
-        verbose_name='Дата обновления'
+        verbose_name='Дата обновления',
+        auto_created=True,
     )
     updates_enabled = models.BooleanField(verbose_name="Обновления включены", blank=False, null=False)
     over_23 = models.BooleanField(verbose_name="Новый план", blank=False, null=False, default=False)
