@@ -227,6 +227,29 @@ const updateAcademicPlanConfiguration = createLogic({
     }
 });
 
+const updateAcademicPlanOver23 = createLogic({
+    type: planActions.updateAcademicPlanOver23.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+        const academicPlanConfiguration = action.payload;
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ACADEMIC_PLAN_UPDATE_OVER_23}));
+
+        service.updateAcademicPlanOver23(academicPlanConfiguration)
+          .then((res) => {
+              dispatch(planActions.getUpdatedAcademicPlans());
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.UPDATE_ACADEMIC_PLAN_UPDATE_OVER_23}));
+              return done();
+          });
+    }
+});
+
 const updateSchedulerConfiguration = createLogic({
     type: planActions.updateSchedulerConfiguration.type,
     latest: true,
@@ -260,5 +283,6 @@ export default [
     createNewAcademicPlanUpdateConfiguration,
     updateAcademicPlanConfiguration,
     getSchedulerConfiguration,
+    updateAcademicPlanOver23,
     updateSchedulerConfiguration
 ];

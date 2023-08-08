@@ -117,6 +117,13 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
         });
     };
 
+    changeOver23Status = (id: number, over23: boolean) => (): void => {
+        this.props.actions.updateAcademicPlanOver23({
+            [UpdatedAcademicPlanFields.ID]: id,
+            [UpdatedAcademicPlanFields.OVER_23]: !over23
+        });
+    };
+
     handleAdd = () => {
         this.props.actions.openDialog();
     }
@@ -211,8 +218,9 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                           indicatorColor="primary"
                           onChange={this.showUpdatedPlans}
                     >
-                        <Tab value="1" label="Обновляемые планы" />
-                        <Tab value="2" label="Журнал обновлений" />
+                        <Tab value="1" label="Журнал обновлений" />
+                        <Tab value="2" label="Обновляемые планы" />
+
                     </Tabs>
 
                     <Button
@@ -249,7 +257,7 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
 
                 <Scrollbars>
                     <div className={classes.tableWrap}>
-                        {this.state.currentTab === '1' ? <Table stickyHeader size='small'>
+                        {this.state.currentTab === '2' ? <Table stickyHeader size='small'>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell className={classes.idPlanCell}>
@@ -353,13 +361,18 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                                             <TableCell className={classes.idPlanCell}>{updatedPlan[UpdatedAcademicPlanFields.ACADEMIC_PLAN_ID]}</TableCell>
                                             <TableCell>{updatedPlan[UpdatedAcademicPlanFields.ACADEMIC_PLAN_TITLE]}</TableCell>
                                             <TableCell>{moment(updatedPlan[UpdatedAcademicPlanFields.UPDATED_DATE_TIME]).format(FULL_DATE_FORMAT_WITH_TIME)}</TableCell>
-                                            <TableCell>{
+                                            <TableCell>
                                                 <Switch checked={updatedPlan[UpdatedAcademicPlanFields.UPDATES_ENABLED]}
                                                         onChange={this.changeUpdateStatus(updatedPlan[UpdatedAcademicPlanFields.ID], updatedPlan[UpdatedAcademicPlanFields.UPDATES_ENABLED])}
                                                         color="primary"
                                                 />
-                                            }</TableCell>
-                                            <TableCell>{updatedPlan[UpdatedAcademicPlanFields.OVER_23] ? <CheckIcon /> : null}</TableCell>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Switch checked={updatedPlan[UpdatedAcademicPlanFields.OVER_23]}
+                                                        onChange={this.changeOver23Status(updatedPlan[UpdatedAcademicPlanFields.ID], updatedPlan[UpdatedAcademicPlanFields.OVER_23])}
+                                                        color="primary"
+                                                />
+                                            </TableCell>
                                         </TableRow>
                                     )}
                                 </TableBody>

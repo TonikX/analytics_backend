@@ -28,7 +28,7 @@ const updatedPlansChangeCurrentPage = createAction('UPDATED_PLANS_CHANGE_CURRENT
 const updatedPlansChangeAllCount = createAction('UPDATED_PLANS_CHANGE_ALL_COUNT');
 const updatedPlansChangeSorting = createAction('UPDATED_PLANS_CHANGE_SORTING');
 
-
+const updateAcademicPlanOver23 = createAction('UPDATE_ACADEMIC_PLAN_OVER_23');
 
 const actions: AcademicPlanUpdateActions = {
     updateAcademicPlansFrom2023,
@@ -36,6 +36,7 @@ const actions: AcademicPlanUpdateActions = {
     setSchedulerConfiguration,
     getSchedulerConfiguration,
     updateAcademicPlanConfiguration,
+    updateAcademicPlanOver23,
     createNewAcademicPlanUpdateConfiguration,
     openDialog,
     closeDialog,

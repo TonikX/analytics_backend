@@ -9,6 +9,7 @@ export interface AcademicPlanUpdateActions {
     setSchedulerConfiguration: any,
     getSchedulerConfiguration: any,
     updateAcademicPlanConfiguration: any,
+    updateAcademicPlanOver23: any,
     createNewAcademicPlanUpdateConfiguration: any,
     openDialog: any,
     closeDialog: any;
