@@ -334,7 +334,7 @@ class AcademicPlanUpdateProcessor:
             return discipline_block_object
         else:
             discipline_block_object = DisciplineBlock(
-                name=isu_academic_plan_block_json['block_name'],
+                name=isu_academic_plan_block_json['blockName'],
                 academic_plan=academic_plan_object
             )
             discipline_block_object.save()
@@ -382,7 +382,8 @@ class AcademicPlanUpdateProcessor:
         if not DisciplineBlockModuleInIsu.objects.filter(
                 module__name=isu_academic_plan_block_module_json['name'],
                 isu_id=isu_academic_plan_block_module_json['id'],
-                isu_father_id=father_module_id
+                isu_father_id=father_module_id,
+                academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
         ).exists():
             discipline_block_module_object_in_isu = DisciplineBlockModuleInIsu(
                 module=discipline_block_module_object,
@@ -662,6 +663,9 @@ class AcademicPlanUpdateProcessor:
                 if children_module_dict['type'] == "discipline":
                     discipline_not_for_del.append(
                         children_module.id)
+                if children_module == None:
+                    print('!!!!!!!!!!!!!!!!!!!')
+                    continue
                 # if module['type'] == "discipline":
                 #     return None
                 # if father_module is not None and children_module is not None:
@@ -771,6 +775,9 @@ class AcademicPlanUpdateProcessor:
                             print('block', discipline_block_object)
                             father_module = self.recursion_module_updater(module, isu_academic_plan_json,
                                                                           discipline_block_object, None)
+                            if father_module == None:
+                                print('!!!!!!!!!!!!!!!!!!!')
+                                continue
 
                         print(block_modules_to_del_ids)
                         # self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
