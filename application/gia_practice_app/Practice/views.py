@@ -93,19 +93,39 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
 
     def create(self, request, *args, **kwargs):
         """
+        Вместо gh_id (id ОХ) можно передать iap_id - id ImplementationAcademicPlan
         Example:
             {
-            "practice_id": 1 - ссылка на РПД
+            "practice_id": 1 - ссылка на Практику
             "gh_id": 1 новое - ссылка на ОХ
             "zun": {
               "indicator_in_zun": 85,
               "items": []
                 }
             }
+             OR
+            {
+            "practice_id": 1 - ссылка на Практику
+            "gh_id": 1 новое - ссылка на ОХ
+            "zun": [
+            {
+              "indicator_in_zun": 85,
+              "items": []
+            },
+            {
+              "indicator_in_zun": 85,
+              "items": []
+            }
+                ]
+            }
         """
-        aps = AcademicPlan.objects.filter(
-            academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=int(
-                request.data.get('gh_id')))
+        if request.data.get('gh_id'):
+            aps = AcademicPlan.objects.filter(
+                academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=int(
+                    request.data.get('gh_id')))
+        if request.data.get('iap_id'):
+            aps = AcademicPlan.objects.filter(
+                academic_plan_in_field_of_study=int(request.data.get('iap_id')))
         wp_in_fss = PracticeInFieldOfStudy.objects.filter(
             Q(practice__id=int(request.data.get('practice_id')),
               work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__in=aps) |
@@ -128,10 +148,18 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
             Q(practice__id=int(request.data.get('practice_id')),
               work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps)
         ).distinct()
+        print(wp_in_fss)
         for wp_in_fs in wp_in_fss:
-            serializer = self.get_serializer(data=request.data['zun'])
-            serializer.is_valid(raise_exception=True)
-            serializer.save(practice_in_fs=wp_in_fs)
+            zun_obj = request.data['zun']
+            if type(zun_obj) is list:
+                for zun in zun_obj:
+                    serializer = self.get_serializer(data=zun)
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save(practice_in_fs=wp_in_fs)
+            else:
+                serializer = self.get_serializer(data=request.data['zun'])
+                serializer.is_valid(raise_exception=True)
+                serializer.save(practice_in_fs=wp_in_fs)
         return Response(status=status.HTTP_201_CREATED)
 
 
