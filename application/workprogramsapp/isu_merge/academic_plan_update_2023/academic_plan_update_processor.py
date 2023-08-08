@@ -166,7 +166,7 @@ class AcademicPlanUpdateProcessor:
                     cerf_list.append(cerf)
 
             srs_hours[sem] = round(fake_srs - 0.1 * (srs_counter), 2)
-            ze_v_sem[sem] = isu_academic_plan_discipline_json["creditPoints"]
+            ze_v_sem[sem] = sem_dict["creditPoints"]
             contact_hours[sem] = round(srs_counter * 1.1, 2)
             last_sem = len(cerf_list)
 
