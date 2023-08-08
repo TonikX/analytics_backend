@@ -170,7 +170,7 @@ class AcademicPlanUpdateProcessor:
             contact_hours[sem] = round(srs_counter * 1.1, 2)
             last_sem = len(cerf_list)
 
-        #work_program_object.description = isu_academic_plan_discipline_json["description"]
+        # work_program_object.description = isu_academic_plan_discipline_json["description"]
         work_program_object.language = isu_academic_plan_discipline_json["langCode"].lower()
         work_program_object.structural_unit = choose_department(isu_academic_plan_discipline_json)
 
