@@ -97,7 +97,7 @@ class AcademicPlanUpdateProcessor:
                 discipline_code=str(isu_academic_plan_discipline_json['id'])
             )
 
-        last_sem = 1
+
         # realisation_format = None
         # department = None
         """if wp_dict["format_id"] == 1:
@@ -168,7 +168,7 @@ class AcademicPlanUpdateProcessor:
             srs_hours[sem] = round(fake_srs - 0.1 * (srs_counter), 2)
             ze_v_sem[sem] = sem_dict["creditPoints"]
             contact_hours[sem] = round(srs_counter * 1.1, 2)
-            last_sem = len(cerf_list)
+            #last_sem = len(cerf_list)
 
         #work_program_object.description = isu_academic_plan_discipline_json["description"]
         work_program_object.language = isu_academic_plan_discipline_json["langCode"].lower()
@@ -180,7 +180,7 @@ class AcademicPlanUpdateProcessor:
         work_program_object.srs_hours_v2 = process_hours(srs_hours)
         work_program_object.ze_v_sem = process_hours(ze_v_sem)
         work_program_object.contact_hours_v2 = process_hours(contact_hours)
-        work_program_object.number_of_semesters = last_sem
+        work_program_object.number_of_semesters = isu_academic_plan_discipline_json["disciplineDuration"]
 
         work_program_object.save()
 
