@@ -6,7 +6,8 @@ from workprogramsapp.educational_program.views import EducationalProgramCreateAP
     EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView, UploadCompetences, \
     GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix, ObjectsOfActivitySet, \
     academ_plan_check, UploadProfStandards, new_ordinal_numbers_for_modules_in_ap, gh_check, \
-    get_all_ap_with_competences_and_indicators, get_all_competences_and_indicators_for_wp, zun_many_remove
+    get_all_ap_with_competences_and_indicators, get_all_competences_and_indicators_for_wp, zun_many_remove, \
+    WorkProgramInFieldOfStudyWithAPByWP, zun_copy
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
@@ -54,6 +55,7 @@ urlpatterns = [
     path('api/competence/get_all_competences_and_indicators_for_wp/<int:wp_id>',
          get_all_competences_and_indicators_for_wp),
     path('api/competence/zun_many_remove', zun_many_remove),
+    path('api/competence/zun_many_copy', zun_copy),
 
     # --Матрица компетенций
     path('api/general_characteristic/competence_matrix/<int:gen_pk>', GetCompetenceMatrix),
@@ -62,6 +64,9 @@ urlpatterns = [
     path('api/competence/upload_prof_standard_from_csv', UploadProfStandards.as_view()),
 
     path('api/new_ordinal_numbers_for_modules_in_ap', new_ordinal_numbers_for_modules_in_ap),
+
+    # --Дополнительно
+    path('api/wp_in_fs/get_by_wp_id/<int:wp_id>', WorkProgramInFieldOfStudyWithAPByWP.as_view()),
 
     url(r'^', include(router.urls)),
     url(r'^', include('workprogramsapp.educational_program.key_competences.urls')),
