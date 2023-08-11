@@ -670,8 +670,45 @@ def zun_copy(request):
     for zun in zuns_to_copy:
         old_zun = Zun.objects.get(id=zun)
         for wp_in_fs in wp_in_fss:
-            new_zun = Zun.objects.create(wp_in_fs=WorkProgramInFieldOfStudy.objects.get(id=wp_in_fs), indicator_in_zun=old_zun.indicator_in_zun)
+            new_zun = Zun.objects.create(wp_in_fs=WorkProgramInFieldOfStudy.objects.get(id=wp_in_fs),
+                                         indicator_in_zun=old_zun.indicator_in_zun)
             new_zuns.append(new_zun)
     serializer = ZunForManyCreateSerializer(new_zuns, many=True)
 
+    return Response(serializer.data, status=201)
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def zun_copy_by_wps(request):
+    '''
+    EXAMPLE:
+
+    {
+        "wp_from_id": 1,
+        "wp_to_id" : 1,
+        "general_characteristic_id":1
+    }
+    '''
+    gh_id = request.data.get("general_characteristic_id")
+    wp_from_id = request.data.get("wp_from_id")
+    wp_to_id = request.data.get("wp_to_id")
+    imp_objs = GeneralCharacteristics.objects.get(id=gh_id).educational_program.all()
+    wp_from = WorkProgram.objects.get(id=wp_from_id)
+    wp_to = WorkProgram.objects.get(id=wp_to_id)
+    zun_list_created = []
+    for imp in imp_objs:
+        ap = imp.academic_plan
+        changeblocks = ap.get_all_changeblocks_from_ap()
+        wp_from_changeblocks = changeblocks.filter(work_program=wp_from)
+        wp_to_changeblocks = changeblocks.filter(work_program=wp_to)
+        print(wp_to_changeblocks)
+        for old_zun in Zun.objects.filter(
+                wp_in_fs__work_program_change_in_discipline_block_module__in=wp_from_changeblocks):
+            for wp_in_fs in WorkProgramInFieldOfStudy.objects.filter(
+                    work_program_change_in_discipline_block_module__in=wp_to_changeblocks):
+                zun_list_created.append(
+                    Zun.objects.create(indicator_in_zun=old_zun.indicator_in_zun, wp_in_fs=wp_in_fs))
+
+    serializer = ZunForManyCreateSerializer(zun_list_created, many=True)
     return Response(serializer.data, status=201)
