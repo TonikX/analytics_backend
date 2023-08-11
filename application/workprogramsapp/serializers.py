@@ -1024,6 +1024,14 @@ class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
 #         model = Expertise
 #         fields = ['expertise_status']
 
+class WorkProgramInFieldOfStudyWithAPSerializer(serializers.ModelSerializer):
+    #work_program = WorkProgramShortForExperiseSerializer
+    work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
+        many=False)
+
+    class Meta:
+        model = WorkProgramInFieldOfStudy
+        fields = ['id', 'work_program_change_in_discipline_block_module']
 
 class WorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор рабочих программ"""
