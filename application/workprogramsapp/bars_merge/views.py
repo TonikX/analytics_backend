@@ -502,7 +502,8 @@ def GetWPForBARS(request, isu_wp_id):
                "additional_points": False if wp.extra_points == "0" or not wp.extra_points else True,
                "expertise_status_name": expertise_status_name,
                "expertise_short_name": expertise_short_name,
-               "terms": []}
+               "terms": [],
+               "bars": wp.bars}
     for sem in range(wp.number_of_semesters):
         term_dict = {"relative_term": sem + 1, "regular_checkpoints": [], "final_checkpoint": None,
                      "course_project_checkpoint": None, "point_distribution": None}
