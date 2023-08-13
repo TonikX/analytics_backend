@@ -1,8 +1,8 @@
-import React, {ReactText} from 'react';
+import React, { ReactText } from 'react';
 import get from "lodash/get";
-import {shallowEqualObjects} from "shallow-equal";
+import { shallowEqualObjects } from "shallow-equal";
 
-import {CreateModalProps} from './types';
+import { CreateModalProps } from './types';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -15,19 +15,19 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Tooltip from "@mui/material/Tooltip";
-import {withStyles} from '@mui/styles';
+import { withStyles } from '@mui/styles';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import connect from './CreateModal.connect';
 import styles from './CreateModal.styles';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import {EvaluationToolFields, ResultsFields} from "../../../../WorkProgram/enum";
-import {TrainingEntitiesFields} from "../../../../TrainingEntities/enum";
-import {SubjectAreaFields} from "../../../../SubjectArea/enum";
+import { EvaluationToolFields, ResultsFields } from "../../../../WorkProgram/enum";
+import { TrainingEntitiesFields } from "../../../../TrainingEntities/enum";
+import { SubjectAreaFields } from "../../../../SubjectArea/enum";
 import SearchSelector from "../../../../../components/SearchSelector";
-import {appRouter} from "../../../../../service/router-service";
-import {DialogType} from "../../../enum";
+import { appRouter } from "../../../../../service/router-service";
+import { DialogType } from "../../../enum";
 
 class CreateModal extends React.PureComponent<CreateModalProps> {
     state = {
@@ -46,9 +46,9 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     componentDidUpdate(prevProps: Readonly<CreateModalProps>, prevState: Readonly<{}>, snapshot?: any) {
-        const {result} = this.props;
+        const { result } = this.props;
 
-        if (!shallowEqualObjects(result, prevProps.result)){
+        if (!shallowEqualObjects(result, prevProps.result)) {
             const subjectAreaId = get(result, [ResultsFields.ITEM, TrainingEntitiesFields.SUBJECT_AREA, SubjectAreaFields.ID], null);
 
             this.props.trainingEntitiesActions.changeSubjectId(subjectAreaId);
@@ -67,13 +67,13 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     }
 
     handleClose = () => {
-        this.props.actions.closeDialog({dialogType: DialogType.RESULTS});
+        this.props.actions.closeDialog({ dialogType: DialogType.RESULTS });
     };
 
     handleSave = () => {
-        const {result} = this.state;
+        const { result } = this.state;
 
-        if (result[ResultsFields.ID]){
+        if (result[ResultsFields.ID]) {
             this.props.actions.changeResult(this.state.result);
         } else {
             this.props.actions.addResult(this.state.result);
@@ -81,7 +81,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     };
 
     changeMasterLevelField = (e: React.ChangeEvent) => {
-        const {result} = this.state;
+        const { result } = this.state;
 
         this.setState({
             result: {
@@ -92,7 +92,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     };
 
     saveTrainingEntityField = (value: ReactText) => {
-        const {result} = this.state;
+        const { result } = this.state;
 
         this.setState({
             result: {
@@ -106,7 +106,7 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     };
 
     changeEvaluationTools = (e: React.ChangeEvent) => {
-        const {result} = this.state;
+        const { result } = this.state;
 
         this.setState({
             result: {
@@ -127,8 +127,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
     };
 
     render() {
-        const {isOpen, classes, trainingEntities} = this.props;
-        const {result} = this.state;
+        const { isOpen, classes, trainingEntities } = this.props;
+        const { result } = this.state;
 
         const disableButton = get(result, [ResultsFields.ITEM, TrainingEntitiesFields.ID], '').length === 0;
 
@@ -164,8 +164,8 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     <FormControl component="fieldset">
                         <FormLabel component="legend">Уровень освоения *</FormLabel>
                         <RadioGroup className={classes.radioGroup}
-                                    onChange={this.changeMasterLevelField}
-                                    value={result[ResultsFields.ITEM]}
+                            onChange={this.changeMasterLevelField}
+                            value={result[ResultsFields.ITEM]}
                         >
                             <FormControlLabel value="1" control={<Radio checked={result[ResultsFields.MASTER_LEVEL] === '1'} />} label="Начальный" />
                             <FormControlLabel value="2" control={<Radio checked={result[ResultsFields.MASTER_LEVEL] === '2'} />} label="Средний" />
@@ -183,22 +183,14 @@ class CreateModal extends React.PureComponent<CreateModalProps> {
                     />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
-                    <Link to={appRouter.getTrainingEntitiesRoute()}
-                          className={classes.link}
-                          target="_blank"
-                    >
-                        <Typography>
-                            Создать учебную сущность
-                        </Typography>
-                    </Link>
                     <Button onClick={this.handleClose}
-                            variant="text">
+                        variant="text">
                         Отмена
                     </Button>
                     <Button onClick={this.handleSave}
-                            variant="contained"
-                            disabled={disableButton}
-                            color="primary">
+                        variant="contained"
+                        disabled={disableButton}
+                        color="primary">
                         Сохранить
                     </Button>
                 </DialogActions>
