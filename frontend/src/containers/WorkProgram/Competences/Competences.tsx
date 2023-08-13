@@ -32,6 +32,7 @@ import {
   getWorkProgramCompetenceFiltersImp,
   getWorkProgramCompetenceFiltersAP,
   getWorkProgramCompetenceFiltersYear,
+  getResultsForSelect,
 } from '../getters'
 
 import IndicatorsDialog from './IndicatorDialog'
@@ -98,6 +99,7 @@ export default React.memo(() => {
   ) : null;
 
   const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
+  const resultsList = useSelector((state: rootState) => getResultsForSelect(state))
 
   const impList = epList && epList.reduce((plans:any, currentPlan:any) => {
     const academicPlan = currentPlan?.discipline_block_module?.descipline_block[0]?.academic_plan;
@@ -469,6 +471,8 @@ export default React.memo(() => {
         handleClose={handleCloseDialog}
         defaultCompetence={dialogCompetence}
         workProgramId={workProgramId}
+        epList={epList}
+        resultsList={resultsList}
       />
       : null
     }
@@ -482,6 +486,7 @@ export default React.memo(() => {
         defaultAttainments={isOpenUpdateZunDialog?.attainments}
         defaultSkills={isOpenUpdateZunDialog?.skills}
         defaultKnowledge={isOpenUpdateZunDialog?.knowledge}
+        resultsList={resultsList}
       /> : null
     }
   </>)

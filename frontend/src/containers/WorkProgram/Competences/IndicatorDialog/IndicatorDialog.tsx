@@ -20,13 +20,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
 import {rootState} from "../../../../store/reducers";
-import {getWorkProgramField} from "../../getters";
 import {getFilterAcademicPlan} from "../../../Competences/getters";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 
 interface IndicatorsProps {
-  workProgramId: number;
+  workProgramId?: number;
+  practiceId?: number;
   isOpen: boolean;
   defaultCompetence?: {
     value: number;
@@ -38,6 +38,9 @@ interface IndicatorsProps {
   };
   isEditMode?: boolean;
   handleClose: () => void;
+  epList: any[];
+  resultsList: {value: string|number, label: string}[];
+  apRequired?: boolean;
 }
 
 type Indicator = {
@@ -62,7 +65,7 @@ const getIndicatorsForSave = (indicators: Indicator[]) => (
   }))
 )
 
-export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId }: IndicatorsProps) => {
+export default ({ apRequired = false, resultsList, epList, isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId, practiceId }: IndicatorsProps) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [competence, setCompetence] = useState<{value: number; label: string}>({value: 0, label: ''})
@@ -164,21 +167,26 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
   const saveZun = useCallback(() => {
     dispatch(actions.saveZUN({
       indicators: getIndicatorsForSave(indicators),
+      workProgramId,
+      practiceId,
+      iap_id: plans[0]
     }))
     handleClose()
-  }, [indicators, plans])
+  }, [indicators, plans, workProgramId, practiceId])
 
   const saveZunForThisEP = useCallback(() => {
     dispatch(actions.saveZUNforThisEP({
       indicators: getIndicatorsForSave(indicators),
       plans: plans[0].value,
+      workProgramId,
+      practiceId,
     }))
     handleClose()
-  }, [indicators, plans])
+  }, [indicators, plans, practiceId])
 
   const disableButton = useMemo(() => (
-      (saveForPlans ? plans.length === 0 : false) || indicators.length === 0
-  ),[plans, saveForPlans, indicators])
+      (saveForPlans || apRequired ? plans.length === 0 : false) || indicators.length === 0
+  ),[plans, saveForPlans, indicators, apRequired])
 
   const changeFilterOnlyWithStandard = (e:any) => {
     dispatch(competenceActions.changeFilterOnlyWithStandard(e.target.checked))
@@ -194,8 +202,6 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
     dispatch(competenceActions.changeFilterAcademicPlan(planId === filterAcademicPlan ? undefined : planId))
     dispatch(competenceActions.getCompetences())
   }
-  console.log('filterAcademicPlan', filterAcademicPlan)
-  const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
 
   const epForSelect = epList && epList.reduce((fullPlans: any, currentPlan: any) => {
     const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
@@ -276,6 +282,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
             valueLabel=""
             value={0}
             cleanLabelAfterSelect
+            resultsList={resultsList}
           />
           <div className={classes.chipsList}>
             {indicator.results.map(result => (
@@ -304,28 +311,38 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
         </React.Fragment>
       ))}
 
-      <Typography className={classes.indicatorDialiogInfoMassage}>
-        Если хотите выбрать ОП для которой сохраняете компетенции и индикаторы, переключите бегунок ниже и выберите нужные. Если компетенции и индикаторы для всех ОП, просто нажмите сохранить.
-      </Typography>
-
-      <FormGroup className={saveForPlans ? classes.switcher : undefined}>
-        <FormControlLabel onChange={changeSaveForPlans} control={<Switch />} label="Сохранить для конкретного УП" />
-      </FormGroup>
-      {saveForPlans ? (
-          <>
-            <PlanSelector
-                label="Учебный план и образовательная программа"
-                onChange={addPlan}
-                valueLabel={plans[0]?.label}
-                value={plans[0]?.value}
-                workProgramId={workProgramId}
+      {apRequired ? null : (
+        <>
+          <Typography className={classes.indicatorDialiogInfoMassage}>
+            Если хотите выбрать ОП для которой сохраняете компетенции и индикаторы, переключите бегунок ниже и выберите нужные. Если компетенции и индикаторы для всех ОП, просто нажмите сохранить.
+          </Typography>
+          <FormGroup className={saveForPlans ? classes.switcher : undefined}>
+            <FormControlLabel onChange={changeSaveForPlans} control={<Switch />} label="Сохранить для конкретного УП" />
+          </FormGroup>
+        </>
+      )}
+      {saveForPlans || apRequired ? (
+          <div style={{marginTop: apRequired && indicators.length ? 30 : 0}}>
+            <SimpleSelector label="Учебный план и образовательная программа"
+                            value={plans[0]?.value}
+                            onChange={addPlan}
+                            metaList={epForSelect}
+                            wrapClass={classes.planSelectorWrap}
             />
+
+            {/*<PlanSelector*/}
+            {/*    label="Учебный план и образовательная программа"*/}
+            {/*    onChange={addPlan}*/}
+            {/*    valueLabel={plans[0]?.label}*/}
+            {/*    value={plans[0]?.value}*/}
+            {/*    workProgramId={workProgramId}*/}
+            {/*/>*/}
             {/*<div className={classes.chipsList}>*/}
             {/*  {plans.map(plan => (*/}
             {/*      <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />*/}
             {/*  ))}*/}
             {/*</div>*/}
-          </>
+          </div>
       ) : null}
       <div className={classes.footer}>
         <Tooltip title="При выборе результатов и учебного плана с ОП можно выбрать несколько объектов, выбирая их по очереди">
@@ -336,7 +353,7 @@ export default ({ isOpen, isEditMode, handleClose, defaultCompetence, defaultInd
                   variant="text">
             Отмена
           </Button>
-          <Button onClick={saveForPlans ? saveZunForThisEP : saveZun}
+          <Button onClick={saveForPlans || apRequired ? saveZunForThisEP : saveZun}
                   variant="contained"
                   disabled={disableButton}
                   color="primary">

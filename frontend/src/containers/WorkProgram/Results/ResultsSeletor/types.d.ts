@@ -7,4 +7,5 @@ export interface SelectorProps {
   disabled?: boolean;
   valueLabel?: string;
   cleanLabelAfterSelect?: boolean;
+  resultsList: {value: string|number, label: string}[]
 }

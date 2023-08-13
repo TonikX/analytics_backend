@@ -2,6 +2,7 @@ import {createLogic} from "redux-logic";
 
 import actions from '../../../layout/actions'
 import workProgramActions from '../actions'
+import practiceActions from '../../Practice/actions'
 
 import Service from '../service'
 
@@ -14,15 +15,16 @@ const saveZUN = createLogic({
     type: workProgramActions.saveZUN.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const state = getState()
-        const workProgramId = getWorkProgramId(state);
+        const {workProgramId, practiceId, ...payload} = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN}));
 
-        service.saveZUN(action.payload, workProgramId)
-            .then((res) => {
-                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
-                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
+        service.saveZUN(payload, workProgramId, practiceId)
+            .then(() => {
+                if (workProgramId) {
+                  dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                  dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
+                }
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -39,22 +41,25 @@ const saveZUNforThisEP = createLogic({
     type: workProgramActions.saveZUNforThisEP.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const state = getState()
-        const workProgramId = getWorkProgramId(state);
+        const {workProgramId, practiceId, ...payload} = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN_FOR_THIS_EP}));
 
-        service.saveZUNforThisEP(action.payload, workProgramId)
+        service.saveZUNforThisEP(payload, workProgramId, practiceId)
             .then((res) => {
-                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
-                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
+                if (workProgramId) {
+                  dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                  dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
+                } else {
+                  dispatch(practiceActions.getPractice(practiceId))
+                }
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));
             })
             .then(() => {
-                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN}));
+                dispatch(actions.fetchingFalse({destination: fetchingTypes.SAVE_ZUN_FOR_THIS_EP}));
                 return done();
             });
     }
@@ -67,7 +72,7 @@ const deleteZUN = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_ZUN}));
 
         service.deleteZUN(action.payload)
-            .then((res) => {
+            .then(() => {
                 dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
                 dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
@@ -111,7 +116,7 @@ const updateZUN = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ZUN}));
 
         service.updateZUN(action.payload, getWorkProgramId(getState()))
-            .then((res) => {
+            .then(() => {
                 dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
                 dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
                 dispatch(actions.fetchingSuccess());
@@ -133,7 +138,7 @@ const deleteIndicators = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.DELETE_INDICATORS}));
 
         service.deleteIndicators(action.payload)
-          .then((res) => {
+          .then(() => {
               dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
               dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
               dispatch(actions.fetchingSuccess());

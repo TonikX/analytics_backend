@@ -26,6 +26,7 @@ export const getCurrentData = (state: rootState, dialogType: DialogType) => get(
 );
 export const getCompetences = (state: rootState): Competence[] => get(getStateData(state), 'practice.competences', initialState.practice.competences);
 export const getResults = (state: rootState): ResultsType[] => get(getStateData(state), 'practice.outcomes', initialState.practice.outcomes);
+export const getPracticeInChangeBlock = (state: rootState): ResultsType[] => get(getStateData(state), 'practice.practice_in_change_block', initialState.practice.practice_in_change_block);
 
 export const getResultsForSelect = (state: rootState) => {
     const allResults = getResults(state);

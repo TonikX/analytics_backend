@@ -6,5 +6,6 @@ export interface SelectorProps {
   className?: any;
   disabled?: boolean;
   valueLabel?: string;
-  workProgramId: number;
+  workProgramId?: number;
+  practiceId?: number;
 }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import get from 'lodash/get'
 
@@ -12,17 +12,19 @@ import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
 
 
-import IndicatorsDialog from './IndicatorDialog'
-import { useStyles } from './Competences.styles'
-import {getId, getCompetences} from "../../getters";
+import IndicatorsDialog from '../../../WorkProgram/Competences/IndicatorDialog'
+import {getId, getCompetences, getPracticeInChangeBlock, getResultsForSelect} from "../../getters";
 import {rootState} from "../../../../store/reducers";
 import actions from "../../actions";
+import {useStyles} from './Competences.styles'
 
 export default React.memo(() => {
   const dispatch = useDispatch()
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
   const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
 
+  const epList = useSelector((state: rootState) => getPracticeInChangeBlock(state))
+  const resultsList = useSelector((state: rootState) => getResultsForSelect(state))
   const competences = useSelector((state: rootState) => getCompetences(state))
   const practiceId = useSelector((state: rootState) => getId(state));
   const classes = useStyles()
@@ -86,7 +88,6 @@ export default React.memo(() => {
         <TableBody>
           {competences.map((competence: any) => {
             const zuns = get(competence, 'zuns', []);
-            console.log(zuns);
             const addIndicatorButton = (
               <div className={classes.smallButton}
                    onClick={() => {
@@ -157,12 +158,17 @@ export default React.memo(() => {
         </TableBody>
       </Table>
 
-      <IndicatorsDialog
-        isOpen={isOpenIndicatorDialog}
-        handleClose={handleCloseDialog}
-        defaultCompetence={dialogCompetence}
-        practiceId={practiceId}
-      />
+      {isOpenIndicatorDialog ? (
+        <IndicatorsDialog
+          isOpen={isOpenIndicatorDialog}
+          handleClose={handleCloseDialog}
+          defaultCompetence={dialogCompetence}
+          practiceId={practiceId}
+          epList={epList}
+          resultsList={resultsList}
+          apRequired
+        />
+      ) : null}
     </>
   )
 })

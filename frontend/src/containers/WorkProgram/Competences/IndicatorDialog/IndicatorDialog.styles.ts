@@ -13,6 +13,15 @@ export const useStyles = makeStyles(() => createStyles({
       width: '321px !important'
     }
   },
+  planSelectorWrap: {
+    width: '100%',
+    '& .MuiInputLabel-shrink': {
+      transform: 'translate(14px, -6.5px) scale(0.75) !important',
+    },
+    '& .MuiOutlinedInput-notchedOutline legend': {
+      width: '250px !important'
+    }
+  },
   marginBottom30: {
     marginBottom: '30px !important'
   },
@@ -55,6 +64,5 @@ export const useStyles = makeStyles(() => createStyles({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 20,
   }
 }));

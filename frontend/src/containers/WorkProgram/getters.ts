@@ -64,7 +64,7 @@ export const getAllSectionsForSelect = (state: rootState) => {
 };
 export const getResultsForSelect = (state: rootState) => {
     const allResults = getWorkProgramResults(state);
-    console.log(allResults)
+
     //@ts-ignore
     return allResults.map((result: any) => ({
         value: get(result, 'id'),

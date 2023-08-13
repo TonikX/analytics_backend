@@ -32,6 +32,7 @@ interface Props {
     number: string;
   }
   results: Result[]
+  resultsList: {value: string|number, label: string}[]
 }
 
 export const UpdateZunDialog = ({
@@ -43,6 +44,7 @@ export const UpdateZunDialog = ({
   defaultAttainments = '',
   zunId,
   results: defaultResults,
+  resultsList,
 }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -99,6 +101,7 @@ export const UpdateZunDialog = ({
         valueLabel=""
         value={0}
         cleanLabelAfterSelect
+        resultsList={resultsList}
       />
       <div className={classes.chipsList}>
         {results.map(result => (

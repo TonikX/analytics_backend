@@ -338,19 +338,28 @@ class WorkProgramService extends AnalyticsService{
         });
     }
 
-    saveZUN({indicators}: any, wpId: any){
+    saveZUN({indicators}: any, wpId: number|undefined, practiceId: number|undefined){
         return this.post(`/api/zun/many_create_for_all_gh/`,{
             workprogram_id: wpId,
+            practice_id: practiceId,
             // wpa_in_fss: plans,
             zun: indicators,
         });
     }
 
-    saveZUNforThisEP({indicators, plans}: any, wpId: any){
+    saveZUNforThisEP({indicators, plans}: any, wpId: number|undefined, practiceId: number|undefined){
+        if (practiceId) {
+            return this.post(`api/zun/practice-many/`,{
+                iap_id: plans,
+                zun: indicators,
+                practice_id: practiceId,
+            });
+        }
+
         return this.post(`/api/zun/many_create/`,{
             workprogram_id: wpId,
             iap_id: plans,
-            zun: indicators
+            zun: indicators,
         });
     }
 
