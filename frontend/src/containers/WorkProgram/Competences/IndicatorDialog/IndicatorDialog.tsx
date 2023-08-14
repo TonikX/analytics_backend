@@ -209,7 +209,7 @@ export default ({ apRequired = false, resultsList, epList, isOpen, isEditMode, h
       return ([
         ...plans,
         {
-          value: academicPlan?.id,
+          value: academicPlan?.academic_plan_in_field_of_study[0]?.id,
           label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
                   / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
                   (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
