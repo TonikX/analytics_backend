@@ -125,7 +125,8 @@ class ZunPracticeManyViewSet(mixins.CreateModelMixin,
                     request.data.get('gh_id')))
         if request.data.get('iap_id'):
             aps = AcademicPlan.objects.filter(
-                academic_plan_in_field_of_study=int(request.data.get('iap_id')))
+                id=int(request.data.get('iap_id')))
+                # ToDo: academic_plan_in_field_of_study=int(request.data.get('iap_id'))) - поменять 14.08.2023
         wp_in_fss = PracticeInFieldOfStudy.objects.filter(
             Q(practice__id=int(request.data.get('practice_id')),
               work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__in=aps) |
