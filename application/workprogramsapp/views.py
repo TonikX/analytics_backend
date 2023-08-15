@@ -211,7 +211,6 @@ class ZunManyViewSet(viewsets.ModelViewSet):
         ).distinct()
         for wp_in_fs in wp_in_fss:
             zun_obj = request.data['zun']
-            print(type(zun_obj))
             if type(zun_obj) is list:
                 for zun in zun_obj:
                     serializer = self.get_serializer(data=zun)
@@ -2149,11 +2148,13 @@ class AcademicPlanListAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanSerializerForList
     queryset = AcademicPlan.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['academic_plan_in_field_of_study__qualification',
+    search_fields = ['id',
+                     'academic_plan_in_field_of_study__qualification',
                      'academic_plan_in_field_of_study__title',
                      'academic_plan_in_field_of_study__year',
                      'academic_plan_in_field_of_study__field_of_study__title',
-                     'academic_plan_in_field_of_study__field_of_study__number']
+                     'academic_plan_in_field_of_study__field_of_study__number',
+                     'ap_isu_id']
     ordering_fields = ['academic_plan_in_field_of_study__qualification',
                        'academic_plan_in_field_of_study__title',
                        'academic_plan_in_field_of_study__year',
