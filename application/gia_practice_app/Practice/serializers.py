@@ -9,7 +9,7 @@ from gia_practice_app.logic import get_permissions_gia_practice
 from workprogramsapp.expertise.models import Expertise, UserExpertise
 from workprogramsapp.expertise.serializers import ShortExpertiseSerializer
 from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule, Competence, Zun, Indicator, \
-    ImplementationAcademicPlan, PracticeInFieldOfStudy
+    ImplementationAcademicPlan, PracticeInFieldOfStudy, DisciplineBlockModule
 from workprogramsapp.serializers import WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer, \
     BibliographicReferenceSerializer, IndicatorSerializer, ImplementationAcademicPlanSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer
@@ -91,7 +91,12 @@ class PracticeSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         try:
             exp = Expertise.objects.get(practice=instance)
-            user_exp = UserExpertise.objects.get(expert=request.user, expertise=exp)
+            user_exp_queryset = UserExpertise.objects.filter(expert=request.user, expertise=exp)
+            ue_stuff = user_exp_queryset.filter(stuff_status="EX")
+            if ue_stuff.exists():
+                user_exp = ue_stuff.first()
+            else:
+                user_exp = user_exp_queryset.first()
         except Expertise.DoesNotExist:
             exp = None
             user_exp = None
@@ -140,18 +145,15 @@ class PracticeSerializer(serializers.ModelSerializer):
                     indicator = IndicatorSerializer(indicator).data
                 except:
                     indicator = None
-                # indicators_array = []
-                # for indicator in indicators:
-                #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
                 items_array = []
                 items = Items.objects.filter(practice_item_in_outcomes__item_in_practice__id=zun.id,
                                              practice_item_in_outcomes__item_in_practice__practice_in_fs__practice__id=instance.id,
                                              practice_item_in_outcomes__item_in_practice__indicator_in_zun__competence__id=competence.id)
                 for item in items:
                     items_array.append({"id": item.id, "name": item.name})
-                # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
-                queryset = ImplementationAcademicPlan.objects.filter(
-                    academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb_for_practice__zun_in_practice__id=zun.id)
+                modules = DisciplineBlockModule.objects.filter(
+                    change_blocks_of_work_programs_in_modules__zuns_for_cb_for_practice__zun_in_practice__id=zun.id)
+                queryset = ImplementationAcademicPlan.get_all_imp_by_modules(modules=modules)
                 serializer = ImplementationAcademicPlanSerializer(queryset, many=True)
                 zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
                                    "attainments": zun.attainments, "indicator": indicator,
@@ -206,7 +208,7 @@ class ZunPracticeForManyCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ZunPractice
-        fields = ['id', 'indicator_in_zun', 'items', 'practice_in_fs']
+        fields = ['id', 'indicator_in_zun', 'items', 'practice_in_fs', 'knowledge', 'skills', 'attainments']
 
 
 class PracticeInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializer):
