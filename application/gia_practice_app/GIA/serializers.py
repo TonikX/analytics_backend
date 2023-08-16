@@ -60,7 +60,12 @@ class GIASerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         try:
             exp = Expertise.objects.get(gia=instance)
-            user_exp = UserExpertise.objects.get(expert=request.user, expertise=exp)
+            user_exp_queryset = UserExpertise.objects.filter(expert=request.user, expertise=exp)
+            ue_stuff = user_exp_queryset.filter(stuff_status="EX")
+            if ue_stuff.exists():
+                user_exp = ue_stuff.first()
+            else:
+                user_exp = user_exp_queryset.first()
         except Expertise.DoesNotExist:
             exp = None
             user_exp = None
