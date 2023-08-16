@@ -33,7 +33,7 @@ class WorkProgramService extends AnalyticsService{
     }
 
     getApWithCompetencesAndIndicatorsToWp(id: string, year: number|null, ap: number|null, imp:number|null){
-        const filtersString = `${year ? `year=${year}&` : ''}${ap ? `ap=${ap}` : ''}${imp ? `imp=${imp}` : ''}`
+        const filtersString = `${year ? `year=${year}&` : ''}${ap ? `ap_id=${ap}` : ''}${imp ? `imp=${imp}` : ''}`
         return this.get(`/api/competence/get_all_ap_with_competences_and_indicators_to_wp/${id}?${filtersString}`);
     }
 
