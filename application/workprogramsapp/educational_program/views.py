@@ -524,7 +524,7 @@ def get_all_ap_with_competences_and_indicators(request, wp_id):
         indicator_in_competencse__zun__wp_in_fs__work_program__id=wp_id).distinct()
     for competence in competences:
         zuns = Zun.objects.filter(wp_in_fs__work_program__id=wp_id,
-                                  indicator_in_zun__competence__id=competence.id)
+                                  indicator_in_zun__competence__id=competence.id).order_by("indicator_in_zun__number")
         for zun in zuns:
             try:
                 indicator = Indicator.objects.get(competence=competence.id,
@@ -589,7 +589,7 @@ def get_all_competences_and_indicators_for_wp(request, wp_id):
     competences_dict = []
     for competence in competences:
         zuns = Zun.objects.filter(wp_in_fs__work_program__id=wp_id,
-                                  indicator_in_zun__competence__id=competence.id)
+                                  indicator_in_zun__competence__id=competence.id).order_by("indicator_in_zun__number")
         zuns_array = []
         for zun in zuns:
             try:
