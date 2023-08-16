@@ -2171,7 +2171,9 @@ class AcademicPlanListShortAPIView(generics.ListAPIView):
                      'academic_plan_in_field_of_study__title',
                      'academic_plan_in_field_of_study__year',
                      'academic_plan_in_field_of_study__field_of_study__title',
-                     'academic_plan_in_field_of_study__field_of_study__number']
+                     'academic_plan_in_field_of_study__field_of_study__number',
+                     'ap_isu_id',
+                     'id']
     ordering_fields = ['academic_plan_in_field_of_study__qualification',
                        'academic_plan_in_field_of_study__title',
                        'academic_plan_in_field_of_study__year',

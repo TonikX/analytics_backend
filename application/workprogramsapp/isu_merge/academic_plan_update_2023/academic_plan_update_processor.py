@@ -351,8 +351,10 @@ class AcademicPlanUpdateProcessor:
     @staticmethod
     def __del_block_modules__by__father__module__(block_modules_not_for_del_ids, discipline_block_module_object):
 
-        bm = DisciplineBlockModule.objects.filter(father_module=discipline_block_module_object) \
-            .exclude(id__in=block_modules_not_for_del_ids).delete()
+        bms = DisciplineBlockModule.objects.filter(father_module=discipline_block_module_object) \
+            .exclude(id__in=block_modules_not_for_del_ids)
+        for bm in bms:
+            bm.father_module.remove(discipline_block_module_object)
 
     @staticmethod
     def __del_block__(block_to_del_ids, isu_academic_plan_json):
