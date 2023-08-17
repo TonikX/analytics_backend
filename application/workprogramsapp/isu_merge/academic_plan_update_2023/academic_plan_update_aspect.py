@@ -1,3 +1,4 @@
+from gia_practice_app.Practice.models import Practice
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_updater import \
     discipline_block_module_object_relations_updater
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
@@ -246,5 +247,37 @@ class AcademicPlanUpdateAspect:
             )
 
             return updated_work_program_id_str_up_for_isu_object
+
+        return wrapper
+
+
+    @staticmethod
+    def practice_changes_aspect(func):
+        def wrapper(*args, **kwargs):
+            isu_academic_plan_practice_json = args[1]
+            isu_academic_plan_json = args[0]
+
+            # todo get() returned more than one Practice -- it returned 11!
+            if Practice.objects.filter(
+                    prac_isu_id=str(isu_academic_plan_practice_json['id'])
+            ).exists():
+                old_practice_object = Practice.objects.filter(
+                    prac_isu_id=str(isu_academic_plan_practice_json['id'])
+                )[0]
+            else:
+                old_practice_object = None
+
+            updated_practice_object = func(
+                old_practice_object, *args, **kwargs
+            )
+
+            # AcademicPlanUpdateLogger.log_changes(
+            #     isu_academic_plan_json["id"],
+            #     AcademicPlanUpdateLogger.LoggedObjectType.practice,
+            #     old_practice_object,
+            #     updated_practice_object
+            # )
+
+            return updated_practice_object
 
         return wrapper

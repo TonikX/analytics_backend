@@ -716,11 +716,19 @@ class AcademicPlanUpdateProcessor:
                 isu_module__isu_id=father_module['id'],
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )[0]
+            if isu_academic_plan_discipline_json["blockName"] == "Блок 2. Практика":
+                practice_object = AcademicPlanUpdateProcessor.__process_discipline__(
+                    isu_academic_plan_json,
+                    isu_academic_plan_discipline_json,
+                    father_module_object
+                )
+                print("PRACTICE", practice_object)
             work_program_object = AcademicPlanUpdateProcessor.__process_discipline__(
                 isu_academic_plan_json,
                 isu_academic_plan_discipline_json,
                 father_module_object
             )
+            #print(practice_object)
             work_program_in_field_of_study_object, \
             work_program_change_in_discipline_block_module_object = \
                 AcademicPlanUpdateProcessor.__process_linked_data__(
@@ -798,3 +806,211 @@ class AcademicPlanUpdateProcessor:
                 traceback.print_exc()
                 print(e)
                 # capture_exception(e)
+
+
+    @staticmethod
+    @AcademicPlanUpdateAspect.practice_changes_aspect
+    def __process_practice__(practice_object,
+                               isu_academic_plan_json,
+                               isu_academic_plan_practice_json,
+                               module_object):
+        if practice_object is None:
+            practice_object = WorkProgram(
+                title=isu_academic_plan_practice_json['name'].strip(),
+                # subject_code=isu_academic_plan_practice_json['plan_order'],
+                # qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
+                practice_code=str(isu_academic_plan_practice_json['id'])
+            )
+
+
+        # realisation_format = None
+        # department = None
+        """if wp_dict["format_id"] == 1:
+            realisation_format = "offline"
+        elif wp_dict["format_id"] == 2:
+            realisation_format = "mixed"
+        elif wp_dict["format_id"] == 3:
+            realisation_format = "online"""
+
+        # def choose_department(isu_academic_plan_practice_json):
+        #     department = None
+        #     department_obj = isu_academic_plan_practice_json["department"]
+        #     department_by_id = StructuralUnit.objects.filter(isu_id=department_obj["id"])
+        #     if department_by_id.exists():
+        #         department = department_by_id.first()
+        #     else:
+        #         department_by_name = StructuralUnit.objects.filter(title=department_obj["name"])
+        #         if department_by_name.exists():
+        #             department = department_by_name.first()
+        #         else:
+        #             department_by_short_name = StructuralUnit.objects.filter(
+        #                 short_name=department_obj["short_name"])
+        #             if department_by_short_name.exists():
+        #                 department = department_by_short_name.first()
+        #     return department
+        # 
+        # def process_hours(hours: list):
+        #     return ", ".join([str(hour) for hour in hours]) if hours else "0, 0, 0, 0"
+        # 
+        # practice_hours = [0, 0, 0, 0, 0, 0]
+        # lecture_hours = [0, 0, 0, 0, 0, 0]
+        # lab_hours = [0, 0, 0, 0, 0, 0]
+        # cons_hours = [0, 0, 0, 0, 0, 0]
+        # srs_hours = [0, 0, 0, 0, 0, 0]
+        # ze_v_sem = [0, 0, 0, 0, 0, 0]
+        # contact_hours = [0, 0, 0, 0, 0, 0]
+        # certification_types = {5: '1', 9: '2', 6: '3', 7: '4', 8: '5'}
+        # cerf_list = []
+        # 
+        # practice_contents = list(isu_academic_plan_practice_json["contents"].values())[0]
+        # for sem_dict in practice_contents:
+        #     fake_srs = 0
+        #     sem = sem_dict["order"] - 1
+        #     srs_counter = 0
+        #     for type_dict in sem_dict["activities"]:
+        #         wt_id = type_dict["workTypeId"]
+        #         if wt_id == 0:
+        #             continue
+        #         if wt_id == 1:
+        #             lecture_hours[sem] = type_dict["volume"]
+        #             srs_counter += type_dict["volume"]
+        #         elif wt_id == 2:
+        #             lab_hours[sem] = type_dict["volume"]
+        #             srs_counter += type_dict["volume"]
+        #         elif wt_id == 3:
+        #             practice_hours[sem] = type_dict["volume"]
+        #             srs_counter += type_dict["volume"]
+        #         elif wt_id == 12:
+        #             cons_hours[sem] = type_dict["volume"]
+        #             srs_counter += type_dict["volume"]
+        #         elif wt_id == 4:
+        #             fake_srs = type_dict["volume"]
+        #         else:
+        #             cerf = СertificationEvaluationTool(type=certification_types[wt_id],
+        #                                                semester=sem + 1)
+        #             cerf_list.append(cerf)
+        # 
+        #     srs_hours[sem] = round(fake_srs - 0.1 * (srs_counter), 2)
+        #     ze_v_sem[sem] = sem_dict["creditPoints"]
+        #     contact_hours[sem] = round(srs_counter * 1.1, 2)
+        #     #last_sem = len(cerf_list)
+        # 
+        # # practice_object.description = isu_academic_plan_practice_json["description"]
+        # practice_object.language = isu_academic_plan_practice_json["langCode"].lower()
+        # practice_object.structural_unit = choose_department(isu_academic_plan_practice_json)
+        # 
+        # practice_object.practice_hours_v2 = process_hours(practice_hours)
+        # practice_object.lecture_hours_v2 = process_hours(lecture_hours)
+        # practice_object.lab_hours_v2 = process_hours(lab_hours)
+        # practice_object.srs_hours_v2 = process_hours(srs_hours)
+        # practice_object.ze_v_sem = process_hours(ze_v_sem)
+        # practice_object.contact_hours_v2 = process_hours(contact_hours)
+        # practice_object.number_of_semesters = isu_academic_plan_practice_json["practiceDuration"]
+        # 
+        # practice_object.save()
+        # 
+        # for cerf_to_connect in cerf_list:
+        #     is_cerf_exist = СertificationEvaluationTool.objects.filter(practice=practice_object,
+        #                                                                type=cerf_to_connect.type,
+        #                                                                semester=cerf_to_connect.semester)
+        #     if not is_cerf_exist.exists():
+        #         cerf_to_connect.practice = practice_object
+        #         cerf_to_connect.save()
+        # 
+        # # def watchmaker(hours, ze):
+        # #     ze = ze
+        # #     sem = 0
+        # #     all_ze_indexes_in_rpd = 0
+        # #     # todo was  lecture_hours_v2 = [0, 0, 0, 0], with 10752 index out of range
+        # #     lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        # #     ## print(lecture_hours_v2)
+        # #     for i in hours:
+        # #         ## print(hours)
+        # #         if ze[all_ze_indexes_in_rpd] >= 1.0:
+        # #             lecture_hours_v2[sem] = i
+        # #             sem += 1
+        # #         all_ze_indexes_in_rpd += 1
+        # #
+        # #     return str(lecture_hours_v2).strip("[]")
+        # #
+        # # def structural_unit(isu_academic_plan_practice_json):
+        # #     if StructuralUnit.objects.filter(title=str(isu_academic_plan_practice_json['practice_doer'].strip())):
+        # #         st_unit = \
+        # #             StructuralUnit.objects.filter(title=isu_academic_plan_practice_json['practice_doer'].strip())[0]
+        # #         st_unit.isu_id = int(isu_academic_plan_practice_json['practice_doer_id'])
+        # #         # print('Структурное подразделение записалось')
+        # #         st_unit.save()
+        # #     else:
+        # #         # print(isu_academic_plan_practice_json['practice_doer'].strip())
+        # #         # print(isu_academic_plan_practice_json['practice_doer_id'])
+        # #         StructuralUnit.objects.create(title=isu_academic_plan_practice_json['practice_doer'].strip(),
+        # #                                       isu_id=int(isu_academic_plan_practice_json['practice_doer_id']))
+        # #         st_unit = StructuralUnit.objects.get(title=isu_academic_plan_practice_json['practice_doer'].strip(),
+        # #                                              isu_id=int(
+        # #                                                  isu_academic_plan_practice_json['practice_doer_id']))
+        # #         # print('Структурное подразделение выбралось')
+        # #     return st_unit
+        # #
+        # # def semesters(ze):
+        # #     sem = 0
+        # #     for i in ze:
+        # #         if i > 0:
+        # #             sem += 1
+        # #     return sem
+        # #
+        # # ze = AcademicPlanUpdateUtils.get_ze(isu_academic_plan_practice_json)
+        # # lec = AcademicPlanUpdateUtils.get_lec(isu_academic_plan_practice_json)
+        # # prac = AcademicPlanUpdateUtils.get_prac(isu_academic_plan_practice_json)
+        # # lab = AcademicPlanUpdateUtils.get_lab(isu_academic_plan_practice_json)
+        # # consultation = AcademicPlanUpdateUtils.get_consultation(isu_academic_plan_practice_json)
+        # #
+        # # practice_object.number_of_semesters = int(
+        # #     semesters([float(x) for x in ze])
+        # # )
+        # #
+        # # practice_object.lecture_hours_v2 = watchmaker(
+        # #     [float(x) for x in lec],
+        # #     [float(x) for x in ze]
+        # # )
+        # #
+        # # practice_object.practice_hours_v2 = watchmaker(
+        # #     [float(x) for x in prac],
+        # #     [float(x) for x in ze]
+        # # )
+        # #
+        # # practice_object.consultation_v2 = watchmaker(
+        # #     [float(x) for x in consultation],
+        # #     [float(x) for x in ze]
+        # # )
+        # #
+        # # practice_object.lab_hours_v2 = watchmaker(
+        # #     [float(x) for x in lab],
+        # #     [float(x) for x in ze]
+        # # )
+        # #
+        # # practice_object.srs_hours_v2 = watchmaker(
+        # #     [
+        # #         float(x) for x in
+        # #         AcademicPlanUpdateUtils.set_srs(
+        # #             AcademicPlanUpdateUtils.get_srs(
+        # #                 ze,
+        # #                 lec,
+        # #                 prac,
+        # #                 lab
+        # #             ),
+        # #             ze,
+        # #             lec,
+        # #             prac,
+        # #             lab,
+        # #             module_object.name
+        # #         )
+        # #     ],
+        # #     [float(x) for x in ze]
+        # # )
+        # #
+        # # practice_object.practice_code = str(isu_academic_plan_practice_json['disc_id'])
+        # # if isu_academic_plan_practice_json['practice_doer'] and \
+        # #         isu_academic_plan_practice_json['practice_doer_id'] is not None:
+        # #     practice_object.structural_unit = structural_unit(isu_academic_plan_practice_json)
+        # # practice_object.save()
+        return practice_object
