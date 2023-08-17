@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 from sentry_sdk import capture_exception
 
+from gia_practice_app.Practice.models import Practice
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_aspect import AcademicPlanUpdateAspect
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_utils import AcademicPlanUpdateUtils
 from workprogramsapp.isu_merge.academic_plan_update_2023.isu_service import IsuService, IsuUser
@@ -717,7 +718,7 @@ class AcademicPlanUpdateProcessor:
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )[0]
             if isu_academic_plan_discipline_json["blockName"] == "Блок 2. Практика":
-                practice_object = AcademicPlanUpdateProcessor.__process_discipline__(
+                practice_object = AcademicPlanUpdateProcessor.__process_practice__(
                     isu_academic_plan_json,
                     isu_academic_plan_discipline_json,
                     father_module_object
@@ -815,11 +816,11 @@ class AcademicPlanUpdateProcessor:
                                isu_academic_plan_practice_json,
                                module_object):
         if practice_object is None:
-            practice_object = WorkProgram(
+            practice_object = Practice(
                 title=isu_academic_plan_practice_json['name'].strip(),
                 # subject_code=isu_academic_plan_practice_json['plan_order'],
                 # qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
-                practice_code=str(isu_academic_plan_practice_json['id'])
+                prac_isu_id=str(isu_academic_plan_practice_json['id'])
             )
 
 
