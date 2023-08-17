@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 from sentry_sdk import capture_exception
 
-from gia_practice_app.Practice.models import Practice
+from gia_practice_app.Practice.models import Practice, PracticeTemplate
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_aspect import AcademicPlanUpdateAspect
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_utils import AcademicPlanUpdateUtils
 from workprogramsapp.isu_merge.academic_plan_update_2023.isu_service import IsuService, IsuUser
@@ -816,13 +816,62 @@ class AcademicPlanUpdateProcessor:
                                isu_academic_plan_practice_json,
                                module_object):
         if practice_object is None:
+            pt = PracticeTemplate.objects.create()
             practice_object = Practice(
                 title=isu_academic_plan_practice_json['name'].strip(),
                 # subject_code=isu_academic_plan_practice_json['plan_order'],
                 # qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json),
-                prac_isu_id=str(isu_academic_plan_practice_json['id'])
+                prac_isu_id=str(isu_academic_plan_practice_json['id']),
+                discipline_code=str(isu_academic_plan_practice_json['id'])
             )
+            practice_object.save()
+            practice_object.practice_base = pt
+            practice_object.save()
 
+
+        def choose_department(isu_academic_plan_discipline_json):
+            department = None
+            department_obj = isu_academic_plan_discipline_json["department"]
+            department_by_id = StructuralUnit.objects.filter(isu_id=department_obj["id"])
+            if department_by_id.exists():
+                department = department_by_id.first()
+            else:
+                department_by_name = StructuralUnit.objects.filter(title=department_obj["name"])
+                if department_by_name.exists():
+                    department = department_by_name.first()
+                else:
+                    department_by_short_name = StructuralUnit.objects.filter(
+                        short_name=department_obj["short_name"])
+                    if department_by_short_name.exists():
+                        department = department_by_short_name.first()
+            return department
+
+        def process_hours(hours: list):
+            return ", ".join([str(hour) for hour in hours]) if hours else "0, 0, 0, 0"
+
+        ze_v_sem = [0, 0, 0, 0, 0, 0]
+        certification_types = {5: '1', 9: '2', 6: '3', 7: '4', 8: '5'}
+        cerf_list = []
+        discipline_contents = list(isu_academic_plan_practice_json["contents"].values())[0]
+        for sem_dict in discipline_contents:
+            sem = sem_dict["order"] - 1
+            ze_v_sem[sem] = sem_dict["creditPoints"]
+            activity_list = []
+            for activity in sem_dict["activities"]:
+
+                if activity["workTypeId"] in certification_types.keys():
+                    activity_list.append(int(certification_types[activity["workTypeId"]]))
+            cerf_list.append(activity_list)
+            #last_sem = len(cerf_list)
+
+        # work_program_object.description = isu_academic_plan_discipline_json["description"]
+        practice_object.language = isu_academic_plan_practice_json["langCode"].lower()
+        practice_object.structural_unit = choose_department(isu_academic_plan_practice_json)
+        practice_object.ze_v_sem = process_hours(ze_v_sem)
+        practice_object.number_of_semesters = isu_academic_plan_practice_json["disciplineDuration"]
+        practice_object.evaluation_tools_v_sem = str(cerf_list)
+
+        practice_object.save()
 
         # realisation_format = None
         # department = None
