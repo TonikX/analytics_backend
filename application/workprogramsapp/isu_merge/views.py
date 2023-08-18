@@ -4,12 +4,14 @@ from typing import Dict
 
 import pandas
 from django.conf import settings
+from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import permissions
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -28,7 +30,7 @@ from workprogramsapp.isu_merge.serializers import IsuHistoryListViewSerializer
 from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan, \
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
     WorkProgramInFieldOfStudy, Zun, AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, \
-    AcademicPlanUpdateConfiguration, IsuObjectsSendLogger
+    AcademicPlanUpdateConfiguration, IsuObjectsSendLogger, DisciplineBlockModuleInIsu
 from workprogramsapp.permissions import IsExpertiseMasterStrict
 from workprogramsapp.serializers import AcademicPlanUpdateLogSerializer, AcademicPlanUpdateConfigurationSerializer, \
     AcademicPlanUpdateSchedulerConfigurationSerializer
@@ -988,3 +990,31 @@ class UpdateModulesRelationships(APIView):
         modules_updated = process_modules(modules)
 
         return Response(data={"plans_created"}, status=200)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def IsuModulesDuplicates(request):
+    isu_modules = DisciplineBlockModuleInIsu.objects.values('isu_id').annotate(Count('id')).order_by().filter(
+        id__count__gt=1)
+    modules_to_append = {}
+    for isu_module in isu_modules:
+        duplicate = DisciplineBlockModuleInIsu.objects.filter(isu_id=isu_module["isu_id"])
+        duplicate_module = duplicate.first().module
+        if duplicate.count() == duplicate.filter(module=duplicate_module).count():
+            print(duplicate)
+        else:
+            module_id = duplicate.first().isu_id
+            modules_to_append[module_id] = []
+            duplicate_list = []
+            for d in duplicate:
+                imp = ImplementationAcademicPlan.objects.get(academic_plan=d.academic_plan)
+                duplicate_list.append(
+                    {
+                        "isu_id": d.isu_id,
+                        "our_id": d.module.id,
+                        "ap_id": imp.ap_isu_id
+                    }
+                )
+            modules_to_append[module_id] = duplicate_list
+    return Response(data=modules_to_append,status=200)
