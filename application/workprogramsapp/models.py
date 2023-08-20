@@ -1454,6 +1454,7 @@ class DisciplineBlockModuleInIsu(models.Model):
     isu_father_id = models.IntegerField(verbose_name="ИСУ ид родителя", blank=True, null=True)
     academic_plan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, related_name="module_isu_in_plan",
                                       blank=True, null=True)
+    fake_id = models.CharField(max_length=1024, blank=True, null=True, verbose_name='ap_id+isu_module_id')
 
 
 class IsuObjectsSendLogger(models.Model):

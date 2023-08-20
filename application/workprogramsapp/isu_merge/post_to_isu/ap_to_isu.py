@@ -6,7 +6,7 @@ from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuServic
 from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import generate_wp_in_lower_module_for_ap_isu, \
     post_module_to_isu, post_wp_to_isu, post_gia_to_isu, post_practice_to_isu, post_ap_to_isu
 from workprogramsapp.models import DisciplineBlock, WorkProgram, WorkProgramChangeInDisciplineBlockModule, \
-    DisciplineBlockModule, DisciplineBlockModuleInIsu
+    DisciplineBlockModule, DisciplineBlockModuleInIsu, ImplementationAcademicPlan
 
 TOKEN = "xd"  # login fucntion here
 
@@ -30,9 +30,14 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None, requi
             id_created = isu_module.isu_id
         except DisciplineBlockModuleInIsu.DoesNotExist:
             id_created = post_module_to_isu(token=TOKEN, module=module, block=block, parent_id=father_id, ap_id=ap.id)
+            fake_id = None
+            if DisciplineBlockModuleInIsu.objects.filter(isu_id=id_created).exists():
+                imp = ImplementationAcademicPlan.objects.get(academic_plan=ap)
+                fake_id = str(imp.ap_isu_id) + "_" + str(id_created)
+
             try:
                 DisciplineBlockModuleInIsu.objects.create(module=module, isu_father_id=father_id,
-                                                          academic_plan=ap, isu_id=id_created)
+                                                          academic_plan=ap, isu_id=id_created, fake_id=fake_id)
             except IntegrityError:
                 lines_of_plan.append({"error_module": module.id})
                 break

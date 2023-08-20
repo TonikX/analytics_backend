@@ -258,10 +258,13 @@ class AcademicPlanUpdateAspect:
 
             # todo get() returned more than one Practice -- it returned 11!
             if Practice.objects.filter(
-                    prac_isu_id=str(isu_academic_plan_practice_json['id'])
+                    prac_isu_id=str(isu_academic_plan_practice_json['id']),
+                    discipline_code=str(isu_academic_plan_practice_json['id'])
+
             ).exists():
                 old_practice_object = Practice.objects.filter(
-                    prac_isu_id=str(isu_academic_plan_practice_json['id'])
+                    prac_isu_id=str(isu_academic_plan_practice_json['id']),
+                    discipline_code=str(isu_academic_plan_practice_json['id'])
                 )[0]
             else:
                 old_practice_object = None
