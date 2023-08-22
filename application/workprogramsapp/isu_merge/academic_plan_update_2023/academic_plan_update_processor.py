@@ -350,11 +350,20 @@ class AcademicPlanUpdateProcessor:
             .exclude(id__in=block_modules_to_del_ids).delete()
 
     @staticmethod
-    def __del_block_modules__by__father__module__(block_modules_not_for_del_ids, discipline_block_module_object):
+    def __del_block_modules__by__father__module__(block_modules_not_for_del_ids, discipline_block_module_object,
+                                                  isu_academic_plan_block_module_json,
+                                                  isu_academic_plan_json,
+                                                  father_module_json):
 
         bms = DisciplineBlockModule.objects.filter(father_module=discipline_block_module_object) \
             .exclude(id__in=block_modules_not_for_del_ids)
         for bm in bms:
+            father_module_id = father_module_json.get("id") if father_module_json else None
+            DisciplineBlockModuleInIsu.objects.filter(
+                module=bm,
+                academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])
+                # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
+            ).delete()
             bm.father_module.remove(discipline_block_module_object)
 
     @staticmethod
@@ -687,7 +696,11 @@ class AcademicPlanUpdateProcessor:
             #     pass
             # modules_not_for_del = []
             AcademicPlanUpdateProcessor.__del_block_modules__by__father__module__(modules_not_for_del,
-                                                                                  discipline_block_module_object)
+                                                                                  discipline_block_module_object,
+                                                                                  module,
+                                                                                  isu_academic_plan_json,
+                                                                                  father_module
+                                                                                  )
             AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
                                                                               discipline_not_for_del)
             AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(discipline_block_module_object,
