@@ -98,7 +98,6 @@ class AcademicPlanUpdateProcessor:
                 discipline_code=str(isu_academic_plan_discipline_json['id'])
             )
 
-
         # realisation_format = None
         # department = None
         """if wp_dict["format_id"] == 1:
@@ -169,7 +168,7 @@ class AcademicPlanUpdateProcessor:
             srs_hours[sem] = round(fake_srs - 0.1 * (srs_counter), 2)
             ze_v_sem[sem] = sem_dict["creditPoints"]
             contact_hours[sem] = round(srs_counter * 1.1, 2)
-            #last_sem = len(cerf_list)
+            # last_sem = len(cerf_list)
 
         # work_program_object.description = isu_academic_plan_discipline_json["description"]
         work_program_object.language = isu_academic_plan_discipline_json["langCode"].lower()
@@ -377,7 +376,7 @@ class AcademicPlanUpdateProcessor:
     @AcademicPlanUpdateAspect.discipline_block_module_changes_aspect
     def __process_block_module__(discipline_block_module_object,
                                  isu_academic_plan_block_module_json,
-                                 #discipline_block_object,
+                                 # discipline_block_object,
                                  isu_academic_plan_json,
                                  father_module
                                  ):
@@ -423,17 +422,13 @@ class AcademicPlanUpdateProcessor:
                                 work_program_object,
                                 isu_academic_plan_discipline_json,
                                 isu_academic_plan_json):
-        # if isu_academic_plan_discipline_json['is_optional']:
-        #     option = 'Optionally'
-        # else:
-        #     option = 'Required'
 
+        # ToDo: Сделать обработку случая option == 'Optionally' (Приоритет --+)
         option = 'Required'
 
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
 
-        print('try 2')
         if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
@@ -442,7 +437,6 @@ class AcademicPlanUpdateProcessor:
                 #     isu_academic_plan_discipline_json['discipline_name']
                 # )
         ).exists()):
-            print('try 3')
             old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
@@ -509,19 +503,10 @@ class AcademicPlanUpdateProcessor:
                 work_program_in_field_of_study.save()
         else:
             work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule()
-            # ToDo: Починить ЗЕ тут
-            # work_program_change_in_discipline_block_module.credit_units = AcademicPlanUpdateUtils.ze_to_format(
-            #     AcademicPlanUpdateUtils.get_ze(
-            #         isu_academic_plan_discipline_json))
             work_program_change_in_discipline_block_module.change_type = option
             work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
             list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
             work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
-
-            # work_program_change_in_discipline_block_module.subject_code = AcademicPlanUpdateUtils.num_to_int(
-            #     isu_academic_plan_discipline_json['plan_order'],
-            #     isu_academic_plan_discipline_json['discipline_name']
-            # )
             work_program_change_in_discipline_block_module.save()
             work_program_change_in_discipline_block_module.work_program.add(work_program_object)
             work_program_change_in_discipline_block_module.save()
@@ -607,6 +592,7 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     def __del_work_program_in_field_of_study__(discipline_block_module, new_disciplines_ids):
+        # ToDo: Сделать обработку удалятора модуля из блока, как в __del_old_wpcbms_by_module__ (так, чтобы модуль не удалялся вообще) (приоритет +++)
         wcbms = WorkProgramInFieldOfStudy. \
             objects.filter(
             work_program_change_in_discipline_block_module__discipline_block_module=discipline_block_module) \
@@ -629,7 +615,17 @@ class AcademicPlanUpdateProcessor:
                                  father_module=None,
 
                                  ):
-        print('start')
+        """
+
+        :param module: словарь с модулем
+        :param isu_academic_plan_json: Json со всем УП
+        :param discipline_block_object: django-объект блока (посылается только для тех модулей которые включены непосредственно в блок)
+        :param father_module: словарь с модулем отцом (посылается только для модулей, которые вложенны в модуль, а не в блок)
+        :return: модуль или РПД (РПП)
+
+        Метод обрабатывает переданный блок модуля или РПД. Модуль сам определяет тип объекта.
+        Если внутри переданного модуля есть модули, модуль рекурсивно вызовет обработку всех вложенных модулей.
+        """
 
         # block_modules_to_del_ids.append(discipline_block_module_object.id)
         disciplines_for_del_in_module = []
@@ -637,15 +633,20 @@ class AcademicPlanUpdateProcessor:
         modules_not_for_del = []
         discipline_not_for_del = []
         if module['type'] == "module":
+            """
+            ToDo: предполагается доработать функционал поиска модуля на нашей стороне и создания нового в случае необходимости в 
+            AcademicPlanUpdateProcessor.__process_block_module__ и в его дектораторе  @AcademicPlanUpdateAspect.discipline_block_module_changes_aspect
+            __process_block_module__ - создает или изменяет существующий объект
+            discipline_block_module_changes_aspect - ищет существующий объект
+            """
             discipline_block_module_object = AcademicPlanUpdateProcessor \
                 .__process_block_module__(
                 module,
                 isu_academic_plan_json,
-                #discipline_block_object,
+                # discipline_block_object,
                 father_module
-
             )
-            # father_module = module
+
             if discipline_block_object is not None:
                 print('Not Father', discipline_block_object)
                 discipline_block_module_object.descipline_block.add(discipline_block_object)
@@ -657,15 +658,13 @@ class AcademicPlanUpdateProcessor:
                     isu_module__isu_id=father_module['id'],
                     # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
                 )[0])
-                # discipline_block_module_object.father_module.save()
                 discipline_block_module_object.save()
             father_module = module
             for children_module_dict in module['children']:
-                print('---- Module lvl 2')
-                save_module = module
+                """
+                Одна из Важнейших частей кода, тут происходит вызов обработчика вложенного модуля или РПД
+                """
                 module = children_module_dict
-                # if children_module_dict['type'] == "module":
-                #     father_module = save_module
                 children_module = AcademicPlanUpdateProcessor.recursion_module_updater(module,
                                                                                        isu_academic_plan_json, None,
                                                                                        father_module)
@@ -676,25 +675,7 @@ class AcademicPlanUpdateProcessor:
                     discipline_not_for_del.append(
                         children_module.id)
                 if children_module == None:
-                    print('!!!!!!!!!!!!!!!!!!!')
                     continue
-                # if module['type'] == "discipline":
-                #     return None
-                # if father_module is not None and children_module is not None:
-                #     print('Father')
-                #     discipline_block_module_object.childs.add(children_module)
-                #     discipline_block_module_object.save()
-                #     modules_not_for_del.append(
-                #         children_module.id)
-            # try:
-            #     print('Father')
-            #     discipline_block_module_object.father_module.add(children_module)
-            #     discipline_block_module_object.save()
-            #     modules_not_for_del.append(
-            #         children_module.id)
-            # except:
-            #     pass
-            # modules_not_for_del = []
             AcademicPlanUpdateProcessor.__del_block_modules__by__father__module__(modules_not_for_del,
                                                                                   discipline_block_module_object,
                                                                                   module,
@@ -702,20 +683,9 @@ class AcademicPlanUpdateProcessor:
                                                                                   father_module
                                                                                   )
             AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
-                                                                              discipline_not_for_del)
+                                                                               discipline_not_for_del)
             AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(discipline_block_module_object,
                                                                      discipline_not_for_del)
-
-
-
-            # if father_module is not None:
-            #     print('Father')
-            #     # discipline_block_module_object.childs.add(children_module)
-            #     # discipline_block_module_object.save()
-            # else:
-            #     print('Not Father', discipline_block_object)
-            #     discipline_block_module_object.descipline_block.add(discipline_block_object)
-            #     discipline_block_module_object.save()
 
             return discipline_block_module_object
 
@@ -742,7 +712,7 @@ class AcademicPlanUpdateProcessor:
                 isu_academic_plan_discipline_json,
                 father_module_object
             )
-            #print(practice_object)
+            # print(practice_object)
             work_program_in_field_of_study_object, \
             work_program_change_in_discipline_block_module_object = \
                 AcademicPlanUpdateProcessor.__process_linked_data__(
@@ -751,24 +721,18 @@ class AcademicPlanUpdateProcessor:
                     isu_academic_plan_discipline_json,
                     isu_academic_plan_json
                 )
-            # print('___')
-            # print(work_program_in_field_of_study_object)
-            # AcademicPlanUpdateProcessor.__process_work_program_id_str_up_for_isu__(
-            #     work_program_in_field_of_study_object,
-            #     isu_academic_plan_json,
-            #     isu_academic_plan_discipline_json
-            # )
             work_program_change_in_discipline_block_modules_not_for_del.append(
                 work_program_change_in_discipline_block_module_object.id)
             disciplines_for_del_in_module.append(work_program_object.id)
-            #AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(father_module_object,
+            # AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(father_module_object,
             #                                                                   disciplines_for_del_in_module)
-            #AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(father_module_object,
+            # AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(father_module_object,
             #                                                         work_program_change_in_discipline_block_modules_not_for_del)
             return work_program_object
 
     def update_academic_plans(self):
-        academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True, over_23=True).values_list(
+        academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True,
+                                                                            over_23=True).values_list(
             'academic_plan_id', flat=True)
 
         for plan_id in academic_plans_ids:
@@ -821,13 +785,12 @@ class AcademicPlanUpdateProcessor:
                 print(e)
                 # capture_exception(e)
 
-
     @staticmethod
     @AcademicPlanUpdateAspect.practice_changes_aspect
     def __process_practice__(practice_object,
-                               isu_academic_plan_json,
-                               isu_academic_plan_practice_json,
-                               module_object):
+                             isu_academic_plan_json,
+                             isu_academic_plan_practice_json,
+                             module_object):
         if practice_object is None:
             pt = PracticeTemplate.objects.create()
             practice_object = Practice(
@@ -886,8 +849,6 @@ class AcademicPlanUpdateProcessor:
 
         practice_object.save()
 
-        # realisation_format = None
-        # department = None
         """if wp_dict["format_id"] == 1:
             realisation_format = "offline"
         elif wp_dict["format_id"] == 2:
@@ -895,185 +856,5 @@ class AcademicPlanUpdateProcessor:
         elif wp_dict["format_id"] == 3:
             realisation_format = "online"""
 
-        # def choose_department(isu_academic_plan_practice_json):
-        #     department = None
-        #     department_obj = isu_academic_plan_practice_json["department"]
-        #     department_by_id = StructuralUnit.objects.filter(isu_id=department_obj["id"])
-        #     if department_by_id.exists():
-        #         department = department_by_id.first()
-        #     else:
-        #         department_by_name = StructuralUnit.objects.filter(title=department_obj["name"])
-        #         if department_by_name.exists():
-        #             department = department_by_name.first()
-        #         else:
-        #             department_by_short_name = StructuralUnit.objects.filter(
-        #                 short_name=department_obj["short_name"])
-        #             if department_by_short_name.exists():
-        #                 department = department_by_short_name.first()
-        #     return department
-        # 
-        # def process_hours(hours: list):
-        #     return ", ".join([str(hour) for hour in hours]) if hours else "0, 0, 0, 0"
-        # 
-        # practice_hours = [0, 0, 0, 0, 0, 0]
-        # lecture_hours = [0, 0, 0, 0, 0, 0]
-        # lab_hours = [0, 0, 0, 0, 0, 0]
-        # cons_hours = [0, 0, 0, 0, 0, 0]
-        # srs_hours = [0, 0, 0, 0, 0, 0]
-        # ze_v_sem = [0, 0, 0, 0, 0, 0]
-        # contact_hours = [0, 0, 0, 0, 0, 0]
-        # certification_types = {5: '1', 9: '2', 6: '3', 7: '4', 8: '5'}
-        # cerf_list = []
-        # 
-        # practice_contents = list(isu_academic_plan_practice_json["contents"].values())[0]
-        # for sem_dict in practice_contents:
-        #     fake_srs = 0
-        #     sem = sem_dict["order"] - 1
-        #     srs_counter = 0
-        #     for type_dict in sem_dict["activities"]:
-        #         wt_id = type_dict["workTypeId"]
-        #         if wt_id == 0:
-        #             continue
-        #         if wt_id == 1:
-        #             lecture_hours[sem] = type_dict["volume"]
-        #             srs_counter += type_dict["volume"]
-        #         elif wt_id == 2:
-        #             lab_hours[sem] = type_dict["volume"]
-        #             srs_counter += type_dict["volume"]
-        #         elif wt_id == 3:
-        #             practice_hours[sem] = type_dict["volume"]
-        #             srs_counter += type_dict["volume"]
-        #         elif wt_id == 12:
-        #             cons_hours[sem] = type_dict["volume"]
-        #             srs_counter += type_dict["volume"]
-        #         elif wt_id == 4:
-        #             fake_srs = type_dict["volume"]
-        #         else:
-        #             cerf = СertificationEvaluationTool(type=certification_types[wt_id],
-        #                                                semester=sem + 1)
-        #             cerf_list.append(cerf)
-        # 
-        #     srs_hours[sem] = round(fake_srs - 0.1 * (srs_counter), 2)
-        #     ze_v_sem[sem] = sem_dict["creditPoints"]
-        #     contact_hours[sem] = round(srs_counter * 1.1, 2)
-        #     #last_sem = len(cerf_list)
-        # 
-        # # practice_object.description = isu_academic_plan_practice_json["description"]
-        # practice_object.language = isu_academic_plan_practice_json["langCode"].lower()
-        # practice_object.structural_unit = choose_department(isu_academic_plan_practice_json)
-        # 
-        # practice_object.practice_hours_v2 = process_hours(practice_hours)
-        # practice_object.lecture_hours_v2 = process_hours(lecture_hours)
-        # practice_object.lab_hours_v2 = process_hours(lab_hours)
-        # practice_object.srs_hours_v2 = process_hours(srs_hours)
-        # practice_object.ze_v_sem = process_hours(ze_v_sem)
-        # practice_object.contact_hours_v2 = process_hours(contact_hours)
-        # practice_object.number_of_semesters = isu_academic_plan_practice_json["practiceDuration"]
-        # 
-        # practice_object.save()
-        # 
-        # for cerf_to_connect in cerf_list:
-        #     is_cerf_exist = СertificationEvaluationTool.objects.filter(practice=practice_object,
-        #                                                                type=cerf_to_connect.type,
-        #                                                                semester=cerf_to_connect.semester)
-        #     if not is_cerf_exist.exists():
-        #         cerf_to_connect.practice = practice_object
-        #         cerf_to_connect.save()
-        # 
-        # # def watchmaker(hours, ze):
-        # #     ze = ze
-        # #     sem = 0
-        # #     all_ze_indexes_in_rpd = 0
-        # #     # todo was  lecture_hours_v2 = [0, 0, 0, 0], with 10752 index out of range
-        # #     lecture_hours_v2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        # #     ## print(lecture_hours_v2)
-        # #     for i in hours:
-        # #         ## print(hours)
-        # #         if ze[all_ze_indexes_in_rpd] >= 1.0:
-        # #             lecture_hours_v2[sem] = i
-        # #             sem += 1
-        # #         all_ze_indexes_in_rpd += 1
-        # #
-        # #     return str(lecture_hours_v2).strip("[]")
-        # #
-        # # def structural_unit(isu_academic_plan_practice_json):
-        # #     if StructuralUnit.objects.filter(title=str(isu_academic_plan_practice_json['practice_doer'].strip())):
-        # #         st_unit = \
-        # #             StructuralUnit.objects.filter(title=isu_academic_plan_practice_json['practice_doer'].strip())[0]
-        # #         st_unit.isu_id = int(isu_academic_plan_practice_json['practice_doer_id'])
-        # #         # print('Структурное подразделение записалось')
-        # #         st_unit.save()
-        # #     else:
-        # #         # print(isu_academic_plan_practice_json['practice_doer'].strip())
-        # #         # print(isu_academic_plan_practice_json['practice_doer_id'])
-        # #         StructuralUnit.objects.create(title=isu_academic_plan_practice_json['practice_doer'].strip(),
-        # #                                       isu_id=int(isu_academic_plan_practice_json['practice_doer_id']))
-        # #         st_unit = StructuralUnit.objects.get(title=isu_academic_plan_practice_json['practice_doer'].strip(),
-        # #                                              isu_id=int(
-        # #                                                  isu_academic_plan_practice_json['practice_doer_id']))
-        # #         # print('Структурное подразделение выбралось')
-        # #     return st_unit
-        # #
-        # # def semesters(ze):
-        # #     sem = 0
-        # #     for i in ze:
-        # #         if i > 0:
-        # #             sem += 1
-        # #     return sem
-        # #
-        # # ze = AcademicPlanUpdateUtils.get_ze(isu_academic_plan_practice_json)
-        # # lec = AcademicPlanUpdateUtils.get_lec(isu_academic_plan_practice_json)
-        # # prac = AcademicPlanUpdateUtils.get_prac(isu_academic_plan_practice_json)
-        # # lab = AcademicPlanUpdateUtils.get_lab(isu_academic_plan_practice_json)
-        # # consultation = AcademicPlanUpdateUtils.get_consultation(isu_academic_plan_practice_json)
-        # #
-        # # practice_object.number_of_semesters = int(
-        # #     semesters([float(x) for x in ze])
-        # # )
-        # #
-        # # practice_object.lecture_hours_v2 = watchmaker(
-        # #     [float(x) for x in lec],
-        # #     [float(x) for x in ze]
-        # # )
-        # #
-        # # practice_object.practice_hours_v2 = watchmaker(
-        # #     [float(x) for x in prac],
-        # #     [float(x) for x in ze]
-        # # )
-        # #
-        # # practice_object.consultation_v2 = watchmaker(
-        # #     [float(x) for x in consultation],
-        # #     [float(x) for x in ze]
-        # # )
-        # #
-        # # practice_object.lab_hours_v2 = watchmaker(
-        # #     [float(x) for x in lab],
-        # #     [float(x) for x in ze]
-        # # )
-        # #
-        # # practice_object.srs_hours_v2 = watchmaker(
-        # #     [
-        # #         float(x) for x in
-        # #         AcademicPlanUpdateUtils.set_srs(
-        # #             AcademicPlanUpdateUtils.get_srs(
-        # #                 ze,
-        # #                 lec,
-        # #                 prac,
-        # #                 lab
-        # #             ),
-        # #             ze,
-        # #             lec,
-        # #             prac,
-        # #             lab,
-        # #             module_object.name
-        # #         )
-        # #     ],
-        # #     [float(x) for x in ze]
-        # # )
-        # #
-        # # practice_object.practice_code = str(isu_academic_plan_practice_json['disc_id'])
-        # # if isu_academic_plan_practice_json['practice_doer'] and \
-        # #         isu_academic_plan_practice_json['practice_doer_id'] is not None:
-        # #     practice_object.structural_unit = structural_unit(isu_academic_plan_practice_json)
-        # # practice_object.save()
+
         return practice_object

@@ -120,29 +120,28 @@ class AcademicPlanUpdateAspect:
     @staticmethod
     def discipline_block_module_changes_aspect(func):
         def wrapper(*args, **kwargs):
+            """
+            Тут реализовать логику поиска модулей и проверку на состав модуля
+            может понадобится isu_academic_plan_block_module_json, который есть в этом декораторе
+            добавим в модуль поле "дата последнего обновления"
+            через DisciplineBlockModuleInIsu находим все таблицы, которые теоретически должны быть такие же, как эта
+            далее сравниваем состав этих таблиц с модулями из жсона и смотрим на дату, если таблицы менялись менее чем пару дней назад и состав розный -
+            делаем новую, если более, изменяем состав (тут нужно подумать, как лучше)
+            """
             isu_academic_plan_block_module_json, isu_academic_plan_json, father_module = args
-            # discipline_block_object,
-            # print(isu_academic_plan_block_module_json)
             if DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['name'],
                     isu_module__isu_id=isu_academic_plan_block_module_json['id'],
-                    # descipline_block=discipline_block_object
             ).exists():
                 old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
                     name=isu_academic_plan_block_module_json['name'],
                     isu_module__isu_id=isu_academic_plan_block_module_json['id'],
-                    # descipline_block=discipline_block_object
                 )[0]
             else:
                 old_discipline_block_module_object = None
-            # print('old_discipline_block_module_object',  old_discipline_block_module_object)
             updated_discipline_block_module_object = func(
                 copy.deepcopy(old_discipline_block_module_object), *args, **kwargs
             )
-            print(updated_discipline_block_module_object)
-
-            print('try to start')
-            # discipline_block_module_object_relations_updater(updated_discipline_block_module_object)
 
             # AcademicPlanUpdateLogger.log_changes(
             #     isu_academic_plan_json["id"],
