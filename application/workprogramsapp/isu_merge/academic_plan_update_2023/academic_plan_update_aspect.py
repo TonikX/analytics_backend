@@ -136,11 +136,12 @@ class AcademicPlanUpdateAspect:
             if new_id:
                 if DisciplineBlockModule.objects.filter(
                         name=isu_academic_plan_block_module_json['name'],
-                        isu_module__new_id=isu_academic_plan_block_module_json['id'],
+                        isu_module__new_id=isu_academic_plan_block_module_json['new_id'],
+
                 ).exists():
                     old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
                         name=isu_academic_plan_block_module_json['name'],
-                        isu_module__new_id=isu_academic_plan_block_module_json['id'],
+                        isu_module__new_id=isu_academic_plan_block_module_json['new_id'],
                     )[0]
                 else:
                     old_discipline_block_module_object = None
@@ -153,6 +154,7 @@ class AcademicPlanUpdateAspect:
                     old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
                         name=isu_academic_plan_block_module_json['name'],
                         isu_module__isu_id=isu_academic_plan_block_module_json['id'],
+                        isu_module__new_id=None
                     )[0]
                 else:
                     old_discipline_block_module_object = None
@@ -166,7 +168,6 @@ class AcademicPlanUpdateAspect:
             #     old_discipline_block_module_object,
             #     updated_discipline_block_module_object
             # )
-
             return updated_discipline_block_module_object
 
         return wrapper
