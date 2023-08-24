@@ -129,16 +129,33 @@ class AcademicPlanUpdateAspect:
             делаем новую, если более, изменяем состав (тут нужно подумать, как лучше)
             """
             isu_academic_plan_block_module_json, isu_academic_plan_json, father_module = args
-            if DisciplineBlockModule.objects.filter(
-                    name=isu_academic_plan_block_module_json['name'],
-                    isu_module__isu_id=isu_academic_plan_block_module_json['id'],
-            ).exists():
-                old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
-                    name=isu_academic_plan_block_module_json['name'],
-                    isu_module__isu_id=isu_academic_plan_block_module_json['id'],
-                )[0]
+
+            new_id = isu_academic_plan_block_module_json.get("new_id")
+            if str(isu_academic_plan_block_module_json["id"]) == new_id:
+                new_id = None
+            if new_id:
+                if DisciplineBlockModule.objects.filter(
+                        name=isu_academic_plan_block_module_json['name'],
+                        isu_module__new_id=isu_academic_plan_block_module_json['id'],
+                ).exists():
+                    old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
+                        name=isu_academic_plan_block_module_json['name'],
+                        isu_module__new_id=isu_academic_plan_block_module_json['id'],
+                    )[0]
+                else:
+                    old_discipline_block_module_object = None
+
             else:
-                old_discipline_block_module_object = None
+                if DisciplineBlockModule.objects.filter(
+                        name=isu_academic_plan_block_module_json['name'],
+                        isu_module__isu_id=isu_academic_plan_block_module_json['id'],
+                ).exists():
+                    old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
+                        name=isu_academic_plan_block_module_json['name'],
+                        isu_module__isu_id=isu_academic_plan_block_module_json['id'],
+                    )[0]
+                else:
+                    old_discipline_block_module_object = None
             updated_discipline_block_module_object = func(
                 copy.deepcopy(old_discipline_block_module_object), *args, **kwargs
             )

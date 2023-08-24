@@ -23,21 +23,16 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None, requi
     """
     for module in modules:
         required = required and (module.selection_rule == "all")
-        id_created = None
         try:
             isu_module = DisciplineBlockModuleInIsu.objects.get(module=module, isu_father_id=father_id,
                                                                 academic_plan=ap)
             id_created = isu_module.isu_id
         except DisciplineBlockModuleInIsu.DoesNotExist:
             id_created = post_module_to_isu(token=TOKEN, module=module, block=block, parent_id=father_id, ap_id=ap.id)
-            fake_id = None
-            if DisciplineBlockModuleInIsu.objects.filter(isu_id=id_created).exists():
-                imp = ImplementationAcademicPlan.objects.get(academic_plan=ap)
-                fake_id = str(imp.ap_isu_id) + "_" + str(id_created)
 
             try:
                 DisciplineBlockModuleInIsu.objects.create(module=module, isu_father_id=father_id,
-                                                          academic_plan=ap, isu_id=id_created, fake_id=fake_id)
+                                                          academic_plan=ap, isu_id=id_created)
             except IntegrityError:
                 lines_of_plan.append({"error_module": module.id})
                 break
