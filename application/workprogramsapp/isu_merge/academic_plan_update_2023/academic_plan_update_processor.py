@@ -10,6 +10,7 @@ from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_ut
 from workprogramsapp.isu_merge.academic_plan_update_2023.isu_service import IsuService, IsuUser
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_updater import \
     discipline_block_module_object_relations_updater
+from workprogramsapp.isu_merge.academic_plan_update_2023.process_modules_with_hashes import get_ap_jsons
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
     WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration, \
@@ -349,12 +350,36 @@ class AcademicPlanUpdateProcessor:
             .exclude(id__in=block_modules_to_del_ids).delete()
 
     @staticmethod
-    def __del_block_modules__by__father__module__(block_modules_not_for_del_ids, discipline_block_module_object):
+    def __del_block_modules__by__father__module__(block_modules_not_for_del_ids, discipline_block_module_object,
+                                                  isu_academic_plan_block_module_json,
+                                                  isu_academic_plan_json,
+                                                  father_module_json):
 
         bms = DisciplineBlockModule.objects.filter(father_module=discipline_block_module_object) \
             .exclude(id__in=block_modules_not_for_del_ids)
         for bm in bms:
+            father_module_id = father_module_json.get("id") if father_module_json else None
+            DisciplineBlockModuleInIsu.objects.filter(
+                module=bm,
+                academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
+                # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
+            ).delete()
             bm.father_module.remove(discipline_block_module_object)
+
+    @staticmethod
+    def __del_father_block_modules__(block_modules_not_for_del_ids,
+                                     discipline_block_object,
+                                     isu_academic_plan_json, ):
+
+        bms = DisciplineBlockModule.objects.filter(father_module=None, descipline_block__academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]) \
+            .exclude(id__in=block_modules_not_for_del_ids)
+        for bm in bms:
+            DisciplineBlockModuleInIsu.objects.filter(
+                module=bm,
+                academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
+                # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
+            ).delete()
+            bm.descipline_block.remove(discipline_block_object)
 
     @staticmethod
     def __del_block__(block_to_del_ids, isu_academic_plan_json):
@@ -373,6 +398,9 @@ class AcademicPlanUpdateProcessor:
                                  ):
 
         father_module_id = father_module.get("id") if father_module else None
+        new_id = isu_academic_plan_block_module_json.get("new_id")
+        if str(isu_academic_plan_block_module_json["id"]) == new_id:
+            new_id = None
         if discipline_block_module_object is None:
             discipline_block_module_object = DisciplineBlockModule(
                 name=isu_academic_plan_block_module_json['name'],
@@ -380,21 +408,37 @@ class AcademicPlanUpdateProcessor:
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )
             discipline_block_module_object.save()
-
-        if not DisciplineBlockModuleInIsu.objects.filter(
-                module__name=isu_academic_plan_block_module_json['name'],
-                isu_id=isu_academic_plan_block_module_json['id'],
-                isu_father_id=father_module_id,
-                academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
-        ).exists():
-            discipline_block_module_object_in_isu = DisciplineBlockModuleInIsu(
-                module=discipline_block_module_object,
-                isu_id=isu_academic_plan_block_module_json['id'],
-                isu_father_id=father_module_id,
-                academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
-                # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
-            )
-            discipline_block_module_object_in_isu.save()
+        if new_id:
+            if not DisciplineBlockModuleInIsu.objects.filter(
+                    module__name=isu_academic_plan_block_module_json['name'],
+                    new_id=new_id,
+                    isu_father_id=father_module_id,
+                    academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
+            ).exists():
+                discipline_block_module_object_in_isu = DisciplineBlockModuleInIsu(
+                    module=discipline_block_module_object,
+                    new_id=new_id,
+                    isu_id=isu_academic_plan_block_module_json['id'],
+                    isu_father_id=father_module_id,
+                    academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
+                    # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
+                )
+                discipline_block_module_object_in_isu.save()
+        else:
+            if not DisciplineBlockModuleInIsu.objects.filter(
+                    module__name=isu_academic_plan_block_module_json['name'],
+                    isu_id=isu_academic_plan_block_module_json['id'],
+                    isu_father_id=father_module_id,
+                    academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
+            ).exists():
+                discipline_block_module_object_in_isu = DisciplineBlockModuleInIsu(
+                    module=discipline_block_module_object,
+                    isu_id=isu_academic_plan_block_module_json['id'],
+                    isu_father_id=father_module_id,
+                    academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
+                    # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
+                )
+                discipline_block_module_object_in_isu.save()
 
         rules_ids = {1: "choose_n_from_m", 2: "all", 21: "any_quantity", 41: "by_credit_units",
                      61: "no_more_than_n_credits"}
@@ -637,18 +681,27 @@ class AcademicPlanUpdateProcessor:
                 # discipline_block_object,
                 father_module
             )
-
             if discipline_block_object is not None:
                 print('Not Father', discipline_block_object)
                 discipline_block_module_object.descipline_block.add(discipline_block_object)
                 discipline_block_module_object.save()
                 discipline_block_object = None
             elif father_module is not None:
-                discipline_block_module_object.father_module.add(DisciplineBlockModule.objects.filter(
-                    name=father_module['name'],
-                    isu_module__isu_id=father_module['id'],
-                    # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
-                )[0])
+                new_id = father_module.get("new_id")
+                if str(father_module.get("id")) == new_id:
+                    new_id = None
+                if new_id:
+                    discipline_block_module_object.father_module.add(DisciplineBlockModule.objects.filter(
+                        name=father_module['name'],
+                        isu_module__new_id=new_id,
+                        # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
+                    )[0])
+                else:
+                    discipline_block_module_object.father_module.add(DisciplineBlockModule.objects.filter(
+                        name=father_module['name'],
+                        isu_module__isu_id=father_module['id'],
+                        # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
+                    )[0])
                 discipline_block_module_object.save()
             father_module = module
             for children_module_dict in module['children']:
@@ -668,7 +721,11 @@ class AcademicPlanUpdateProcessor:
                 if children_module == None:
                     continue
             AcademicPlanUpdateProcessor.__del_block_modules__by__father__module__(modules_not_for_del,
-                                                                                  discipline_block_module_object)
+                                                                                  discipline_block_module_object,
+                                                                                  module,
+                                                                                  isu_academic_plan_json,
+                                                                                  father_module
+                                                                                  )
             AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
                                                                                discipline_not_for_del)
             AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(discipline_block_module_object,
@@ -721,13 +778,18 @@ class AcademicPlanUpdateProcessor:
         academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True,
                                                                             over_23=True).values_list(
             'academic_plan_id', flat=True)
+        father_module_not_for_del = []
 
+        # Магия для того чтобы починить поломанные модули в ИСУ
+        get_ap_jsons()
+        # ------
         for plan_id in academic_plans_ids:
             try:
                 plan_id = str(plan_id)
 
                 old_academic_plan = self.__get_old_academic_plan_by_id__(plan_id)
-                isu_academic_plan_json = self.isu_service.get_academic_plan_only_modules(plan_id)
+                imp = ImplementationAcademicPlan.objects.get(academic_plan=old_academic_plan)
+                isu_academic_plan_json = imp.isu_modified_plan
                 # isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
                 if isu_academic_plan_json is not None:
                     # self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
@@ -750,10 +812,15 @@ class AcademicPlanUpdateProcessor:
                             print('block', discipline_block_object)
                             father_module = self.recursion_module_updater(module, isu_academic_plan_json,
                                                                           discipline_block_object, None)
+                            father_module_not_for_del.append(father_module.id)
+
+
                             if father_module == None:
                                 print('!!!!!!!!!!!!!!!!!!!')
                                 continue
-
+                        AcademicPlanUpdateProcessor.__del_father_block_modules__(father_module_not_for_del,
+                                                                                 discipline_block_object,
+                                                                                 isu_academic_plan_json)
                         print(block_modules_to_del_ids)
                         # self.__del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json,
                         #                           discipline_block_object)

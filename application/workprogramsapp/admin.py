@@ -19,7 +19,7 @@ from .individualization.models import IndividualImplementationAcademicPlan, \
 # FieldOfStudyWorkProgram,
 from .models import EducationalProgram, GeneralCharacteristics, Department, Profession, SkillsOfProfession, \
     SkillsOfRole, \
-    Role, ProfessionalStandard
+    Role, ProfessionalStandard, IsuModulesHashes
 from .models import (
     WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, FieldOfStudy, Zun,
     Competence, Indicator, EvaluationTool, Topic, WorkProgramInFieldOfStudy,
@@ -178,7 +178,7 @@ admin.site.register(PracticeInFieldOfStudy)
 admin.site.register(UniversityPartner)
 admin.site.register(AcademicPlanUpdateNotification)
 admin.site.register(EmployerRepresentative)
-
+admin.site.register(IsuModulesHashes)
 
 @admin.register(DisciplineBlockModuleInIsu)
 class ModuleIsuAdmin(admin.ModelAdmin):
