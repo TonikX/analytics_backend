@@ -687,6 +687,7 @@ class ImplementationAcademicPlan(models.Model):
                                                 verbose_name='ВУЗ партнер',
                                                 related_name='implementation_academic_plan_in_university_partner',
                                                 blank=True)
+    isu_modified_plan = JSONField(blank=True, null=True, verbose_name="JSON УП из ИСУ с модифицированным ID модулей")
 
     def __str__(self):
         return 'НАШ ОП ид: ' + str(self.id) + ' / ' + 'ОП ИСУ ИД: ' + str(self.op_isu_id)
@@ -1454,7 +1455,7 @@ class DisciplineBlockModuleInIsu(models.Model):
     isu_father_id = models.IntegerField(verbose_name="ИСУ ид родителя", blank=True, null=True)
     academic_plan = models.ForeignKey(AcademicPlan, on_delete=models.CASCADE, related_name="module_isu_in_plan",
                                       blank=True, null=True)
-    fake_id = models.CharField(max_length=1024, blank=True, null=True, verbose_name='ap_id+isu_module_id')
+    new_id = models.CharField(max_length=1024, blank=True, null=True, verbose_name='ap_id and isu_module_id')
 
 
 class IsuObjectsSendLogger(models.Model):
@@ -1476,3 +1477,13 @@ class IsuObjectsSendLogger(models.Model):
     error_status = models.IntegerField(verbose_name="номер ошибки")
     returned_data = JSONField(verbose_name="Вернувшийся ответ")
     date_of_sending = models.DateTimeField(default=timezone.now)
+
+
+class IsuModulesHashes(models.Model):
+    isu_id = models.IntegerField(verbose_name="ИСУ ид модуля")
+    academic_plan = models.ForeignKey(ImplementationAcademicPlan, on_delete=models.CASCADE,
+                                      related_name="module_isu_in_plan_by_hash",
+                                      blank=True, null=True)
+    ap_isu_id = models.IntegerField(verbose_name="ИСУ ид плана")
+    module_hash = models.TextField(verbose_name="Хэш модуля")
+    new_id = models.CharField(max_length=1024, blank=True, null=True, verbose_name='ap_id+isu_module_id')
