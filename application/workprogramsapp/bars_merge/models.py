@@ -32,21 +32,3 @@ class BarsEPAssociate(models.Model):
     base_field_of_study = models.ManyToManyField('ImplementationAcademicPlan', verbose_name="Направление",
                                                  related_name="field_of_study_in_bars")
     is_in_bars = models.BooleanField(verbose_name="Отправлялась ли в БАРС", default=False)
-
-
-class WorkProgramByTerm(models.Model):
-    relative_choices = (
-        (0, 'Весна'),
-        (1, 'Осень'),
-    )
-    work_program = models.ForeignKey("WorkProgram", on_delete=models.CASCADE, related_name="wp_in_term")
-    ap_in_term = models.ManyToManyField('ImplementationAcademicPlan',
-                                        verbose_name="Учебные планы реализующие РПД в данном семестре этого года",
-                                        related_name="field_of_study_in_bars")
-    year_of_realisation = models.PositiveIntegerField(verbose_name="Учебный год реализации дисциплины")
-    term_of_realisation = models.PositiveIntegerField(
-        verbose_name="Абсолютный семестр реализации дисциплины по связанным УП")
-    relative_term = models.PositiveIntegerField(verbose_name="Относительный семетр реализации дисцпилны")
-    period_of_time = models.PositiveIntegerField(choices=relative_choices, verbose_name="Весенний или осенний семестр ")
-
-    is_in_bars = models.BooleanField(verbose_name="Отправлялась ли в БАРС", default=False)
