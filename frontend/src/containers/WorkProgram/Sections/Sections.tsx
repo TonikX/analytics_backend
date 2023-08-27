@@ -93,13 +93,14 @@ class Sections extends React.PureComponent<SectionsProps> {
     const totalHours = this.state.totalHours || totalTotalHours;
 
     sections.forEach((section) => {
-      const contactWork = section[workProgramSectionFields.CONTACT_WORK];
-      const sro = (contactWork / totalContactWork * (totalHours - totalContactWork)).toFixed(2)
+      const contactWork = this.calculateContactWork(section).toFixed(2);
+      const sro = (parseFloat(contactWork) / totalContactWork * (totalHours - totalContactWork)).toFixed(2)
       //@ts-ignore
       const newSectionHours = (parseFloat(sro) + parseFloat(contactWork)).toFixed(2);
 
       this.props.actions.saveSection({
         ...section,
+        [workProgramSectionFields.CONTACT_WORK]: contactWork,
         [workProgramSectionFields.SPO]: sro,
         [workProgramSectionFields.TOTAL_HOURS]: newSectionHours,
       });
@@ -137,7 +138,7 @@ class Sections extends React.PureComponent<SectionsProps> {
   render() {
     //@ts-ignore
     const {classes} = this.props;
-    const {sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat, contactHours, consultationHours} = this.props;
+    const {showImplementationFormatError, sections, isCanEdit, totalHours, lectureHours, practiceHours, labHours, srsHours, semesterCount, implementationFormat, contactHours, consultationHours} = this.props;
     const {createNewSectionMode} = this.state;
 
     const totalLectureClassesHours = this.getTotalHours(workProgramSectionFields.LECTURE_CLASSES).toFixed(2);
@@ -167,6 +168,7 @@ class Sections extends React.PureComponent<SectionsProps> {
 
     return (
       <div className={classes.secondStep}>
+        {showImplementationFormatError ? <Typography style={{color: 'red'}}>У вас не указан формат реализации дисциплины. По умолчанию калькулятор считает трудоемкость по формату "офлайн".</Typography> : null}
         <TableContainer className={classes.table}>
           <AutoSizer disableHeight>
             {({ width, height }: any) => (

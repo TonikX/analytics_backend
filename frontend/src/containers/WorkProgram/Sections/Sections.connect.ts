@@ -7,7 +7,7 @@ import {getWorkProgramField, isCanEdit} from '../getters';
 import {WorkProgramActions} from "../types";
 
 import {rootState} from "../../../store/reducers";
-import {fields, WorkProgramGeneralFields} from "../enum";
+import {fields, ImplementationFormatsEnum, WorkProgramGeneralFields} from "../enum";
 import {getHoursArray, getAllHours} from "../utils";
 
 const mapStateToProps = (state:rootState) => {
@@ -28,6 +28,7 @@ const mapStateToProps = (state:rootState) => {
         srsHours: srsHours,
         contactHours: contactHours,
         consultationHours: consultationHours,
+        showImplementationFormatError: !!getWorkProgramField(state, WorkProgramGeneralFields.IMPLEMENTATION_FORMAT) || ImplementationFormatsEnum.OFFLINE,
         semesterCount: getWorkProgramField(state, WorkProgramGeneralFields.SEMESTER_COUNT) || 1,
         implementationFormat: getWorkProgramField(state, WorkProgramGeneralFields.IMPLEMENTATION_FORMAT),
     };
