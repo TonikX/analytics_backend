@@ -1,3 +1,4 @@
+from gia_practice_app.Practice.models import Practice
 from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_updater import \
     discipline_block_module_object_relations_updater
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
@@ -119,29 +120,47 @@ class AcademicPlanUpdateAspect:
     @staticmethod
     def discipline_block_module_changes_aspect(func):
         def wrapper(*args, **kwargs):
+            """
+            Тут реализовать логику поиска модулей и проверку на состав модуля
+            может понадобится isu_academic_plan_block_module_json, который есть в этом декораторе
+            добавим в модуль поле "дата последнего обновления"
+            через DisciplineBlockModuleInIsu находим все таблицы, которые теоретически должны быть такие же, как эта
+            далее сравниваем состав этих таблиц с модулями из жсона и смотрим на дату, если таблицы менялись менее чем пару дней назад и состав розный -
+            делаем новую, если более, изменяем состав (тут нужно подумать, как лучше)
+            """
             isu_academic_plan_block_module_json, isu_academic_plan_json, father_module = args
-            # discipline_block_object,
-            # print(isu_academic_plan_block_module_json)
-            if DisciplineBlockModule.objects.filter(
-                    name=isu_academic_plan_block_module_json['name'],
-                    isu_module__isu_id=isu_academic_plan_block_module_json['id'],
-                    # descipline_block=discipline_block_object
-            ).exists():
-                old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
-                    name=isu_academic_plan_block_module_json['name'],
-                    isu_module__isu_id=isu_academic_plan_block_module_json['id'],
-                    # descipline_block=discipline_block_object
-                )[0]
+
+            new_id = isu_academic_plan_block_module_json.get("new_id")
+            if str(isu_academic_plan_block_module_json["id"]) == new_id:
+                new_id = None
+            if new_id:
+                if DisciplineBlockModule.objects.filter(
+                        name=isu_academic_plan_block_module_json['name'],
+                        isu_module__new_id=isu_academic_plan_block_module_json['new_id'],
+
+                ).exists():
+                    old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
+                        name=isu_academic_plan_block_module_json['name'],
+                        isu_module__new_id=isu_academic_plan_block_module_json['new_id'],
+                    )[0]
+                else:
+                    old_discipline_block_module_object = None
+
             else:
-                old_discipline_block_module_object = None
-            # print('old_discipline_block_module_object',  old_discipline_block_module_object)
+                if DisciplineBlockModule.objects.filter(
+                        name=isu_academic_plan_block_module_json['name'],
+                        isu_module__isu_id=isu_academic_plan_block_module_json['id'],
+                ).exists():
+                    old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
+                        name=isu_academic_plan_block_module_json['name'],
+                        isu_module__isu_id=isu_academic_plan_block_module_json['id'],
+                        isu_module__new_id=None
+                    )[0]
+                else:
+                    old_discipline_block_module_object = None
             updated_discipline_block_module_object = func(
                 copy.deepcopy(old_discipline_block_module_object), *args, **kwargs
             )
-            print(updated_discipline_block_module_object)
-
-            print('try to start')
-            # discipline_block_module_object_relations_updater(updated_discipline_block_module_object)
 
             # AcademicPlanUpdateLogger.log_changes(
             #     isu_academic_plan_json["id"],
@@ -149,7 +168,6 @@ class AcademicPlanUpdateAspect:
             #     old_discipline_block_module_object,
             #     updated_discipline_block_module_object
             # )
-
             return updated_discipline_block_module_object
 
         return wrapper
@@ -246,5 +264,40 @@ class AcademicPlanUpdateAspect:
             )
 
             return updated_work_program_id_str_up_for_isu_object
+
+        return wrapper
+
+
+    @staticmethod
+    def practice_changes_aspect(func):
+        def wrapper(*args, **kwargs):
+            isu_academic_plan_practice_json = args[1]
+            isu_academic_plan_json = args[0]
+
+            # todo get() returned more than one Practice -- it returned 11!
+            if Practice.objects.filter(
+                    prac_isu_id=str(isu_academic_plan_practice_json['id']),
+                    discipline_code=str(isu_academic_plan_practice_json['id'])
+
+            ).exists():
+                old_practice_object = Practice.objects.filter(
+                    prac_isu_id=str(isu_academic_plan_practice_json['id']),
+                    discipline_code=str(isu_academic_plan_practice_json['id'])
+                )[0]
+            else:
+                old_practice_object = None
+
+            updated_practice_object = func(
+                old_practice_object, *args, **kwargs
+            )
+
+            # AcademicPlanUpdateLogger.log_changes(
+            #     isu_academic_plan_json["id"],
+            #     AcademicPlanUpdateLogger.LoggedObjectType.practice,
+            #     old_practice_object,
+            #     updated_practice_object
+            # )
+
+            return updated_practice_object
 
         return wrapper
