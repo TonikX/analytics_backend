@@ -952,9 +952,14 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
 class WorkProgramInFieldOfStudy(CloneMixin, models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.CASCADE,
-                                                                       related_name="zuns_for_cb")
+                                                                       related_name="zuns_for_cb", blank=True, null=True)
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
+
+    backup_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE,
+                                      related_name="module_backup", blank=True, null=True)
+    backup_ap = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, related_name="ap_backup", blank=True,
+                                  null=True)
 
 
 class GiaInFieldOfStudy(models.Model):
@@ -973,6 +978,10 @@ class PracticeInFieldOfStudy(models.Model):
     practice = models.ForeignKey('gia_practice_app.Practice', on_delete=models.CASCADE, related_name="zuns_for_pr",
                                  blank=True, null=True)
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
+    backup_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE,
+                                      related_name="module_backup_practice", blank=True, null=True)
+    backup_ap = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, related_name="ap_backup_practice", blank=True,
+                                  null=True)
 
 
 class WorkProgramIdStrUpForIsu(CloneMixin, models.Model):

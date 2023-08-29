@@ -14,7 +14,7 @@ from workprogramsapp.isu_merge.academic_plan_update_2023.process_modules_with_ha
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
     WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration, \
-    СertificationEvaluationTool, DisciplineBlockModuleInIsu
+    СertificationEvaluationTool, DisciplineBlockModuleInIsu, PracticeInFieldOfStudy
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -453,13 +453,131 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     @AcademicPlanUpdateAspect.linked_data_changes_aspect
+    def __process_practice_linked_data__(discipline_block_module_object,
+                                         practice_object,
+                                         isu_academic_plan_discipline_json,
+                                         isu_academic_plan_json):
+
+        # ToDo: Сделать обработку случая option == 'Optionally' (Приоритет --+)
+        replaceable = isu_academic_plan_discipline_json["replaceable"]
+        option = 'Required' if not replaceable else 'Optionally'
+
+        old_work_program_change_in_discipline_block_module = None
+        old_practice_in_field_of_study = None
+
+        if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                discipline_block_module=discipline_block_module_object,
+                change_type=option,
+                # subject_code=AcademicPlanUpdateUtils.num_to_int(
+                #     isu_academic_plan_discipline_json['plan_order'],
+                #     isu_academic_plan_discipline_json['discipline_name']
+                # )
+        ).exists()):
+            old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
+                discipline_block_module=discipline_block_module_object,
+                change_type=option,
+                # subject_code=AcademicPlanUpdateUtils.num_to_int(
+                #     isu_academic_plan_discipline_json['plan_order'],
+                #     isu_academic_plan_discipline_json['discipline_name']
+                # )
+            )
+            list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
+            old_work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
+            old_work_program_change_in_discipline_block_module.save()
+
+            work_program_change_in_discipline_block_module = copy.deepcopy(
+                old_work_program_change_in_discipline_block_module)
+            work_program_change_in_discipline_block_module.save()
+
+            if PracticeInFieldOfStudy.objects.filter(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    practice=practice_object
+            ).exists():
+                old_practice_in_field_of_study = PracticeInFieldOfStudy.objects.get(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    practice=practice_object
+                )
+                practice_in_field_of_study = copy.deepcopy(old_practice_in_field_of_study)
+                practice_in_field_of_study.save()
+            else:
+                practice_in_field_of_study = PracticeInFieldOfStudy(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    practice=practice_object
+                )
+                practice_in_field_of_study.save()
+        elif WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                discipline_block_module=discipline_block_module_object,
+                change_type=option,
+                practice=practice_object
+        ).exists():
+            old_work_program_change_in_discipline_block_module = \
+                WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                    discipline_block_module=discipline_block_module_object,
+                    change_type=option,
+                    practice=practice_object
+                )[0]
+            list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
+            old_work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
+            old_work_program_change_in_discipline_block_module.save()
+            work_program_change_in_discipline_block_module = copy \
+                .deepcopy(old_work_program_change_in_discipline_block_module)
+            if PracticeInFieldOfStudy.objects.filter(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    practice=practice_object
+            ).exists():
+                old_practice_in_field_of_study = PracticeInFieldOfStudy.objects.get(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    practice=practice_object
+                )
+                practice_in_field_of_study = copy.deepcopy(old_practice_in_field_of_study)
+                practice_in_field_of_study.save()
+            else:
+                practice_in_field_of_study = PracticeInFieldOfStudy(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    practice=practice_object
+                )
+                practice_in_field_of_study.save()
+        else:
+            work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule()
+            work_program_change_in_discipline_block_module.change_type = option
+            work_program_change_in_discipline_block_module.discipline_block_module = discipline_block_module_object
+            list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
+            work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
+            work_program_change_in_discipline_block_module.save()
+            work_program_change_in_discipline_block_module.practice.add(practice_object)
+            work_program_change_in_discipline_block_module.save()
+            print(work_program_change_in_discipline_block_module)
+            if PracticeInFieldOfStudy.objects.filter(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    practice=practice_object
+            ).exists():
+                old_practice_in_field_of_study = PracticeInFieldOfStudy.objects.get(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    practice=practice_object
+                )
+                practice_in_field_of_study = copy.deepcopy(old_practice_in_field_of_study)
+                practice_in_field_of_study.save()
+            else:
+                practice_in_field_of_study = PracticeInFieldOfStudy(
+                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                    practice=practice_object
+                )
+                practice_in_field_of_study.save()
+        return old_work_program_change_in_discipline_block_module, \
+               old_practice_in_field_of_study, \
+               work_program_change_in_discipline_block_module, \
+               practice_in_field_of_study
+
+    @staticmethod
+    @AcademicPlanUpdateAspect.linked_data_changes_aspect
     def __process_linked_data__(discipline_block_module_object,
                                 work_program_object,
                                 isu_academic_plan_discipline_json,
                                 isu_academic_plan_json):
 
         # ToDo: Сделать обработку случая option == 'Optionally' (Приоритет --+)
-        option = 'Required'
+        replaceable = isu_academic_plan_discipline_json["replaceable"]
+        option = 'Required' if not replaceable else 'Optionally'
 
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
@@ -626,12 +744,32 @@ class AcademicPlanUpdateProcessor:
         return work_program_id_str_up_for_isu_object
 
     @staticmethod
-    def __del_work_program_in_field_of_study__(discipline_block_module, new_disciplines_ids):
+    def __del_work_program_in_field_of_study__(discipline_block_module, new_disciplines_ids, isu_academic_plan_json):
         # ToDo: Сделать обработку удалятора модуля из блока, как в __del_old_wpcbms_by_module__ (так, чтобы модуль не удалялся вообще) (приоритет +++)
         wcbms = WorkProgramInFieldOfStudy. \
             objects.filter(
             work_program_change_in_discipline_block_module__discipline_block_module=discipline_block_module) \
-            .exclude(work_program__id__in=new_disciplines_ids).delete()
+            .exclude(work_program__id__in=new_disciplines_ids)
+        for wcbm in wcbms:
+            wcbm.backup_module=DisciplineBlockModule.objects.get(change_blocks_of_work_programs_in_modules__zuns_for_cb=wcbm)
+            wcbm.backup_ap = AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
+            wcbm.work_program_change_in_discipline_block_module = None
+            wcbm.save()
+
+    @staticmethod
+    def __del_practice_in_field_of_study__(discipline_block_module, new_disciplines_ids, isu_academic_plan_json):
+        pfos = PracticeInFieldOfStudy. \
+            objects.filter(
+            work_program_change_in_discipline_block_module__discipline_block_module=discipline_block_module) \
+            .exclude(practice__id__in=new_disciplines_ids)
+        for pfo in pfos:
+            pfo.backup_module = DisciplineBlockModule.objects.get(
+                change_blocks_of_work_programs_in_modules__zuns_for_cb=pfo)
+            pfo.backup_ap = AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
+            pfo.work_program_change_in_discipline_block_module = None
+            pfo.save()
+
+
 
     @staticmethod
     def __del_old_wpcbms_by_module__(discipline_block_module_object,
@@ -667,6 +805,7 @@ class AcademicPlanUpdateProcessor:
         work_program_change_in_discipline_block_modules_not_for_del = []
         modules_not_for_del = []
         discipline_not_for_del = []
+        practices_not_for_del = []
         if module['type'] == "module":
             """
             ToDo: предполагается доработать функционал поиска модуля на нашей стороне и создания нового в случае необходимости в 
@@ -716,20 +855,33 @@ class AcademicPlanUpdateProcessor:
                     modules_not_for_del.append(
                         children_module.id)
                 if children_module_dict['type'] == "discipline":
-                    discipline_not_for_del.append(
-                        children_module.id)
+                    if "practice" in children_module_dict["rpdUrl"]:
+                        practices_not_for_del.append(
+                            children_module.id)
+                    else:
+                        discipline_not_for_del.append(
+                            children_module.id)
+
                 if children_module == None:
                     continue
+
             AcademicPlanUpdateProcessor.__del_block_modules__by__father__module__(modules_not_for_del,
                                                                                   discipline_block_module_object,
                                                                                   module,
                                                                                   isu_academic_plan_json,
                                                                                   father_module
                                                                                   )
+
+
+            AcademicPlanUpdateProcessor.__del_practice_in_field_of_study__(discipline_block_module_object,
+                                                                           practices_not_for_del,
+                                                                           isu_academic_plan_json)
             AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
-                                                                               discipline_not_for_del)
-            AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(discipline_block_module_object,
-                                                                     discipline_not_for_del)
+                                                                               discipline_not_for_del,
+                                                                               isu_academic_plan_json)
+            if discipline_not_for_del:
+                AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(discipline_block_module_object,
+                                                                         discipline_not_for_del)
 
             return discipline_block_module_object
 
@@ -744,13 +896,25 @@ class AcademicPlanUpdateProcessor:
                 isu_module__isu_id=father_module['id'],
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )[0]
-            if isu_academic_plan_discipline_json["blockName"] == "Блок 2. Практика":
+            if "practice" in isu_academic_plan_discipline_json["rpdUrl"]:
                 practice_object = AcademicPlanUpdateProcessor.__process_practice__(
                     isu_academic_plan_json,
                     isu_academic_plan_discipline_json,
                     father_module_object
                 )
                 print("PRACTICE", practice_object)
+                practice_in_field_of_study_object, \
+                work_program_change_in_discipline_block_module_object = \
+                    AcademicPlanUpdateProcessor.__process_practice_linked_data__(
+                        father_module_object,
+                        practice_object,
+                        isu_academic_plan_discipline_json,
+                        isu_academic_plan_json
+                    )
+                work_program_change_in_discipline_block_modules_not_for_del.append(
+                    work_program_change_in_discipline_block_module_object.id)
+                return practice_object
+
             work_program_object = AcademicPlanUpdateProcessor.__process_discipline__(
                 isu_academic_plan_json,
                 isu_academic_plan_discipline_json,
