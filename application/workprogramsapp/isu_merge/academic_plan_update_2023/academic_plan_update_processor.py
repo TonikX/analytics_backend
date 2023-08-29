@@ -854,12 +854,13 @@ class AcademicPlanUpdateProcessor:
                 if children_module_dict['type'] == "module":
                     modules_not_for_del.append(
                         children_module.id)
-                if children_module_dict["blockName"] == "Блок 2. Практика":
-                    practices_not_for_del.append(
-                        children_module.id)
-                elif children_module_dict['type'] == "discipline":
-                    discipline_not_for_del.append(
-                        children_module.id)
+                if children_module_dict['type'] == "discipline":
+                    if "practice" in children_module_dict["rpdUrl"]:
+                        practices_not_for_del.append(
+                            children_module.id)
+                    else:
+                        discipline_not_for_del.append(
+                            children_module.id)
 
                 if children_module == None:
                     continue
@@ -871,14 +872,14 @@ class AcademicPlanUpdateProcessor:
                                                                                   father_module
                                                                                   )
 
-            if practices_not_for_del:
-                AcademicPlanUpdateProcessor.__del_practice_in_field_of_study__(discipline_block_module_object,
-                                                                               practices_not_for_del,
+
+            AcademicPlanUpdateProcessor.__del_practice_in_field_of_study__(discipline_block_module_object,
+                                                                           practices_not_for_del,
+                                                                           isu_academic_plan_json)
+            AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
+                                                                               discipline_not_for_del,
                                                                                isu_academic_plan_json)
             if discipline_not_for_del:
-                AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
-                                                                                   discipline_not_for_del,
-                                                                                   isu_academic_plan_json)
                 AcademicPlanUpdateProcessor.__del_old_wpcbms_by_module__(discipline_block_module_object,
                                                                          discipline_not_for_del)
 
@@ -895,7 +896,7 @@ class AcademicPlanUpdateProcessor:
                 isu_module__isu_id=father_module['id'],
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )[0]
-            if isu_academic_plan_discipline_json["blockName"] == "Блок 2. Практика":
+            if "practice" in isu_academic_plan_discipline_json["rpdUrl"]:
                 practice_object = AcademicPlanUpdateProcessor.__process_practice__(
                     isu_academic_plan_json,
                     isu_academic_plan_discipline_json,
