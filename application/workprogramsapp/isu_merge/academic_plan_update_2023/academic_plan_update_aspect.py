@@ -150,6 +150,7 @@ class AcademicPlanUpdateAspect:
                 if DisciplineBlockModule.objects.filter(
                         name=isu_academic_plan_block_module_json['name'],
                         isu_module__isu_id=isu_academic_plan_block_module_json['id'],
+                        isu_module__new_id=None
                 ).exists():
                     old_discipline_block_module_object = DisciplineBlockModule.objects.filter(
                         name=isu_academic_plan_block_module_json['name'],
