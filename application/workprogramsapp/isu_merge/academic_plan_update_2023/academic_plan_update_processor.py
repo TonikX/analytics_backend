@@ -459,7 +459,8 @@ class AcademicPlanUpdateProcessor:
                                          isu_academic_plan_json):
 
         # ToDo: Сделать обработку случая option == 'Optionally' (Приоритет --+)
-        option = 'Required'
+        replaceable = isu_academic_plan_discipline_json["replaceable"]
+        option = 'Required' if not replaceable else 'Optionally'
 
         old_work_program_change_in_discipline_block_module = None
         old_practice_in_field_of_study = None
@@ -575,7 +576,8 @@ class AcademicPlanUpdateProcessor:
                                 isu_academic_plan_json):
 
         # ToDo: Сделать обработку случая option == 'Optionally' (Приоритет --+)
-        option = 'Required'
+        replaceable = isu_academic_plan_discipline_json["replaceable"]
+        option = 'Required' if not replaceable else 'Optionally'
 
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
