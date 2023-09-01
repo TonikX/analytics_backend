@@ -345,7 +345,7 @@ class AcademicPlanUpdateProcessor:
     def __del_block_modules__(block_modules_to_del_ids, isu_academic_plan_json, discipline_block_object):
 
         bm = DisciplineBlockModule.objects.filter(
-            descipline_block=discipline_block_object, \
+            descipline_block=discipline_block_object,
             descipline_block__academic_plan__ap_isu_id=isu_academic_plan_json['id']) \
             .exclude(id__in=block_modules_to_del_ids).delete()
 
@@ -354,7 +354,6 @@ class AcademicPlanUpdateProcessor:
                                                   isu_academic_plan_block_module_json,
                                                   isu_academic_plan_json,
                                                   father_module_json):
-
         bms = DisciplineBlockModule.objects.filter(father_module=discipline_block_module_object) \
             .exclude(id__in=block_modules_not_for_del_ids)
         for bm in bms:
@@ -396,7 +395,6 @@ class AcademicPlanUpdateProcessor:
                                  isu_academic_plan_json,
                                  father_module
                                  ):
-
         father_module_id = father_module.get("id") if father_module else None
         new_id = isu_academic_plan_block_module_json.get("new_id")
         if str(isu_academic_plan_block_module_json["id"]) == new_id:
@@ -465,14 +463,14 @@ class AcademicPlanUpdateProcessor:
         old_work_program_change_in_discipline_block_module = None
         old_practice_in_field_of_study = None
 
-        if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
+        """if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
                 # subject_code=AcademicPlanUpdateUtils.num_to_int(
                 #     isu_academic_plan_discipline_json['plan_order'],
                 #     isu_academic_plan_discipline_json['discipline_name']
                 # )
-        ).exists()):
+         ).exists()):
             old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
@@ -504,8 +502,8 @@ class AcademicPlanUpdateProcessor:
                     work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
                     practice=practice_object
                 )
-                practice_in_field_of_study.save()
-        elif WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                practice_in_field_of_study.save()"""
+        if WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
                 practice=practice_object
@@ -581,8 +579,9 @@ class AcademicPlanUpdateProcessor:
 
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
-
-        if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
+        if isu_academic_plan_discipline_json["name"] == "Математические основы машинного обучения":
+            print("kal")
+        """if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
                 # subject_code=AcademicPlanUpdateUtils.num_to_int(
@@ -621,8 +620,8 @@ class AcademicPlanUpdateProcessor:
                     work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
                     work_program=work_program_object
                 )
-                work_program_in_field_of_study.save()
-        elif WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                work_program_in_field_of_study.save()"""
+        if WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
                 work_program=work_program_object
@@ -764,7 +763,7 @@ class AcademicPlanUpdateProcessor:
             .exclude(practice__id__in=new_disciplines_ids)
         for pfo in pfos:
             pfo.backup_module = DisciplineBlockModule.objects.get(
-                change_blocks_of_work_programs_in_modules__zuns_for_cb=pfo)
+                change_blocks_of_work_programs_in_modules__zuns_for_cb_for_practice=pfo)
             pfo.backup_ap = AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]
             pfo.work_program_change_in_discipline_block_module = None
             pfo.save()
@@ -827,9 +826,11 @@ class AcademicPlanUpdateProcessor:
                 discipline_block_object = None
             elif father_module is not None:
                 new_id = father_module.get("new_id")
+
                 if str(father_module.get("id")) == new_id:
                     new_id = None
                 if new_id:
+                    father_module_object = DisciplineBlockModule.objects.get(isu_module__new_id=new_id)
                     discipline_block_module_object.father_module.add(DisciplineBlockModule.objects.filter(
                         name=father_module['name'],
                         isu_module__new_id=new_id,
@@ -839,8 +840,10 @@ class AcademicPlanUpdateProcessor:
                     discipline_block_module_object.father_module.add(DisciplineBlockModule.objects.filter(
                         name=father_module['name'],
                         isu_module__isu_id=father_module['id'],
+                        isu_module__new_id=None
                         # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
                     )[0])
+
                 discipline_block_module_object.save()
             father_module = module
             for children_module_dict in module['children']:
@@ -852,8 +855,7 @@ class AcademicPlanUpdateProcessor:
                                                                                        isu_academic_plan_json, None,
                                                                                        father_module)
                 if children_module_dict['type'] == "module":
-                    modules_not_for_del.append(
-                        children_module.id)
+                    modules_not_for_del.append(children_module.id)
                 if children_module_dict['type'] == "discipline":
                     if "practice" in children_module_dict["rpdUrl"]:
                         practices_not_for_del.append(
@@ -872,10 +874,11 @@ class AcademicPlanUpdateProcessor:
                                                                                   father_module
                                                                                   )
 
+            if module["blockName"] == "Блок 2. Практика":
+                AcademicPlanUpdateProcessor.__del_practice_in_field_of_study__(discipline_block_module_object,
+                                                                               practices_not_for_del,
+                                                                               isu_academic_plan_json)
 
-            AcademicPlanUpdateProcessor.__del_practice_in_field_of_study__(discipline_block_module_object,
-                                                                           practices_not_for_del,
-                                                                           isu_academic_plan_json)
             AcademicPlanUpdateProcessor.__del_work_program_in_field_of_study__(discipline_block_module_object,
                                                                                discipline_not_for_del,
                                                                                isu_academic_plan_json)

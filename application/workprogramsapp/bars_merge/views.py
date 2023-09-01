@@ -508,11 +508,11 @@ def GetWPForBARS(request, isu_wp_id):
         term_dict = {"relative_term": sem + 1, "regular_checkpoints": [], "final_checkpoint": None,
                      "course_project_checkpoint": None, "point_distribution": None}
         evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__work_program__id=wp.id,
-                                                         semester=sem + 1)
+                                                         semester=sem + 1).distinct()
 
         certificate = СertificationEvaluationTool.objects.filter(work_program__id=wp.id,
                                                                  semester=sem + 1)
-        print(certificate)
+        print(evaluation_tools)
         for cerf in certificate:
             # Отдельно обрабатываем случай наличия курсовика
             if int(cerf.type) == 4 or int(cerf.type) == 5:
