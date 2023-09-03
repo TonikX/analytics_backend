@@ -511,7 +511,7 @@ class AcademicPlanUpdateProcessor:
             old_work_program_change_in_discipline_block_module = \
                 WorkProgramChangeInDisciplineBlockModule.objects.filter(
                     discipline_block_module=discipline_block_module_object,
-                    change_type=option,
+                    #=option,
                     practice=practice_object
                 )[0]
             list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
@@ -579,8 +579,6 @@ class AcademicPlanUpdateProcessor:
 
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
-        if isu_academic_plan_discipline_json["name"] == "Математические основы машинного обучения":
-            print("kal")
         """if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 change_type=option,
@@ -623,7 +621,7 @@ class AcademicPlanUpdateProcessor:
                 work_program_in_field_of_study.save()"""
         if WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
-                change_type=option,
+                #change_type=option,
                 work_program=work_program_object
         ).exists():
             old_work_program_change_in_discipline_block_module = \
