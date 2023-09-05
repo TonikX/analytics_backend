@@ -7,12 +7,12 @@ import {WorkProgramActions} from "../../types";
 
 import {rootState} from "../../../../store/reducers";
 import {getWorkProgramField, isCanEdit} from "../../getters";
-import {WorkProgramGeneralFields} from "../../enum";
+import {ImplementationFormatsEnum, WorkProgramGeneralFields} from "../../enum";
 
 const mapStateToProps = (state:rootState) => {
     return {
         isCanEdit: isCanEdit(state),
-        implementationFormat: getWorkProgramField(state, WorkProgramGeneralFields.IMPLEMENTATION_FORMAT),
+        implementationFormat: getWorkProgramField(state, WorkProgramGeneralFields.IMPLEMENTATION_FORMAT) || ImplementationFormatsEnum.OFFLINE,
     };
 };
 

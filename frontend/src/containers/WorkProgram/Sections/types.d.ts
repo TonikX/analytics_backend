@@ -5,6 +5,7 @@ import styles from "./Sections.styles";
 import {ImplementationFormatsEnum} from "../enum";
 
 export interface SectionsProps extends WithStyles<typeof styles> {
+    showImplementationFormatError: boolean;
     actions: WorkProgramActions;
     sections: Array<SectionType>;
     isCanEdit: boolean;
