@@ -627,7 +627,7 @@ class AcademicPlanUpdateProcessor:
             old_work_program_change_in_discipline_block_module = \
                 WorkProgramChangeInDisciplineBlockModule.objects.filter(
                     discipline_block_module=discipline_block_module_object,
-                    change_type=option,
+                    #change_type=option,
                     work_program=work_program_object
                 )[0]
             list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
