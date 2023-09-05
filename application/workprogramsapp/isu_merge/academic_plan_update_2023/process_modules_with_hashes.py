@@ -1,4 +1,5 @@
 from django.db.models import Count
+from sentry_sdk import capture_exception
 
 from analytics_project import settings
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuUser
@@ -20,7 +21,11 @@ def get_ap_jsons():
     plans = []
     for plan_id in academic_plans_ids:
         plan_id = str(plan_id)
-        old_academic_plan = ImplementationAcademicPlan.objects.get(ap_isu_id=plan_id)
+        try:
+            old_academic_plan = ImplementationAcademicPlan.objects.get(ap_isu_id=plan_id)
+        except ImplementationAcademicPlan.DoesNotExist as ex:
+            capture_exception(ex)
+            continue
         isu_academic_plan_json = isu_service.get_academic_plan_only_modules(plan_id)
         old_academic_plan.isu_modified_plan = isu_academic_plan_json
         old_academic_plan.save()
