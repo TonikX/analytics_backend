@@ -95,11 +95,11 @@ class AcademicPlanUpdateAspect:
             isu_academic_plan_block_json, academic_plan_object, isu_academic_plan_json = args
 
             if DisciplineBlock.objects.filter(
-                    name=isu_academic_plan_block_json['name'],
+                    name=isu_academic_plan_block_json['name'].strip(),
                     academic_plan=academic_plan_object
             ).exists():
                 old_discipline_block_object = DisciplineBlock.objects.get(
-                    name=isu_academic_plan_block_json['name'],
+                    name=isu_academic_plan_block_json['name'].strip(),
                     academic_plan=academic_plan_object
                 )
             else:
@@ -107,12 +107,12 @@ class AcademicPlanUpdateAspect:
 
             updated_discipline_block_object = func(copy.deepcopy(old_discipline_block_object), *args, **kwargs)
 
-            AcademicPlanUpdateLogger.log_changes(
-                isu_academic_plan_json["id"],
-                AcademicPlanUpdateLogger.LoggedObjectType.DISCIPLINE_BLOCK,
-                old_discipline_block_object,
-                updated_discipline_block_object
-            )
+            # AcademicPlanUpdateLogger.log_changes(
+            #     isu_academic_plan_json["id"],
+            #     AcademicPlanUpdateLogger.LoggedObjectType.DISCIPLINE_BLOCK,
+            #     old_discipline_block_object,
+            #     updated_discipline_block_object
+            # )
 
             return updated_discipline_block_object
 
