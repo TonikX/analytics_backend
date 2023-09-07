@@ -1,4 +1,5 @@
 from django.db.models import Count
+from sentry_sdk import capture_exception
 
 from analytics_project import settings
 from workprogramsapp.isu_merge.academic_plan_update.isu_service import IsuUser
@@ -20,7 +21,11 @@ def get_ap_jsons():
     plans = []
     for plan_id in academic_plans_ids:
         plan_id = str(plan_id)
-        old_academic_plan = ImplementationAcademicPlan.objects.get(ap_isu_id=plan_id)
+        try:
+            old_academic_plan = ImplementationAcademicPlan.objects.get(ap_isu_id=plan_id)
+        except ImplementationAcademicPlan.DoesNotExist as ex:
+            capture_exception(ex)
+            continue
         isu_academic_plan_json = isu_service.get_academic_plan_only_modules(plan_id)
         old_academic_plan.isu_modified_plan = isu_academic_plan_json
         old_academic_plan.save()
@@ -57,7 +62,7 @@ def process_json_recursion(modules_json, ap):
 
 # IsuModulesHashes.objects.values('isu_id').annotate(Count('id')).order_by().filter(id__count__gt=1)
 
-def process_editing_json(modules_json, hash_obj,):
+def process_editing_json(modules_json, hash_obj, ):
     for object_module in modules_json:
         if object_module["type"] == "module":
             if object_module["id"] == hash_obj.isu_id:
@@ -70,9 +75,18 @@ def get_id_with_diff_hashes():
         module_hash__count__gt=1)
     unique_hashes = {}
     for hash_obj_aggregate in ids:
-        save_hash = IsuModulesHashes.objects.filter(isu_id=hash_obj_aggregate["isu_id"]).values("module_hash").annotate(
-            Count("id")).latest('id__count')["module_hash"]
-        unique_hashes[save_hash] = str(hash_obj_aggregate["isu_id"])
+        max_dict = {"hash": None,
+                    "count": 0, }
+        for hash_to_find in IsuModulesHashes.objects.filter(isu_id=hash_obj_aggregate["isu_id"]).values(
+                "module_hash").annotate(Count("id")):
+            module_hash = hash_to_find["module_hash"]
+            count_hashes = IsuModulesHashes.objects.filter(module_hash=module_hash).count()
+            if count_hashes >= max_dict["count"]:
+                max_dict["hash"] = module_hash
+                max_dict["count"] = count_hashes
+
+        unique_hashes[max_dict["hash"]] = str(hash_obj_aggregate["isu_id"])
+
         for hash_obj in IsuModulesHashes.objects.filter(isu_id=hash_obj_aggregate["isu_id"]):
             if unique_hashes.get(hash_obj.module_hash) is None:
                 new_id = str(hash_obj.ap_isu_id) + "_" + str(hash_obj.isu_id)
