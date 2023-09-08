@@ -46,7 +46,7 @@ import {FULL_DATE_FORMAT_WITH_TIME} from "../../common/utils";
 
 class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
     state = {
-        currentTab: "2"
+        currentTab: "1"
     }
 
     componentDidMount() {
@@ -218,7 +218,7 @@ class AcademicPlanUpdate extends React.Component<AcademicPlanUpdateProps> {
                           indicatorColor="primary"
                           onChange={this.showUpdatedPlans}
                     >
-                        <Tab value="2" label="Обновляемые планы" />
+                        <Tab value="1" label="Обновляемые планы" />
                         {/*<Tab value="1" label="Журнал обновлений" />*/}
                     </Tabs>
 
