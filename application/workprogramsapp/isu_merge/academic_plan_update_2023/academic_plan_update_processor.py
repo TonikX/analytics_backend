@@ -511,7 +511,7 @@ class AcademicPlanUpdateProcessor:
                                      discipline_block_object,
                                      isu_academic_plan_json, ):
 
-        bms = DisciplineBlockModule.objects.filter(father_module=None, descipline_block__academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]) \
+        bms = DisciplineBlockModule.objects.filter(descipline_block__academic_plan=AcademicPlan.objects.filter(ap_isu_id=isu_academic_plan_json['id'])[0]) \
             .exclude(id__in=block_modules_not_for_del_ids)
         for bm in bms:
             DisciplineBlockModuleInIsu.objects.filter(
