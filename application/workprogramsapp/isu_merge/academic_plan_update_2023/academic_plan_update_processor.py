@@ -1123,7 +1123,6 @@ class AcademicPlanUpdateProcessor:
                 if str(father_module.get("id")) == new_id:
                     new_id = None
                 if new_id:
-                    father_module_object = DisciplineBlockModule.objects.get(isu_module__new_id=new_id)
                     discipline_block_module_object.father_module.add(DisciplineBlockModule.objects.filter(
                         name=father_module['name'],
                         isu_module__new_id=new_id,
@@ -1173,7 +1172,7 @@ class AcademicPlanUpdateProcessor:
                                                                                   father_module
                                                                                   )
 
-            if module["blockName"] == "Блок 2. Практика":
+            if module["blockName"] == "Блок 2. Практика" and practices_not_for_del:
                 AcademicPlanUpdateProcessor.__del_practice_in_field_of_study__(discipline_block_module_object,
                                                                                practices_not_for_del,
                                                                                isu_academic_plan_json)
@@ -1278,7 +1277,7 @@ class AcademicPlanUpdateProcessor:
         academic_plans_ids = AcademicPlanUpdateConfiguration.objects.filter(updates_enabled=True,
                                                                             over_23=True).values_list(
             'academic_plan_id', flat=True)
-        father_module_not_for_del = []
+
 
         # Магия для того чтобы починить поломанные модули в ИСУ
         get_ap_jsons()
@@ -1292,6 +1291,7 @@ class AcademicPlanUpdateProcessor:
                 isu_academic_plan_json = imp.isu_modified_plan
                 # isu_academic_plan_json = json.loads(json.dumps(test_plan['result']))
                 if isu_academic_plan_json is not None:
+                    father_module_not_for_del = []
                     # self.__update_disciplines__(old_academic_plan, isu_academic_plan_json)
 
                     # field_of_study = self.__process_field_of_study__(isu_academic_plan_json)
