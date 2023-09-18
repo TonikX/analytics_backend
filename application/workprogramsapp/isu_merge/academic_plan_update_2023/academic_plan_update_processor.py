@@ -1177,7 +1177,7 @@ class AcademicPlanUpdateProcessor:
                                                                                practices_not_for_del,
                                                                                isu_academic_plan_json)
             if module["blockName"] == "Блок 3. ГИА":
-                AcademicPlanUpdateProcessor.__del_practice_in_field_of_study__(discipline_block_module_object,
+                AcademicPlanUpdateProcessor.__del_gia_in_field_of_study__(discipline_block_module_object,
                                                                                gia_not_for_del,
                                                                                isu_academic_plan_json)
 
@@ -1199,9 +1199,14 @@ class AcademicPlanUpdateProcessor:
             isu_academic_plan_discipline_json = module
             # for isu_academic_plan_discipline_json in module['contents']:
             print("---------------", father_module['name'], father_module['id'])
+            new_id = father_module.get("new_id")
+
+            if str(father_module.get("id")) == new_id:
+                new_id = None
             father_module_object = DisciplineBlockModule.objects.filter(
                 name=father_module['name'],
                 isu_module__isu_id=father_module['id'],
+                isu_module__new_id=new_id
                 # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             )[0]
             if "practice" in isu_academic_plan_discipline_json["rpdUrl"]:
