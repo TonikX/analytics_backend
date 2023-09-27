@@ -1,13 +1,16 @@
+import datetime
+
 from django_filters import BooleanFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
-from workprogramsapp.expertise.models import UserExpertise, ExpertiseComments, Expertise
-from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer
+from workprogramsapp.expertise.models import UserExpertise, ExpertiseComments, Expertise, ExpertiseChangeLog
+from workprogramsapp.expertise.serializers import UserExpertiseSerializer, CommentSerializer, ExpertiseSerializer, \
+    ExpertiseChangeLogSerializer
 from workprogramsapp.models import WorkProgram
 from workprogramsapp.notifications.models import ExpertiseNotification
 from workprogramsapp.permissions import IsMemberOfExpertise, IsRpdDeveloperOrReadOnly, IsMemberOfUserExpertise, \
@@ -143,11 +146,13 @@ class ChangeExpertiseView(generics.UpdateAPIView):
     serializer_class = ExpertiseSerializer
     permission_classes = [IsExpertiseMasterStrict]
 
-    #
-    # def perform_update(self, serializer):
-    #     if
-    #     serializer.save()
-
+    def perform_update(self, serializer):
+        instance = self.get_object()
+        exp_status = self.request.data.get('expertise_status')
+        if exp_status == "AC":
+            user = self.request.user
+            ExpertiseChangeLog.objects.create(expertise=instance, user=user, date_change=datetime.datetime.now())
+        serializer.save()
 
 class ChangeUserExpertiseView(generics.UpdateAPIView):
     """
@@ -233,3 +238,19 @@ def ChangeStatusesOfExpertiseWP(request):
 
     except:
         return Response(status=400)
+
+
+class ExpertiseChangeLogListView(generics.ListAPIView):
+    """
+    Ченджлог принятия экспертизы
+    """
+    queryset = ExpertiseChangeLog.objects.all()
+    serializer_class = ExpertiseChangeLogSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self, *args, **kwargs):
+        if 'pk' in dict(self.kwargs):
+            return ExpertiseChangeLog.objects.filter(expertise=self.kwargs['pk']).order_by("date_change")
+        if self.request.GET.get("wp_id"):
+            return ExpertiseChangeLog.objects.filter(
+                expertise__work_program__id=self.request.GET.get("wp_id")).order_by("date_change")

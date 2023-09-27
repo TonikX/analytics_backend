@@ -42,9 +42,12 @@ class Expertise(models.Model):
         ('OFERTA', 'Оферта'),
     ]
 
-    work_program = models.ForeignKey('WorkProgram', related_name='expertise_with_rpd', on_delete=models.CASCADE, blank=True, null=True)
-    gia = models.ForeignKey('gia_practice_app.GIA', related_name='expertise_with_gia', on_delete=models.CASCADE, blank=True, null=True)
-    practice = models.ForeignKey('gia_practice_app.Practice', related_name='expertise_with_practice', on_delete=models.CASCADE,
+    work_program = models.ForeignKey('WorkProgram', related_name='expertise_with_rpd', on_delete=models.CASCADE,
+                                     blank=True, null=True)
+    gia = models.ForeignKey('gia_practice_app.GIA', related_name='expertise_with_gia', on_delete=models.CASCADE,
+                            blank=True, null=True)
+    practice = models.ForeignKey('gia_practice_app.Practice', related_name='expertise_with_practice',
+                                 on_delete=models.CASCADE,
                                  blank=True, null=True)
 
     expertise_type = models.CharField(choices=TYPE_CHOICES, max_length=1024, verbose_name="Тип экспертизы", blank=True,
@@ -96,3 +99,11 @@ class ExpertsOnStructuralUnit(models.Model):
     expert = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experts_with_units', on_delete=models.CASCADE)
     structural_units = models.ManyToManyField('StructuralUnit', verbose_name='Эксперты',
                                               related_name='structural_units_with_experts')
+
+
+class ExpertiseChangeLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_expertise_log",
+                             blank=True, null=True, )
+    expertise = models.ForeignKey('Expertise', on_delete=models.CASCADE, related_name="expertise_status_log",
+                                  blank=True, null=True, )
+    date_change = models.DateTimeField(blank=True, null=True, verbose_name='дата изменения')
