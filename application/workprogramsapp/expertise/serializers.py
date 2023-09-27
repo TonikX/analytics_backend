@@ -5,7 +5,7 @@ from dataprocessing.serializers import userProfileSerializer
 # from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
-from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
+from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments, ExpertiseChangeLog
 from workprogramsapp.models import WorkProgram
 from workprogramsapp.workprogram_additions.serializers import ShortStructuralUnitSerializer
 
@@ -228,4 +228,21 @@ class CommentSerializerFull(serializers.ModelSerializer):
 
     class Meta:
         model = ExpertiseComments
+        fields = "__all__"
+
+
+class ShortExpertiseSerializerWithWp(serializers.ModelSerializer):
+    work_program = WorkProgramShortForExperiseSerializerWithStructUnit(many=False)
+
+    class Meta:
+        model = Expertise
+        fields = ["id", "work_program"]
+
+
+class ExpertiseChangeLogSerializer(serializers.ModelSerializer):
+    expertise = ShortExpertiseSerializerWithWp(many=False)
+    user = userProfileSerializer(many=False)
+
+    class Meta:
+        model = ExpertiseChangeLog
         fields = "__all__"
