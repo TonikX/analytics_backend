@@ -232,11 +232,11 @@ class CommentSerializerFull(serializers.ModelSerializer):
 
 
 class ShortExpertiseSerializerWithWp(serializers.ModelSerializer):
-    work_program = WorkProgramShortForExperiseSerializerWithStructUnit(many=False)
+    #work_program = WorkProgramShortForExperiseSerializerWithStructUnit(many=False)
 
     class Meta:
         model = Expertise
-        fields = ["id", "work_program"]
+        fields = ["id", "approval_date"]
 
 
 class ExpertiseChangeLogSerializer(serializers.ModelSerializer):
