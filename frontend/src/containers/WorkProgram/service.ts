@@ -41,6 +41,10 @@ class WorkProgramService extends AnalyticsService{
         return this.get(`/api/competence/get_all_competences_and_indicators_for_wp/${id}`);
     }
 
+    getExpertiseLogAccept(id: string){
+        return this.get(`/api/expertise/log_accept?wp_id=${id}`);
+    }
+
     cloneWorkProgram(id: string){
         const formData = new FormData();
 

@@ -55,6 +55,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         const id = this.getWorkProgramId();
 
         this.props.actions.getWorkProgram(id);
+        this.props.actions.getExpertiseLogAccept(id);
     }
 
     componentDidUpdate(prevProps: Readonly<WorkProgramProps>, prevState: Readonly<{}>, snapshot?: any) {
@@ -87,7 +88,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             activeStep: sectionsValue[section] || 0
         })
     }
-
     openConfirmDuplicateWPModal = () => {
         this.setState({
             openConfirmDuplicateWPModal: true

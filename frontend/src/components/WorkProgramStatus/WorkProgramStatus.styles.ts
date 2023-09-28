@@ -17,6 +17,14 @@ export default makeStyles(() => createStyles({
     cursorPointer: {
         cursor: 'pointer'
     },
+    statusPointBlock: {
+        display: 'flex',
+        alignItems: 'center'
+    },
+    statusPointTooltip: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
     disabledStyle: {
 
     }

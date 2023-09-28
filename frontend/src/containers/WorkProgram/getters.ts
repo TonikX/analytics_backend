@@ -14,6 +14,7 @@ export const getWorkProgramCompetenceFilters = (state: rootState) => get(getStat
 export const getWorkProgramCompetenceFiltersYear = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'year', 2023);
 export const getWorkProgramCompetenceFiltersAP = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'ap', null);
 export const getWorkProgramCompetenceFiltersImp = (state: rootState) => get(getWorkProgramCompetenceFilters(state), 'imp', null);
+export const getExpertiseLogAccept = (state: rootState) => get(getStateData(state), fields.EXPERTISE_LOG_ACCEPT, {});
 
 export const getWorkProgram = (state: rootState) => get(getStateData(state), fields.WORK_PROGRAM, {});
 export const getWorkProgramResults = (state: rootState) => get(getWorkProgram(state), fields.WORK_PROGRAM_RESULTS, []);

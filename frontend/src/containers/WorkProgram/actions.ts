@@ -82,6 +82,9 @@ const updateCompetenceFilterAP = createAction('UPDATE_COMPETENCE_FILTER_AP');
 
 const deleteIndicators = createAction('DELETE_INDICATORS');
 
+const getExpertiseLogAccept = createAction('GET_EXPERTISE_LOG_ACCEPT');
+const setExpertiseLogAccept = createAction('SET_EXPERTISE_LOG_ACCEPT');
+
 const actions: WorkProgramActions = {
     updateCompetenceFilterYear,
     updateCompetenceFilterIMP,
@@ -161,6 +164,9 @@ const actions: WorkProgramActions = {
 
     deleteLiterature,
     addLiterature,
+
+    getExpertiseLogAccept,
+    setExpertiseLogAccept,
 }
 
 export default actions;
