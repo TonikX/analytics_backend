@@ -102,6 +102,12 @@ class ExpertsOnStructuralUnit(models.Model):
 
 
 class ExpertiseChangeLog(models.Model):
+    ACTION_CHOICES = [
+        ('AC', 'Экспертиза принята'),
+        ('RE', 'Отправлена на доработку'),
+        ('SE', 'Отправлена на экспертизу'),
+    ]
+    action = models.CharField(choices=ACTION_CHOICES, max_length=1024, verbose_name="дейсвтие", blank=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_expertise_log",
                              blank=True, null=True, )
     expertise = models.ForeignKey('Expertise', on_delete=models.CASCADE, related_name="expertise_status_log",
