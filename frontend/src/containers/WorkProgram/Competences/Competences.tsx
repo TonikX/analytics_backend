@@ -267,7 +267,7 @@ export default React.memo(() => {
                       : <></>
                     }
                     <TableCell>
-                      {zun?.indicator?.number} {zun?.indicator?.name}
+                      {zun?.indicator?.number} {zun?.indicator?.name} ({zun?.indicator?.id})
                       <div className={classes.smallButton}
                           onClick={() => deleteZun(zun.id)}
                       >
@@ -436,7 +436,7 @@ export default React.memo(() => {
                         : null
                       }
                       <TableCell className={classes.cell}>
-                        {zun.indicator.number} {zun.indicator.name}
+                        {zun.indicator.number} {zun.indicator.name} ({zun?.indicator?.id})
                         <div className={classes.smallButton}
                              onClick={() => deleteZun(zun.id)}
                         >

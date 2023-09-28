@@ -476,7 +476,7 @@ class AcademicPlanUpdateProcessor:
             return discipline_block_object
         else:
             discipline_block_object = DisciplineBlock(
-                name=isu_academic_plan_block_json['blockName'],
+                name=isu_academic_plan_block_json['blockName'].strip(),
                 academic_plan=academic_plan_object
             )
             discipline_block_object.save()
