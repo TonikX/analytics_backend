@@ -262,6 +262,8 @@ def PracticeShortInfo(request, isu_id):
             {"moodle": None})
         newdata.update(
             {"description": None})
+        newdata.update(
+            {"language": practice.language})
         try:
             status = Expertise.objects.get(practice=practice).get_expertise_status_display()
             if not status:
@@ -288,6 +290,9 @@ def GIAShortInfo(request, isu_id):
             {"moodle": None})
         newdata.update(
             {"description": None})
+        gia_lang = "eng" if "/" in gia.title or "-en" in gia.title else "ru"
+        newdata.update(
+            {"language": gia_lang})
         try:
             status = Expertise.objects.get(gia=gia).get_expertise_status_display()
             if not status:
