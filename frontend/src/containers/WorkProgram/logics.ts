@@ -149,6 +149,28 @@ const getAllCompetencesAndIndicatorsForWp = createLogic({
     }
 });
 
+const getExpertiseLogAccept = createLogic({
+    type: workProgramActions.getExpertiseLogAccept.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EXPERTISE_LOG_ACCEPT}));
+
+        service.getExpertiseLogAccept(action.payload)
+          .then((res) => {
+              dispatch(workProgramActions.setExpertiseLogAccept(res.data.results?.[0]));
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EXPERTISE_LOG_ACCEPT}));
+              return done();
+          });
+    }
+});
+
 const saveWorkProgram = createLogic({
     type: workProgramActions.saveWorkProgram.type,
     latest: true,
@@ -343,4 +365,5 @@ export default [
     sendToIsu,
     approveWorkProgram,
     sendWorkProgramToArchive,
+    getExpertiseLogAccept,
 ];
