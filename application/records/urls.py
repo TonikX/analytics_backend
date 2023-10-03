@@ -2,7 +2,7 @@ from django.urls import path
 from .views import number_of_academplans_by_qualification_and_year, RecordOfWorkProgramQuality, StructuralUnits, \
     AcademicPlans, report_of_number_of_workprograms_by_qualification, WorkProgramDetailsWithApAndSemesters, \
     GetDuplicates, WorkProgramEvaluationToolsCounter, WorkProgramRealisedInYear, AcademicPlanRealisedInYear, \
-    ModulesWithoutSelectionRules
+    ModulesWithoutSelectionRules, WpWithSimilarCodeGrouped
 from .views import SimpleStatistic, EmptyStringWp, WpWithoutAP, WpWithSimilarCode, \
     WpWithoutStructuralUnit, StructuralUnitWp, FieldOfStudyPlanToISU, AllWpShort, WorkProgramDetailsWithApAndSemesters, \
     OneAcademicPlanWithDescriptionWp, AllAcademicPlanWithDescriptionWp, GetPrerequisitesAndOutcomesOfWpByStrUP, \
@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/record/workprogram/getemptystring', EmptyStringWp),#'-' ???
     path('api/record/workprogram/wpwithoutap', WpWithoutAP),#'-'
     path('api/record/workprogram/similarcode', WpWithSimilarCode),#'-'
+    path('api/record/workprogram/similarcode_grouped', WpWithSimilarCodeGrouped),#'-'
     path('api/record/structural/workprogram', StructuralUnitWp), #'+'
     path('api/record/structural/empty', WpWithoutStructuralUnit), #'+'
     path('api/record/structural_units', StructuralUnits),

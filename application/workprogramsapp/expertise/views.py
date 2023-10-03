@@ -149,10 +149,15 @@ class ChangeExpertiseView(generics.UpdateAPIView):
     def perform_update(self, serializer):
         instance = self.get_object()
         exp_status = self.request.data.get('expertise_status')
+        user = self.request.user
         if exp_status == "AC":
-            user = self.request.user
-            ExpertiseChangeLog.objects.create(expertise=instance, user=user, date_change=datetime.datetime.now())
+            ExpertiseChangeLog.objects.create(expertise=instance, user=user, date_change=datetime.datetime.now(),
+                                              action="AC")
+        elif exp_status == "RE":
+            ExpertiseChangeLog.objects.create(expertise=instance, user=user, date_change=datetime.datetime.now(),
+                                              action="RE")
         serializer.save()
+
 
 class ChangeUserExpertiseView(generics.UpdateAPIView):
     """
