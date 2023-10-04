@@ -23,7 +23,6 @@ import {FULL_DATE_FORMAT_WITH_TIME} from "../../common/utils";
 const WorkProgramStatus: React.FC<WorkProgramStatusProps> = ({status, onClick, disabledStyle}: WorkProgramStatusProps) => {
   const classes = useStyles()
   const expertiseLogAccept = useSelector((state: rootState) => getExpertiseLogAccept(state))
-
   return (
     <div className={classNames(classes.status, {[classes.cursorPointer]: onClick})}
          onClick={() => typeof onClick === 'function' && onClick(status)}
@@ -31,7 +30,7 @@ const WorkProgramStatus: React.FC<WorkProgramStatusProps> = ({status, onClick, d
       <Tooltip
         title={
           <div className={classes.statusPointTooltip}>
-            <div>Дата: {moment(get(expertiseLogAccept?.expertise?.approval_date, 'basic.notification_date')).format(FULL_DATE_FORMAT_WITH_TIME)}</div>
+            <div>Дата: {moment(expertiseLogAccept?.expertise?.approval_date).format(FULL_DATE_FORMAT_WITH_TIME)}</div>
             <div>Имя: {expertiseLogAccept?.user?.first_name}</div>
             <div>Фамилия: {expertiseLogAccept?.user?.last_name}</div>
             <div>
