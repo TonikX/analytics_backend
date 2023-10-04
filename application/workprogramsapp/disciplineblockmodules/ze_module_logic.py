@@ -135,18 +135,20 @@ def recursion_module(obj):
                 unit_final_sum += sum([int(unit) for unit in changeblock.credit_units.split(", ")])
 
 
-    except AttributeError as e:
-        print("a", e)
-        capture_event(e)
-    except IndexError as e:
-        print("i", e)
-        capture_event(e)
-    except ValueError as e:
-        print("v", e)
-        capture_event(e)
-    except TypeError as e:
-        print("t", e)
-        capture_event(e)
+    # except AttributeError as e:
+    #     print("a", e)
+    #     capture_event(e)
+    # except IndexError as e:
+    #     print("i", e)
+    #     capture_event(e)
+    # except ValueError as e:
+    #     print("v", e)
+    #     capture_event(e)
+    # except TypeError as e:
+    #     print("t", e)
+    #     capture_event(e)
+    except:
+        pass
     return unit_final_sum
 
 
