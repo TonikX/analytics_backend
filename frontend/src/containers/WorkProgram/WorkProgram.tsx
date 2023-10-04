@@ -290,7 +290,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         return (
             <div className={classes.wrap}>
                 <div className={classes.header}>
-                    <WorkProgramStatus status={workProgramStatus} />
+                    <WorkProgramStatus workProgram status={workProgramStatus} />
 
                     <div className={classes.headerButtons}>
                         {canSendToArchive && <Button onClick={this.openConfirmArchiveWPModal}>Отправить в архив</Button>}
