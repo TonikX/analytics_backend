@@ -1,4 +1,4 @@
-from sentry_sdk import capture_exception
+from sentry_sdk import capture_exception, capture_event
 
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
@@ -137,16 +137,16 @@ def recursion_module(obj):
 
     except AttributeError as e:
         print("a", e)
-        capture_exception(e)
+        capture_event(e)
     except IndexError as e:
         print("i", e)
-        capture_exception(e)
+        capture_event(e)
     except ValueError as e:
         print("v", e)
-        capture_exception(e)
+        capture_event(e)
     except TypeError as e:
         print("t", e)
-        capture_exception(e)
+        capture_event(e)
     return unit_final_sum
 
 
