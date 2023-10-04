@@ -20,7 +20,7 @@ import moment from "moment/moment";
 import get from "lodash/get";
 import {FULL_DATE_FORMAT_WITH_TIME} from "../../common/utils";
 
-const WorkProgramStatus: React.FC<WorkProgramStatusProps> = ({status, onClick, disabledStyle, workProgram}: WorkProgramStatusProps) => {
+const WorkProgramStatus: React.FC<WorkProgramStatusProps> = ({status, onClick, disabledStyle}: WorkProgramStatusProps) => {
   const classes = useStyles()
   const expertiseLogAccept = useSelector((state: rootState) => getExpertiseLogAccept(state))
   return (
@@ -28,7 +28,7 @@ const WorkProgramStatus: React.FC<WorkProgramStatusProps> = ({status, onClick, d
          onClick={() => typeof onClick === 'function' && onClick(status)}
     >
       <Tooltip
-         title={workProgram && (
+         title={expertiseLogAccept?.user?.first_name && (
           <div className={classes.statusPointTooltip}>
             <div>Дата: {moment(expertiseLogAccept?.expertise?.approval_date).format(FULL_DATE_FORMAT_WITH_TIME)}</div>
             <div>Имя: {expertiseLogAccept?.user?.first_name}</div>
