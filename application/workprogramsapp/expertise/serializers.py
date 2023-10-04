@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework import serializers
 
 from dataprocessing.models import User
@@ -91,7 +93,9 @@ class ExpertiseSerializer(serializers.ModelSerializer):
             print("такая экспертиза уже существует")
             return is_exp_exist[0]
         exp = Expertise.objects.create(**validated_data)
-        UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="SE")  # ???
+        UserExpertise.objects.create(expertise=exp, expert=request.user, stuff_status="SE")
+        ExpertiseChangeLog.objects.create(expertise=exp, user=request.user, date_change=datetime.datetime.now(),
+                                          action="SE")
 
         # Автодобавление экспертов
         if not exp_type or exp_type == "WP":

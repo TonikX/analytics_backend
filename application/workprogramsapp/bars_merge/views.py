@@ -488,7 +488,11 @@ def GetWPForBARS(request, isu_wp_id):
     """
     Передача конкретной РПД по айдишнику в БАРС
     """
-    wp = WorkProgram.objects.get(discipline_code=str(isu_wp_id))
+    try:
+        wp = WorkProgram.objects.get(discipline_code=str(isu_wp_id))
+    except WorkProgram.DoesNotExist:
+        return Response({"error": "Такой рабочей программы не существует", "error_code": 404}, status=404)
+
     try:
         exp = Expertise.objects.get(work_program=wp)
         expertise_status_name = exp.get_expertise_status_display()

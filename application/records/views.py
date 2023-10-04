@@ -10,6 +10,7 @@ from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
 from dataprocessing.models import User
+from dataprocessing.serializers import WorkProgramShortSerializer
 from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, DisciplineBlock, \
     DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, ImplementationAcademicPlan, FieldOfStudy, \
@@ -157,6 +158,24 @@ def WpWithSimilarCode(request):
     serializer = WorkProgramSerializerForStatistic(similar_wp, many=True)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def WpWithSimilarCodeGrouped(request):
+    """
+    API-запрос на просмотр РПД с одинаковым дисциплин кодом
+    """
+    wp_counter_code = WorkProgram.objects.all().values('discipline_code').annotate(
+        total=Count('discipline_code')).filter(total__gt=1)
+    similar_codes = {}
+    for wp in wp_counter_code:
+
+        similar_wp = WorkProgram.objects.filter(discipline_code=wp['discipline_code']).order_by("discipline_code")
+        serializer = WorkProgramShortSerializer(similar_wp, many=True)
+        similar_codes[wp['discipline_code']]=serializer.data
+    """similar_wp = WorkProgram.objects.filter(discipline_code__in=similar_codes).order_by("discipline_code")
+    serializer = WorkProgramSerializerForStatistic(similar_wp, many=True)"""
+    return Response(similar_codes)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
