@@ -318,6 +318,7 @@ def generate_context(gh):
 
     # Представители работодателей
     for emp in EmployerRepresentative.objects.filter(general_characteristic=gh):
-        context["employers"].append({"pos": emp.employer_position, "name": emp.fio_employer})
+        context["employers"].append(
+            {"pos": emp.employer_position, "name": emp.fio_employer, "comp": emp.organization_name})
 
     return context
