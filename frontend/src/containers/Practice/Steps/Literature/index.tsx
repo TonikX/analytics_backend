@@ -37,7 +37,8 @@ class Literature extends React.PureComponent<LiteratureProps> {
         this.props.actions.saveField({field: PracticeFields.BIBLIOGRAPHIC_REFERENCE, value: refs});
     };
 
-    handleSave = ({ selectedLiterature }: { selectedLiterature: Array<LiteratureType>}) => {
+    handleSave = (params: { selectedLiterature: Array<LiteratureType>}) => {
+        const { selectedLiterature } = params
         const ids = selectedLiterature.map(literature => literature.id);
         this.props.actions.saveField({field: PracticeFields.BIBLIOGRAPHIC_REFERENCE, value: ids});
         this.handleClose();

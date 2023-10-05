@@ -45,7 +45,7 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
     state = {
         selectedLiterature: [],
         selectedLiteratureEbsco: [],
-        source: literatureSource.EBSCO
+        source: literatureSource.ANALITYCS
     };
 
     componentDidMount() {
@@ -144,7 +144,7 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
                     <DialogContent className={classes.dialogContent}>
                         <div className={classes.header}>
                             <Tabs value={source} onChange={this.handleChangeSource}>
-                                <Tab value={literatureSource.EBSCO} label="Эбско" />
+                                {/*<Tab value={literatureSource.EBSCO} label="Эбско" />*/}
                                 <Tab value={literatureSource.ANALITYCS} label="Аналитика" />
                             </Tabs>
 
