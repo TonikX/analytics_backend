@@ -20,7 +20,7 @@ const getLiterature = createLogic({
     process({getState, action}: any, dispatch, done) {
         const state = getState();
 
-        const source = action?.payload?.source || literatureSource.EBSCO
+        const source = action?.payload?.source
 
         const currentPage = getCurrentPage(state);
         const searchQuery = getSearchQuery(state);
