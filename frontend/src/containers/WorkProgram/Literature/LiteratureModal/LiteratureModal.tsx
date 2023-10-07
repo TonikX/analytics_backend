@@ -25,7 +25,9 @@ class LiteratureModal extends React.PureComponent<LiteratureModalProps> {
             <AddLiteratureModal handleClose={this.handleClose}
                                 handleSave={this.handleSave}
                                 selectedItems={selectedItems}
-                                isOpen={isOpen}/>
+                                isOpen={isOpen}
+                                showEBSCO
+            />
         )
     }
 }
