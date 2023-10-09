@@ -8,4 +8,5 @@ export interface ExpertiseProps extends WithStyles<typeof styles> {
     generalActions: GeneralActions;
     expertise: ExpertiseType;
     canEdit: boolean;
+    expertiseLog: LogItem[];
 }

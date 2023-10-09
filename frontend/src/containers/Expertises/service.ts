@@ -14,6 +14,10 @@ class ExpertisesService extends AnalyticsService{
         return this.get(`/api/expertise/${id}`);
     }
 
+    getExpertiseLogAccept(id: string){
+        return this.get(`/api/expertise/log_accept?wp_id=${id}`);
+    }
+
     addExpertToExpertise(expertiseId: number, userId: number){
         return this.post(`/api/expertise/user/create`, {
             expert: userId,

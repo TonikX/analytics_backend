@@ -64,6 +64,7 @@ const getExpertise = createLogic({
         service.getExpertise(id)
             .then((res) => {
                 dispatch(expertisesActions.setExpertise(res.data));
+                dispatch(expertisesActions.getExpertiseLogAccept(res.data.work_program.id));
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
@@ -73,6 +74,28 @@ const getExpertise = createLogic({
                 dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EXPERTISE}));
                 return done();
             });
+    }
+});
+
+const getExpertiseLogAccept = createLogic({
+    type: expertisesActions.getExpertiseLogAccept.type,
+    latest: true,
+    process({getState, action}: any, dispatch, done) {
+
+        dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_EXPERTISE_LOG_ACCEPT}));
+
+        service.getExpertiseLogAccept(action.payload)
+          .then((res) => {
+              dispatch(expertisesActions.setExpertiseLogAccept(res.data.results));
+              dispatch(actions.fetchingSuccess());
+          })
+          .catch((err) => {
+              dispatch(actions.fetchingFailed(err));
+          })
+          .then(() => {
+              dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_EXPERTISE_LOG_ACCEPT}));
+              return done();
+          });
     }
 });
 
@@ -252,4 +275,5 @@ export default [
     getComments,
     createComment,
     updateUnreadCommentStatus,
+    getExpertiseLogAccept,
 ];

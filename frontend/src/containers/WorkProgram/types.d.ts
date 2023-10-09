@@ -131,6 +131,9 @@ export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
     [WorkProgramGeneralFields.BARS]: boolean;
     [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: ImplementationFormatsEnum;
+    expertise_with_rpd: {
+        id: number;
+    }[]
 };
 
 export type ZunType = {

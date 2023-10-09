@@ -5,13 +5,15 @@ import {SortingType} from "../../components/SortingButton/types";
 import {WorkProgramGeneralType, WorkProgramStatusType} from "../WorkProgram/types";
 import {UserType} from "../../layout/types";
 import {CommentFields} from "./enum";
+import {LogItem} from "./Expertise/types";
 
 export interface ExpertisesActions {
     getComments: any;
     setComments: any;
     createComment: any;
     updateUnreadCommentStatus: any;
-
+    getExpertiseLogAccept: any;
+    setExpertiseLogAccept: any;
     changeSelectedStatus: any;
     changeSelectedQualification: any;
     changeSearchQuery: any;
@@ -34,11 +36,20 @@ export interface ExpertisesActions {
     removeExpertFromExpertise: any;
 }
 
+export type LogItem = {
+    action: string;
+    expertise: {
+        approval_date: string;
+    }
+    user: UserType;
+}
+
 export interface expertisesState {
     [fields.SORTING]: {
         [fields.SORTING_FIELD]: string,
         [fields.SORTING_MODE]: SortingType;
     };
+    [fields.EXPERTISE_LOG_ACCEPT]: any;
     [fields.ALL_COUNT]: number;
     [fields.CURRENT_PAGE]: number;
     [fields.IS_OPEN_ADD_EXPERT_MODAL]: Boolean;
@@ -48,11 +59,13 @@ export interface expertisesState {
     [fields.SELECTED_STATUS]: WorkProgramStatusType|'';
     [fields.SELECTED_QUALIFICATION]: string;
     [fields.COMMENTS]: Array<CommentType>;
+    [fields.EXPERTISE_LOG_ACCEPT]: LogItem[];
 }
 
 export interface ExpertisesProps extends WithStyles<typeof styles> {
     actions: ExpertisesActions;
     expertisesList: Array<any>;
+    expertiseLogAccept: any;
     currentPage: number;
     searchQuery: string;
     allCount: number;

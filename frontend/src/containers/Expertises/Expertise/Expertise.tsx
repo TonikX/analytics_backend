@@ -27,8 +27,21 @@ import {ExpertisesFields, UserExpertResult, fields, userStatusesInExFields} from
 import connect from './Expertise.connect';
 import styles from './Expertise.styles';
 import {getLink, getLinkLabel} from "../utils";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import TabPanel from '@mui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
+import {LogsTable} from "./LogsTable";
 
 class Expertise extends React.Component<ExpertiseProps & withRouterData> {
+    state = {
+        tab: '1',
+    }
+
+    handleChangeTab = (event: React.SyntheticEvent, value: string) => {
+       this.setState({tab: value})
+    };
+
     componentDidMount() {
         const expertiseId = get(this, 'props.params.id');
 
@@ -56,6 +69,7 @@ class Expertise extends React.Component<ExpertiseProps & withRouterData> {
         //@ts-ignore
         const {classes} = this.props;
         const {expertise} = this.props;
+        const {tab} = this.state;
 
         const experts = get(expertise, ExpertisesFields.EXPERTS_USERS_IN_RPD, [])
             .filter((item: any) => get(item, "stuff_status") === 'AU' || get(item, "stuff_status") === 'EX');
@@ -73,11 +87,11 @@ class Expertise extends React.Component<ExpertiseProps & withRouterData> {
         } else {
             canApproveWP = false
         }
-        const canAddDeleteExperts = 
+        const canAddDeleteExperts =
             isExpertiseStatusEX
             && (
                 get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.EX_MASTER}`) ||
-                get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.STRUCTURAL_LEADER}`) 
+                get(expertise, `${fields.USER_STATUS_IN_EX}.${userStatusesInExFields.STRUCTURAL_LEADER}`)
             )
 
         const link = getLink(expertise);
@@ -101,36 +115,48 @@ class Expertise extends React.Component<ExpertiseProps & withRouterData> {
                     }
                 </div>
 
-                <Scrollbars>
-                    <div className={classes.tableWrap}>
-                        <Table stickyHeader size='small'>
-                            <TableHead className={classes.header}>
-                                <TableRow>
-                                    <TableCell>Эксперт</TableCell>
-                                    <TableCell>Оценка</TableCell>
-                                    {canAddDeleteExperts && <TableCell className={classes.deleteCell}/>}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {experts.map((expert: any) =>
-                                    <TableRow key={expert[ExpertisesFields.EXPERT].id}>
-                                        <TableCell>{expert[ExpertisesFields.EXPERT].first_name} {expert[ExpertisesFields.EXPERT].last_name}</TableCell>
-                                        <TableCell>
-                                            {get(UserExpertResult, expert[ExpertisesFields.USER_EXPERTISE_STATUS], 'Не проверено')}
-                                        </TableCell>
-                                        {canAddDeleteExperts &&
-                                            <TableCell className={classes.deleteCell}>
-                                                <IconButton onClick={this.handleClickDelete(expert.id)}>
-                                                    <DeleteIcon/>
-                                                </IconButton>
-                                            </TableCell>
-                                        }
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </div>
-                </Scrollbars>
+                <TabContext value={tab}>
+                    <Tabs value={tab} onChange={this.handleChangeTab}>
+                        <Tab value="1" label="Эксперты" />
+                        <Tab value="2" label="Лог" />
+                    </Tabs>
+                    <Scrollbars>
+                        <TabPanel value="1" className={classes.tablePanel}>
+                                <div className={classes.tableWrap}>
+                                    <Table stickyHeader size='small'>
+                                        <TableHead className={classes.header}>
+                                            <TableRow>
+                                                <TableCell>Эксперт</TableCell>
+                                                <TableCell>Оценка</TableCell>
+                                                {canAddDeleteExperts && <TableCell className={classes.deleteCell}/>}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {experts.map((expert: any) =>
+                                              <TableRow key={expert[ExpertisesFields.EXPERT].id}>
+                                                  <TableCell>{expert[ExpertisesFields.EXPERT].first_name} {expert[ExpertisesFields.EXPERT].last_name}</TableCell>
+                                                  <TableCell>
+                                                      {get(UserExpertResult, expert[ExpertisesFields.USER_EXPERTISE_STATUS], 'Не проверено')}
+                                                  </TableCell>
+                                                  {canAddDeleteExperts &&
+                                                    <TableCell className={classes.deleteCell}>
+                                                        <IconButton onClick={this.handleClickDelete(expert.id)}>
+                                                            <DeleteIcon/>
+                                                        </IconButton>
+                                                    </TableCell>
+                                                  }
+                                              </TableRow>
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+
+                        </TabPanel>
+                        <TabPanel value="2" className={classes.tablePanel}>
+                            <LogsTable/>
+                        </TabPanel>
+                    </Scrollbars>
+                </TabContext>
 
                 {canAddDeleteExperts &&
                     <Button className={classes.addExpertButton}

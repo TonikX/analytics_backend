@@ -16,4 +16,5 @@ export enum UserFields{
     LAST_NAME = 'last_name',
     ID = 'id',
     USERNAME = 'username',
+    ISU_NUMBER = 'isu_number',
 }
