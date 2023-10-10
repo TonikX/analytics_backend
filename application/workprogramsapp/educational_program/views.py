@@ -23,7 +23,8 @@ from workprogramsapp.educational_program.serializers import EducationalCreatePro
     EducationalProgramSerializer, \
     GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
     GeneralLaborFunctionsSerializer, KindsOfActivitySerializerForEd, EmployerSerializer, \
-    WorkProgramCompetenceIndicatorSerializer, ObjectsOfActivitySerializer, ImplementationAcademicPlanShortSerializer
+    WorkProgramCompetenceIndicatorSerializer, ObjectsOfActivitySerializer, ImplementationAcademicPlanShortSerializer, \
+    CompetenceCommentSerializer
 from .competence_handler import competence_dict_generator
 from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
     GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInEducationalStandard
@@ -52,11 +53,11 @@ from workprogramsapp.serializers import ImplementationAcademicPlanSerializer, In
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
     ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
     KindsOfActivity, EmployerRepresentative, DisciplineBlockModule, DisciplineBlock, \
-    WorkProgramChangeInDisciplineBlockModule, ObjectsOfActivity, AcademicPlan
+    WorkProgramChangeInDisciplineBlockModule, ObjectsOfActivity, AcademicPlan, CompetenceComments
 from workprogramsapp.models import ProfessionalStandard
 
 # Права доступа
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsEducationPlanDeveloper
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsEducationPlanDeveloper, IsExpertiseMaster
 
 # Блок реализации АПИ для КПУД интерфейсов
 from ..notifications.emails.send_mail import mail_sender
@@ -712,3 +713,29 @@ def zun_copy_by_wps(request):
 
     serializer = ZunForManyCreateSerializer(zun_list_created, many=True)
     return Response(serializer.data, status=201)
+
+
+class CompetenceCommentsView(generics.ListAPIView):
+    """
+    View для получения комментариев к компетенции
+    Комментарии можно получить или отправить, указав в адресе id компетенции,
+    """
+    queryset = CompetenceComments.objects.all()
+    serializer_class = CompetenceCommentSerializer
+
+    permission_classes = [IsExpertiseMaster]
+
+    def get_queryset(self, *args, **kwargs):
+        if ('pk' in dict(self.kwargs)):
+            return CompetenceComments.objects.filter(competence__id=self.kwargs['pk'])
+        else:
+            return CompetenceComments.objects.all()
+
+
+class CompetenceCommentCreateView(generics.CreateAPIView):
+    """
+    создание коммента к компетенции
+    """
+    queryset = CompetenceComments.objects.all()
+    serializer_class = CompetenceCommentSerializer
+    permission_classes = [IsExpertiseMaster]

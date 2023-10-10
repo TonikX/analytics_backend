@@ -1127,6 +1127,12 @@ class Competence(models.Model):
         return self.name
 
 
+class CompetenceComments(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_competence_comment")
+    competence = models.ForeignKey("Competence", on_delete=models.CASCADE, related_name="competence_comment")
+    comment_text = models.CharField(max_length=50000, verbose_name="Комментарий")
+    comment_date = models.DateTimeField(auto_now_add=True, blank=True, verbose_name='Дата комментария')
+
 # class IndicatorWorkProgram(models.Model):
 #     '''
 #     Модель для связи рабочих программ и индикаторов
