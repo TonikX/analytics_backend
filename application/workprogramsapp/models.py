@@ -801,6 +801,8 @@ class DisciplineBlockModule(CloneMixin, models.Model):
 
     isu_ids_by_fathers = JSONField(blank=True, null=True, verbose_name="id модуля в ису по отцам")
 
+    clone_info_json = JSONField(blank=True, null=True, verbose_name="JSON  информацией о клонировании")
+
     class Meta:
         ordering = ['order']
 
