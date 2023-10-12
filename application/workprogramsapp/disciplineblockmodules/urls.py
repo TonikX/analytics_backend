@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 from workprogramsapp.disciplineblockmodules.views import DisciplineBlockModuleCreateAPIView, \
     DisciplineBlockModuleDestroyView, DisciplineBlockModuleUpdateView, DisciplineBlockModuleShortListView, \
     DisciplineBlockModuleDetailView, InsertModule, WorkWithBlocksApiView, InsertModuleInBlockAP, \
-    CopyModulesToAnotherAPView
+    CopyModulesToAnotherAPView, CopyModules
 
 urlpatterns = [
     path('api/disciplineblockmodule/create', DisciplineBlockModuleCreateAPIView.as_view()),
@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/disciplineblockmodule/insert', InsertModule),
     path('api/disciplineblockmodule/insert_to_block', WorkWithBlocksApiView.as_view()),
     path('api/disciplineblockmodule/insert_to_block_with_ap', InsertModuleInBlockAP.as_view()),
-    path('api/disciplineblockmodule/connect_modules_from_ap', CopyModulesToAnotherAPView.as_view())
+    path('api/disciplineblockmodule/connect_modules_from_ap', CopyModulesToAnotherAPView.as_view()),
+    path('api/disciplineblockmodule/copy', CopyModules.as_view()),
 
 ]

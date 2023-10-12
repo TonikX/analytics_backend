@@ -7,7 +7,7 @@ from rest_framework.fields import BooleanField, SerializerMethodField
 # Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, \
-    ProfessionalStandard, ImplementationAcademicPlan
+    ProfessionalStandard, ImplementationAcademicPlan, CompetenceComments
 # Модели данных
 from workprogramsapp.models import GeneralizedLaborFunctions, KindsOfActivity, \
     EmployerRepresentative, WorkProgram, Competence, Zun, Indicator, WorkProgramInFieldOfStudy, ObjectsOfActivity
@@ -269,3 +269,13 @@ class ImplementationAcademicPlanShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImplementationAcademicPlan
         fields = ['id', "title", "qualification", 'academic_plan', 'field_of_study', 'year']
+
+
+class CompetenceCommentSerializer(serializers.ModelSerializer):
+    def to_representation(self, value):
+        self.fields['user'] = userProfileSerializer(many=False, read_only=True)
+        return super().to_representation(value)
+
+    class Meta:
+        model = CompetenceComments
+        fields = "__all__"

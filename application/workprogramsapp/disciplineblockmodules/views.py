@@ -1,4 +1,5 @@
 # РПД
+import datetime
 from collections import OrderedDict
 
 from django.db import transaction
@@ -369,3 +370,51 @@ class CopyModulesToAnotherAPView(APIView):
             [module.descipline_block.add(block_to) for module in modules_from]
 
         return Response(status=status.HTTP_201_CREATED, )
+
+
+class CopyModules(APIView):
+    permission_classes = [IsBlockModuleEditor]
+    my_tags = ["Discipline Blocks"]
+
+    module_id = openapi.Parameter('module_id', openapi.IN_FORM,
+                                  description="id модуля, который надо скопировать",
+                                  type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        required=['version'],
+        properties={
+
+            'module_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+        },
+    ),
+        responses={201: openapi.Response("created info", DisciplineBlockModuleSerializer)})
+    @transaction.atomic
+    def post(self, request):
+        module_to_copy_id = request.data["module_id"]
+        old_module = DisciplineBlockModule.objects.get(id=module_to_copy_id)
+        new_module = DisciplineBlockModule(type=old_module.type, name="КОПИЯ " + old_module.name,
+                                           description=old_module.description, selection_rule=old_module.selection_rule,
+                                           selection_parametr=old_module.selection_parametr
+                                           )
+        user = request.user
+        if old_module.clone_info_json:
+            create_counter = old_module.clone_info_json[-1]["counter"] + 1
+            json_history_to_add = {"counter": create_counter, "user_id": user.id,
+                                   "date": str(datetime.datetime.now()),
+                                   "from_copy_id": old_module.id}
+            new_clone_info = old_module.clone_info_json
+            new_clone_info.append(json_history_to_add)
+        else:
+            new_clone_info = [{"counter": 1, "user_id": user.id,
+                               "date": str(datetime.datetime.now()),
+                               "from_copy_id": old_module.id}]
+        new_module.clone_info_json = new_clone_info
+        new_module.save()
+
+        new_module.editors.add(user)
+        new_module.childs.add(*old_module.childs.all())
+
+        serializer = DisciplineBlockModuleSerializer(new_module)
+        return Response(serializer.data)
+
