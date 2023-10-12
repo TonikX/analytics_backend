@@ -269,7 +269,6 @@ class AcademicPlanUpdateAspect:
 
         return wrapper
 
-
     @staticmethod
     def practice_changes_aspect(func):
         def wrapper(*args, **kwargs):
@@ -278,13 +277,15 @@ class AcademicPlanUpdateAspect:
 
             # todo get() returned more than one Practice -- it returned 11!
             if Practice.objects.filter(
-                    prac_isu_id=str(isu_academic_plan_practice_json['id']),
-                    discipline_code=str(isu_academic_plan_practice_json['id'])
+                    # prac_isu_id=str(isu_academic_plan_practice_json['id']),
+                    discipline_code=str(isu_academic_plan_practice_json['id']),
+                    # qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json)
 
             ).exists():
                 old_practice_object = Practice.objects.filter(
-                    prac_isu_id=str(isu_academic_plan_practice_json['id']),
-                    discipline_code=str(isu_academic_plan_practice_json['id'])
+                    # prac_isu_id=str(isu_academic_plan_practice_json['id']),
+                    discipline_code=str(isu_academic_plan_practice_json['id']),
+                    # qualification=AcademicPlanUpdateUtils.get_qualification(isu_academic_plan_json)
                 )[0]
             else:
                 old_practice_object = None
@@ -303,7 +304,7 @@ class AcademicPlanUpdateAspect:
             return updated_practice_object
 
         return wrapper
-    
+
     @staticmethod
     def gia_changes_aspect(func):
         def wrapper(*args, **kwargs):
@@ -312,12 +313,12 @@ class AcademicPlanUpdateAspect:
 
             # todo get() returned more than one GIA -- it returned 11!
             if GIA.objects.filter(
-                    #prac_isu_id=str(isu_academic_plan_gia_json['id']),
+                    # prac_isu_id=str(isu_academic_plan_gia_json['id']),
                     discipline_code=str(isu_academic_plan_gia_json['id'])
 
             ).exists():
                 old_gia_object = GIA.objects.filter(
-                    #prac_isu_id=str(isu_academic_plan_gia_json['id']),
+                    # prac_isu_id=str(isu_academic_plan_gia_json['id']),
                     discipline_code=str(isu_academic_plan_gia_json['id'])
                 )[0]
             else:
