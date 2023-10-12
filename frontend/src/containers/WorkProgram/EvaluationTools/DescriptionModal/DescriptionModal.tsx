@@ -70,6 +70,7 @@ class DescriptionModal extends React.PureComponent<DescriptionModalProps> {
                         readOnly
                         height="calc(100vh - 280px)"
                         useFormulas
+                        key={evaluationTool[EvaluationToolFields.DESCRIPTION]}
                       />
                     ) : null}
                 </DialogContent>
