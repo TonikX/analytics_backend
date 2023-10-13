@@ -44,8 +44,11 @@ const getIntermediateCertification = createAction('TRAINING_MODULES_GET_INTERMED
 const setTrainingModuleIdForRedirect = createAction('SET_TRAINING_MODULE_ID_FOR_REDIRECT');
 const trainingModulesPageDown = createAction('TRAINING_MODULES_PAGE_DOWN');
 
+const copyDisciplineBlockModule = createAction('DISCIPLINE_BLOCK_MODULE');
+
 const actions: TrainingModulesActions = {
     trainingModulesPageDown,
+    copyDisciplineBlockModule,
     resetFilters,
     setTrainingModuleIdForRedirect,
     updateTrainingModuleFilters,

@@ -9,6 +9,15 @@ export default (theme: Theme) => createStyles({
   checkbox: {
     margin: '10px 0px 10px -12px'
   },
+  headerTop: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    padding: '10px 0px',
+  },
+  headerButtons: {
+    marginLeft: 'auto',
+    display: "flex",
+  },
   selectorWrap: {
     width: '100%',
     '& .MuiInputLabel-shrink': {
@@ -85,7 +94,6 @@ export default (theme: Theme) => createStyles({
   wrap: {
     padding: '0px 30px 30px',
     boxSizing: 'border-box',
-    marginTop: '30px',
   },
   editorsTitle: {
     lineHeight: '32px',

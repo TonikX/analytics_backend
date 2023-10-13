@@ -45,6 +45,8 @@ export interface TrainingModulesActions {
 
     changeEditorList: ActionCreatorWithPayload;
     setTrainingModuleIdForRedirect: ActionCreatorWithPayload;
+
+    copyDisciplineBlockModule: ActionCreatorWithPayload;
 }
 
 export type OpenDialogPayload = {
