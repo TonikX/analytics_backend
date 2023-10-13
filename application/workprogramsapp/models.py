@@ -801,6 +801,8 @@ class DisciplineBlockModule(CloneMixin, models.Model):
 
     isu_ids_by_fathers = JSONField(blank=True, null=True, verbose_name="id модуля в ису по отцам")
 
+    clone_info_json = JSONField(blank=True, null=True, verbose_name="JSON  информацией о клонировании")
+
     class Meta:
         ordering = ['order']
 
@@ -1126,6 +1128,12 @@ class Competence(models.Model):
     def __str__(self):
         return self.name
 
+
+class CompetenceComments(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_competence_comment")
+    competence = models.ForeignKey("Competence", on_delete=models.CASCADE, related_name="competence_comment")
+    comment_text = models.CharField(max_length=50000, verbose_name="Комментарий")
+    comment_date = models.DateTimeField(auto_now_add=True, blank=True, verbose_name='Дата комментария')
 
 # class IndicatorWorkProgram(models.Model):
 #     '''

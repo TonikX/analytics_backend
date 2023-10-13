@@ -7,7 +7,7 @@ from workprogramsapp.educational_program.views import EducationalProgramCreateAP
     GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix, ObjectsOfActivitySet, \
     academ_plan_check, UploadProfStandards, new_ordinal_numbers_for_modules_in_ap, gh_check, \
     get_all_ap_with_competences_and_indicators, get_all_competences_and_indicators_for_wp, zun_many_remove, \
-    WorkProgramInFieldOfStudyWithAPByWP, zun_copy, zun_copy_by_wps
+    WorkProgramInFieldOfStudyWithAPByWP, zun_copy, zun_copy_by_wps, CompetenceCommentsView, CompetenceCommentCreateView
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
@@ -57,6 +57,8 @@ urlpatterns = [
     path('api/competence/zun_many_remove', zun_many_remove),
     path('api/competence/zun_many_copy', zun_copy),
     path('api/competence/zun_copy_by_gh', zun_copy_by_wps),
+    path('api/competence/comments/<int:pk>', CompetenceCommentsView.as_view()),
+    path('api/competence/comments/create', CompetenceCommentCreateView.as_view()),
 
     # --Матрица компетенций
     path('api/general_characteristic/competence_matrix/<int:gen_pk>', GetCompetenceMatrix),
