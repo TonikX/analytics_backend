@@ -60,6 +60,10 @@ export default React.memo(() => {
         >
           Добавить ЗУН
         </Button>
+
+        <span className={classes.alertText}>
+          На данный момент редактирование ЗУНа для добавления знаний умений и навыков не реализовано. <br/>Функционал будет добавлен в ближайшее время
+        </span>
       </Typography>
 
       <Table stickyHeader>

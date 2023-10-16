@@ -27,6 +27,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
       color: theme.palette.primary.main,
     }
   },
+  alertText: {
+    color: theme.palette.error.main,
+    width: '100%',
+  },
   addZUNButton: {
     marginLeft: 'auto !important'
   },
@@ -34,6 +38,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     marginBottom: '6px !important',
     fontSize: '20px',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexWrap: 'wrap'
   },
 }))
