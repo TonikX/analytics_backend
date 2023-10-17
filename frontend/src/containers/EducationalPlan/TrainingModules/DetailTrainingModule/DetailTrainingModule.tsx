@@ -79,6 +79,22 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         selectionParameter: this.props.module[TrainingModuleFields.SELECTION_PARAMETER],
       })
     }
+
+    if (prevProps.params.id !== this.props.params.id) {
+      this.props.actions.getTrainingModule(this.getModuleId());
+    }
+
+    if (prevProps.trainingModuleIdForRedirect !== this.props.trainingModuleIdForRedirect && this.props.trainingModuleIdForRedirect) {
+      this.goToTrainingModule()
+    }
+  }
+
+  goToTrainingModule = () => {
+    // @ts-ignore
+    const {navigate, trainingModuleIdForRedirect} = this.props;
+
+    this.props.actions.setTrainingModuleIdForRedirect(null)
+    navigate(appRouter.getTrainingModuleDetailLink(trainingModuleIdForRedirect));
   }
 
   handleCreateNewWPBlock = (moduleId: number) => () => {
@@ -195,11 +211,15 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     });
   }
 
+  copyDisciplineBlockModule = () => {
+    this.props.actions.copyDisciplineBlockModule();
+  }
+
   renderBlockOfWP = (blockOfWorkPrograms: any, level: number) => {
 
     //@ts-ignore
     const {classes} = this.props;
-    const {canEdit} = this.props
+    const {canEdit} = this.props;
 
       return (
         <>
@@ -417,7 +437,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   renderModules = () => {
     //@ts-ignore
     const {classes} = this.props;
-    const {module, canEdit} = this.props
+    const {module, canEdit} = this.props;
     return (
       <>
         <Scrollbars style={{height: 'calc(100vh - 400px)'}}>
@@ -665,6 +685,13 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
 
     return (
       <div className={classes.wrap}>
+        <div className={classes.headerTop}>
+          <div className={classes.headerButtons}>
+            <Button onClick={this.copyDisciplineBlockModule}>
+              Копировать
+            </Button>
+          </div>
+        </div>
         <Paper className={classes.root}>
           <Stepper activeStep={activeStep}
                    orientation="vertical"

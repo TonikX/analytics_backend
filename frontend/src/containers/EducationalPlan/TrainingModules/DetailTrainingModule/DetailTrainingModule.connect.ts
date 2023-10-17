@@ -6,7 +6,13 @@ import {rootState} from "../../../../store/reducers";
 import actions from "../actions";
 import educationPlansActions from "../../actions";
 
-import {getTrainingModule, getModuleRating, getModuleRatingId, getCanEdit} from "../getters";
+import {
+  getTrainingModule,
+  getModuleRating,
+  getModuleRatingId,
+  getCanEdit,
+  getTrainingModuleIdForRedirect
+} from "../getters";
 import folderActions from "../../../Profile/Folders/actions";
 
 export const mapStateToProps = (state: rootState) => {
@@ -15,6 +21,7 @@ export const mapStateToProps = (state: rootState) => {
     moduleRating: getModuleRating(state),
     moduleRatingId: getModuleRatingId(state),
     canEdit: getCanEdit(state),
+    trainingModuleIdForRedirect: getTrainingModuleIdForRedirect(state),
   };
 };
 

@@ -29,11 +29,17 @@ const setComments = createAction('EXPERTISES_SET_COMMENTS');
 const createComment = createAction('EXPERTISES_CREATE_COMMENT');
 const updateUnreadCommentStatus = createAction('EXPERTISES_UPDATE_UNREAD_COMMENT_STATUS');
 
+const getExpertiseLogAccept = createAction('EXPERTISE_GET_EXPERTISE_LOG_ACCEPT');
+const setExpertiseLogAccept = createAction('EXPERTISE_SET_EXPERTISE_LOG_ACCEPT');
+
 const actions: ExpertisesActions = {
     getComments,
     setComments,
     createComment,
     updateUnreadCommentStatus,
+
+    setExpertiseLogAccept,
+    getExpertiseLogAccept,
 
     changeSelectedQualification,
     changeSelectedStatus,

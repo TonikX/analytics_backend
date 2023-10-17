@@ -18,9 +18,12 @@ import {CommentType} from "../../components/Comments/types";
 export interface WorkProgramActions {
     pageDown: any;
 
-    updateCompetenceFilterYear: any,
-    updateCompetenceFilterIMP: any,
-    updateCompetenceFilterAP: any,
+    getExpertiseLogAccept: any;
+    setExpertiseLogAccept: any;
+
+    updateCompetenceFilterYear: any;
+    updateCompetenceFilterIMP: any;
+    updateCompetenceFilterAP: any;
 
     saveZUN: any;
     saveZUNforThisEP: any;
@@ -98,6 +101,7 @@ export interface WorkProgramActions {
 
 export interface workProgramState {
     [fields.WORK_PROGRAM]: any;
+    [fields.EXPERTISE_LOG_ACCEPT]: any;
     [fields.WORK_PROGRAM_EVALUATION_TOOLS]: Array<EvaluationToolType>;
     [fields.WORK_PROGRAM_EVALUATION_TOOL]: EvaluationToolType|{};
     [fields.AP_WITH_COMPETENCES_AND_INDICATORS_TO_WP]: any;
@@ -127,6 +131,9 @@ export type WorkProgramGeneralType = {
     [WorkProgramGeneralFields.ZUN]: Array<ZunType>;
     [WorkProgramGeneralFields.BARS]: boolean;
     [WorkProgramGeneralFields.IMPLEMENTATION_FORMAT]: ImplementationFormatsEnum;
+    expertise_with_rpd: {
+        id: number;
+    }[]
 };
 
 export type ZunType = {
@@ -146,6 +153,16 @@ export type ZunType = {
 
 export interface WorkProgramProps extends WithStyles<typeof styles> {
     actions: WorkProgramActions;
+    expertiseLogAccept: {
+        expertise: {
+            approvale_date: string
+        },
+        user: {
+            first_name: string,
+            last_name: string,
+            isu_number: number
+        }
+    },
     foldersActions: FolderActions;
     workProgramTitle: string;
     canApprove: boolean;

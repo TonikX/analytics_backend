@@ -35,6 +35,7 @@ export interface layoutState {
 export type UserType = {
     [UserFields.FIRST_NAME]: string;
     [UserFields.LAST_NAME]: string;
+    [UserFields.ISU_NUMBER]: string;
     [UserFields.ID]: number;
     [UserFields.USERNAME]: string;
 }

@@ -20,4 +20,5 @@ export interface AddLiteratureModalProps extends  WithStyles<typeof styles> {
     literatureActions: LiteratureActions;
     handleClose: () => void;
     handleSave: ({ selectedLiterature, selectedLiteratureEbsco }: { selectedLiterature: Array<LiteratureType>, selectedLiteratureEbsco: Array<LiteratureEbscoType>}) => void;
+    showEBSCO: boolean;
 }

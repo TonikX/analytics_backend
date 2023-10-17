@@ -2,6 +2,7 @@ from django.contrib.auth.models import Group
 from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
 
+from analytics_project import settings
 from dataprocessing.itmo_backends import isu_client_credentials_request
 from dataprocessing.models import User
 from gia_practice_app.GIA.models import GIA
@@ -94,9 +95,10 @@ def expertise_notificator(sender, instance, created, **kwargs):
     # isu_client_credentials_request('https://dev.disc.itmo.su/api/v1/disciplines/:disc_id?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(status=instance.expertise_status, wp_id=wp_exp.id))
 
     try:
-        isu_client_credentials_request(
-            'https://disc.itmo.su/api/v1/disciplines/{disc_id}?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(
-                disc_id=wp_exp.discipline_code, status=instance.get_expertise_status_display(), wp_id=wp_exp.id))
+        if settings.DEBUG == False:
+            isu_client_credentials_request(
+                'https://disc.itmo.su/api/v1/disciplines/{disc_id}?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(
+                    disc_id=wp_exp.discipline_code, status=instance.get_expertise_status_display(), wp_id=wp_exp.id))
     except:
         pass
 

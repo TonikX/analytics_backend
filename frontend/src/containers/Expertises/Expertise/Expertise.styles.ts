@@ -26,6 +26,9 @@ export default (theme: Theme) => createStyles({
             color: theme.palette.primary.main
         }
     },
+    tablePanel: {
+      padding: '25px 0 !important',
+    },
     addIcon: {
         marginLeft: 'auto',
     },

@@ -45,7 +45,7 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
     state = {
         selectedLiterature: [],
         selectedLiteratureEbsco: [],
-        source: literatureSource.EBSCO
+        source: this.props.showEBSCO ? literatureSource.EBSCO : literatureSource.ANALITYCS
     };
 
     componentDidMount() {
@@ -103,7 +103,7 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
     }
 
     render() {
-        const {isOpen, classes, allCount, literatureList, currentPage, handleClose, handleSave} = this.props;
+        const {isOpen, classes, allCount, literatureList, currentPage, handleClose, handleSave, showEBSCO} = this.props;
         const {selectedLiterature, source, selectedLiteratureEbsco} = this.state;
         const disableButton = source === literatureSource.EBSCO ? selectedLiteratureEbsco.length === 0 : selectedLiterature.length === 0;
 
@@ -144,7 +144,7 @@ class AddLiteratureModal extends React.PureComponent<AddLiteratureModalProps> {
                     <DialogContent className={classes.dialogContent}>
                         <div className={classes.header}>
                             <Tabs value={source} onChange={this.handleChangeSource}>
-                                <Tab value={literatureSource.EBSCO} label="Эбско" />
+                                {showEBSCO ? <Tab value={literatureSource.EBSCO} label="Эбско" /> : null}
                                 <Tab value={literatureSource.ANALITYCS} label="Аналитика" />
                             </Tabs>
 

@@ -35,6 +35,7 @@ import Competences from "./Competences";
 
 import {FavoriteType} from "../Profile/Folders/enum";
 import {WorkProgramProps} from './types';
+import {appRouter} from "../../service/router-service";
 
 import {sectionsValue, steps, subSections} from "./constants";
 
@@ -55,6 +56,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         const id = this.getWorkProgramId();
 
         this.props.actions.getWorkProgram(id);
+        this.props.actions.getExpertiseLogAccept(id);
     }
 
     componentDidUpdate(prevProps: Readonly<WorkProgramProps>, prevState: Readonly<{}>, snapshot?: any) {
@@ -87,7 +89,6 @@ class WorkProgram extends React.Component<WorkProgramProps> {
             activeStep: sectionsValue[section] || 0
         })
     }
-
     openConfirmDuplicateWPModal = () => {
         this.setState({
             openConfirmDuplicateWPModal: true
@@ -280,9 +281,17 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         this.props.navigate(link)
     }
 
+    handleStatusClicked = () => {
+        //@ts-ignore
+        this.props.navigate(appRouter.getExpertiseRouteLink(this.getExpertiseId()))
+    }
+
+    getExpertiseId = () => this.props.workProgram?.expertise_with_rpd?.[0]?.id
+
     render() {
         //@ts-ignore
         const {classes} = this.props;
+        const workProgramExpertiseId = this.getExpertiseId();
         const {workProgramTitle, canSendToExpertise, canSendToArchive, canApprove, canComment, workProgramStatus,
             workProgramRating, canAddToFolder, validateErrors, notificationsRead, canSendToIsu} = this.props;
         const {activeStep, isOpenComments} = this.state;
@@ -290,7 +299,7 @@ class WorkProgram extends React.Component<WorkProgramProps> {
         return (
             <div className={classes.wrap}>
                 <div className={classes.header}>
-                    <WorkProgramStatus status={workProgramStatus} />
+                    <WorkProgramStatus onClick={workProgramExpertiseId ? this.handleStatusClicked : undefined} status={workProgramStatus} />
 
                     <div className={classes.headerButtons}>
                         {canSendToArchive && <Button onClick={this.openConfirmArchiveWPModal}>Отправить в архив</Button>}

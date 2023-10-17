@@ -11,6 +11,7 @@ export const initialState: expertisesState = {
         [fields.SORTING_FIELD]: '',
         [fields.SORTING_MODE]: ''
     },
+    [fields.EXPERTISE_LOG_ACCEPT]: [],
     [fields.CURRENT_PAGE]: 1,
     [fields.ALL_COUNT]: 1,
     [fields.SEARCH_QUERY]: "",
@@ -25,6 +26,11 @@ export const initialState: expertisesState = {
 const setExpertise = (state: expertisesState, {payload}: any): expertisesState => ({
     ...state,
     [fields.EXPERTISE]: payload,
+});
+
+const setExpertiseLogAccept = (state: expertisesState, {payload}: any): expertisesState => ({
+    ...state,
+    [fields.EXPERTISE_LOG_ACCEPT]: payload
 });
 
 const setData = (state: expertisesState, {payload}: any): expertisesState => ({
@@ -82,6 +88,7 @@ const changeSorting = (state: expertisesState, {payload}: any): expertisesState 
 export const reducer = createReducer(initialState, {
     [actions.setExpertisesList.type]: setData,
     [actions.setComments.type]: setComments,
+    [actions.setExpertiseLogAccept.type]: setExpertiseLogAccept,
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCurrentPage.type]: changeCurrentPage,
     [actions.changeAllCount.type]: changeAllCount,

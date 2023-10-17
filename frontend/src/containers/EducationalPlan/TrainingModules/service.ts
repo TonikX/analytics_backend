@@ -71,6 +71,12 @@ class TrainingModulesService extends AnalyticsService{
         return this.get(`/api/certification_tools/${id}`);
     }
 
+    copyDisciplineBlockModule(id: number){
+        return this.post(`/api/disciplineblockmodule/copy`, {
+            module_id: id
+        });
+    }
+
     changeIntermediateCertification(evaluationTool: any){
         const id = evaluationTool[IntermediateCertificationFields.ID];
 

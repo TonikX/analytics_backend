@@ -152,6 +152,29 @@ const removeFatherFromModule = createLogic({
     }
 });
 
+const copyDisciplineBlockModule = createLogic({
+  type: trainingModuleActions.copyDisciplineBlockModule.type,
+  latest: true,
+  process({getState, action}: any, dispatch, done) {
+    const moduleId = getTrainingModuleId(getState());
+
+    dispatch(actions.fetchingTrue({destination: fetchingTypes.DUPLICATE_DISCIPLINE_BLOCK_MODULE}));
+
+    service.copyDisciplineBlockModule(moduleId)
+      .then((res: any) => {
+        dispatch(moduleActions.setTrainingModuleIdForRedirect(res.data.id));
+        dispatch(actions.fetchingSuccess());
+      })
+      .catch((err) => {
+        dispatch(actions.fetchingFailed(err));
+      })
+      .then(() => {
+        dispatch(actions.fetchingFalse({destination: fetchingTypes.DUPLICATE_DISCIPLINE_BLOCK_MODULE}));
+        return done();
+      });
+  }
+});
+
 const updateChildModules = createLogic({
     type: trainingModuleActions.updateChildModules.type,
     latest: true,
@@ -385,4 +408,5 @@ export default [
     deleteIntermediateCertification,
     getIntermediateCertification,
     changeTrainingModuleEducationalPrograms,
+    copyDisciplineBlockModule
 ];

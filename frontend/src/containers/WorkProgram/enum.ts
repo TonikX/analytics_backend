@@ -1,5 +1,6 @@
 export enum fields {
     WORK_PROGRAM = 'WORK_PROGRAM',
+    EXPERTISE_LOG_ACCEPT = 'EXPERTISE_LOG_ACCEPT',
     WORK_PROGRAM_TITLE = 'title',
     WORK_PROGRAM_CODE = 'discipline_code',
     WORK_PROGRAM_QUALIFICATION = 'qualification',
@@ -103,6 +104,7 @@ export enum workProgramTopicFields {
 
 export enum fetchingTypes {
     GET_RESULTS = 'GET_RESULTS',
+    GET_EXPERTISE_LOG_ACCEPT = 'GET_EXPERTISE_LOG_ACCEPT',
     UPDATE_UNREAD_COMMENT_STATUS = 'UPDATE_UNREAD_COMMENT_STATUS',
     CLONE_WORK_PROGRAM = 'CLONE_WORK_PROGRAM',
 

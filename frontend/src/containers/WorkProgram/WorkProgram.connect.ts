@@ -10,7 +10,9 @@ import {
     isCanComment,
     isCanSendToIsu,
     isCanEdit,
-    isCanAddToFolder, getWorkProgramNotificationsUnread,
+    isCanAddToFolder,
+    getWorkProgramNotificationsUnread,
+    getExpertiseLogAccept,
 } from './getters';
 
 import {rootState} from "../../store/reducers";
@@ -25,6 +27,7 @@ import {isFetchingComponentByKey} from "../../layout/getters";
 const mapStateToProps = (state:rootState) => {
     return {
         workProgram: getWorkProgram(state),
+        expertiseLogAccept: getExpertiseLogAccept(state),
         workProgramTitle: getWorkProgramField(state, WorkProgramGeneralFields.TITLE),
         workProgramRating: getWorkProgramField(state, WorkProgramGeneralFields.RATING),
         workProgramRatingId: getWorkProgramField(state, WorkProgramGeneralFields.RATING_ID),

@@ -6,7 +6,7 @@ import {GENERAL_PATH} from "./reducer";
 
 import {ExpertisesFields, fields} from './enum';
 
-import {expertisesState, ExpertiseType} from './types';
+import {expertisesState, ExpertiseType, LogItem} from './types';
 import {WorkProgramStatusType} from "../WorkProgram/types";
 import {Types} from "../../components/SortingButton/types";
 
@@ -29,3 +29,5 @@ export const getSortingField = (state: rootState) => get(getSorting(state), fiel
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);
 
 export const getComments = (state: rootState) => get(getSorting(state), fields.COMMENTS, []);
+
+export const getExpertiseLogAccept = (state: rootState) => get(getStateData(state), fields.EXPERTISE_LOG_ACCEPT, [] as LogItem[]);
