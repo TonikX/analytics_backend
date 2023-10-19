@@ -19,14 +19,19 @@ class Command(BaseCommand):
         not_exisisted_zuns = 0
         restored_counter = 0
         more_than_one_fs_count = 0
+        zero_fos = 0
+        dropped_zuns = []
         for restored_data in data:
             wp_in_fss = WorkProgramInFieldOfStudy.objects.filter(work_program=restored_data["wp_id"],
                                                                  work_program_change_in_discipline_block_module__discipline_block_module__id=
                                                                  restored_data["module_id"]).distinct()
+            restored_counter += 1
+            print(wp_in_fss)
             if wp_in_fss.count() == 0:
                 print(wp_in_fss)
+                zero_fos+=1
                 continue
-            restored_counter += 1
+
             if wp_in_fss.count() > 1:
                 more_than_one_fs_count += 1
             wp_in_fs = None
@@ -58,6 +63,7 @@ class Command(BaseCommand):
                             zun_to_connect = Zun.objects.get(id=zun_id)
                         except Zun.DoesNotExist:
                             #print(zun_id)
+                            dropped_zuns.append(zun_id)
                             not_exisisted_zuns += 1
                             continue
                         zun_to_connect.wp_in_fs = wp_in_fs
@@ -65,5 +71,9 @@ class Command(BaseCommand):
                         recreated_counter += 1
                         #print(zun_to_connect, wp_in_fs)
         print(
-            f"records: {recreated_counter}, skipped: {skipped_counter}, more than one wp in fs {more_than_one_fs_count}"
-            f", not_existed_zuns: {not_exisisted_zuns}, restored_zuns: {restored_counter}")
+            f"recreated relations: {recreated_counter}, skipped: {skipped_counter}, more than one wp in fs {more_than_one_fs_count}"
+            f", not_existed_zuns: {not_exisisted_zuns}, finded_fos: {restored_counter}, not founded fos: {zero_fos}")
+        dirname = os.path.dirname(__file__)
+        filename = os.path.join(dirname, 'files/DROPPED_ZUNS.json')
+        with open(filename, 'w') as file:
+            file.write(json.dumps(dropped_zuns, indent=2, ensure_ascii=False))
