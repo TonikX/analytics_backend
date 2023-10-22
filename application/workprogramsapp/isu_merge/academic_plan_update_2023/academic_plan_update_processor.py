@@ -1331,8 +1331,8 @@ class AcademicPlanUpdateProcessor:
                         #                           discipline_block_object)
                     #
                     # print(block_to_del_ids)
-                    # self.__del_block__(block_to_del_ids, isu_academic_plan_json,
-                    #                   )
+                    self.__del_block__(block_to_del_ids, isu_academic_plan_json,
+                                      )
 
                     academic_plan_update_configuration = AcademicPlanUpdateConfiguration.objects \
                         .get(academic_plan_id=plan_id)

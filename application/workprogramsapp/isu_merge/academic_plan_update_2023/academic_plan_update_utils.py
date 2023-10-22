@@ -86,13 +86,22 @@ class AcademicPlanUpdateUtils:
 
     @staticmethod
     def get_qualification(isu_academic_plan_json):
-        training_period = int(float(isu_academic_plan_json['training_period']))
-        if training_period == 4:
-            qualification = 'bachelor'
-        elif training_period == 2:
-            qualification = 'master'
+        if 'training_period' in isu_academic_plan_json:
+            training_period = int(float(isu_academic_plan_json['training_period']))
+            if training_period == 4:
+                qualification = 'bachelor'
+            elif training_period == 2:
+                qualification = 'master'
+            else:
+                qualification = 'specialist'
         else:
-            qualification = 'specialist'
+            training_period = isu_academic_plan_json["levelQualification"]
+            if training_period == "Бакалавр":
+                qualification = 'bachelor'
+            elif training_period == "Магистр":
+                qualification = 'master'
+            else:
+                qualification = 'specialist'
         return qualification
 
     @staticmethod

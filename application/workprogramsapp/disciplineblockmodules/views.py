@@ -411,7 +411,7 @@ class CopyModules(APIView):
                                "from_copy_id": old_module.id}]
         new_module.clone_info_json = new_clone_info
         new_module.save()
-
+        print(old_module.childs.all())
         new_module.editors.add(user)
         new_module.childs.add(*old_module.childs.all())
 
