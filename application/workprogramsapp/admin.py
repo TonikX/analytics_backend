@@ -28,7 +28,8 @@ from .models import (
     СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
     WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions,
     AcademicPlanUpdateConfiguration,
-    AcademicPlanUpdateLog, GiaInFieldOfStudy, PracticeInFieldOfStudy, DisciplineBlockModuleInIsu, EmployerRepresentative
+    AcademicPlanUpdateLog, GiaInFieldOfStudy, PracticeInFieldOfStudy, DisciplineBlockModuleInIsu, EmployerRepresentative,
+    BugsLog
 )
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments, EmailReset, \
     AcademicPlanUpdateNotification
@@ -180,9 +181,13 @@ admin.site.register(AcademicPlanUpdateNotification)
 admin.site.register(EmployerRepresentative)
 admin.site.register(IsuModulesHashes)
 
+
 @admin.register(DisciplineBlockModuleInIsu)
 class ModuleIsuAdmin(admin.ModelAdmin):
     list_display = ('id', 'isu_id', 'isu_father_id', 'academic_plan', 'module')
     search_fields = ['id', 'isu_id', 'isu_father_id', 'academic_plan__id', 'module__id']
     save_on_top = True
     save_as = True
+
+
+admin.site.register(BugsLog)

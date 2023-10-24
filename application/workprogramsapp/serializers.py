@@ -18,7 +18,7 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
     AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration, \
-    IsuObjectsSendLogger
+    IsuObjectsSendLogger, BugsLog
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer, \
     ShortUniversityPartnerSerializer
 
@@ -1172,3 +1172,11 @@ class WorkProgramInFieldOfStudyShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
         fields = ['id', 'title', 'approval_date', 'authors', 'discipline_code', 'work_program_in_change_block']
+
+
+class BugsLogSerializer(serializers.ModelSerializer):
+    file = serializers.FileField(required=False)
+
+    class Meta:
+        model = BugsLog
+        fields = ['title', 'description', 'file']

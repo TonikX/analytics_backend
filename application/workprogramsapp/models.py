@@ -529,15 +529,17 @@ class GeneralCharacteristics(models.Model):
     dean_of_the_faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                             verbose_name="Декан факультета", related_name="dean_of_the_faculty_in_gh",
                                             blank=True, null=True)
-    dean_of_the_faculty_directors_position = models.CharField(max_length=512, verbose_name="должность Декана", blank=True,
-                                          null=True)
+    dean_of_the_faculty_directors_position = models.CharField(max_length=512, verbose_name="должность Декана",
+                                                              blank=True,
+                                                              null=True)
     cluster_name = models.CharField(max_length=512, verbose_name="Имя подразделения, кластера, института", blank=True,
                                     null=True)
     science_type = models.BooleanField(blank=True, null=True, verbose_name="Научная ОП?")
     industrial_type = models.BooleanField(blank=True, null=True, verbose_name="Индустриальная ОП?")
     corporate_type = models.BooleanField(blank=True, null=True, verbose_name="Корпоративная ОП?")
     enterprise_type = models.BooleanField(blank=True, null=True, verbose_name="Предпринемательская ОП?")
-    target_master_type = models.BooleanField(blank=True, null=True, verbose_name="Магистратура перспективных направлений?")
+    target_master_type = models.BooleanField(blank=True, null=True,
+                                             verbose_name="Магистратура перспективных направлений?")
     on_check = models.CharField(max_length=1024, verbose_name="Статус проверки", choices=check_status,
                                 default="in_work")
 
@@ -691,18 +693,18 @@ class ImplementationAcademicPlan(models.Model):
 
     def __str__(self):
         return 'НАШ ОП ид: ' + str(self.id) + ' / ' + 'ОП ИСУ ИД: ' + str(self.op_isu_id)
+
     @staticmethod
     def get_all_imp_by_modules(modules):
         imp_list = ImplementationAcademicPlan.objects.none()
         for module in modules:
             fathers = module.father_module.prefetch_related("father_module")
             if fathers:
-                imp_list = imp_list|ImplementationAcademicPlan.get_all_imp_by_modules(fathers)
+                imp_list = imp_list | ImplementationAcademicPlan.get_all_imp_by_modules(fathers)
             else:
                 imp_list = imp_list | ImplementationAcademicPlan.objects.filter(
                     academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block=module)
         return imp_list
-
 
 
 class DisciplineBlock(CloneMixin, models.Model):
@@ -873,7 +875,8 @@ class DisciplineBlockModule(CloneMixin, models.Model):
             for module in modules:
                 for ap_index in module.orderings_for_ups:
                     print(ap_index)
-                    if int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) == old_ordinal_number:
+                    if int(ap_index['up_id']) == block.academic_plan.id and int(
+                            ap_index['number']) == old_ordinal_number:
                         ap_index['number'] = new_ordinal_number
                     elif int(ap_index['up_id']) == block.academic_plan.id and new_ordinal_number <= int(
                             ap_index['number']) <= old_ordinal_number:
@@ -883,7 +886,8 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         else:
             for module in modules:
                 for ap_index in module.orderings_for_ups:
-                    if int(ap_index['up_id']) == block.academic_plan.id and int(ap_index['number']) == old_ordinal_number:
+                    if int(ap_index['up_id']) == block.academic_plan.id and int(
+                            ap_index['number']) == old_ordinal_number:
                         ap_index['number'] = new_ordinal_number
                     elif int(ap_index['up_id']) == block.academic_plan.id and old_ordinal_number < int(
                             ap_index['number']) <= new_ordinal_number:
@@ -954,7 +958,8 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
 class WorkProgramInFieldOfStudy(CloneMixin, models.Model):
     work_program_change_in_discipline_block_module = models.ForeignKey('WorkProgramChangeInDisciplineBlockModule',
                                                                        on_delete=models.SET_NULL,
-                                                                       related_name="zuns_for_cb", blank=True, null=True)
+                                                                       related_name="zuns_for_cb", blank=True,
+                                                                       null=True)
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
 
@@ -984,7 +989,8 @@ class PracticeInFieldOfStudy(models.Model):
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
     backup_module = models.ForeignKey('DisciplineBlockModule', on_delete=models.CASCADE,
                                       related_name="module_backup_practice", blank=True, null=True)
-    backup_ap = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, related_name="ap_backup_practice", blank=True,
+    backup_ap = models.ForeignKey('AcademicPlan', on_delete=models.CASCADE, related_name="ap_backup_practice",
+                                  blank=True,
                                   null=True)
     backup_date = models.DateTimeField(null=True, blank=True, verbose_name='Дата бэкапа')
 
@@ -1137,6 +1143,7 @@ class CompetenceComments(models.Model):
     competence = models.ForeignKey("Competence", on_delete=models.CASCADE, related_name="competence_comment")
     comment_text = models.CharField(max_length=50000, verbose_name="Комментарий")
     comment_date = models.DateTimeField(auto_now_add=True, blank=True, verbose_name='Дата комментария')
+
 
 # class IndicatorWorkProgram(models.Model):
 #     '''
@@ -1507,3 +1514,21 @@ class IsuModulesHashes(models.Model):
     ap_isu_id = models.IntegerField(verbose_name="ИСУ ид плана")
     module_hash = models.TextField(verbose_name="Хэш модуля")
     new_id = models.CharField(max_length=1024, blank=True, null=True, verbose_name='ap_id+isu_module_id')
+
+
+def get_upload_path_for_bugs_log(instance, filename):
+    return "bugs_log/user_{id}/{file}".format(id=instance.order.id, file=filename)
+
+
+class BugsLog(models.Model):
+    """
+    Модель харения информации оь багах, присланных пользователями
+    """
+    title = models.CharField(verbose_name="Наименование бага", max_length=1024)
+    description = models.CharField(verbose_name="Описание бага", max_length=16384)
+    file = models.FileField(upload_to=get_upload_path_for_bugs_log, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    date = models.DateTimeField(editable=True, auto_now_add=True, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.user) + ' / ' + str(self.title) + ' / ' + str(self.date)
