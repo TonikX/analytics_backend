@@ -60,6 +60,7 @@ from workprogramsapp.models import ProfessionalStandard
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsEducationPlanDeveloper, IsExpertiseMaster
 
 # Блок реализации АПИ для КПУД интерфейсов
+from ..expertise.serializers import WorkProgramShortForExperiseSerializerWithStructUnit
 from ..notifications.emails.send_mail import mail_sender
 
 
@@ -739,3 +740,51 @@ class CompetenceCommentCreateView(generics.CreateAPIView):
     queryset = CompetenceComments.objects.all()
     serializer_class = CompetenceCommentSerializer
     permission_classes = [IsExpertiseMaster]
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_all_unfilled_wp(request, gh_id):
+    blocks_for_gh = DisciplineBlock.objects.filter(
+        academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=gh_id)
+    wp_unfilled_set = WorkProgram.objects.none()
+    for block in blocks_for_gh:
+        if "1" in block.name or "2" in block.name:
+
+            for module in block.modules_in_discipline_block.all():
+                cbs_for_block = DisciplineBlockModule.get_all_changeblocks_from_module(module)
+                for cb_in_block in cbs_for_block:
+                    wp_in_fs = cb_in_block.zuns_for_cb.all().first()
+                    if not wp_in_fs:
+                        continue
+                    if not Zun.objects.filter(wp_in_fs=wp_in_fs).exists():
+                        wp_unfilled_set = wp_unfilled_set | WorkProgram.objects.filter(id=wp_in_fs.work_program.id)
+
+        else:
+            continue
+    response_data = WorkProgramShortForExperiseSerializerWithStructUnit(wp_unfilled_set, many=True)
+    return Response(response_data.data, status=200)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_all_unfilled_indicator(request, gh_id):
+    blocks_for_gh = DisciplineBlock.objects.filter(
+        academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=gh_id)
+    wp_unfilled_set = WorkProgram.objects.none()
+    for block in blocks_for_gh:
+        if "1" in block.name or "2" in block.name:
+
+            for module in block.modules_in_discipline_block.all():
+                cbs_for_block = DisciplineBlockModule.get_all_changeblocks_from_module(module)
+                for cb_in_block in cbs_for_block:
+                    wp_in_fs = cb_in_block.zuns_for_cb.all().first()
+                    if not wp_in_fs:
+                        continue
+                    if not Zun.objects.filter(wp_in_fs=wp_in_fs).exists():
+                        wp_unfilled_set = wp_unfilled_set | WorkProgram.objects.filter(id=wp_in_fs.work_program.id)
+
+        else:
+            continue
+    response_data = WorkProgramShortForExperiseSerializerWithStructUnit(wp_unfilled_set, many=True)
+    return Response(response_data.data, status=200)
