@@ -8,7 +8,7 @@ from workprogramsapp.educational_program.views import EducationalProgramCreateAP
     academ_plan_check, UploadProfStandards, new_ordinal_numbers_for_modules_in_ap, gh_check, \
     get_all_ap_with_competences_and_indicators, get_all_competences_and_indicators_for_wp, zun_many_remove, \
     WorkProgramInFieldOfStudyWithAPByWP, zun_copy, zun_copy_by_wps, CompetenceCommentsView, CompetenceCommentCreateView, \
-    get_all_unfilled_wp
+    get_all_unfilled_wp, get_all_unfilled_indicator
 from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
@@ -36,6 +36,7 @@ urlpatterns = [
          GeneralCharacteristicsDetailsWithEducationalProgramView.as_view()),
     path('api/gh_check/<int:gh_id>', gh_check),
     path('api/general_characteristic/get_unfilled_wp/<int:gh_id>', get_all_unfilled_wp),
+    path('api/general_characteristic/get_unfilled_indicators/<int:gh_id>', get_all_unfilled_indicator),
 
 
     # --Образовательная программа
