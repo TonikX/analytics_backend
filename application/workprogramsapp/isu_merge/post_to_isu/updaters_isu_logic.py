@@ -290,7 +290,7 @@ def generate_wp_in_lower_module_for_ap_isu(disc_id, changeblock, module, isu_id_
             "semester_start": changeblock.semester_start,
             "replaceable ": replaceable,
             "required": required,
-            "choice_flow": False}
+            "choice_flow": True}
 
 
 def post_ap_to_isu(token, ap_dict, ap):
