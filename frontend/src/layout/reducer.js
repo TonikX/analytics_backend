@@ -17,6 +17,7 @@ export const initialState = {
     [fields.USER_DATA]: {},
     [fields.NOTIFICATIONS_COUNT]: 0,
     [fields.MOCK_MENU]: [],
+    [fields.SHOW_BUG_MODAL]: false,
 };
 
 const fetchingTrue = (state, {payload}) => ({
@@ -96,6 +97,16 @@ const setAuthFalse = (state) => ({
     [fields.IS_AUTH]: false,
 });
 
+const setShowBugModalTrue = (state) => ({
+    ...state,
+    [fields.SHOW_BUG_MODAL]: true,
+});
+
+const setShowBugModalFalse = (state) => ({
+    ...state,
+    [fields.SHOW_BUG_MODAL]: false,
+});
+
 export const reducer = createReducer(initialState, {
     [actions.fetchingComponentTrue.type]: fetchingComponentTrue,
     [actions.fetchingTrue.type]: fetchingTrue,
@@ -105,6 +116,8 @@ export const reducer = createReducer(initialState, {
     [actions.fetchingSuccess.type]: fetchingSuccess,
     [actions.setAuthFalse.type]: setAuthFalse,
     [actions.setAuthTrue.type]: setAuthTrue,
+    [actions.setShowBugModalTrue.type]: setShowBugModalTrue,
+    [actions.setShowBugModalFalse.type]: setShowBugModalFalse,
     [actions.setAllUsers.type]: setAllUsers,
     [actions.setUserGroups.type]: setUserGroups,
     [actions.setUserData.type]: setUserData,

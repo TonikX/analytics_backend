@@ -12,6 +12,14 @@ class MainService extends AnalyticsService{
         return this.get(`/api/user/groups`);
     }
 
+    sendBug(title: string, description: string, file: string){
+        return this.post(`/api/bugs_log`, {
+            title,
+            description,
+            file
+        });
+    }
+
     refreshToken(){
         return this.post(`/auth/jwt/refresh`, {
             refresh: userService.getRefreshToken()
