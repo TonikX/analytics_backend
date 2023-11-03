@@ -2,6 +2,8 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth.models import Group
+from rest_framework.fields import SerializerMethodField
+
 from dataprocessing.serializers import userProfileSerializer
 from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan, \
     DisciplineBlock
@@ -206,3 +208,21 @@ class BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer(seriali
         model = DisciplineBlock
         fields = ['module', 'descipline_block']
 
+
+class ImplementationAcademicPlanForModuleSerializer(serializers.ModelSerializer):
+    field_of_study = FieldOfStudyImplementationSerializer(many=True)
+
+    on_check = SerializerMethodField()
+    ap_id = SerializerMethodField()
+
+    def get_on_check(self, instance):
+        on_check_field = instance.academic_plan.on_check
+        return on_check_field
+
+    def get_ap_id(self, instance):
+        ap_id_field = instance.academic_plan.id
+        return ap_id_field
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id', 'year', 'field_of_study', 'title', "on_check", "ap_id"]

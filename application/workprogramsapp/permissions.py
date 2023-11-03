@@ -245,13 +245,13 @@ class IsUniversalModule(permissions.BasePermission):
         if request.method == "DELETE":
             module_id = request.query_params.get('module')
             module = DisciplineBlockModule.objects.get(id=module_id)
-            if module.type == "universal_module" and request.user not in module.editors:
+            if module.type == "universal_module" and request.user not in module.editors.all():
                 return False
         # Для добавления модулей
         if request.data.get("module") and request.method == "POST":
             for module_id in request.data.get("module"):
                 module = DisciplineBlockModule.objects.get(id=module_id)
-                if module.type == "universal_module" and request.user not in module.editors:
+                if module.type == "universal_module" and request.user not in module.editors.all():
                     return False
         # Для копирования модулей
         if request.data.get("module_id") and request.method == "POST":
@@ -259,4 +259,11 @@ class IsUniversalModule(permissions.BasePermission):
             module = DisciplineBlockModule.objects.get(id=module_id)
             if module.type == "universal_module" and not request.user.groups.filter(name="expertise_master"):
                 return False
+        # Для Обновления модулей
+        if view.kwargs.get("pk") and request.method == "PATCH":
+            module_id = view.kwargs.get("pk")
+            module = DisciplineBlockModule.objects.get(id=module_id)
+            if module.type == "universal_module" and not request.user.groups.filter(name="expertise_master"):
+                return False
+
         return True

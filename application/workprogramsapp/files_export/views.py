@@ -527,8 +527,8 @@ class GeneralCharacteristicGenerateDocx(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         gh = GeneralCharacteristics.objects.get(id=kwargs['pk'])
-        # tpl = DocxTemplate( "C:\\Users\\s4\\Desktop\\analytics_backend\\application\\static-backend\\export_template\\oh_template_2023.docx")
-        tpl = DocxTemplate("/application/static-backend/export_template/oh_template_2023.docx")
+        tpl = DocxTemplate( "C:\\Users\\s4\\Desktop\\analytics_backend\\application\\static-backend\\export_template\\oh_template_2023.docx")
+        #tpl = DocxTemplate("/application/static-backend/export_template/oh_template_2023.docx")
         context = generate_context(gh)
         tpl.render(context)
         filename = f"ОХ_{context['year']}_{context['op_name']}.docx"
