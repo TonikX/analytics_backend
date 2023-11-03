@@ -11,7 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django_super_deduper.merge import MergedModelInstance
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
-from rest_framework import filters
+from rest_framework import filters, parsers
 from rest_framework import generics, viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -2450,6 +2450,7 @@ class WorkProgramArchiveUpdateView(generics.UpdateAPIView):
 class BugsLogView(generics.CreateAPIView):
     name = 'Загрузка файла ТЗ заказа'
     permission_classes = (IsAuthenticated,)
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser)
     serializer_class = BugsLogSerializer
     queryset = BugsLog.objects.all()
 

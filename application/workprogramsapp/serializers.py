@@ -1180,3 +1180,10 @@ class BugsLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = BugsLog
         fields = ['title', 'description', 'file']
+
+    # def create(self, validated_data):
+    #     file_data = validated_data.pop('file')
+    #     thread_obj = BugsLog(**validated_data)
+    #     thread_obj.file = file_data
+    #     thread_obj.save()
+    #     return thread_obj
