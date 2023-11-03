@@ -137,8 +137,8 @@ def recursion_module_matrix(ws, level, modules, unique_dict, competence_dict, de
 
 
 def process_excel_competence_matrix(gen_characteristic):
-    wb_obj = openpyxl.load_workbook("C:\\Users\\s4\\Desktop\\analytics_backend\\application\\static-backend\\export_template\\competence_matrix_template_2023.xlsx")
-    #wb_obj = openpyxl.load_workbook("/application/static-backend/export_template/competence_matrix_template_2023.xlsx")
+    #wb_obj = openpyxl.load_workbook("C:\\Users\\s4\\Desktop\\analytics_backend\\application\\static-backend\\export_template\\competence_matrix_template_2023.xlsx")
+    wb_obj = openpyxl.load_workbook("/application/static-backend/export_template/competence_matrix_template_2023.xlsx")
 
     unique_dict = \
         {"is_first_iter_ap": True,
