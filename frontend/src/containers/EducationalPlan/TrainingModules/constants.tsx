@@ -107,6 +107,7 @@ export const steps = {
     [StepsEnum.MODULES]: 'Учебные модули',
     [StepsEnum.PLANS]: 'Доступные учебные планы',
     [StepsEnum.EVALUATION_TOOLS]: <>Оценочные средства <br /> (не обязательны)</>,
+    [StepsEnum.MODULE_COPY_HISTORY]: 'История копирования модуля',
 }
 
 export const selectRulesArray = [

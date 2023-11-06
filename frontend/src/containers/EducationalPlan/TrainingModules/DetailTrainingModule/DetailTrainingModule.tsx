@@ -53,6 +53,7 @@ import AddTrainingModuleModal from "../AddTrainingModuleModal/AddTrainingModuleM
 import {TrainingModuleType} from "../types";
 import {BACHELOR_QUALIFICATION, specializationObject} from "../../../WorkProgram/constants";
 import {Checkbox, FormControlLabel} from "@mui/material";
+import ModuleCopyHistory from "../ModuleCopyHistory/ModuleCopyHistory";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -676,12 +677,19 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         return this.renderPlans()
       case StepsEnum.EVALUATION_TOOLS:
         return <EvaluationTools />
+      case StepsEnum.MODULE_COPY_HISTORY:
+        return <ModuleCopyHistory />
     }
   }
 
   render() {
     const {module, classes, moduleRating} = this.props;
     const {deleteBlockConfirmId, deletedWorkProgramsLength, addEditorsMode, activeStep} = this.state;
+    let finalSteps = Object.keys(steps);
+    if (this.props.module?.clone_info_json === null) {
+      // @ts-ignore
+      finalSteps = Object.keys(steps).filter((step) => +step !== StepsEnum.MODULE_COPY_HISTORY)
+    }
 
     return (
       <div className={classes.wrap}>
@@ -698,7 +706,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
                    nonLinear
                    className={classes.stepper}
           >
-            {Object.keys(steps).map((key) => (
+            {finalSteps.map((key) => (
               <Step key={key} onClick={() => this.setState({activeStep: parseInt(key)})}>
                 <StepButton style={{textAlign: 'left',}}
                             key={key}

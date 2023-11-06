@@ -10,7 +10,6 @@ const mapStateToProps = (state: rootState) => {
     return {
         evaluationToolsList: getEvaluationListModule(state) || [],
         isCanEdit: getCanEdit(state),
-
     };
 };
 

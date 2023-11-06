@@ -61,4 +61,5 @@ export enum StepsEnum {
     MODULES = 1,
     PLANS = 2,
     EVALUATION_TOOLS = 3,
+    MODULE_COPY_HISTORY = 4,
 }

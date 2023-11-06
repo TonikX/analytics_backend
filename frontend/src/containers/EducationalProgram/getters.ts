@@ -21,7 +21,7 @@ import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): educationalProgramState => get(state, GENERAL_PATH);
 export const getEducationalProgramCharacteristic = (state: rootState): EducationalProgramCharacteristicType|{} => get(getStateData(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {});
-export const getEducationalProgramId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'educational_program.id', 0);
+export const getEducationalProgramId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'educational_program.0.id', 0);
 export const getEducationalProgramCharacteristicId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'id', 0);
 export const getEducationalProgramCharacteristicCanEdit= (state: rootState): boolean =>
   get(getEducationalProgramCharacteristic(state), 'can_edit', false);
@@ -37,6 +37,8 @@ const titleDirectionPath = 'work_program_change_in_discipline_block_module.disci
 const numberDirectionPath = 'work_program_change_in_discipline_block_module.discipline_block_module.descipline_block.0.academic_plan.academic_plan_in_field_of_study.0.field_of_study.0.number'
 
 export const getDirectionsDependedOnWorkProgram = (state: rootState): Array<any> => get(getStateData(state), fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM, []);
+export const getUnfilledWorkPrograms = (state: rootState): Array<any> => get(getStateData(state), fields.UNFILLED_WORK_PROGRAMS, []);
+export const getUnfilledIndicators = (state: rootState): Array<any> => get(getStateData(state), fields.UNFILLED_INDICATORS, []);
 
 export const getDirectionsDependedOnWorkProgramForSelector = (state: rootState): SelectorListType =>
     getDirectionsDependedOnWorkProgram(state).map((plan: EducationalPlanListType) => ({

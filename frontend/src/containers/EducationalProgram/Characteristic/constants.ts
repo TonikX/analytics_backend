@@ -57,4 +57,9 @@ export const steps = [
         label: 'Матрица компетенций',
         link: (id: number) => appRouter.getCharacteristicSubSectionLink(id, 13)
     },
+
+    {
+        label: 'Анализ заполняемости',
+        link: (id: number) => appRouter.getCharacteristicSubSectionLink(id, 14)
+    },
 ];
