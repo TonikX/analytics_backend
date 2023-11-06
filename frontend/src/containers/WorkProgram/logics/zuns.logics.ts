@@ -3,6 +3,7 @@ import {createLogic} from "redux-logic";
 import actions from '../../../layout/actions'
 import workProgramActions from '../actions'
 import practiceActions from '../../Practice/actions'
+import educationalProgramActions from '../../EducationalProgram/actions'
 
 import Service from '../service'
 
@@ -41,19 +42,21 @@ const saveZUNforThisEP = createLogic({
     type: workProgramActions.saveZUNforThisEP.type,
     latest: true,
     process({getState, action}: any, dispatch, done) {
-        const {workProgramId, practiceId, ...payload} = action.payload;
+        const {workProgramId, practiceId, updateCharacteristics, ...payload} = action.payload;
 
         dispatch(actions.fetchingTrue({destination: fetchingTypes.SAVE_ZUN_FOR_THIS_EP}));
 
         service.saveZUNforThisEP(payload, workProgramId, practiceId)
             .then((res) => {
-                if (workProgramId) {
-                  dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
-                  dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
-                } else {
-                  dispatch(practiceActions.getPractice(practiceId))
-                }
-                dispatch(actions.fetchingSuccess());
+              if (updateCharacteristics) { // значит мы на странице характеристики
+                dispatch(educationalProgramActions.getUnfilledWorkPrograms());
+              } else if (workProgramId) {
+                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
+              } else {
+                dispatch(practiceActions.getPractice(practiceId))
+              }
+              dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {
                 dispatch(actions.fetchingFailed(err));

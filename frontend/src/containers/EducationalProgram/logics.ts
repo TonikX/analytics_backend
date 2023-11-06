@@ -169,6 +169,52 @@ const getCompetenceMatrix = createLogic({
   }
 });
 
+const getUnfilledWorkPrograms = createLogic({
+  type: educationalPlanActions.getUnfilledWorkPrograms.type,
+  latest: true,
+  process({getState, action}: any, dispatch, done) {
+    const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+    dispatch(actions.fetchingTrue({destination: fetchingTypes.UNFILLED_WORK_PROGRAMS}));
+
+    service.getEducationalProgramUnfilledWorkPrograms(characteristicId)
+      .then((res) => {
+        dispatch(educationalPlanActions.setUnfilledWorkPrograms(res.data));
+        dispatch(actions.fetchingSuccess());
+      })
+      .catch((err) => {
+        dispatch(actions.fetchingFailed(err));
+      })
+      .then(() => {
+        dispatch(actions.fetchingFalse({destination: fetchingTypes.UNFILLED_WORK_PROGRAMS}));
+        return done();
+      });
+  }
+});
+
+const getUnfilledIndicators = createLogic({
+  type: educationalPlanActions.getUnfilledIndicators.type,
+  latest: true,
+  process({getState, action}: any, dispatch, done) {
+    const characteristicId = getEducationalProgramCharacteristicId(getState());
+
+    dispatch(actions.fetchingTrue({destination: fetchingTypes.UNFILLED_INDICATORS}));
+
+    service.getEducationalProgramUnfilledIndicators(characteristicId)
+      .then((res) => {
+        dispatch(educationalPlanActions.setUnfilledIndicators(res.data));
+        dispatch(actions.fetchingSuccess());
+      })
+      .catch((err) => {
+        dispatch(actions.fetchingFailed(err));
+      })
+      .then(() => {
+        dispatch(actions.fetchingFalse({destination: fetchingTypes.UNFILLED_INDICATORS}));
+        return done();
+      });
+  }
+});
+
 const saveZun = createLogic({
     type: educationalPlanActions.saveZun.type,
     latest: true,
@@ -952,4 +998,7 @@ export default [
   deleteRepresentative,
   updateRepresentative,
   sendToCheck,
+
+  getUnfilledWorkPrograms,
+  getUnfilledIndicators
 ];

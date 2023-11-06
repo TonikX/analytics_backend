@@ -84,8 +84,18 @@ const setDirectionsDependedOnWorkProgram = createAction('SET_DIRECTIONS_DEPENDED
 
 const sendToCheck = createAction('SEND_TO_CHECK');
 
+const getUnfilledWorkPrograms = createAction('GET_UNFILLED_WORK_PROGRAMS');
+const setUnfilledWorkPrograms = createAction('SET_UNFILLED_WORK_PROGRAMS');
+const getUnfilledIndicators = createAction('GET_UNFILLED_INDICATORS');
+const setUnfilledIndicators = createAction('SET_UNFILLED_INDICATORS');
+
 const actions: EducationalProgramActions = {
     sendToCheck,
+
+    getUnfilledWorkPrograms,
+    getUnfilledIndicators,
+    setUnfilledWorkPrograms,
+    setUnfilledIndicators,
 
     addNewRepresentative,
     updateRepresentative,

@@ -41,6 +41,8 @@ interface IndicatorsProps {
   epList: any[];
   resultsList: {value: string|number, label: string}[];
   apRequired?: boolean;
+  defaultEpId?: number;
+  updateCharacteristics?: boolean;
 }
 
 type Indicator = {
@@ -65,7 +67,19 @@ const getIndicatorsForSave = (indicators: Indicator[]) => (
   }))
 )
 
-export default ({ apRequired = false, resultsList, epList, isOpen, isEditMode, handleClose, defaultCompetence, defaultIndicator, workProgramId, practiceId }: IndicatorsProps) => {
+export default ({
+  updateCharacteristics,
+  defaultEpId,
+  apRequired = false,
+  resultsList,
+  epList = [],
+  isOpen, isEditMode,
+  handleClose,
+  defaultCompetence,
+  defaultIndicator,
+  workProgramId,
+  practiceId
+}: IndicatorsProps) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [competence, setCompetence] = useState<{value: number; label: string}>({value: 0, label: ''})
@@ -180,6 +194,7 @@ export default ({ apRequired = false, resultsList, epList, isOpen, isEditMode, h
       plans: plans[0].value,
       workProgramId,
       practiceId,
+      updateCharacteristics,
     }))
     handleClose()
   }, [indicators, plans, practiceId])
@@ -198,12 +213,19 @@ export default ({ apRequired = false, resultsList, epList, isOpen, isEditMode, h
 
   const filterAcademicPlan = useSelector((state: rootState) => getFilterAcademicPlan(state))
 
+  useEffect(() => {
+    if (defaultEpId) {
+      changeFilterAcademicPlan(defaultEpId);
+      setPlans([{value: defaultEpId, label: ''}]);
+    }
+  }, [defaultEpId])
+
   const changeFilterAcademicPlan = (planId: ReactText) => {
     dispatch(competenceActions.changeFilterAcademicPlan(planId === filterAcademicPlan ? undefined : planId))
     dispatch(competenceActions.getCompetences())
   }
 
-  const epForSelect = epList && epList.reduce((fullPlans: any, currentPlan: any) => {
+  const epForSelect = epList ? epList.reduce((fullPlans: any, currentPlan: any) => {
     const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
       const academicPlan = item?.academic_plan;
       return ([
@@ -222,7 +244,7 @@ export default ({ apRequired = false, resultsList, epList, isOpen, isEditMode, h
       ...fullPlans,
       ...plans,
     ]
-  }, [])
+  }, []) : []
 
   useEffect(() => {
     if (defaultCompetence){
@@ -311,7 +333,7 @@ export default ({ apRequired = false, resultsList, epList, isOpen, isEditMode, h
         </React.Fragment>
       ))}
 
-      {apRequired ? null : (
+      {apRequired || defaultEpId ? null : (
         <>
           <Typography className={classes.indicatorDialiogInfoMassage}>
             Если хотите выбрать ОП для которой сохраняете компетенции и индикаторы, переключите бегунок ниже и выберите нужные. Если компетенции и индикаторы для всех ОП, просто нажмите сохранить.

@@ -52,6 +52,14 @@ class Service extends AnalyticsService{
     return this.get(`/api/general_characteristic/detail/${id}`);
   }
 
+  getEducationalProgramUnfilledWorkPrograms(id: number){
+    return this.get(`/api/general_characteristic/get_unfilled_wp/${id}`);
+  }
+
+  getEducationalProgramUnfilledIndicators(id: number){
+    return this.get(`/api/general_characteristic/get_unfilled_indicators/${id}`);
+  }
+
   createEducationProgram(program: any){
     return this.post(`/api/general_characteristic/create`, {
       "educational_program": program[EducationProgramFields.ACADEMIC_PLAN_FOR_EP],

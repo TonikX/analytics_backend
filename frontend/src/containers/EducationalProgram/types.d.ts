@@ -59,6 +59,11 @@ export interface EducationalProgramActions {
     getDirectionsDependedOnWorkProgram: any;
     setDirectionsDependedOnWorkProgram: any;
 
+    getUnfilledWorkPrograms: any;
+    getUnfilledIndicators: any;
+    setUnfilledWorkPrograms: any;
+    setUnfilledIndicators: any;
+
     characteristicCreateGroup: ActionCreatorWithPayload<CharacteristicCreateGroupActionType>;
     characteristicSaveGroupTitle: ActionCreatorWithPayload<CharacteristicSaveGroupTitleActionType>;
     characteristicSaveCompetence: ActionCreatorWithPayload<CharacteristicAddCompetenceActionType>;
@@ -89,6 +94,8 @@ export interface educationalProgramState {
         [fields.DIALOG_DATA]: EducationalProgramType|{};
     };
     [fields.COMPETENCE_MATRIX]: any;
+    [fields.UNFILLED_INDICATORS]: any;
+    [fields.UNFILLED_WORK_PROGRAMS]: any;
 }
 
 export type EducationalProgramCharacteristicType = {
