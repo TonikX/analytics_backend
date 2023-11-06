@@ -1081,7 +1081,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        if instance.discipline_code == None:
+        if instance.discipline_code == None and self.context.get('request'):
             data["can_send_to_isu"] = bool(self.context['request'].user.groups.filter(name="expertise_master"))
         return data
 
