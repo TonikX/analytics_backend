@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import AdditionalMaterialSet, StructuralUnitSet, UserStructuralUnitSet, CompetencesSet, \
     ChangeSemesterInEvaluationsCorrect, WorkProgramShortInfo, WorkProgramItemsPrerequisitesView, PracticeShortInfo, \
-    GIAShortInfo
+    GIAShortInfo, wp_in_academic_plan
 
 router = DefaultRouter()
 router.register(r'api/general_ch/additional_material_in_topic_of_rpd',
@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/practice/isu/<int:isu_id>', PracticeShortInfo),
     path('api/gia/isu/<int:isu_id>', GIAShortInfo),
     path('api/workprogram/items_isu/<int:isu_id>', WorkProgramItemsPrerequisitesView.as_view()),
+    path('api/workprogram/in_ap/<int:ap_id>', wp_in_academic_plan),
 
 
 ]
