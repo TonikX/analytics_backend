@@ -50,6 +50,7 @@ const saveZUNforThisEP = createLogic({
             .then((res) => {
               if (updateCharacteristics) { // значит мы на странице характеристики
                 dispatch(educationalProgramActions.getUnfilledWorkPrograms());
+                dispatch(educationalProgramActions.getUnfilledIndicators());
               } else if (workProgramId) {
                 dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
                 dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())

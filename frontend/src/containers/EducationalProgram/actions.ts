@@ -89,6 +89,9 @@ const setUnfilledWorkPrograms = createAction('SET_UNFILLED_WORK_PROGRAMS');
 const getUnfilledIndicators = createAction('GET_UNFILLED_INDICATORS');
 const setUnfilledIndicators = createAction('SET_UNFILLED_INDICATORS');
 
+const getCharacteristicsWorkProgram = createAction('GET_CHARACTERISTICS_WORK_PROGRAM');
+const setCharacteristicsWorkProgram = createAction('SET_CHARACTERISTICS_WORK_PROGRAM');
+
 const actions: EducationalProgramActions = {
     sendToCheck,
 
@@ -96,6 +99,9 @@ const actions: EducationalProgramActions = {
     getUnfilledIndicators,
     setUnfilledWorkPrograms,
     setUnfilledIndicators,
+
+    setCharacteristicsWorkProgram,
+    getCharacteristicsWorkProgram,
 
     addNewRepresentative,
     updateRepresentative,

@@ -86,6 +86,19 @@ export default ({
   const [indicators, setIndicators] = useState<Indicator[]>([])
   const [plans, setPlans] = useState<Array<{value: number; label: string}>>([])
 
+
+  useEffect(() => {
+    if (!defaultIndicator) return;
+
+    setIndicators([{
+      ...defaultIndicator,
+      results: [],
+      knowledge: '',
+      skills: '',
+      attainments: ''
+    }])
+  }, [defaultIndicator])
+
   const changeZunFields = useCallback((indicatorIndex: number, zunField: 'skills'|'knowledge'|'attainments') => (e: any) => {
     const updatedIndicators = indicators
     updatedIndicators[indicatorIndex][zunField] = e.target.value
@@ -343,7 +356,7 @@ export default ({
           </FormGroup>
         </>
       )}
-      {saveForPlans || apRequired ? (
+      {(saveForPlans || apRequired) && !defaultEpId ? (
           <div style={{marginTop: apRequired && indicators.length ? 30 : 0}}>
             <SimpleSelector label="Учебный план и образовательная программа"
                             value={plans[0]?.value}

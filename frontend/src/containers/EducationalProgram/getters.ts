@@ -39,6 +39,7 @@ const numberDirectionPath = 'work_program_change_in_discipline_block_module.disc
 export const getDirectionsDependedOnWorkProgram = (state: rootState): Array<any> => get(getStateData(state), fields.DIRECTIONS_DEPENDED_ON_WORK_PROGRAM, []);
 export const getUnfilledWorkPrograms = (state: rootState): Array<any> => get(getStateData(state), fields.UNFILLED_WORK_PROGRAMS, []);
 export const getUnfilledIndicators = (state: rootState): Array<any> => get(getStateData(state), fields.UNFILLED_INDICATORS, []);
+export const getCharacteristicsWorkProgram = (state: rootState): Array<any> => get(getStateData(state), fields.CHARACTERISTICS_WORK_PROGRAM, []);
 
 export const getDirectionsDependedOnWorkProgramForSelector = (state: rootState): SelectorListType =>
     getDirectionsDependedOnWorkProgram(state).map((plan: EducationalPlanListType) => ({

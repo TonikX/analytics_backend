@@ -11,7 +11,7 @@ import {rootState} from "../../../../store/reducers";
 import {
   getUnfilledWorkPrograms,
   getUnfilledIndicators,
-  getEducationalProgramId
+  getEducationalProgramId,
 } from "../../getters";
 import actions from "../../../EducationalProgram/actions";
 import TableHead from "@mui/material/TableHead";
@@ -25,6 +25,7 @@ import Button from "@mui/material/Button";
 import IndicatorsDialog from "../../../WorkProgram/Competences/IndicatorDialog/IndicatorDialog";
 import wpActions from "../../../WorkProgram/actions";
 import {getResultsForSelect, getWorkProgramField} from "../../../WorkProgram/getters";
+import {WorkProgramSelectModal} from "../WorkProgramSelectModal";
 
 export const AbilityAnalysis = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,9 @@ export const AbilityAnalysis = () => {
   const [tab, setTab] = useState('1');
   const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
-  const [selectedWpId, setSelectedWpId] = useState(undefined)
+  const [isOpenWorkProgramModal, setIsOpenWorkProgramModal] = useState(false)
+  const [defaultIndicator, setDefaultIndicator] = useState<{value: number, label: string}|undefined>()
+  const [selectedWpId, setSelectedWpId] = useState<number|undefined>(undefined)
   const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
   const resultsList = useSelector((state: rootState) => getResultsForSelect(state))
   const educationalProgramId = useSelector((state: rootState) => getEducationalProgramId(state))
@@ -44,6 +47,7 @@ export const AbilityAnalysis = () => {
 
   useEffect(() => {
     dispatch(actions.getUnfilledWorkPrograms());
+    dispatch(actions.getCharacteristicsWorkProgram());
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -61,6 +65,7 @@ export const AbilityAnalysis = () => {
   const handleCloseDialog = () => {
     setDialogCompetence(undefined)
     setIsOpenIndicatorDialog(false)
+    setDefaultIndicator(undefined)
   }
 
   const unfilledWorkPrograms = useSelector((state: rootState) => getUnfilledWorkPrograms(state))
@@ -137,7 +142,7 @@ export const AbilityAnalysis = () => {
               <TableCell className={classes.header}>
                 Индикатор
               </TableCell>
-              {/*<TabчleCell className={classes.header} />*/}
+              <TableCell className={classes.header} />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -161,18 +166,22 @@ export const AbilityAnalysis = () => {
                         <TableCell className={classes.cell}>
                           {indicator?.number} {indicator?.name}
                         </TableCell>
-                        {/*<TableCell className={classes.cell}>*/}
-                        {/*  <Button*/}
-                        {/*    onClick={() => {*/}
-                        {/*      handleCreateZUN();*/}
-                        {/*    }}*/}
-                        {/*    variant="outlined"*/}
-                        {/*    className={classes.addZUNButton}*/}
-                        {/*    color="secondary"*/}
-                        {/*  >*/}
-                        {/*    Добавить ЗУН*/}
-                        {/*  </Button>*/}
-                        {/*</TableCell>*/}
+                        <TableCell className={classes.cell}>
+                          <Button
+                            onClick={() => {
+                              setIsOpenWorkProgramModal(true)
+                              setDefaultIndicator({
+                                label: indicator?.name,
+                                value: indicator?.id,
+                              })
+                            }}
+                            variant="outlined"
+                            className={classes.addZUNButton}
+                            color="secondary"
+                          >
+                            Добавить ЗУН
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     )
                   })}
@@ -194,9 +203,21 @@ export const AbilityAnalysis = () => {
           defaultEpId={educationalProgramId}
           updateCharacteristics
           apRequired
+          defaultIndicator={defaultIndicator}
         />
         : null
       }
+
+      {isOpenWorkProgramModal ? (
+        <WorkProgramSelectModal
+          onSelect={(wpId: number) => {
+            setSelectedWpId(wpId);
+            setIsOpenWorkProgramModal(false);
+            setIsOpenIndicatorDialog(true);
+          }}
+          onCancel={() => setIsOpenWorkProgramModal(false)}
+        />
+      ) : null}
     </TabContext>
   );
 }
