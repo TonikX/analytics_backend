@@ -23,7 +23,8 @@ from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialS
 from .serializers import CompetenceFullSerializer
 from ..expertise.models import Expertise
 from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram, OutcomesOfWorkProgram, \
-    СertificationEvaluationTool, EvaluationTool, Topic, Competence, AcademicPlan
+    СertificationEvaluationTool, EvaluationTool, Topic, Competence, AcademicPlan, \
+    WorkProgramChangeInDisciplineBlockModule
 from ..serializers import WorkProgramSerializer, CompetenceSerializer, WorkProgramShortForExperiseSerializer
 
 
@@ -320,9 +321,13 @@ class WorkProgramItemsPrerequisitesView(generics.RetrieveAPIView):
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-def wp_in_academic_plan(request, ap_id):
-    ap_to_get = AcademicPlan.objects.get(id=ap_id)
-    changeblocks = ap_to_get.get_all_changeblocks_from_ap()
-    wps = WorkProgram.objects.filter(zuns_for_wp__work_program_change_in_discipline_block_module__in=changeblocks)
+def wp_in_general_characteristic(request, gh_id):
+    ap_all = AcademicPlan.objects.filter(
+        academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=gh_id).distinct()
+    changeblocks = WorkProgramChangeInDisciplineBlockModule.objects.none()
+    for ap_to_get in ap_all:
+        changeblocks = changeblocks | ap_to_get.get_all_changeblocks_from_ap()
+    wps = WorkProgram.objects.filter(
+        zuns_for_wp__work_program_change_in_discipline_block_module__in=changeblocks).distinct()
     serializer = WorkProgramShortForExperiseSerializer(wps, many=True)
     return Response(serializer.data)
