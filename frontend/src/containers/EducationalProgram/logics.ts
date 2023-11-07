@@ -215,6 +215,31 @@ const getUnfilledIndicators = createLogic({
   }
 });
 
+const getCharacteristicsWorkProgram = createLogic({
+  type: educationalPlanActions.getCharacteristicsWorkProgram.type,
+  latest: true,
+  process({getState, action}: any, dispatch, done) {
+    // const characteristicId = getEducationalProgramCharacteristicId(getState());
+    const characteristic: any = getEducationalProgramCharacteristic(getState());
+    const characteristicId = characteristic?.educational_program?.[0].academic_plan?.id;
+
+    dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTICS_WORK_PROGRAM}));
+
+    service.getCharacteristicsWorkProgram(characteristicId)
+      .then((res) => {
+        dispatch(educationalPlanActions.setCharacteristicsWorkProgram(res.data));
+        dispatch(actions.fetchingSuccess());
+      })
+      .catch((err) => {
+        dispatch(actions.fetchingFailed(err));
+      })
+      .then(() => {
+        dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTICS_WORK_PROGRAM}));
+        return done();
+      });
+  }
+});
+
 const saveZun = createLogic({
     type: educationalPlanActions.saveZun.type,
     latest: true,
@@ -978,6 +1003,8 @@ export default [
 
   characteristicSaveKindOfActivity,
   characteristicDeleteKindOfActivity,
+
+  getCharacteristicsWorkProgram,
 
   createKindOfActivity,
   getKindsOfActivity,
