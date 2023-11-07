@@ -137,7 +137,7 @@ export const AbilityAnalysis = () => {
               <TableCell className={classes.header}>
                 Индикатор
               </TableCell>
-              <TableCell className={classes.header} />
+              {/*<TabчleCell className={classes.header} />*/}
             </TableRow>
           </TableHead>
           <TableBody>
