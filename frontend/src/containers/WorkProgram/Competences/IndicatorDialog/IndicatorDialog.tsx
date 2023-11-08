@@ -9,7 +9,6 @@ import InfoIcon from "@mui/icons-material/InfoOutlined";
 import CompetenceSelector from '../../../Competences/CompetenceSelector'
 import IndicatorSelector from '../../../Competences/Indicators/IndicatorSelector'
 import ResultsSelector from '../../Results/ResultsSeletor'
-import PlanSelector from '../../../EducationalPlan/WorkProgramPlansSelector'
 import { useStyles } from './IndicatorDialog.styles'
 import actions from '../../actions'
 import competenceActions from '../../../Competences/actions'
@@ -40,10 +39,13 @@ interface IndicatorsProps {
   handleClose: () => void;
   epList?: any[];
   finalEpList?: {value: number, label: string}[];
+  finalEpListForCompetence?: {value: number, label: string}[];
   resultsList: {value: string|number, label: string}[];
   apRequired?: boolean;
   defaultEpId?: number;
+  defaultEpIdForCompetence?: number;
   updateCharacteristics?: boolean;
+  disableCompetence?: boolean;
 }
 
 type Indicator = {
@@ -70,14 +72,17 @@ const getIndicatorsForSave = (indicators: Indicator[]) => (
 
 export default ({
   updateCharacteristics,
+  defaultEpIdForCompetence,
   defaultEpId,
   apRequired = false,
   resultsList,
   epList = [],
   finalEpList = [],
+  finalEpListForCompetence = [],
   isOpen, isEditMode,
   handleClose,
   defaultCompetence,
+  disableCompetence,
   defaultIndicator,
   workProgramId,
   practiceId
@@ -182,20 +187,6 @@ export default ({
     setPlans([{
       value, label
     }])
-    // if (plans.find(item => item.value === value)) return
-    // if (value) {
-    //   setPlans([
-    //     ...plans,
-    //     {
-    //       value,
-    //       label
-    //     }
-    //   ])
-    // }
-  }, [plans])
-
-  const removePlan = useCallback((value: number) => {
-    setPlans(plans.filter(plan => plan.value !== value))
   }, [plans])
 
   const saveZun = useCallback(() => {
@@ -234,11 +225,13 @@ export default ({
   const filterAcademicPlan = useSelector((state: rootState) => getFilterAcademicPlan(state))
 
   useEffect(() => {
+    if (defaultEpIdForCompetence) {
+      changeFilterAcademicPlan(defaultEpIdForCompetence);
+    }
     if (defaultEpId) {
-      changeFilterAcademicPlan(defaultEpId);
       setPlans([{value: defaultEpId, label: ''}]);
     }
-  }, [defaultEpId])
+  }, [defaultEpIdForCompetence, defaultEpId])
 
   const changeFilterAcademicPlan = (planId: ReactText) => {
     dispatch(competenceActions.changeFilterAcademicPlan(planId === filterAcademicPlan ? undefined : planId))
@@ -289,7 +282,7 @@ export default ({
                       value={filterAcademicPlan}
                       onChange={changeFilterAcademicPlan}
                       onClickMenuItem={changeFilterAcademicPlan}
-                      metaList={epForSelect}
+                      metaList={finalEpListForCompetence ?? epForSelect}
                       wrapClass={classes.selectorWrap}
       />
       <CompetenceSelector
@@ -298,7 +291,7 @@ export default ({
         valueLabel={competence.label}
         label="Компетенция"
         className={classes.marginBottom30}
-        disabled={Boolean(defaultCompetence)}
+        disabled={Boolean(disableCompetence)}
       />
       <IndicatorSelector
         onChange={addIndicator}
@@ -370,19 +363,6 @@ export default ({
                             metaList={epForSelect}
                             wrapClass={classes.planSelectorWrap}
             />
-
-            {/*<PlanSelector*/}
-            {/*    label="Учебный план и образовательная программа"*/}
-            {/*    onChange={addPlan}*/}
-            {/*    valueLabel={plans[0]?.label}*/}
-            {/*    value={plans[0]?.value}*/}
-            {/*    workProgramId={workProgramId}*/}
-            {/*/>*/}
-            {/*<div className={classes.chipsList}>*/}
-            {/*  {plans.map(plan => (*/}
-            {/*      <Chip key={`result-${plan.value}`} className={classes.chip} onDelete={() => removePlan(plan.value)} label={plan.label} />*/}
-            {/*  ))}*/}
-            {/*</div>*/}
           </div>
       ) : null}
       <div className={classes.footer}>

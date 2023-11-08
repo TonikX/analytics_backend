@@ -167,6 +167,7 @@ export default React.memo(() => {
           isOpen={isOpenIndicatorDialog}
           handleClose={handleCloseDialog}
           defaultCompetence={dialogCompetence}
+          disableCompetence={!!dialogCompetence}
           practiceId={practiceId}
           epList={epList}
           resultsList={resultsList}

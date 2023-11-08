@@ -11,7 +11,7 @@ import {rootState} from "../../../../store/reducers";
 import {
   getUnfilledWorkPrograms,
   getUnfilledIndicators,
-  getEducationalProgramId, getEducationalProgramCharacteristic,
+  getEducationalProgramCharacteristic,
 } from "../../getters";
 import actions from "../../../EducationalProgram/actions";
 import TableHead from "@mui/material/TableHead";
@@ -31,18 +31,29 @@ export const AbilityAnalysis = () => {
   const classes = useStyles()
   const isFirstEnterSecondTab = useRef(true)
   const [tab, setTab] = useState('1');
-  const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
   const [isOpenWorkProgramModal, setIsOpenWorkProgramModal] = useState(false)
   const [defaultIndicator, setDefaultIndicator] = useState<{value: number, label: string}|undefined>()
+  const [defaultCompetence, setDefaultCompetence] = useState<{value: number, label: string}|undefined>()
   const [selectedWpId, setSelectedWpId] = useState<number|undefined>(undefined)
   const characteristics: any = useSelector((state: rootState) => getEducationalProgramCharacteristic(state))
   const resultsList = useSelector((state: rootState) => getResultsForSelect(state))
-  const educationalProgramId = useSelector((state: rootState) => getEducationalProgramId(state))
+  const educationalProgramId = characteristics.educational_program?.[0]?.id;
+  const educationalProgramIdForCompetence = characteristics.educational_program?.[0]?.academic_plan?.id;
+
   const finalEpList = characteristics.educational_program.map((item: any) => {
     return (
       {
         value: item.id,
+        label: `Направление: ${item?.field_of_study[0]?.title} / ОП: ${item?.title} (${item?.year})`,
+      }
+    )
+  })
+
+  const finalEpListForCompetence = characteristics.educational_program.map((item: any) => {
+    return (
+      {
+        value: item.academic_plan.id,
         label: `Направление: ${item?.field_of_study[0]?.title} / ОП: ${item?.title} (${item?.year})`,
       }
     )
@@ -66,9 +77,10 @@ export const AbilityAnalysis = () => {
   }
 
   const handleCloseDialog = () => {
-    setDialogCompetence(undefined)
+    setDefaultCompetence(undefined)
     setIsOpenIndicatorDialog(false)
     setDefaultIndicator(undefined)
+    setDefaultCompetence(undefined)
   }
 
   const unfilledWorkPrograms = useSelector((state: rootState) => getUnfilledWorkPrograms(state))
@@ -148,19 +160,19 @@ export const AbilityAnalysis = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {unfilledIndicators?.map((unfilledIndicator: any) => {
+            {unfilledIndicators?.map((competence: any) => {
               return (
                 <>
-                  {unfilledIndicator?.indicators?.map((indicator: any, index: number) => {
+                  {competence?.indicators?.map((indicator: any, index: number) => {
                     return (
-                      <TableRow key={unfilledIndicator?.id}>
+                      <TableRow key={competence?.id}>
                         {index === 0 ?
-                          <TableCell rowSpan={unfilledIndicator?.indicators?.length} className={classes.cell}>
+                          <TableCell rowSpan={competence?.indicators?.length} className={classes.cell}>
                             <Link className={classes.workProgramLink}
-                                  to={appRouter.getCompetenceIndicatorsRouteLink(unfilledIndicator?.id)}
+                                  to={appRouter.getCompetenceIndicatorsRouteLink(competence?.id)}
                                   target="_blank"
                             >
-                              {unfilledIndicator?.number} {unfilledIndicator?.name}
+                              {competence?.number} {competence?.name}
                             </Link>
                           </TableCell>
                           : <></>
@@ -175,6 +187,10 @@ export const AbilityAnalysis = () => {
                               setDefaultIndicator({
                                 label: indicator?.name,
                                 value: indicator?.id,
+                              })
+                              setDefaultCompetence({
+                                label: competence?.name,
+                                value: competence?.id,
                               })
                             }}
                             variant="outlined"
@@ -198,11 +214,13 @@ export const AbilityAnalysis = () => {
         <IndicatorsDialog
           isOpen={isOpenIndicatorDialog}
           handleClose={handleCloseDialog}
-          defaultCompetence={dialogCompetence}
+          defaultCompetence={defaultCompetence}
           workProgramId={selectedWpId}
           finalEpList={finalEpList}
+          finalEpListForCompetence={finalEpListForCompetence}
           resultsList={resultsList}
           defaultEpId={educationalProgramId}
+          defaultEpIdForCompetence={educationalProgramIdForCompetence}
           updateCharacteristics
           apRequired
           defaultIndicator={defaultIndicator}
