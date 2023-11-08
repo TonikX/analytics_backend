@@ -8,6 +8,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import {useSelector} from "react-redux";
 import {rootState} from "../../../../store/reducers";
+import Typography from '@mui/material/Typography';
 import {
   getUnfilledWorkPrograms,
   getUnfilledIndicators,
@@ -93,6 +94,9 @@ export const AbilityAnalysis = () => {
 
   return (
     <TabContext value={tab}>
+      <Typography style={{marginBottom: 10}}>
+        На данной странице Вы можете увидеть какие РПД, связанные с общей характеристикой не имеют компетенций и индикаторов и какие компетенции и индикаторы в данной общей характеристике не связанны ни с какими РПД. Добавить индикаторы компетенций и знания умения и навыки можно прямо в этом интерфейсе. Индикаторы компетенций должны быть связаны с блоками 1 и 2.
+      </Typography>
       <Box
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
