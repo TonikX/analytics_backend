@@ -14,6 +14,7 @@ nginx/ssl/data/
 frontend/.env.production
 **/discipline_code/*
 **/upload/*
+**/media/*
 **/certificates/*
 /frontend/.env.production
 
