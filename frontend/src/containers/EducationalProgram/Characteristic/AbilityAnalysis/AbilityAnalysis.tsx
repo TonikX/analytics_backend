@@ -11,7 +11,7 @@ import {rootState} from "../../../../store/reducers";
 import {
   getUnfilledWorkPrograms,
   getUnfilledIndicators,
-  getEducationalProgramId,
+  getEducationalProgramId, getEducationalProgramCharacteristic,
 } from "../../getters";
 import actions from "../../../EducationalProgram/actions";
 import TableHead from "@mui/material/TableHead";
@@ -23,8 +23,7 @@ import { useStyles } from './AbilityAnalysis.styles'
 import {appRouter} from "../../../../service/router-service";
 import Button from "@mui/material/Button";
 import IndicatorsDialog from "../../../WorkProgram/Competences/IndicatorDialog/IndicatorDialog";
-import wpActions from "../../../WorkProgram/actions";
-import {getResultsForSelect, getWorkProgramField} from "../../../WorkProgram/getters";
+import {getResultsForSelect} from "../../../WorkProgram/getters";
 import {WorkProgramSelectModal} from "../WorkProgramSelectModal";
 
 export const AbilityAnalysis = () => {
@@ -37,13 +36,17 @@ export const AbilityAnalysis = () => {
   const [isOpenWorkProgramModal, setIsOpenWorkProgramModal] = useState(false)
   const [defaultIndicator, setDefaultIndicator] = useState<{value: number, label: string}|undefined>()
   const [selectedWpId, setSelectedWpId] = useState<number|undefined>(undefined)
-  const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
+  const characteristics: any = useSelector((state: rootState) => getEducationalProgramCharacteristic(state))
   const resultsList = useSelector((state: rootState) => getResultsForSelect(state))
   const educationalProgramId = useSelector((state: rootState) => getEducationalProgramId(state))
-
-  const getWorkProgramById = (id: number) => {
-    dispatch(wpActions.getWorkProgram(id))
-  }
+  const finalEpList = characteristics.educational_program.map((item: any) => {
+    return (
+      {
+        value: item.academic_plan?.id,
+        label: `Направление: ${item?.field_of_study[0]?.title} / ОП: ${item?.title} (${item?.year})`,
+      }
+    )
+  })
 
   useEffect(() => {
     dispatch(actions.getUnfilledWorkPrograms());
@@ -116,7 +119,6 @@ export const AbilityAnalysis = () => {
                       onClick={() => {
                         handleCreateZUN();
                         setSelectedWpId(unfilledWorkProgram?.id);
-                        getWorkProgramById(unfilledWorkProgram?.id);
                       }}
                       variant="outlined"
                       className={classes.addZUNButton}
@@ -198,7 +200,7 @@ export const AbilityAnalysis = () => {
           handleClose={handleCloseDialog}
           defaultCompetence={dialogCompetence}
           workProgramId={selectedWpId}
-          epList={epList}
+          finalEpList={finalEpList}
           resultsList={resultsList}
           defaultEpId={educationalProgramId}
           updateCharacteristics
@@ -212,7 +214,7 @@ export const AbilityAnalysis = () => {
         <WorkProgramSelectModal
           onSelect={(wpId: number) => {
             setSelectedWpId(wpId);
-            getWorkProgramById(wpId);
+            // getWorkProgramById(wpId);
             setIsOpenWorkProgramModal(false);
             setIsOpenIndicatorDialog(true);
           }}
