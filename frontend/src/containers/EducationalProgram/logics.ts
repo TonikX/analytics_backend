@@ -219,13 +219,11 @@ const getCharacteristicsWorkProgram = createLogic({
   type: educationalPlanActions.getCharacteristicsWorkProgram.type,
   latest: true,
   process({getState, action}: any, dispatch, done) {
-    // const characteristicId = getEducationalProgramCharacteristicId(getState());
-    const characteristic: any = getEducationalProgramCharacteristic(getState());
-    const characteristicId = characteristic?.educational_program?.[0].academic_plan?.id;
+    const characteristicId = getEducationalProgramCharacteristicId(getState());
 
-    dispatch(actions.fetchingTrue({destination: fetchingTypes.CHARACTERISTICS_WORK_PROGRAM}));
+    dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_CHARACTERISTICS_WORK_PROGRAMS}));
 
-    service.getCharacteristicsWorkProgram(characteristicId)
+    service.getCharacteristicsWorkPrograms(characteristicId)
       .then((res) => {
         dispatch(educationalPlanActions.setCharacteristicsWorkProgram(res.data));
         dispatch(actions.fetchingSuccess());
@@ -234,7 +232,7 @@ const getCharacteristicsWorkProgram = createLogic({
         dispatch(actions.fetchingFailed(err));
       })
       .then(() => {
-        dispatch(actions.fetchingFalse({destination: fetchingTypes.CHARACTERISTICS_WORK_PROGRAM}));
+        dispatch(actions.fetchingFalse({destination: fetchingTypes.GET_CHARACTERISTICS_WORK_PROGRAMS}));
         return done();
       });
   }
