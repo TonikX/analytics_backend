@@ -2449,8 +2449,8 @@ class WorkProgramArchiveUpdateView(generics.UpdateAPIView):
 
 class BugsLogView(generics.CreateAPIView):
     name = 'Загрузка файла ТЗ заказа'
-    permission_classes = (IsAuthenticated,)
-    parser_classes = (parsers.FormParser, parsers.MultiPartParser)
+    permission_classes = [IsAuthenticated]
+    #parser_classes = (parsers.FormParser, parsers.MultiPartParser)
     serializer_class = BugsLogSerializer
     queryset = BugsLog.objects.all()
 

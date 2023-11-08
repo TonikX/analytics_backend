@@ -1517,7 +1517,7 @@ class IsuModulesHashes(models.Model):
 
 
 def get_upload_path_for_bugs_log(instance, filename):
-    return "bugs_log/user_{id}/{file}".format(id=instance.order.id, file=filename)
+    return "bugs_log/user_{id}/{file}".format(id=instance.user.id, file=filename)
 
 
 class BugsLog(models.Model):
