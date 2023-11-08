@@ -362,9 +362,14 @@ class AcademicPlan(models.Model):
             print(db.id)
             DisciplineBlock.new_descipline_block_modules(db.id)
 
-    def get_all_changeblocks_from_ap(self):
+    def get_all_changeblocks_from_ap(self, block_to_filter=None):
         changeblock_in_ap = WorkProgramChangeInDisciplineBlockModule.objects.none()
-        for block in DisciplineBlock.objects.filter(academic_plan__id=self.id):
+        if block_to_filter:
+            blocks = DisciplineBlock.objects.filter(academic_plan__id=self.id, name__icontains=block_to_filter)
+        else:
+            blocks = DisciplineBlock.objects.filter(academic_plan__id=self.id)
+
+        for block in blocks:
             for module in DisciplineBlockModule.objects.filter(descipline_block=block):
                 changeblock_in_ap = changeblock_in_ap | DisciplineBlockModule.get_all_changeblocks_from_module(module)
         return changeblock_in_ap
