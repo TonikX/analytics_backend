@@ -59,8 +59,9 @@ class Service extends AnalyticsService{
   getEducationalProgramUnfilledIndicators(id: number){
     return this.get(`/api/general_characteristic/get_unfilled_indicators/${id}`);
   }
-  getCharacteristicsWorkProgram(id: number){
-    return this.get(`/api/workprogram/in_ap/${id}`);
+
+  getCharacteristicsWorkPrograms(id: number){
+    return this.get(`/api/workprogram/in_gh/${id}`);
   }
 
   createEducationProgram(program: any){

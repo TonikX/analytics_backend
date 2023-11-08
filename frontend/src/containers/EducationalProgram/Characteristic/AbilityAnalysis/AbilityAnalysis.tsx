@@ -212,6 +212,7 @@ export const AbilityAnalysis = () => {
         <WorkProgramSelectModal
           onSelect={(wpId: number) => {
             setSelectedWpId(wpId);
+            getWorkProgramById(wpId);
             setIsOpenWorkProgramModal(false);
             setIsOpenIndicatorDialog(true);
           }}
