@@ -864,7 +864,8 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
             ap = AcademicPlan.objects.create(**validated_data)
             imp = ImplementationAcademicPlan.objects.create(academic_plan=ap,
                                                             title=validated_data.pop('educational_profile'),
-                                                            qualification=validated_data.pop('qualification'))
+                                                            qualification=validated_data.pop('qualification'),
+                                                            year=validated_data["year"])
             imp.field_of_study.add(FieldOfStudy.objects.get(id=fos_pk))
         except KeyError:
             ap = AcademicPlan.objects.create(**validated_data)

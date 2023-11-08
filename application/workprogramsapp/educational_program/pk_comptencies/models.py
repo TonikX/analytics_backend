@@ -59,7 +59,8 @@ class IndicatorInPkCompetenceInGeneralCharacteristic(models.Model):
                                                   on_delete=models.CASCADE,
                                                   verbose_name="Группа профессиональных компетенций в ОХ",
                                                   related_name="indicator_of_competence_in_group_of_pk_competences")
-    indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE, verbose_name="Индикатор ПК компетенции в ОХ")
+    indicator = models.ForeignKey('Indicator', on_delete=models.CASCADE, verbose_name="Индикатор ПК компетенции в ОХ",
+                                  related_name="indicator_in_pk")
 
     def __str__(self):
         return str(self.competence_in_group_of_pk) + '/' + str(self.indicator)

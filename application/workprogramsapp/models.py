@@ -939,7 +939,7 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
                                                 null=True)
     work_program = models.ManyToManyField('WorkProgram', verbose_name="Рабочая программа",
                                           through='WorkProgramInFieldOfStudy',
-                                          related_name="work_program_in_change_block")
+                                          related_name="work_program_in_change_block", blank=True, null=True)
     gia = models.ManyToManyField('gia_practice_app.GIA', verbose_name="Гиа",
                                  related_name="gia_in_change_block",
                                  through='GiaInFieldOfStudy', blank=True, null=True)

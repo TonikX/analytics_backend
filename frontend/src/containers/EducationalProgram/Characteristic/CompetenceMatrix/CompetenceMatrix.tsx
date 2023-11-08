@@ -26,6 +26,7 @@ import {
     AttachIndicatorProps, CompetencesRowProps,
 } from "./types";
 import {appRouter} from '../../../../service/router-service';
+import Button from "@mui/material/Button";
 
 const EMPTY = '\u00A0';
 
@@ -304,7 +305,11 @@ const TableContent = (tableContentProps: TableContentProps) => {
     )
 };
 
-export default () => {
+interface CompetenceMatrixProps {
+    handleUpdateMatrixTable: () => void;
+}
+
+export default ({ handleUpdateMatrixTable }: CompetenceMatrixProps) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const competenceMatrixId = useSelector(getEducationalProgramCharacteristicId);
@@ -353,6 +358,8 @@ export default () => {
 
     return (
         <div>
+            <Button style={{marginBottom: 10}} onClick={handleUpdateMatrixTable}><b>Обновить таблицу</b></Button>
+
             <TableContainer>
                 <Table size='small' className={classes.tableHeight}>
                     <TableHead>

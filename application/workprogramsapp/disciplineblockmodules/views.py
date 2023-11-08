@@ -21,11 +21,14 @@ from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockMo
     DisciplineBlockModuleSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
     DisciplineBlockModuleDetailSerializer, ShortDisciplineBlockModuleForModuleListSerializer, \
     DisciplineBlockModuleUpdateForBlockRelationSerializer, \
-    BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer
+    BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer, \
+    ImplementationAcademicPlanSerializerForBlockModule, ImplementationAcademicPlanForModuleSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
-from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan, AcademicPlan
+from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan, AcademicPlan, \
+    WorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor, \
-    IsAcademicPlanDeveloper
+    IsAcademicPlanDeveloper, IsUniversalModule
+from workprogramsapp.serializers import ImplementationAcademicPlanForWPinFSSerializer
 
 
 class DisciplineBlockModuleCreateAPIView(generics.CreateAPIView):
@@ -57,7 +60,7 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleCreateSerializer
-    permission_classes = [IsBlockModuleEditor]
+    permission_classes = [IsBlockModuleEditor, IsUniversalModule]
     my_tags = ["Discipline Blocks"]
 
     def patch(self, request, *args, **kwargs):
@@ -208,6 +211,8 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
         except:
             newdata.update({"rating": False})
 
+        newdata['plans_included'] = ImplementationAcademicPlanForModuleSerializer(
+            ImplementationAcademicPlan.get_all_imp_by_modules(queryset), many=True, ).data
         newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'], self.request.user)
         newdata = OrderedDict(newdata)
 
@@ -290,7 +295,7 @@ class InsertModuleInBlockAP(APIView):
 
 
 class WorkWithBlocksApiView(APIView):
-    permission_classes = [IsAcademicPlanDeveloper]
+    permission_classes = [IsAcademicPlanDeveloper, IsUniversalModule]
     my_tags = ["Discipline Blocks"]
 
     descipline_block = openapi.Parameter('descipline_block', openapi.IN_FORM,
@@ -373,7 +378,7 @@ class CopyModulesToAnotherAPView(APIView):
 
 
 class CopyModules(APIView):
-    permission_classes = [IsBlockModuleEditor]
+    permission_classes = [IsBlockModuleEditor, IsUniversalModule]
     my_tags = ["Discipline Blocks"]
 
     module_id = openapi.Parameter('module_id', openapi.IN_FORM,
@@ -414,6 +419,14 @@ class CopyModules(APIView):
         print(old_module.childs.all())
         new_module.editors.add(user)
         new_module.childs.add(*old_module.childs.all())
+
+        for changeblock in old_module.change_blocks_of_work_programs_in_modules.all():
+            new_changeblock = WorkProgramChangeInDisciplineBlockModule.objects.create(
+                discipline_block_module=new_module, change_type=changeblock.change_type)
+            new_changeblock.work_program.add(*changeblock.work_program.all())
+            new_changeblock.gia.add(*changeblock.gia.all())
+            new_changeblock.practice.add(*changeblock.practice.all())
+            new_changeblock.save()
 
         serializer = DisciplineBlockModuleSerializer(new_module)
         return Response(serializer.data)

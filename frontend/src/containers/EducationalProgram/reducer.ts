@@ -24,12 +24,30 @@ export const initialState: educationalProgramState = {
         [fields.IS_OPEN_DIALOG]: false,
         [fields.DIALOG_DATA]: {}
     },
-    [fields.COMPETENCE_MATRIX]: {}
+    [fields.COMPETENCE_MATRIX]: {},
+    [fields.UNFILLED_INDICATORS]: [],
+    [fields.UNFILLED_WORK_PROGRAMS]: [],
+    [fields.CHARACTERISTICS_WORK_PROGRAM]: [],
 };
 
 const setEducationalProgramList = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
     ...state,
     [fields.EDUCATION_PROGRAM_LIST]: payload,
+});
+
+const setCharacteristicsWorkProgram = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+    ...state,
+    [fields.CHARACTERISTICS_WORK_PROGRAM]: payload,
+});
+
+const setUnfilledWorkPrograms = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+    ...state,
+    [fields.UNFILLED_WORK_PROGRAMS]: payload,
+});
+
+const setUnfilledIndicators = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
+    ...state,
+    [fields.UNFILLED_INDICATORS]: payload,
 });
 
 const setEducationalProgramCharacteristic = (state: educationalProgramState, {payload}: any): educationalProgramState => ({
@@ -106,8 +124,11 @@ const setDirectionsDependedOnWorkProgram = (state: educationalPlanState, {payloa
 export const reducer = createReducer(initialState, {
     [actions.setEducationalProgramList.type]: setEducationalProgramList,
     [actions.setEducationalProgramCharacteristic.type]: setEducationalProgramCharacteristic,
+    [actions.setCharacteristicsWorkProgram.type]: setCharacteristicsWorkProgram,
     [actions.setCompetenceMatrix.type]: setCompetenceMatrix,
     [actions.openDialog.type]: openDialog,
+    [actions.setUnfilledWorkPrograms.type]: setUnfilledWorkPrograms,
+    [actions.setUnfilledIndicators.type]: setUnfilledIndicators,
     [actions.closeDialog.type]: closeDialog,
     [actions.changeSearchQuery.type]: changeSearchQuery,
     [actions.changeCurrentPage.type]: changeCurrentPage,

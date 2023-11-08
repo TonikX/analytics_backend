@@ -117,6 +117,13 @@ export interface TrainingModulesProps extends WithStyles<typeof styles>, PropsFr
 export type PropsFromRedux = ReturnType<mapStateToProps>;
 export type ActionsFromRedux = ReturnType<mapDispatchToProps>;
 
+export type CloneInfoItem = {
+    counter: number;
+    date: string;
+    from_copy_id: number;
+    user_id: number;
+}
+
 export type TrainingModuleType = {
     [TrainingModuleFields.ID]: number;
     [TrainingModuleFields.NAME]: string;
@@ -132,4 +139,5 @@ export type TrainingModuleType = {
     [TrainingModuleFields.EDITORS]: Array<UserType>;
     [TrainingModuleFields.CAN_EDIT]: boolean;
     [TrainingModuleFields.CERTIFICATION_EVALUATION_LIST]?: IntermediateCertificationType[];
+    clone_info_json: Array<CloneInfoItem>;
 }

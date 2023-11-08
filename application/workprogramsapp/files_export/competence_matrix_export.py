@@ -137,8 +137,8 @@ def recursion_module_matrix(ws, level, modules, unique_dict, competence_dict, de
 
 
 def process_excel_competence_matrix(gen_characteristic):
-    #wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\competence_matrix_template.xlsx")
-    wb_obj = openpyxl.load_workbook("/application/static-backend/export_template/competence_matrix_template_2023.xlsx")
+    wb_obj = openpyxl.load_workbook("C:\\Users\\s4\\Desktop\\analytics_backend\\application\\static-backend\\export_template\\competence_matrix_template_2023.xlsx")
+    #wb_obj = openpyxl.load_workbook("/application/static-backend/export_template/competence_matrix_template_2023.xlsx")
 
     unique_dict = \
         {"is_first_iter_ap": True,
@@ -211,8 +211,15 @@ def fill_competences(ws, column_start, competence_queryset, competence_dict, nam
 
 def competence_header(ws, gen_characteristic):
     #gen_characteristic = GeneralCharacteristics.objects.get(pk=gen_pk)
+    """pk_competences = PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+        group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False).distinct()"""
     pk_competences = PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-        group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False).distinct()
+        group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False,
+        group_of_pk__type_of_pk_competence="prof").distinct() | PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+        group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False,
+        group_of_pk__type_of_pk_competence="fore").distinct() | PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+        group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False,
+        group_of_pk__type_of_pk_competence="min").distinct()
     general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
         group_of_pk__educational_standard=gen_characteristic.educational_standard,
         competence__isnull=False)
