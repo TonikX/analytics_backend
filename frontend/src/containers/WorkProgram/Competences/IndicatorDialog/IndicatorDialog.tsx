@@ -37,7 +37,6 @@ interface IndicatorsProps {
   };
   isEditMode?: boolean;
   handleClose: () => void;
-  epList?: any[];
   finalEpList?: {value: number, label: string}[];
   finalEpListForCompetence?: {value: number, label: string}[];
   resultsList: {value: string|number, label: string}[];
@@ -76,7 +75,6 @@ export default ({
   defaultEpId,
   apRequired = false,
   resultsList,
-  epList = [],
   finalEpList = [],
   finalEpListForCompetence = [],
   isOpen, isEditMode,
@@ -238,27 +236,6 @@ export default ({
     dispatch(competenceActions.getCompetences())
   }
 
-  const epForSelect = finalEpList ? finalEpList : epList ? epList.reduce((fullPlans: any, currentPlan: any) => {
-    const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
-      const academicPlan = item?.academic_plan;
-      return ([
-        ...plans,
-        {
-          value: academicPlan?.academic_plan_in_field_of_study[0]?.id,
-          label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
-                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
-                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
-                 `,
-        }
-      ])
-    }, [])
-
-    return [
-      ...fullPlans,
-      ...plans,
-    ]
-  }, []) : []
-
   useEffect(() => {
     if (defaultCompetence){
       setCompetence(defaultCompetence)
@@ -282,7 +259,7 @@ export default ({
                       value={filterAcademicPlan}
                       onChange={changeFilterAcademicPlan}
                       onClickMenuItem={changeFilterAcademicPlan}
-                      metaList={finalEpListForCompetence ?? epForSelect}
+                      metaList={finalEpListForCompetence}
                       wrapClass={classes.selectorWrap}
       />
       <CompetenceSelector
@@ -360,7 +337,7 @@ export default ({
             <SimpleSelector label="Учебный план и образовательная программа"
                             value={plans[0]?.value}
                             onChange={addPlan}
-                            metaList={epForSelect}
+                            metaList={finalEpList}
                             wrapClass={classes.planSelectorWrap}
             />
           </div>

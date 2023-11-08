@@ -29,6 +29,50 @@ export default React.memo(() => {
   const practiceId = useSelector((state: rootState) => getId(state));
   const classes = useStyles()
 
+  const finalEpListForCompetence = epList?.reduce((fullPlans: any, currentPlan: any) => {
+    const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
+      const academicPlan = item?.academic_plan;
+
+      return ([
+        ...plans,
+        {
+          value: academicPlan?.id,
+          label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
+                 `,
+        }
+      ])
+    }, [])
+
+    return [
+      ...fullPlans,
+      ...plans,
+    ]
+  }, [])
+
+  const finalEpList = epList?.reduce((fullPlans: any, currentPlan: any) => {
+    const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
+      const academicPlan = item?.academic_plan;
+      return ([
+        ...plans,
+        {
+          value: academicPlan?.academic_plan_in_field_of_study[0]?.id,
+          label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
+                 `,
+        }
+      ])
+    }, [])
+
+    return [
+      ...fullPlans,
+      ...plans,
+    ]
+  }, [])
+
+
   const handleCloseDialog = () => {
     setDialogCompetence(undefined);
     setIsOpenIndicatorDialog(false)
@@ -169,7 +213,8 @@ export default React.memo(() => {
           defaultCompetence={dialogCompetence}
           disableCompetence={!!dialogCompetence}
           practiceId={practiceId}
-          epList={epList}
+          finalEpList={finalEpList}
+          finalEpListForCompetence={finalEpListForCompetence}
           resultsList={resultsList}
           apRequired
         />

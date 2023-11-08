@@ -127,6 +127,32 @@ export default React.memo(() => {
     ]
   }, [])
 
+  const finalEpList = epList && epList.reduce((fullPlans: any, currentPlan: any) => {
+    const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
+      const academicPlan = item?.academic_plan;
+
+      if (academicPlan === undefined || filterYear && +filterYear !== academicPlan?.academic_plan_in_field_of_study[0]?.year) {
+        return plans;
+      }
+
+      return ([
+        ...plans,
+        {
+          value: academicPlan?.id,
+          label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
+                 `,
+        }
+      ])
+    }, [])
+
+    return [
+      ...fullPlans,
+      ...plans,
+    ]
+  }, [])
+
   const onChangeFilterYear = (value:any) => {
     dispatch(actions.updateCompetenceFilterYear(value ? value.format(YEAR_DATE_FORMAT) : ''))
     dispatch(actions.updateCompetenceFilterAP(null))
@@ -438,7 +464,8 @@ export default React.memo(() => {
         defaultCompetence={dialogCompetence}
         disableCompetence={!!dialogCompetence}
         workProgramId={workProgramId}
-        epList={epList}
+        finalEpList={finalEpList}
+        finalEpListForCompetence={apList}
         resultsList={resultsList}
       />
       : null

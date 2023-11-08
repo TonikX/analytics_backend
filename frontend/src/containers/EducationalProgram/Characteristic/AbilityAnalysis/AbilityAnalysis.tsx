@@ -14,6 +14,7 @@ import {
   getEducationalProgramCharacteristic,
 } from "../../getters";
 import actions from "../../../EducationalProgram/actions";
+import wpActions from "../../../WorkProgram/actions";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -63,6 +64,10 @@ export const AbilityAnalysis = () => {
     dispatch(actions.getUnfilledWorkPrograms());
     dispatch(actions.getCharacteristicsWorkProgram());
   }, []);
+
+  useEffect(() => {
+    dispatch(wpActions.getWorkProgram(selectedWpId));
+  }, [selectedWpId]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     if (isFirstEnterSecondTab.current) {
