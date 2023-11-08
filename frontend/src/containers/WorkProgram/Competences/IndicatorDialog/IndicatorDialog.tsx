@@ -244,7 +244,6 @@ export default ({
     dispatch(competenceActions.changeFilterAcademicPlan(planId === filterAcademicPlan ? undefined : planId))
     dispatch(competenceActions.getCompetences())
   }
-  console.log('asdasdad!!!! filterAcademicPlan', filterAcademicPlan)
 
   const epForSelect = finalEpList ? finalEpList : epList ? epList.reduce((fullPlans: any, currentPlan: any) => {
     const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
@@ -272,7 +271,7 @@ export default ({
       setCompetence(defaultCompetence)
     }
   }, [defaultCompetence])
-  console.log('filterAcademicPlanfilterAcademicPlan', filterAcademicPlan)
+
   return (
     <Dialog
       open={isOpen}

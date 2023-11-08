@@ -42,7 +42,7 @@ export const AbilityAnalysis = () => {
   const finalEpList = characteristics.educational_program.map((item: any) => {
     return (
       {
-        value: item.academic_plan?.id,
+        value: item.id,
         label: `Направление: ${item?.field_of_study[0]?.title} / ОП: ${item?.title} (${item?.year})`,
       }
     )
