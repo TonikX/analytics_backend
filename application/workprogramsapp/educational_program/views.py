@@ -751,14 +751,13 @@ def get_all_unfilled_wp(request, gh_id):
     wp_unfilled_set = WorkProgram.objects.none()
     for block in blocks_for_gh:
         if "1" in block.name or "2" in block.name:
-
             for module in block.modules_in_discipline_block.all():
                 cbs_for_block = DisciplineBlockModule.get_all_changeblocks_from_module(module)
                 for cb_in_block in cbs_for_block:
                     wp_in_fs = cb_in_block.zuns_for_cb.all().first()
                     if not wp_in_fs:
                         continue
-                    if not Zun.objects.filter(wp_in_fs=wp_in_fs).exists():
+                    if not Zun.objects.filter(wp_in_fs=wp_in_fs, indicator_in_zun__isnull=False).exists():
                         wp_unfilled_set = wp_unfilled_set | WorkProgram.objects.filter(id=wp_in_fs.work_program.id)
 
         else:
