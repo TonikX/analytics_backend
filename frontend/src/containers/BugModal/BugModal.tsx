@@ -108,19 +108,24 @@ export const BugModal = () => {
           />
         </Button>
 
-        {selectedFile ? <>{selectedFile?.name}
-          <DeleteIcon onClick={() => setSelectedFile(null)} />
-        </> : null}
+        {selectedFile ? <div className={classes.bugModal_deleteFile}>
+          {selectedFile?.name}
+          <DeleteIcon
+            className={classes.bugModal_deleteFile_icon}
+            onClick={() => setSelectedFile(null)}
+          />
+        </div> : null}
       </DialogContent>
 
-      <DialogActions>
-        {showCheckBox && (<FormControlLabel
+      <DialogActions className={classes.bugModal_footer}>
+        {showCheckBox && (<FormControlLabel className={classes.formControlLabel_margin}
           control={
             <Checkbox
                   checked={checked}
                   onChange={handleChange}
                   name="checked"
                   color="primary"
+
                 />
               }
               label="Больше не показывать"

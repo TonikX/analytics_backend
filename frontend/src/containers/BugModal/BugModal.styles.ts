@@ -10,4 +10,19 @@ export default makeStyles(() => createStyles({
         marginBottom: '20px !important',
         width: '500px'
     },
+    formControlLabel_margin: {
+        marginRight: 'auto !important',
+        marginLeft: '15px !important'
+    },
+    bugModal_deleteFile: {
+        display: 'flex',
+        alignItems: 'center'
+    },
+    bugModal_footer: {
+        display: 'flex'
+    },
+    bugModal_deleteFile_icon: {
+        marginLeft: '10px',
+        cursor: 'pointer'
+    }
 }));
