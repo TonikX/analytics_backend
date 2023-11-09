@@ -8,5 +8,6 @@ export default makeStyles(() => createStyles({
     },
     formInput_margin: {
         marginBottom: '20px !important',
+        width: '500px'
     },
 }));

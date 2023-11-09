@@ -28,12 +28,16 @@ export const BugModal = () => {
   const [description, setDescription] = useState('');
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const classes = useStyles();
+  const [showCheckBox, setShowCheckBox] = useState(false);
 
   useEffect(() => {
     bugModalLocalStorage.updatePageTransition();
     if (bugModalLocalStorage.getPageTransitions() >= 20) {
       dispatch(actions.setShowBugModalTrue());
+      setShowCheckBox(true);
       bugModalLocalStorage.resetPageTransitions();
+    } else {
+      setShowCheckBox(false);
     }
   }, [currentPath]);
 
@@ -61,6 +65,8 @@ export const BugModal = () => {
   const handleSave = () => {
     dispatch(actions.sendBug({title, description, selectedFile}));
   };
+
+  console.log(bugModalLocalStorage.getPageTransitions())
 
   return (
     <Dialog
@@ -108,17 +114,18 @@ export const BugModal = () => {
       </DialogContent>
 
       <DialogActions>
-        <FormControlLabel
+        {showCheckBox && (<FormControlLabel
           control={
             <Checkbox
-              checked={checked}
-              onChange={handleChange}
-              name="checked"
-              color="primary"
+                  checked={checked}
+                  onChange={handleChange}
+                  name="checked"
+                  color="primary"
+                />
+              }
+              label="Больше не показывать"
             />
-          }
-          label="Больше не показывать"
-        />
+        )}
         <Button onClick={closeBugModal}
                 variant="text">
           Отмена

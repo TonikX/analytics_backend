@@ -12,12 +12,8 @@ class MainService extends AnalyticsService{
         return this.get(`/api/user/groups`);
     }
 
-    sendBug(title: string, description: string, file: string){
-        return this.post(`/api/bugs_log`, {
-            title,
-            description,
-            file
-        });
+    sendBug(formData: any) {
+        return this.post('/api/bugs_log', formData);
     }
 
     refreshToken(){

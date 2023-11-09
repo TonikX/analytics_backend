@@ -110,10 +110,16 @@ const sendBug = createLogic({
 
     const {title, description, selectedFile} = action.payload;
 
-    service.sendBug(title, description, selectedFile)
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('file', selectedFile);
+
+    service.sendBug(formData)
       .then((res) => {
         dispatch(actions.fetchingFalse({destination: 'refresh'}));
         dispatch(actions.fetchingSuccess(['Сообщение о баге успешно отправлено']));
+        dispatch(actions.setShowBugModalFalse());
       })
       .catch((err) => {
         dispatch(actions.fetchingFalse({destination: 'refresh'}));
