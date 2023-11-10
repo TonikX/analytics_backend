@@ -24,7 +24,8 @@ from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockMo
     BodyParamsForDisciplineBlockModuleUpdateForBlockRelationSerializer, \
     ImplementationAcademicPlanSerializerForBlockModule, ImplementationAcademicPlanForModuleSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
-from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan, AcademicPlan
+from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan, AcademicPlan, \
+    WorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor, \
     IsAcademicPlanDeveloper, IsUniversalModule
 from workprogramsapp.serializers import ImplementationAcademicPlanForWPinFSSerializer
@@ -418,6 +419,14 @@ class CopyModules(APIView):
         print(old_module.childs.all())
         new_module.editors.add(user)
         new_module.childs.add(*old_module.childs.all())
+
+        for changeblock in old_module.change_blocks_of_work_programs_in_modules.all():
+            new_changeblock = WorkProgramChangeInDisciplineBlockModule.objects.create(
+                discipline_block_module=new_module, change_type=changeblock.change_type)
+            new_changeblock.work_program.add(*changeblock.work_program.all())
+            new_changeblock.gia.add(*changeblock.gia.all())
+            new_changeblock.practice.add(*changeblock.practice.all())
+            new_changeblock.save()
 
         serializer = DisciplineBlockModuleSerializer(new_module)
         return Response(serializer.data)

@@ -17,6 +17,7 @@ import TrajectoryIcon from '@mui/icons-material/SchoolOutlined';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Tooltip from "@mui/material/Tooltip";
+import Button from '@mui/material/Button';
 
 import UserService from "../../service/user-service";
 import {appRouter} from "../../service/router-service";
@@ -30,6 +31,7 @@ interface HeaderProps extends WithStyles<typeof styles>, withRouterData {
   isAuth: boolean;
   handleCloseMenu: Function;
   handleOpenMenu: Function;
+  showModal: () => void;
   logout: Function;
   notificationsCount: number;
   isDodProfile: boolean;
@@ -90,6 +92,12 @@ class Header extends React.PureComponent<HeaderProps>{
           </Typography>
           {isAuth &&
             <div className={classes.rightSide}>
+              <Button
+                  className={classes.bugModalButton}
+                  onClick={this.props.showModal}>
+                  Нашли баг?
+              </Button>
+
               <Tooltip title="Индивидуальные учебные планы">
                 <Link to={appRouter.getIndividualEducationalPlansRoute()}
                       className={classes.link}

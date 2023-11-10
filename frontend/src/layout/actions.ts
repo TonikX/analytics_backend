@@ -27,8 +27,15 @@ const refreshToken = createAction('REFRESH_LOGIN');
 
 const setMockMenu = createAction('SET_MOCK_MENU');
 
+const setShowBugModalTrue = createAction('SET_SHOW_BUG_MODAL_TRUE');
+const setShowBugModalFalse = createAction('SET_SHOW_BUG_MODAL_FALSE');
+
+const sendBug = createAction('SET_BUG');
+
 const actions: GeneralActions = {
     setUserNotificationsCount,
+    setShowBugModalTrue,
+    setShowBugModalFalse,
     setMockMenu,
     refreshToken,
     fetchingComponentFalse,
@@ -45,6 +52,7 @@ const actions: GeneralActions = {
     setUserGroups,
     setUserData,
     getUserData,
+    sendBug,
 };
 
 export default actions;

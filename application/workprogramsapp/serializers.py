@@ -18,7 +18,8 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
     AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration, \
-    IsuObjectsSendLogger
+    IsuObjectsSendLogger, BugsLog
+from .validators import validate_file_extension
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer, \
     ShortUniversityPartnerSerializer
 
@@ -1173,3 +1174,18 @@ class WorkProgramInFieldOfStudyShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
         fields = ['id', 'title', 'approval_date', 'authors', 'discipline_code', 'work_program_in_change_block']
+
+
+class BugsLogSerializer(serializers.ModelSerializer):
+    file = serializers.FileField(required=False, validators=[validate_file_extension])
+
+    class Meta:
+        model = BugsLog
+        fields = ['title', 'description', 'file']
+
+    # def create(self, validated_data):
+    #     file_data = validated_data.pop('file')
+    #     thread_obj = BugsLog(**validated_data)
+    #     thread_obj.file = file_data
+    #     thread_obj.save()
+    #     return thread_obj
