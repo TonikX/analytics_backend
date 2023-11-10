@@ -9,6 +9,7 @@ export enum fields {
     USER_GROUPS = 'USER_GROUPS',
     MOCK_MENU = 'MOCK_MENU',
     NOTIFICATIONS_COUNT = 'NOTIFICATIONS_COUNT',
+    SHOW_BUG_MODAL = 'SHOW_BUG_MODAL'
 }
 
 export enum UserFields{

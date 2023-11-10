@@ -8,11 +8,15 @@ export default (theme: Theme) => createStyles({
   rightSide: {
     marginLeft: 'auto',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   header: {
     zIndex: 1000,
-    boxShadow: 'none !important'
+    boxShadow: 'none !important',
+  },
+  bugModalButton: {
+    textTransform: 'initial',
+    color: '#fff !important',
   },
   popper: {
     zIndex: '10000 !important'
@@ -49,5 +53,5 @@ export default (theme: Theme) => createStyles({
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: 'bold',
-  }
+  },
 });
