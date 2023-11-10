@@ -107,6 +107,8 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
     """
         Получение списка модулей с краткой информацией
         Можно осуществлять поиск по имени, имени блока, типу образования
+
+
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = ShortDisciplineBlockModuleForModuleListSerializer
@@ -211,9 +213,15 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
         except:
             newdata.update({"rating": False})
 
+        imps = ImplementationAcademicPlan.get_all_imp_by_modules(queryset)
+        is_used_in_accepted_plan = bool(imps.exclude(academic_plan__on_check="in_work").exists())
+
+
         newdata['plans_included'] = ImplementationAcademicPlanForModuleSerializer(
-            ImplementationAcademicPlan.get_all_imp_by_modules(queryset), many=True, ).data
-        newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'], self.request.user)
+            imps, many=True, ).data
+        newdata['status'] = "used" if is_used_in_accepted_plan else "not_used"
+        newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'],
+                                                                         self.request.user) and not is_used_in_accepted_plan
         newdata = OrderedDict(newdata)
 
         return Response(newdata, status=status.HTTP_200_OK)
