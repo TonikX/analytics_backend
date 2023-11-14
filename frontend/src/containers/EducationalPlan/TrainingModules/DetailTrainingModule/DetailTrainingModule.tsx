@@ -25,6 +25,7 @@ import EditIcon from "@mui/icons-material/EditOutlined";
 import Paper from "@mui/material/Paper";
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
+import HelpIcon from '@mui/icons-material/Help';
 
 import ConfirmDialog from "../../../../components/ConfirmDialog/ConfirmDialog";
 
@@ -43,7 +44,7 @@ import {UserType} from "../../../../layout/types";
 import UserSelector from "../../../Profile/UserSelector/UserSelector";
 import Dialog from "@mui/material/Dialog";
 import {fields, StepsEnum, TrainingModuleFields} from "../enum";
-import {selectRulesArray, steps} from "../constants";
+import {selectRulesArray, steps, typesListArray} from "../constants";
 import StepButton from "@mui/material/StepButton";
 import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
@@ -54,6 +55,8 @@ import {TrainingModuleType} from "../types";
 import {BACHELOR_QUALIFICATION, specializationObject} from "../../../WorkProgram/constants";
 import {Checkbox, FormControlLabel} from "@mui/material";
 import ModuleCopyHistory from "../ModuleCopyHistory/ModuleCopyHistory";
+import IconButton from "@mui/material/IconButton";
+import TrajectoryIcon from "@mui/icons-material/SchoolOutlined";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -435,6 +438,15 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     })
   }
 
+  updateTypeModule = (value: ReactText) => {
+    this.props.actions.changeTrainingModule({
+      data: {
+        [TrainingModuleFields.TYPE]: value,
+        id: this.props.module?.id
+      }
+    })
+  }
+
   renderModules = () => {
     //@ts-ignore
     const {classes} = this.props;
@@ -484,7 +496,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   renderGeneral = () => {
     const {module, classes, canEdit} = this.props
     if (!module?.id) return <></>
-
+console.log(module)
     const onlyForStrucUnit = module?.[TrainingModuleFields.ONLY_FOR_STRUCT_UNITS]
 
     return (
@@ -516,11 +528,22 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           )}
         </div>
 
+
+
         <>
           <Typography className={classes.textInfo}>
             ID конструктора КОП: <b>{module?.[TrainingModuleFields.ID]}</b>
             {module?.[TrainingModuleFields.ISU_ID] && <><br/> ISU id: <b>{module?.[TrainingModuleFields.ISU_ID]}</b></>}
           </Typography>
+
+          {!canEdit && (
+            <Typography className={classes.textInfo}>
+              Статус модуля: <b>В работе</b>
+              <Tooltip title="Нельзя редактировать модуль, который включен в утвержденный учебный план. Универсальные модули могут редактировать только работники ОСОП">
+                <HelpIcon className={classes.questionIcon} fontSize={'small'}/>
+              </Tooltip>
+            </Typography>
+          )}
 
           {canEdit ? (
             onlyForStrucUnit !== undefined ? (
@@ -562,6 +585,19 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           ) : (
             <Typography className={classes.textInfo}>
               <b>Правило выбора:</b> {selectRulesArray.find((item) => item.value === module?.[TrainingModuleFields.SELECTION_RULE])?.label}
+            </Typography>
+          )}
+
+          {canEdit ? (
+            <SimpleSelector label="Тип модуля"
+                            value={module?.[TrainingModuleFields.TYPE]}
+                            onChange={this.updateTypeModule}
+                            metaList={typesListArray}
+                            wrapClass={classes.selectorTypeWrap}
+            />
+          ) : (
+            <Typography className={classes.textInfo}>
+              <b>Тип модуля:</b> {typesListArray.find((item) => item.value === module?.[TrainingModuleFields.TYPE])?.label}
             </Typography>
           )}
 
