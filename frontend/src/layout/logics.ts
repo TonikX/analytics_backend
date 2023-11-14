@@ -113,7 +113,9 @@ const sendBug = createLogic({
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
-    formData.append('file', selectedFile);
+    if (selectedFile !== null) {
+      formData.append('file', selectedFile)
+    }
 
     service.sendBug(formData)
       .then((res) => {
