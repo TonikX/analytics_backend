@@ -496,7 +496,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   renderGeneral = () => {
     const {module, classes, canEdit} = this.props
     if (!module?.id) return <></>
-console.log(module)
+
     const onlyForStrucUnit = module?.[TrainingModuleFields.ONLY_FOR_STRUCT_UNITS]
 
     return (
