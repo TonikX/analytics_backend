@@ -157,7 +157,8 @@ export default (theme: Theme) => createStyles({
   questionIcon: {
     position: 'relative',
     top: '4px',
-    marginLeft: '5px'
+    marginLeft: '5px',
+    color: theme.palette.secondary.main
   },
   actions: {
     textAlign: 'end',

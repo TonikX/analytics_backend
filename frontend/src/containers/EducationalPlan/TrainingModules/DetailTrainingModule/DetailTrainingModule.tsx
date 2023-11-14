@@ -30,7 +30,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import ConfirmDialog from "../../../../components/ConfirmDialog/ConfirmDialog";
 
 import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
-import {OPTIONALLY, typeOfWorkProgramInPlan} from "../../data";
+import {OPTIONALLY} from "../../data";
 import {appRouter} from "../../../../service/router-service";
 import {BlocksOfWorkProgramsType} from "../../types";
 
@@ -55,8 +55,6 @@ import {TrainingModuleType} from "../types";
 import {BACHELOR_QUALIFICATION, specializationObject} from "../../../WorkProgram/constants";
 import {Checkbox, FormControlLabel} from "@mui/material";
 import ModuleCopyHistory from "../ModuleCopyHistory/ModuleCopyHistory";
-import IconButton from "@mui/material/IconButton";
-import TrajectoryIcon from "@mui/icons-material/SchoolOutlined";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -537,10 +535,10 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           </Typography>
 
           {!canEdit && (
-            <Typography className={classes.textInfo}>
+            <Typography className={classes.textInfo} style={{marginBottom: 10}}>
               Статус модуля: <b>В работе</b>
               <Tooltip title="Нельзя редактировать модуль, который включен в утвержденный учебный план. Универсальные модули могут редактировать только работники ОСОП">
-                <HelpIcon className={classes.questionIcon} fontSize={'small'}/>
+                <HelpIcon className={classes.questionIcon} fontSize='medium' />
               </Tooltip>
             </Typography>
           )}
@@ -575,18 +573,6 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               <b>Описание:</b> {module?.[TrainingModuleFields.DESCRIPTION]}
             </Typography>
           )}
-          {canEdit ? (
-            <SimpleSelector label="Правило выбора"
-              value={module?.[TrainingModuleFields.SELECTION_RULE]}
-              onChange={this.updateSelectRule}
-              metaList={selectRulesArray}
-              wrapClass={classes.selectorWrap}
-            />
-          ) : (
-            <Typography className={classes.textInfo}>
-              <b>Правило выбора:</b> {selectRulesArray.find((item) => item.value === module?.[TrainingModuleFields.SELECTION_RULE])?.label}
-            </Typography>
-          )}
 
           {canEdit ? (
             <SimpleSelector label="Тип модуля"
@@ -598,6 +584,19 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
           ) : (
             <Typography className={classes.textInfo}>
               <b>Тип модуля:</b> {typesListArray.find((item) => item.value === module?.[TrainingModuleFields.TYPE])?.label}
+            </Typography>
+          )}
+
+          {canEdit ? (
+            <SimpleSelector label="Правило выбора"
+                            value={module?.[TrainingModuleFields.SELECTION_RULE]}
+                            onChange={this.updateSelectRule}
+                            metaList={selectRulesArray}
+                            wrapClass={classes.selectorWrap}
+            />
+          ) : (
+            <Typography className={classes.textInfo}>
+              <b>Правило выбора:</b> {selectRulesArray.find((item) => item.value === module?.[TrainingModuleFields.SELECTION_RULE])?.label}
             </Typography>
           )}
 
