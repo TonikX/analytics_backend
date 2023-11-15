@@ -20,6 +20,7 @@ import Menu from '../components/Menu';
 import AbsoluteLoader from '../components/AbsoluteLoader';
 import Notificator from '../components/Notificator';
 import AddToFolderModal from "../containers/Profile/Folders/AddToFolderModal/AddToFolderModal";
+import {BugModal} from "../containers/BugModal/BugModal";
 
 import {withRouter} from '../hoc/WithRouter'
 import theme from './themeMaterialUi';
@@ -78,6 +79,10 @@ class Layout extends React.Component {
         this.handleCloseMenu();
     };
 
+    showModal = () => {
+        this.props.actions.setShowBugModalTrue();
+    };
+
     isWorkProgramPage = () => this.props.location.pathname.includes('/work-program/');
     isLandingPage = () => this.props.location.pathname === '/';
 
@@ -102,6 +107,7 @@ class Layout extends React.Component {
                                 handleCloseMenu={this.handleCloseMenu}
                                 openGeneralMenu={openMenu}
                                 isAuth={isAuth}
+                                showModal={this.showModal}
                                 logout={this.logout}
                                 notificationsCount={notificationsCount}
                                 isDodProfile={isDodProfile}
@@ -115,12 +121,13 @@ class Layout extends React.Component {
                                 {!isFetchingRefreshToken && (
                                     <Scrollbars>
                                         {this.props.children}
-                                    </Scrollbars>       
+                                    </Scrollbars>
                                 )}
                             </div>
                         </div>
 
                         {isAuth && <AddToFolderModal />}
+                        {isAuth && <BugModal />}
                     </ThemeProvider>
                 </SnackbarProvider>
             </LocalizationProvider>

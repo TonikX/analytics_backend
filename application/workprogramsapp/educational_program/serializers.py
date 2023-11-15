@@ -279,3 +279,19 @@ class CompetenceCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompetenceComments
         fields = "__all__"
+
+
+class CompetenceSerializerForIndicator(serializers.ModelSerializer):
+    """Сериализатор Компетенций"""
+
+    class Meta:
+        model = Competence
+        fields = ['id', 'number', 'name']
+
+
+class IndicatorForUnfilledSerializer(serializers.ModelSerializer):
+    #competence = CompetenceSerializerForIndicator
+
+    class Meta:
+        model = Indicator
+        fields = ["id", "number", "name"]

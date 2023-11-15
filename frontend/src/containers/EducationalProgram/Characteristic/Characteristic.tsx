@@ -55,6 +55,7 @@ import Checkbox from "@mui/material/Checkbox";
 import TextField from "../../../components/TextField";
 import {StatusPoint} from "../../../components/StatusPoint";
 import Service from '../service';
+import {AbilityAnalysis} from "./AbilityAnalysis";
 
 const service = new Service();
 
@@ -673,7 +674,9 @@ class Characteristic extends React.Component<CharacteristicProps> {
       //     />
       //   </div>
       case 12:
-        return <CompetenceMatrix/>
+        return <CompetenceMatrix handleUpdateMatrixTable={this.handleUpdateMatrixTable}/>
+      case 13:
+        return <AbilityAnalysis />
     }
   }
 
@@ -794,10 +797,6 @@ class Characteristic extends React.Component<CharacteristicProps> {
                 </div>
               </div>
             </Typography>
-
-            {activeStep === steps.length - 1 ? (
-              <Button style={{marginBottom: 10}} onClick={this.handleUpdateMatrixTable}><b>Обновить таблицу</b></Button>
-            ) : null}
 
             {this.renderContent()}
           </div>

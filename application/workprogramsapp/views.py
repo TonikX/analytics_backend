@@ -11,10 +11,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django_super_deduper.merge import MergedModelInstance
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
-from rest_framework import filters
+from rest_framework import filters, parsers
 from rest_framework import generics, viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -24,7 +25,7 @@ from .educational_program.search_filters import CompetenceFilter
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
-    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy
+    DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, BugsLog
 from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
@@ -39,7 +40,8 @@ from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSeria
     ZunCreateSaveSerializer, WorkProgramForIndividualRoutesSerializer, AcademicPlanShortSerializer, \
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer, AcademicPlanSerializerForList, \
-    WorkProgramArchiveUpdateSerializer, EvaluationToolListSerializer, CompetenceWithStandardSerializer
+    WorkProgramArchiveUpdateSerializer, EvaluationToolListSerializer, CompetenceWithStandardSerializer, \
+    BugsLogSerializer
 from .serializers import BibliographicReferenceSerializer, \
     WorkProgramBibliographicReferenceUpdateSerializer, \
     PrerequisitesOfWorkProgramCreateSerializer, EvaluationToolForWorkProgramSerializer, EvaluationToolCreateSerializer, \
@@ -2443,3 +2445,14 @@ class WorkProgramArchiveUpdateView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(WorkProgramSerializer(instance).data)
+
+
+class BugsLogView(generics.CreateAPIView):
+    name = 'Загрузка файла ТЗ заказа'
+    permission_classes = [IsAuthenticated]
+    #parser_classes = (parsers.FormParser, parsers.MultiPartParser)
+    serializer_class = BugsLogSerializer
+    queryset = BugsLog.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

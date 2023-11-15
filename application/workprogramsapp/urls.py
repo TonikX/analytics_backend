@@ -25,7 +25,7 @@ from .profession.views import SkillsOfProfessionInProfessionList, SkillsOfProfes
 from .profession.views import SkillsOfRoleInRoleList, SkillsOfRoleInRoleCreateAPIView, SkillsOfRoleInRoleUpdateView, \
     SkillsOfRoleInRoleDestroyView
 from .views import AcademicPlanCreateAPIView, AcademicPlanListAPIView, AcademicPlanDetailsView, AcademicPlanDestroyView, \
-    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, ZunManyForAllGhViewSet
+    AcademicPlanUpdateView, ImplementationAcademicPlanAPIView, ZunManyForAllGhViewSet, BugsLogView
 from .views import BibliographicReferenceListCreateAPIView, BibliographicReferenceDetailsView, \
     BibliographicReferenceDestroyView, \
     BibliographicReferenceUpdateView, WorkProgramBibliographicReferenceUpdateView, \
@@ -278,8 +278,9 @@ urlpatterns = [
     path('api/skillsofroleinrole/update/<int:pk>', SkillsOfRoleInRoleUpdateView.as_view()),
     path('api/skillsofroleingroups', ItemWithRoles.as_view()),
 
-    # Информация о пользователе
+    # Работа с пользователями
     path('api/user/groups', UserGroups),
+    path('api/bugs_log', BugsLogView.as_view()),
 
     # Папки и рейтинги
     path('api/folders', FoldersListView.as_view()),
