@@ -965,7 +965,6 @@ class WorkProgramInFieldOfStudy(CloneMixin, models.Model):
                                                                        on_delete=models.SET_NULL,
                                                                        related_name="zuns_for_cb", blank=True,
                                                                        null=True)
-                                                                       related_name="zuns_for_cb", blank=True, null=True)
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, related_name="zuns_for_wp")
     id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
 
