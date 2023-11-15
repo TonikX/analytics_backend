@@ -18,7 +18,7 @@ def process_headers(headers: list):
     academic_plan: dict
     counter_plans = 0
     for ap_header in headers:
-        if ap_header["selection_year"] != 2023:
+        if ap_header["selection_year"] != 2024:
             continue
 
         qualification_name = get_qualification(ap_header["direction_code"])
@@ -62,7 +62,7 @@ def process_headers(headers: list):
         imp.title = ap_header["edu_program_name"]
         imp.total_intensity = int(total_intensity)
         imp.academic_plan = academic_plan
-        imp.year = 2023
+        imp.year = 2024
         imp.qualification = qualification_name
         imp.save()
         print('!!', ImplementationAcademicPlan.objects.filter(id=imp.id))
