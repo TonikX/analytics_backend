@@ -190,7 +190,7 @@ class PracticeInFieldOfStudyForWorkProgramList(generics.ListAPIView):
 
 class ZunPracticeManyForAllGhViewSet(mixins.CreateModelMixin,
                                      # mixins.RetrieveModelMixin,
-                                     # mixins.UpdateModelMixin,
+                                     mixins.UpdateModelMixin,
                                      mixins.DestroyModelMixin,
                                      # mixins.ListModelMixin,
                                      GenericViewSet):
@@ -198,7 +198,7 @@ class ZunPracticeManyForAllGhViewSet(mixins.CreateModelMixin,
     model = ZunPractice
     queryset = ZunPractice.objects.all()
     serializer_class = ZunPracticeForManyCreateSerializer
-    http_method_names = ['post', 'delete']
+    http_method_names = ['post', 'delete', "patch"]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def create(self, request, *args, **kwargs):
@@ -218,6 +218,26 @@ class ZunPracticeManyForAllGhViewSet(mixins.CreateModelMixin,
             serializer.is_valid(raise_exception=True)
             serializer.save(practice_in_fs=wp_in_fs)
         return Response(status=status.HTTP_201_CREATED)
+
+
+    def update(self, request, *args, **kwargs):
+        for_all = request.data.get("for_all")
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if for_all:
+            prac = Practice.objects.get(zuns_for_pr=instance.practice_in_fs)
+            Practice.objects.filter(practice_in_fs__practice=prac, skills=instance.skills,
+                               attainments=instance.attainments,
+                               knowledge=instance.knowledge, indicator_in_zun__id=instance.indicator_in_zun.id).update(
+                skills=request.data["skills"], attainments=request.data["attainments"],
+                knowledge=request.data["knowledge"])
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        else:
+            return Response({"message": "failed", "details": serializer.errors})
+
 
 
 @api_view(['POST'])
