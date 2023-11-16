@@ -130,6 +130,7 @@ export type TrainingModuleType = {
     [TrainingModuleFields.DESCRIPTION]: string;
     [TrainingModuleFields.TYPE]: string;
     [TrainingModuleFields.ISU_ID]: string;
+    [TrainingModuleFields.STATUS]: string;
     [TrainingModuleFields.DISCIPLINE]: {
         [TrainingModuleFields.ACADEMIC_PLAN]: {
             [TrainingModuleFields.EDUCATIONAL_PROFILE]: string;

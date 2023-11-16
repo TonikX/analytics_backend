@@ -55,6 +55,7 @@ import {TrainingModuleType} from "../types";
 import {BACHELOR_QUALIFICATION, specializationObject} from "../../../WorkProgram/constants";
 import {Checkbox, FormControlLabel} from "@mui/material";
 import ModuleCopyHistory from "../ModuleCopyHistory/ModuleCopyHistory";
+import {PlansWithModuleData} from "../PlansWithModuleData/PlansWithModuleData";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -712,6 +713,8 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         return this.renderPlans()
       case StepsEnum.EVALUATION_TOOLS:
         return <EvaluationTools />
+      case StepsEnum.PLANS_WITH_MODULE_DATA:
+        return <PlansWithModuleData />
       case StepsEnum.MODULE_COPY_HISTORY:
         return <ModuleCopyHistory />
     }
