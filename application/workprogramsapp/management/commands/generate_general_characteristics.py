@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         year = options["year"][0]
-        print("year")
+        print(year)
         for iap in ImplementationAcademicPlan.objects.filter(year=year):
             if GeneralCharacteristics.objects.filter(educational_program__title=iap.title,
                                                      educational_program__year=iap.year).exists():
@@ -26,9 +26,9 @@ class Command(BaseCommand):
                 gh.educational_program.add(iap)
                 if iap.qualification == 'bachelor':
                     gh.educational_standard = \
-                        EducationalStandard.objects.filter(name='ОС Университета ИТМО уровня бакалавриат')[0]
+                        EducationalStandard.objects.filter(name='ОС Университета ИТМО уровня бакалавриат (22)', standard_date=2022)[0]
                 elif iap.qualification == 'master':
                     gh.educational_standard = \
-                        EducationalStandard.objects.filter(name='ОС Университета ИТМО уровня магистратура')[0]
+                        EducationalStandard.objects.filter(name='ОС Университета ИТМО уровня магистратура (22)', standard_date=2022)[0]
             gh.save()
         print("done")
