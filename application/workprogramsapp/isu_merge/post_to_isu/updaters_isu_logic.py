@@ -274,7 +274,7 @@ def post_module_to_isu(token, module, parent_id, block, ap_id):
     if module.selection_parametr:
         module_dict["params"] = [int(el) for el in module.selection_parametr.split(", ")]
     else:
-        module_dict["params"] = None
+        module_dict["params"] = [0]
     module_dict["rpd_module_id"] = module.id
     return generate_response(url, headers, body, "module", module.id, ap_id)[0]
 
