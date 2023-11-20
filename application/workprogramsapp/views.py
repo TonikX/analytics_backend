@@ -348,7 +348,7 @@ class CompetencesListView(generics.ListAPIView):
                 group_over__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__academic_plan__id=ap_id)
             general_filter = Q(
                 group_general__group_of_pk__educational_standard__educational_standard_in_educational_program__educational_program__academic_plan__id=ap_id)
-            pk_filter = Q(pk_group__group_of_pk__general_characteristic__educational_programn__academic_plan__id=ap_id)
+            pk_filter = Q(pk_group__group_of_pk__general_characteristic__educational_program__academic_plan__id=ap_id)
             queryset = queryset.filter(key_filter | over_filter | general_filter | pk_filter)
 
         if in_standard:
