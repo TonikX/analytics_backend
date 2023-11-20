@@ -10,5 +10,6 @@ class DisciplineBlockModuleFilter(django_filters.FilterSet):
             'id': ['exact'],
             'module_isu_id': ['exact', 'icontains'],
             'name': ['exact', 'icontains'],
-            'descipline_block__name':['exact', 'icontains']
+            'descipline_block__name':['exact', 'icontains'],
+            'type': ['exact', 'icontains']
         }
