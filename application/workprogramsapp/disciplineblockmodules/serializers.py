@@ -42,6 +42,7 @@ class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerial
     descipline_block = DisciplineBlockDetailAcademicSerializer(many=True)
     editors = userProfileSerializer(many=True)
 
+
     # father = serializers.SerializerMethodField()
     # educational_programs_to_access = ImplementationAcademicPlanCreateSerializer(many=False, required=False)
 
@@ -171,10 +172,17 @@ class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSeriali
     Сериализатор для вывода списка Модулей
     """
     editors = userProfileSerializer(many=True)
+    status = serializers.SerializerMethodField()
+
+    def get_status(self, obj):
+        imps = ImplementationAcademicPlan.get_all_imp_by_modules([obj])
+        is_used_in_accepted_plan = bool(imps.exclude(academic_plan__on_check="in_work").exists())
+
+        return "used" if is_used_in_accepted_plan else "not_used"
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'module_isu_id', 'name', 'type', 'editors']
+        fields = ['id', 'module_isu_id', 'name', 'type', 'editors', "status"]
 
 
 class DisciplineBlockModuleUpdateForBlockRelationSerializer(serializers.ModelSerializer):
