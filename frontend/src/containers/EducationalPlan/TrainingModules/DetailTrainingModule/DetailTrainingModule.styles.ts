@@ -27,15 +27,6 @@ export default (theme: Theme) => createStyles({
       width: '100px !important'
     }
   },
-  selectorTypeWrap: {
-    width: '100%',
-    '& .MuiInputLabel-shrink': {
-      transform: 'translate(14px, -6.5px) scale(0.75) !important',
-    },
-    '& .MuiOutlinedInput-notchedOutline legend': {
-      width: '73px !important'
-    }
-  },
   moduleName: {
     color: theme.palette.primary.main,
     fontWeight: 'bold',
@@ -153,12 +144,6 @@ export default (theme: Theme) => createStyles({
   },
   textInfo: {
     marginBottom: '10px',
-  },
-  questionIcon: {
-    position: 'relative',
-    top: '4px',
-    marginLeft: '5px',
-    color: theme.palette.secondary.main
   },
   actions: {
     textAlign: 'end',

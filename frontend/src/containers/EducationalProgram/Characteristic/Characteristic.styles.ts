@@ -37,7 +37,6 @@ export default (theme: Theme) => createStyles({
     width: '100%',
     boxSizing: 'border-box',
     paddingLeft: '50px',
-    overflowX: 'scroll'
   },
   title: {
     fontSize: '24px !important',
