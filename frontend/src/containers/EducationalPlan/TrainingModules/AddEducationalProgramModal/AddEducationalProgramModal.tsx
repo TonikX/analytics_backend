@@ -29,7 +29,7 @@ class AddEducationalProgramModal extends React.PureComponent<TrainingModuleCreat
     };
 
     componentDidMount() {
-        this.props.educationalProgramActions.changeFiltering({[filterFields.YEAR]: 2023})
+        // this.props.educationalProgramActions.changeFiltering({[filterFields.YEAR]: 2023})
         this.searchModules()
     }
 

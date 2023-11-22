@@ -44,7 +44,7 @@ import {UserType} from "../../../../layout/types";
 import UserSelector from "../../../Profile/UserSelector/UserSelector";
 import Dialog from "@mui/material/Dialog";
 import {fields, StepsEnum, TrainingModuleFields} from "../enum";
-import {selectRulesArray, steps, typesListArray} from "../constants";
+import {selectRulesArray, steps, typesListArrayNew} from "../constants";
 import StepButton from "@mui/material/StepButton";
 import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
@@ -579,12 +579,12 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             <SimpleSelector label="Тип модуля"
                             value={module?.[TrainingModuleFields.TYPE]}
                             onChange={this.updateTypeModule}
-                            metaList={typesListArray}
+                            metaList={typesListArrayNew}
                             wrapClass={classes.selectorTypeWrap}
             />
           ) : (
             <Typography className={classes.textInfo}>
-              <b>Тип модуля:</b> {typesListArray.find((item) => item.value === module?.[TrainingModuleFields.TYPE])?.label}
+              <b>Тип модуля:</b> {typesListArrayNew.find((item) => item.value === module?.[TrainingModuleFields.TYPE])?.label}
             </Typography>
           )}
 
@@ -724,7 +724,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     const {module, classes, moduleRating} = this.props;
     const {deleteBlockConfirmId, deletedWorkProgramsLength, addEditorsMode, activeStep} = this.state;
     let finalSteps = Object.keys(steps);
-    if (this.props.module?.clone_info_json === null) {
+    if (this.props.module?.clone_info_json === null || !this.props.module?.clone_info_json) {
       // @ts-ignore
       finalSteps = Object.keys(steps).filter((step) => +step !== StepsEnum.MODULE_COPY_HISTORY)
     }
