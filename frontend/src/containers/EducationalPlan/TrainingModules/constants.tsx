@@ -107,6 +107,7 @@ export const steps = {
     [StepsEnum.MODULES]: 'Учебные модули',
     [StepsEnum.PLANS]: 'Доступные учебные планы',
     [StepsEnum.EVALUATION_TOOLS]: <>Оценочные средства <br /> (не обязательны)</>,
+    [StepsEnum.PLANS_WITH_MODULE_DATA]: 'Планы с данным модулем',
     [StepsEnum.MODULE_COPY_HISTORY]: 'История копирования модуля',
 }
 
@@ -132,3 +133,15 @@ export const selectRulesArray = [
         label: 'Hе более N зачетных единиц'
     },
 ]
+
+
+export const statusPlansIncluded: any = {
+    verified: "Проверено",
+    on_check: "На проверке",
+    in_work: "В работе"
+}
+
+export const statusTrainingModule: any = {
+    used: "Используется",
+    not_used: "Не используется"
+}
