@@ -271,7 +271,7 @@ class IsUniversalModule(permissions.BasePermission):
                     return False
         # Для копирования модулей
         if request.data.get("module_id") and request.method == "POST":
-            module_id = request.query_params.get('module_id')
+            module_id = request.data.get('module_id')
             module = DisciplineBlockModule.objects.get(id=module_id)
             if module.type == "universal_module" and not request.user.groups.filter(name="expertise_master"):
                 return False
