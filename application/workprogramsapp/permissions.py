@@ -241,8 +241,8 @@ class IsUniversalModule(permissions.BasePermission):
     @staticmethod
     def check_access(module_id: int, user: User) -> bool:
         module = DisciplineBlockModule.objects.get(pk=module_id)
-        """if user.is_superuser:
-            return True"""
+        if user.is_superuser:
+            return True
         if module.type == "universal_module" and user not in module.editors.all():
             return False
         else:
