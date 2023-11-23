@@ -261,13 +261,13 @@ class IsUniversalModule(permissions.BasePermission):
         if request.method == "DELETE"  and view.__class__.__name__ == "WorkWithBlocksApiView":
             module_id = request.query_params.get('module')
             module = DisciplineBlockModule.objects.get(id=module_id)
-            if module.type == "universal_module" and request.user not in module.editors.all():
+            if module.type == "universal_module" and not request.user.groups.filter(name="expertise_master"):
                 return False
         # Для добавления модулей в УП
         if request.data.get("module") and request.method == "POST" and view.__class__.__name__ == "WorkWithBlocksApiView":
             for module_id in request.data.get("module"):
                 module = DisciplineBlockModule.objects.get(id=module_id)
-                if module.type == "universal_module" and request.user not in module.editors.all():
+                if module.type == "universal_module" and not request.user.groups.filter(name="expertise_master"):
                     return False
         # Для копирования модулей
         if request.data.get("module_id") and request.method == "POST":
