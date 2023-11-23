@@ -90,7 +90,7 @@ const SortableItem = SortableElement((props:any) => {
               <Link to={appRouter.getTrainingModuleDetailLink(module.id)} target="_blank" className={classes.link}>
                 {module.name}
               </Link>:
-              
+
             </Typography>
             <Typography>
               {module.laboriousness ? <>&nbsp;<b>Трудоемкость:</b> {module.laboriousness}</> : ''}
@@ -102,7 +102,7 @@ const SortableItem = SortableElement((props:any) => {
           <TableCell style={{ width: '7%'}} />
           <TableCell style={{ width: '7%'}} />
           <TableCell style={{ width: '3%'}}>
-            {level === 0 && canEdit ? (
+            {level === 0 && canEdit && module?.can_remove ? (
               <Tooltip title="Удалить модуль">
                 <DeleteIcon className={classes.marginRight10}
                             color="primary"
@@ -128,11 +128,11 @@ const SortableItem = SortableElement((props:any) => {
 
 const SortableList = SortableContainer((props:any) => {
   const {modules, detailPlan, classes, canEdit, blockId, handleDisconnectModule } = props;
-  
+
   return (
     <div>
       {modules.map((value: any, index: number) => (
-        <SortableItem key={`item-${value.name}`} 
+        <SortableItem key={`item-${value.name}`}
                       index={index}
                       module={value}
                       classes={classes}
@@ -483,9 +483,9 @@ class EducationalPlan extends React.Component<EducationalPlanDetailProps> {
                           </TableCell>
                         </TableRow>
                       </Table>
-                      
-                      <SortableList 
-                        classes={classes} 
+
+                      <SortableList
+                        classes={classes}
                         modules={block.modules_in_discipline_block}
                         canEdit={canEdit}
                         blockId={block?.id}
