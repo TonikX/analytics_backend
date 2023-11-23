@@ -50,7 +50,7 @@ class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleSerializer
-    permission_classes = [IsBlockModuleEditor]
+    permission_classes = [IsBlockModuleEditor, IsUniversalModule]
     my_tags = ["Discipline Blocks"]
 
 

@@ -238,17 +238,33 @@ class IsBlockModuleEditor(permissions.BasePermission):
 
 class IsUniversalModule(permissions.BasePermission):
 
+    @staticmethod
+    def check_access(module_id: int, user: User) -> bool:
+        module = DisciplineBlockModule.objects.get(pk=module_id)
+        if user.is_superuser:
+            return True
+        if module.type == "universal_module" and user not in module.editors.all():
+            return False
+        else:
+            return True
+
     def has_permission(self, request, view):
         if request.user.is_superuser:
             return True
         # Для удаления модулей
-        if request.method == "DELETE":
+        if request.method == "DELETE" and view.__class__.__name__ == "DisciplineBlockModuleDestroyView":
+            module = DisciplineBlockModule.objects.get(pk=view.kwargs['pk'])
+            if module.type == "universal_module" and request.user not in module.editors.all():
+                return False
+
+        # Для удаления модулей из УП
+        if request.method == "DELETE"  and view.__class__.__name__ == "WorkWithBlocksApiView":
             module_id = request.query_params.get('module')
             module = DisciplineBlockModule.objects.get(id=module_id)
             if module.type == "universal_module" and request.user not in module.editors.all():
                 return False
-        # Для добавления модулей
-        if request.data.get("module") and request.method == "POST":
+        # Для добавления модулей в УП
+        if request.data.get("module") and request.method == "POST" and view.__class__.__name__ == "WorkWithBlocksApiView":
             for module_id in request.data.get("module"):
                 module = DisciplineBlockModule.objects.get(id=module_id)
                 if module.type == "universal_module" and request.user not in module.editors.all():
