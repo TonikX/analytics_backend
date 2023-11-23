@@ -65,6 +65,7 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         instance = self.get_object()
+        self.serializer_class.context={"request":request}
         data = request.data
         blocks = data.get("descipline_block")
         if blocks:
