@@ -150,6 +150,13 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance, validated_data):
+        type_income = validated_data.get("type")
+        if type_income and instance.type != type_income and not self.context["request"].user.groups.filter(
+                name="expertise_master").exists():
+            raise serializers.ValidationError(
+                {"detail": "Только сотрудники ОСОП могут менять тип модуля"},
+                code=403,
+            )
         updated_module = super(DisciplineBlockModuleCreateSerializer, self).update(instance, validated_data)
         module_group = Group.objects.get(name='blockmodule_editor')
         for user in updated_module.editors.all():

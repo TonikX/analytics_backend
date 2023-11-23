@@ -535,12 +535,16 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             {module?.[TrainingModuleFields.ISU_ID] && <><br/> ISU id: <b>{module?.[TrainingModuleFields.ISU_ID]}</b></>}
           </Typography>
 
+          <Typography className={classes.textInfo} style={{marginBottom: 10}}>
+            Статус модуля: <b>{module?.status === "used" ? "Используется в утвержденном учебном плане" : "Не используется в утвержденном учебном плане"}</b>
+            <Tooltip title="Нельзя редактировать модуль, который включен в утвержденный учебный план. Универсальные модули могут редактировать только работники ОСОП">
+              <HelpIcon className={classes.questionIcon} fontSize='medium' />
+            </Tooltip>
+          </Typography>
+
           {!canEdit && (
             <Typography className={classes.textInfo} style={{marginBottom: 10}}>
-              Статус модуля: <b>В работе</b>
-              <Tooltip title="Нельзя редактировать модуль, который включен в утвержденный учебный план. Универсальные модули могут редактировать только работники ОСОП">
-                <HelpIcon className={classes.questionIcon} fontSize='medium' />
-              </Tooltip>
+              Редактирование: <b>Недоступно</b>
             </Typography>
           )}
 
