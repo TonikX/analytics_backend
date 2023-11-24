@@ -26,6 +26,8 @@ interface Props {
   defaultKnowledge?: '';
   defaultSkills?: '';
   isEditMode?: boolean;
+  practiceId?: number;
+  workProgramId?: number;
   handleClose: () => void;
   indicator: {
     name: string;
@@ -43,6 +45,8 @@ export const UpdateZunDialog = ({
   defaultSkills = '',
   defaultAttainments = '',
   zunId,
+  practiceId,
+  workProgramId,
   results: defaultResults,
   resultsList,
 }: Props) => {
@@ -64,6 +68,8 @@ export const UpdateZunDialog = ({
       attainments,
       zunId,
       updateAllZuns,
+      practiceId,
+      workProgramId,
       items: results.map((result) => result.value)
     }))
     handleClose()
