@@ -165,7 +165,7 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
                 code=403,
             )
 
-        if type_income == "universal_module" or validated_data.get("childs") and instance.type == "universal_module":
+        if type_income == "universal_module" or (validated_data.get("childs") and instance.type == "universal_module"):
             if validated_data.get("childs"):
                 reverse_universal(validated_data.get("childs"))
             else:
