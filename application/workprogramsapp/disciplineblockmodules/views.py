@@ -217,7 +217,6 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
         imps = ImplementationAcademicPlan.get_all_imp_by_modules(queryset)
         is_used_in_accepted_plan = bool(imps.exclude(academic_plan__on_check="in_work").exists())
 
-
         newdata['plans_included'] = ImplementationAcademicPlanForModuleSerializer(
             imps, many=True, ).data
         newdata['status'] = "used" if is_used_in_accepted_plan else "not_used"
@@ -439,4 +438,3 @@ class CopyModules(APIView):
 
         serializer = DisciplineBlockModuleSerializer(new_module)
         return Response(serializer.data)
-
