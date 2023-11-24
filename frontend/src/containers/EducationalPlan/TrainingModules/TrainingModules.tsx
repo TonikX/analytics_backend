@@ -35,7 +35,7 @@ import UserService from "../../../service/user-service";
 
 import {TrainingModulesProps, TrainingModuleType} from './types';
 import {fields, TrainingModuleFields} from "./enum";
-import {typesListObject} from './constants';
+import {statusTrainingModule, typesListObject} from './constants';
 
 import connect from './TrainingModules.connect';
 import styles from './TrainingModules.styles';
@@ -235,13 +235,16 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                     <TableCell className={classes.headerCell}>
                                         Редакторы
                                     </TableCell>
+                                    <TableCell className={classes.headerCell}>
+                                        Статус
+                                    </TableCell>
 
                                     {canEdit && <TableCell className={classes.headerCell} />}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {trainingModules.map((trainingModule: TrainingModuleType) => {
-                                    const profile = get(trainingModule, [TrainingModuleFields.DISCIPLINE, TrainingModuleFields.ACADEMIC_PLAN, TrainingModuleFields.EDUCATIONAL_PROFILE], '');
+                                    const profile = get(trainingModule, [TrainingModuleFields.DISCIPLINE, TrainingModuleFields.ACADEMIC_PLAN, TrainingModuleFields.EDUCATIONAL_PROFILE, TrainingModuleFields.STATUS], '');
                                     const plans = get(trainingModule, [TrainingModuleFields.DISCIPLINE, TrainingModuleFields.ACADEMIC_PLAN, TrainingModuleFields.ACADEMIC_PLAN_IN_FIELD_OF_STUDY], []);
                                     // @ts-ignore
                                     const type = typesListObject[trainingModule[TrainingModuleFields.TYPE]];
@@ -262,6 +265,9 @@ class TrainingModules extends React.Component<TrainingModulesProps> {
                                             </TableCell>
                                             <TableCell>
                                                 {trainingModule[TrainingModuleFields.EDITORS].map((editor) => getUserFullName(editor)).join(', ')}
+                                            </TableCell>
+                                            <TableCell>
+                                                {statusTrainingModule[trainingModule[TrainingModuleFields.STATUS]]}
                                             </TableCell>
                                             {canEdit &&
                                                 <TableCell>

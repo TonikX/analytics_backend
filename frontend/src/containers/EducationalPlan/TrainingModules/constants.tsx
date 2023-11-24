@@ -80,6 +80,17 @@ export const typesListArray = [
     }
 ];
 
+export const typesListArrayNew = [
+    {
+        value: 'universal_module',
+        label: 'Универсальный модуль'
+    },
+    {
+        value: 'faculty_module',
+        label: 'Факультетский (обычный)'
+    },
+];
+
 export const typesListObject = {
     universal_module: 'Универсальный модуль',
     physical_culture: 'Физическая культура',
@@ -107,6 +118,7 @@ export const steps = {
     [StepsEnum.MODULES]: 'Учебные модули',
     [StepsEnum.PLANS]: 'Доступные учебные планы',
     [StepsEnum.EVALUATION_TOOLS]: <>Оценочные средства <br /> (не обязательны)</>,
+    [StepsEnum.PLANS_WITH_MODULE_DATA]: 'Планы с данным модулем',
     [StepsEnum.MODULE_COPY_HISTORY]: 'История копирования модуля',
 }
 
@@ -119,16 +131,28 @@ export const selectRulesArray = [
         value: 'all',
         label: 'Необходимо выбрать всё в модуле'
     },
-    {
-        value: 'any_quantity',
-        label: 'Выбрать в модуле любое количество или 0'
-    },
+    // {
+    //     value: 'any_quantity',
+    //     label: 'Выбрать в модуле любое количество или 0'
+    // },
     {
         value: 'by_credit_units',
         label: 'Необходимое количество зачетных единиц'
     },
-    {
-        value: 'no_more_than_n_credits',
-        label: 'Hе более N зачетных единиц'
-    },
+    // {
+    //     value: 'no_more_than_n_credits',
+    //     label: 'Hе более N зачетных единиц'
+    // },
 ]
+
+
+export const statusPlansIncluded: any = {
+    verified: "Принято",
+    on_check: "На проверке",
+    in_work: "В работе"
+}
+
+export const statusTrainingModule: any = {
+    used: "Используется",
+    not_used: "Не используется"
+}

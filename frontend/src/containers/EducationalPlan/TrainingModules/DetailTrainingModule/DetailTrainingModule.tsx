@@ -44,7 +44,7 @@ import {UserType} from "../../../../layout/types";
 import UserSelector from "../../../Profile/UserSelector/UserSelector";
 import Dialog from "@mui/material/Dialog";
 import {fields, StepsEnum, TrainingModuleFields} from "../enum";
-import {selectRulesArray, steps, typesListArray} from "../constants";
+import {selectRulesArray, steps, typesListArrayNew} from "../constants";
 import StepButton from "@mui/material/StepButton";
 import TrainingModuleCreateModal from "../TrainingModuleCreateModal/TrainingModuleCreateModal";
 import SimpleSelector from "../../../../components/SimpleSelector/SimpleSelector";
@@ -55,6 +55,7 @@ import {TrainingModuleType} from "../types";
 import {BACHELOR_QUALIFICATION, specializationObject} from "../../../WorkProgram/constants";
 import {Checkbox, FormControlLabel} from "@mui/material";
 import ModuleCopyHistory from "../ModuleCopyHistory/ModuleCopyHistory";
+import {PlansWithModuleData} from "../PlansWithModuleData/PlansWithModuleData";
 
 class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
   state = {
@@ -534,12 +535,16 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             {module?.[TrainingModuleFields.ISU_ID] && <><br/> ISU id: <b>{module?.[TrainingModuleFields.ISU_ID]}</b></>}
           </Typography>
 
+          <Typography className={classes.textInfo} style={{marginBottom: 10}}>
+            Статус модуля: <b>{module?.status === "used" ? "Используется в утвержденном учебном плане" : "Не используется в утвержденном учебном плане"}</b>
+            <Tooltip title="Нельзя редактировать модуль, который включен в утвержденный учебный план. Универсальные модули могут редактировать только работники ОСОП">
+              <HelpIcon className={classes.questionIcon} fontSize='medium' />
+            </Tooltip>
+          </Typography>
+
           {!canEdit && (
             <Typography className={classes.textInfo} style={{marginBottom: 10}}>
-              Статус модуля: <b>В работе</b>
-              <Tooltip title="Нельзя редактировать модуль, который включен в утвержденный учебный план. Универсальные модули могут редактировать только работники ОСОП">
-                <HelpIcon className={classes.questionIcon} fontSize='medium' />
-              </Tooltip>
+              Редактирование: <b>Недоступно</b>
             </Typography>
           )}
 
@@ -578,12 +583,12 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
             <SimpleSelector label="Тип модуля"
                             value={module?.[TrainingModuleFields.TYPE]}
                             onChange={this.updateTypeModule}
-                            metaList={typesListArray}
+                            metaList={typesListArrayNew}
                             wrapClass={classes.selectorTypeWrap}
             />
           ) : (
             <Typography className={classes.textInfo}>
-              <b>Тип модуля:</b> {typesListArray.find((item) => item.value === module?.[TrainingModuleFields.TYPE])?.label}
+              <b>Тип модуля:</b> {typesListArrayNew.find((item) => item.value === module?.[TrainingModuleFields.TYPE])?.label}
             </Typography>
           )}
 
@@ -712,6 +717,8 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
         return this.renderPlans()
       case StepsEnum.EVALUATION_TOOLS:
         return <EvaluationTools />
+      case StepsEnum.PLANS_WITH_MODULE_DATA:
+        return <PlansWithModuleData />
       case StepsEnum.MODULE_COPY_HISTORY:
         return <ModuleCopyHistory />
     }
@@ -721,7 +728,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
     const {module, classes, moduleRating} = this.props;
     const {deleteBlockConfirmId, deletedWorkProgramsLength, addEditorsMode, activeStep} = this.state;
     let finalSteps = Object.keys(steps);
-    if (this.props.module?.clone_info_json === null) {
+    if (this.props.module?.clone_info_json === null || !this.props.module?.clone_info_json) {
       // @ts-ignore
       finalSteps = Object.keys(steps).filter((step) => +step !== StepsEnum.MODULE_COPY_HISTORY)
     }
