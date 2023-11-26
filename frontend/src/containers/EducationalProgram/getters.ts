@@ -21,8 +21,8 @@ import {Types} from "../../components/SortingButton/types";
 
 const getStateData = (state: rootState): educationalProgramState => get(state, GENERAL_PATH);
 export const getEducationalProgramCharacteristic = (state: rootState): EducationalProgramCharacteristicType|{} => get(getStateData(state), fields.EDUCATION_PROGRAM_CHARACTERISTIC, {});
-export const getEducationalProgramId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'educational_program.0.id', 0);
 export const getEducationalProgramCharacteristicId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'id', 0);
+export const getEducationalProgramId = (state: rootState): number => get(getEducationalProgramCharacteristic(state), 'educational_program.0.academic_plan.id', 0);
 export const getEducationalProgramCharacteristicCanEdit= (state: rootState): boolean =>
   get(getEducationalProgramCharacteristic(state), 'can_edit', false);
 

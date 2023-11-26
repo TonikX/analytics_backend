@@ -9,8 +9,13 @@ class Command(BaseCommand):
     Метод для создания шаблонов общих характеристик (февраль 2023)
     """
 
+    def add_arguments(self, parser):
+        parser.add_argument('year', nargs='+', type=int)
+
     def handle(self, *args, **options):
-        for iap in ImplementationAcademicPlan.objects.filter(year=2023):
+        year = options["year"][0]
+        print(year)
+        for iap in ImplementationAcademicPlan.objects.filter(year=year):
             if GeneralCharacteristics.objects.filter(educational_program__title=iap.title,
                                                      educational_program__year=iap.year).exists():
                 gh = GeneralCharacteristics.objects.filter(educational_program__title=iap.title,
@@ -21,8 +26,9 @@ class Command(BaseCommand):
                 gh.educational_program.add(iap)
                 if iap.qualification == 'bachelor':
                     gh.educational_standard = \
-                        EducationalStandard.objects.filter(name='ОС Университета ИТМО уровня бакалавриат')[0]
+                        EducationalStandard.objects.filter(name='ОС Университета ИТМО уровня бакалавриат (22)', standard_date=2022)[0]
                 elif iap.qualification == 'master':
                     gh.educational_standard = \
-                        EducationalStandard.objects.filter(name='ОС Университета ИТМО уровня магистратура')[0]
+                        EducationalStandard.objects.filter(name='ОС Университета ИТМО уровня магистратура (22)', standard_date=2022)[0]
             gh.save()
+        print("done")

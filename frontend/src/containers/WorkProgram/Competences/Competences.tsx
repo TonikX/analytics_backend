@@ -487,6 +487,7 @@ export default React.memo(() => {
         defaultSkills={isOpenUpdateZunDialog?.skills}
         defaultKnowledge={isOpenUpdateZunDialog?.knowledge}
         resultsList={resultsList}
+        workProgramId={workProgramId}
       /> : null
     }
   </>)

@@ -102,9 +102,40 @@ const refreshToken = createLogic({
     }
 });
 
+const sendBug = createLogic({
+  type: actions.sendBug.type,
+  latest: true,
+  process({getState, action}: any, dispatch, done) {
+    dispatch(actions.fetchingTrue({destination: 'refresh'}));
+
+    const {title, description, selectedFile} = action.payload;
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    if (selectedFile !== null && selectedFile !== undefined) {
+      formData.append('file', selectedFile)
+    }
+
+    service.sendBug(formData)
+      .then((res) => {
+        dispatch(actions.fetchingFalse({destination: 'refresh'}));
+        dispatch(actions.fetchingSuccess(['Сообщение о баге успешно отправлено']));
+        dispatch(actions.setShowBugModalFalse());
+      })
+      .catch((err) => {
+        dispatch(actions.fetchingFalse({destination: 'refresh'}));
+      })
+      .then(() => {
+        return done();
+      });
+  }
+});
+
 export default [
     getAllUsers,
     getUserGroups,
     refreshToken,
     getUserData,
+    sendBug
 ];

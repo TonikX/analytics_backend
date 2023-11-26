@@ -54,6 +54,7 @@ export enum TrainingModuleFields {
     SELECTION_PARAMETER = 'selection_parametr',
     CERTIFICATION_EVALUATION_LIST = 'certification_evaluation_tools',
     ONLY_FOR_STRUCT_UNITS = 'only_for_struct_units',
+    STATUS = 'status',
 }
 
 export enum StepsEnum {
@@ -61,5 +62,6 @@ export enum StepsEnum {
     MODULES = 1,
     PLANS = 2,
     EVALUATION_TOOLS = 3,
-    MODULE_COPY_HISTORY = 4,
+    PLANS_WITH_MODULE_DATA = 4,
+    MODULE_COPY_HISTORY = 5,
 }

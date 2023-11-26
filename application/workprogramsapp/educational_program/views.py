@@ -751,14 +751,13 @@ def get_all_unfilled_wp(request, gh_id):
     wp_unfilled_set = WorkProgram.objects.none()
     for block in blocks_for_gh:
         if "1" in block.name or "2" in block.name:
-
             for module in block.modules_in_discipline_block.all():
                 cbs_for_block = DisciplineBlockModule.get_all_changeblocks_from_module(module)
                 for cb_in_block in cbs_for_block:
                     wp_in_fs = cb_in_block.zuns_for_cb.all().first()
                     if not wp_in_fs:
                         continue
-                    if not Zun.objects.filter(wp_in_fs=wp_in_fs).exists():
+                    if not Zun.objects.filter(wp_in_fs=wp_in_fs, indicator_in_zun__isnull=False).exists():
                         wp_unfilled_set = wp_unfilled_set | WorkProgram.objects.filter(id=wp_in_fs.work_program.id)
 
         else:
@@ -769,7 +768,7 @@ def get_all_unfilled_wp(request, gh_id):
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-def get_all_unfilled_indicator(request, gh_id):
+def  get_all_unfilled_indicator(request, gh_id):
     competence_with_indicators_list =[]
     blocks_for_gh = DisciplineBlock.objects.filter(
         academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=gh_id)
@@ -777,7 +776,8 @@ def get_all_unfilled_indicator(request, gh_id):
     indicators_in_gh_list = list(
         Indicator.objects.filter(
             Q(indicator_in_pk__competence_in_group_of_pk__group_of_pk__general_characteristic__id=gh_id) |
-            Q(indicator_in_opk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id)|
+            Q(indicator_in_opk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id) |
+            Q(indicator_in_gpk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id)|
             Q(indicator_in_kk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id)
         ).distinct()
     )
@@ -799,8 +799,8 @@ def get_all_unfilled_indicator(request, gh_id):
     indicator_unfilled_set = set(indicators_in_gh_list) - set(indicator_in_wp_list)
     competences_with_unfilled_indicators = Competence.objects.filter(indicator_in_competencse__in=indicator_unfilled_set).distinct()
     for competence in competences_with_unfilled_indicators:
-        indicators_unfilled = Indicator.objects.filter(competence=competence)
-        indicators_unfilled = set(indicators_unfilled)-indicator_unfilled_set
+        indicators_in_competence= Indicator.objects.filter(competence=competence)
+        indicators_unfilled = set(indicators_in_competence) - set(indicator_in_wp_list)
         competence_serialized = dict(CompetenceSerializerForIndicator(competence).data)
         competence_serialized["indicators"] = IndicatorForUnfilledSerializer(indicators_unfilled, many=True).data
         competence_with_indicators_list.append(competence_serialized)

@@ -19,6 +19,7 @@ from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, D
     WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
     AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration, \
     IsuObjectsSendLogger, BugsLog
+from .permissions import IsUniversalModule, IsDisciplineBlockModuleEditor
 from .validators import validate_file_extension
 from .workprogram_additions.serializers import AdditionalMaterialSerializer, ShortStructuralUnitSerializer, \
     ShortUniversityPartnerSerializer
@@ -696,6 +697,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         self.fields['childs'] = DisciplineBlockModuleWithoutFatherSerializer(many=True)
         self.fields["laboriousness"] = serializers.SerializerMethodField()
+        self.fields["can_remove"] = serializers.SerializerMethodField()
         # self.fields["ze_by_sem"] = serializers.SerializerMethodField()
         return super().to_representation(value)
 
@@ -703,6 +705,10 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         unit_final_sum = recursion_module(obj)
 
         return unit_final_sum
+
+    def get_can_remove(self, obj):
+        can_remove_bool = IsUniversalModule.check_access(obj.id, self.context['request'].user)
+        return can_remove_bool
 
     """def get_ze_by_sem(self, obj):
         max_ze, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = recursion_module_per_ze(obj)
@@ -768,7 +774,7 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
                         module_for_save.orderings_for_ups.append({"up_id": obj.academic_plan.id, "number": index + 1})
                     module_for_save.save()
                 dbms = dbms.order_by('orderings_for_ups__0__number')
-        modules_in_discipline_block = DisciplineBlockModuleSerializer(dbms, many=True)
+        modules_in_discipline_block = DisciplineBlockModuleSerializer(dbms, many=True, context={'request': self.context['request']})
         return modules_in_discipline_block.data
 
     class Meta:
@@ -795,6 +801,8 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan_in_field_of_study = ImplementationAcademicPlanShortForAPSerializer(many=True)
 
     def to_representation(self, instance):
+        self.fields["discipline_blocks_in_academic_plan"] = DisciplineBlockSerializer(many=True, required=False,
+                                                                                      context={'request': self.context['request']})
         data = super().to_representation(instance)
         # try:
         #     data["can_edit"] = self.context['request'].user == instance.author or bool(
@@ -1082,7 +1090,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        if instance.discipline_code == None:
+        if instance.discipline_code == None and self.context.get('request'):
             data["can_send_to_isu"] = bool(self.context['request'].user.groups.filter(name="expertise_master"))
         return data
 

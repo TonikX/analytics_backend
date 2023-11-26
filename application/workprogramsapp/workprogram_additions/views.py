@@ -2,6 +2,8 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg2 import openapi
+from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import filters, generics
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -318,15 +320,24 @@ class WorkProgramItemsPrerequisitesView(generics.RetrieveAPIView):
         obj = get_object_or_404(queryset, discipline_code=str(self.request.resolver_match.kwargs['isu_id']))
         return obj
 
-
+@swagger_auto_schema(
+    method='GET',
+    manual_parameters=[openapi.Parameter('block', openapi.IN_QUERY,
+                                             description="Номер блока для фильтрации",
+                                             type=openapi.TYPE_INTEGER)],
+    operation_description='Метод для изменения статусов учебного плана')
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def wp_in_general_characteristic(request, gh_id):
+
+    block_number = request.GET.get("block")
+    if block_number:
+        block_number=block_number[0]
     ap_all = AcademicPlan.objects.filter(
         academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=gh_id).distinct()
     changeblocks = WorkProgramChangeInDisciplineBlockModule.objects.none()
     for ap_to_get in ap_all:
-        changeblocks = changeblocks | ap_to_get.get_all_changeblocks_from_ap()
+        changeblocks = changeblocks | ap_to_get.get_all_changeblocks_from_ap(block_to_filter=block_number)
     wps = WorkProgram.objects.filter(
         zuns_for_wp__work_program_change_in_discipline_block_module__in=changeblocks).distinct()
     serializer = WorkProgramShortForExperiseSerializer(wps, many=True)

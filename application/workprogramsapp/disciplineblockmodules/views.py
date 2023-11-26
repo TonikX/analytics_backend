@@ -50,7 +50,7 @@ class DisciplineBlockModuleDestroyView(generics.DestroyAPIView):
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleSerializer
-    permission_classes = [IsBlockModuleEditor]
+    permission_classes = [IsBlockModuleEditor, IsUniversalModule]
     my_tags = ["Discipline Blocks"]
 
 
@@ -65,6 +65,7 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         instance = self.get_object()
+        self.serializer_class.context={"request":request}
         data = request.data
         blocks = data.get("descipline_block")
         if blocks:
@@ -107,6 +108,8 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
     """
         Получение списка модулей с краткой информацией
         Можно осуществлять поиск по имени, имени блока, типу образования
+
+
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = ShortDisciplineBlockModuleForModuleListSerializer
@@ -211,9 +214,14 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
         except:
             newdata.update({"rating": False})
 
+        imps = ImplementationAcademicPlan.get_all_imp_by_modules(queryset)
+        is_used_in_accepted_plan = bool(imps.exclude(academic_plan__on_check="in_work").exists())
+
         newdata['plans_included'] = ImplementationAcademicPlanForModuleSerializer(
-            ImplementationAcademicPlan.get_all_imp_by_modules(queryset), many=True, ).data
-        newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'], self.request.user)
+            imps, many=True, ).data
+        newdata['status'] = "used" if is_used_in_accepted_plan else "not_used"
+        newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'],
+                                                                         self.request.user) and not is_used_in_accepted_plan
         newdata = OrderedDict(newdata)
 
         return Response(newdata, status=status.HTTP_200_OK)
@@ -430,4 +438,3 @@ class CopyModules(APIView):
 
         serializer = DisciplineBlockModuleSerializer(new_module)
         return Response(serializer.data)
-
