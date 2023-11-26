@@ -29,7 +29,7 @@ import Step from '@mui/material/Step';
 import ConfirmDialog from "../../../../components/ConfirmDialog/ConfirmDialog";
 
 import {WorkProgramGeneralFields} from "../../../WorkProgram/enum";
-import {OPTIONALLY, typeOfWorkProgramInPlan} from "../../data";
+import {OPTIONALLY} from "../../data";
 import {appRouter} from "../../../../service/router-service";
 import {BlocksOfWorkProgramsType} from "../../types";
 
@@ -249,7 +249,7 @@ class DetailTrainingModule extends React.Component<DetailTrainingModuleProps> {
               const creditUnits = withoutZero2?.reverse()?.join(' ')
 
               const semesterAvailableCount = qualification === BACHELOR_QUALIFICATION ? 9 : 5;
-              const hasSemesterError = semesterStartArr.some((item: any) => ((item + duration) > semesterAvailableCount));
+              const hasSemesterError = semesterStartArr?.some((item: any) => ((item + duration) > semesterAvailableCount));
 
               return (
                 <TableRow key={blockOfWorkProgram[BlocksOfWorkProgramsFields.ID]}>
