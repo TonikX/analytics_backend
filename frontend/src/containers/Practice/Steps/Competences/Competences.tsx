@@ -17,11 +17,15 @@ import {getId, getCompetences, getPracticeInChangeBlock, getResultsForSelect} fr
 import {rootState} from "../../../../store/reducers";
 import actions from "../../actions";
 import {useStyles} from './Competences.styles'
+import EditIcon from "@mui/icons-material/EditOutlined";
+import IconButton from "@mui/material/IconButton";
+import {UpdateZunDialog} from "../../../WorkProgram/Competences/UpdateZunDialog";
 
 export default React.memo(() => {
   const dispatch = useDispatch()
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
   const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
+  const [isOpenUpdateZunDialog, setIsOpenUpdateZunDialog] = useState<any>(false)
 
   const epList = useSelector((state: rootState) => getPracticeInChangeBlock(state))
   const resultsList = useSelector((state: rootState) => getResultsForSelect(state))
@@ -148,6 +152,9 @@ export default React.memo(() => {
                 </TableCell>
                 <TableCell className={classes.cell}>
                   {[get(zun, 'knowledge'), get(zun, 'skills'), get(zun, 'attainments')].filter(item => Boolean(item)).join(' / ')}
+                  <IconButton onClick={() => setIsOpenUpdateZunDialog(zun)}>
+                    <EditIcon />
+                  </IconButton>
                 </TableCell>
                 <TableCell>
                   <div className={classes.smallButton}
@@ -173,6 +180,21 @@ export default React.memo(() => {
           apRequired
         />
       ) : null}
+
+      {isOpenUpdateZunDialog ?
+        <UpdateZunDialog
+          isOpen
+          handleClose={() => setIsOpenUpdateZunDialog(false)}
+          results={isOpenUpdateZunDialog.items}
+          zunId={isOpenUpdateZunDialog.id}
+          indicator={isOpenUpdateZunDialog.indicator}
+          defaultAttainments={isOpenUpdateZunDialog?.attainments}
+          defaultSkills={isOpenUpdateZunDialog?.skills}
+          defaultKnowledge={isOpenUpdateZunDialog?.knowledge}
+          resultsList={resultsList}
+          practiceId={practiceId}
+        /> : null
+      }
     </>
   )
 })
