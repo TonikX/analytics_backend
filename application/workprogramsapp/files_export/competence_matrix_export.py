@@ -180,7 +180,7 @@ def fill_competences(ws, column_start, competence_queryset, competence_dict, nam
         competences_list = []
         pk_code_inc = 0
         for pk_type in ["prof", "fore", "min"]:
-            for comp in competence_queryset.filter(group_of_pk__type_of_pk_competence=pk_type):
+            for comp in competence_queryset.filter(group_of_pk__type_of_pk_competence=pk_type).order_by("competence__number"):
                 if not pk_dict.get(comp.competence.id):
                     pk_code_inc += 1
                     pk_dict[comp.competence.id] = pk_code_inc
