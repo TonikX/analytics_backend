@@ -101,25 +101,6 @@ export default React.memo(() => {
   const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
   const resultsList = useSelector((state: rootState) => getResultsForSelect(state))
 
-  const impList = epList && epList.reduce((plans:any, currentPlan:any) => {
-    const academicPlan = currentPlan?.discipline_block_module?.descipline_block[0]?.academic_plan;
-    const desciplineBlock = currentPlan?.discipline_block_module?.descipline_block[0];
-    if (academicPlan === undefined) {
-      return plans;
-    }
-
-    return ([
-      ...plans,
-      {
-        value: desciplineBlock?.id,
-        label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
-                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
-                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
-                 `,
-      }
-    ])
-  }, [])
-
   const apList = epList && epList.reduce((fullPlans: any, currentPlan: any) => {
     const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
       const academicPlan = item?.academic_plan;
@@ -146,17 +127,38 @@ export default React.memo(() => {
     ]
   }, [])
 
+  const finalEpList = epList && epList.reduce((fullPlans: any, currentPlan: any) => {
+    const plans = currentPlan?.discipline_block_module?.descipline_block?.reduce((plans: any, item: any) => {
+      const academicPlan = item?.academic_plan;
+
+      if (academicPlan === undefined || filterYear && +filterYear !== academicPlan?.academic_plan_in_field_of_study[0]?.year) {
+        return plans;
+      }
+
+      return ([
+        ...plans,
+        {
+          value: academicPlan?.academic_plan_in_field_of_study[0]?.id,
+          label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
+                 `,
+        }
+      ])
+    }, [])
+
+    return [
+      ...fullPlans,
+      ...plans,
+    ]
+  }, [])
+
   const onChangeFilterYear = (value:any) => {
     dispatch(actions.updateCompetenceFilterYear(value ? value.format(YEAR_DATE_FORMAT) : ''))
     dispatch(actions.updateCompetenceFilterAP(null))
     if (filterImp || filterAp) {
       dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
     }
-  }
-
-  const onChangeFilterIMP = (value:any) => {
-    dispatch(actions.updateCompetenceFilterIMP(value))
-    dispatch(actions.getApWithCompetencesAndIndicatorsToWp())
   }
 
   const onChangeFilterAP = (value:any) => {
@@ -326,16 +328,6 @@ export default React.memo(() => {
               />
             </div>
 
-            {/*<div className={classes.competenceFilterSelect}>*/}
-            {/*  <SimpleSelector*/}
-            {/*      label="Имплементация УП"*/}
-            {/*      metaList={impList || []}*/}
-            {/*      onChange={onChangeFilterIMP}*/}
-            {/*      wrapClass={classes.selectorWrap}*/}
-            {/*      noMargin*/}
-            {/*  />*/}
-            {/*</div>*/}
-
             <div className={classes.competenceFilterSelect}>
               <SimpleSelector
                   label="Учебный план"
@@ -470,8 +462,10 @@ export default React.memo(() => {
         isOpen={isOpenIndicatorDialog}
         handleClose={handleCloseDialog}
         defaultCompetence={dialogCompetence}
+        disableCompetence={!!dialogCompetence}
         workProgramId={workProgramId}
-        epList={epList}
+        finalEpList={finalEpList}
+        finalEpListForCompetence={apList}
         resultsList={resultsList}
       />
       : null

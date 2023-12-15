@@ -8,12 +8,14 @@ import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import {useSelector} from "react-redux";
 import {rootState} from "../../../../store/reducers";
+import Typography from '@mui/material/Typography';
 import {
   getUnfilledWorkPrograms,
   getUnfilledIndicators,
-  getEducationalProgramId,
+  getEducationalProgramCharacteristic,
 } from "../../getters";
 import actions from "../../../EducationalProgram/actions";
+import wpActions from "../../../WorkProgram/actions";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -23,8 +25,7 @@ import { useStyles } from './AbilityAnalysis.styles'
 import {appRouter} from "../../../../service/router-service";
 import Button from "@mui/material/Button";
 import IndicatorsDialog from "../../../WorkProgram/Competences/IndicatorDialog/IndicatorDialog";
-import wpActions from "../../../WorkProgram/actions";
-import {getResultsForSelect, getWorkProgramField} from "../../../WorkProgram/getters";
+import {getResultsForSelect} from "../../../WorkProgram/getters";
 import {WorkProgramSelectModal} from "../WorkProgramSelectModal";
 
 export const AbilityAnalysis = () => {
@@ -32,23 +33,42 @@ export const AbilityAnalysis = () => {
   const classes = useStyles()
   const isFirstEnterSecondTab = useRef(true)
   const [tab, setTab] = useState('1');
-  const [dialogCompetence, setDialogCompetence] = useState<{value: number; label: string} | undefined>(undefined)
   const [isOpenIndicatorDialog, setIsOpenIndicatorDialog] = useState(false)
   const [isOpenWorkProgramModal, setIsOpenWorkProgramModal] = useState(false)
   const [defaultIndicator, setDefaultIndicator] = useState<{value: number, label: string}|undefined>()
+  const [defaultCompetence, setDefaultCompetence] = useState<{value: number, label: string}|undefined>()
   const [selectedWpId, setSelectedWpId] = useState<number|undefined>(undefined)
-  const epList = useSelector((state: rootState) => getWorkProgramField(state, 'work_program_in_change_block'))
+  const characteristics: any = useSelector((state: rootState) => getEducationalProgramCharacteristic(state))
   const resultsList = useSelector((state: rootState) => getResultsForSelect(state))
-  const educationalProgramId = useSelector((state: rootState) => getEducationalProgramId(state))
+  const educationalProgramId = characteristics.educational_program?.[0]?.id;
+  const educationalProgramIdForCompetence = characteristics.educational_program?.[0]?.academic_plan?.id;
 
-  const getWorkProgramById = (id: number) => {
-    dispatch(wpActions.getWorkProgram(id))
-  }
+  const finalEpList = characteristics.educational_program.map((item: any) => {
+    return (
+      {
+        value: item.id,
+        label: `Направление: ${item?.field_of_study[0]?.title} / ОП: ${item?.title} (${item?.year})`,
+      }
+    )
+  })
+
+  const finalEpListForCompetence = characteristics.educational_program.map((item: any) => {
+    return (
+      {
+        value: item.academic_plan.id,
+        label: `Направление: ${item?.field_of_study[0]?.title} / ОП: ${item?.title} (${item?.year})`,
+      }
+    )
+  })
 
   useEffect(() => {
     dispatch(actions.getUnfilledWorkPrograms());
     dispatch(actions.getCharacteristicsWorkProgram());
   }, []);
+
+  useEffect(() => {
+    dispatch(wpActions.getWorkProgram(selectedWpId));
+  }, [selectedWpId]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     if (isFirstEnterSecondTab.current) {
@@ -63,9 +83,10 @@ export const AbilityAnalysis = () => {
   }
 
   const handleCloseDialog = () => {
-    setDialogCompetence(undefined)
+    setDefaultCompetence(undefined)
     setIsOpenIndicatorDialog(false)
     setDefaultIndicator(undefined)
+    setDefaultCompetence(undefined)
   }
 
   const unfilledWorkPrograms = useSelector((state: rootState) => getUnfilledWorkPrograms(state))
@@ -73,6 +94,9 @@ export const AbilityAnalysis = () => {
 
   return (
     <TabContext value={tab}>
+      <Typography style={{marginBottom: 10}}>
+        На данной странице Вы можете увидеть какие РПД, связанные с общей характеристикой не имеют компетенций и индикаторов и какие компетенции и индикаторы в данной общей характеристике не связанны ни с какими РПД. Добавить индикаторы компетенций и знания умения и навыки можно прямо в этом интерфейсе. Индикаторы компетенций должны быть связаны с блоками 1 и 2.
+      </Typography>
       <Box
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
@@ -116,7 +140,6 @@ export const AbilityAnalysis = () => {
                       onClick={() => {
                         handleCreateZUN();
                         setSelectedWpId(unfilledWorkProgram?.id);
-                        getWorkProgramById(unfilledWorkProgram?.id);
                       }}
                       variant="outlined"
                       className={classes.addZUNButton}
@@ -146,19 +169,19 @@ export const AbilityAnalysis = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {unfilledIndicators?.map((unfilledIndicator: any) => {
+            {unfilledIndicators?.map((competence: any) => {
               return (
                 <>
-                  {unfilledIndicator?.indicators?.map((indicator: any, index: number) => {
+                  {competence?.indicators?.map((indicator: any, index: number) => {
                     return (
-                      <TableRow key={unfilledIndicator?.id}>
+                      <TableRow key={competence?.id}>
                         {index === 0 ?
-                          <TableCell rowSpan={unfilledIndicator?.indicators?.length} className={classes.cell}>
+                          <TableCell rowSpan={competence?.indicators?.length} className={classes.cell}>
                             <Link className={classes.workProgramLink}
-                                  to={appRouter.getCompetenceIndicatorsRouteLink(unfilledIndicator?.id)}
+                                  to={appRouter.getCompetenceIndicatorsRouteLink(competence?.id)}
                                   target="_blank"
                             >
-                              {unfilledIndicator?.number} {unfilledIndicator?.name}
+                              {competence?.number} {competence?.name}
                             </Link>
                           </TableCell>
                           : <></>
@@ -173,6 +196,10 @@ export const AbilityAnalysis = () => {
                               setDefaultIndicator({
                                 label: indicator?.name,
                                 value: indicator?.id,
+                              })
+                              setDefaultCompetence({
+                                label: competence?.name,
+                                value: competence?.id,
                               })
                             }}
                             variant="outlined"
@@ -196,11 +223,13 @@ export const AbilityAnalysis = () => {
         <IndicatorsDialog
           isOpen={isOpenIndicatorDialog}
           handleClose={handleCloseDialog}
-          defaultCompetence={dialogCompetence}
+          defaultCompetence={defaultCompetence}
           workProgramId={selectedWpId}
-          epList={epList}
+          finalEpList={finalEpList}
+          finalEpListForCompetence={finalEpListForCompetence}
           resultsList={resultsList}
           defaultEpId={educationalProgramId}
+          defaultEpIdForCompetence={educationalProgramIdForCompetence}
           updateCharacteristics
           apRequired
           defaultIndicator={defaultIndicator}
@@ -212,7 +241,7 @@ export const AbilityAnalysis = () => {
         <WorkProgramSelectModal
           onSelect={(wpId: number) => {
             setSelectedWpId(wpId);
-            getWorkProgramById(wpId);
+            // getWorkProgramById(wpId);
             setIsOpenWorkProgramModal(false);
             setIsOpenIndicatorDialog(true);
           }}
