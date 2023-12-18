@@ -25,7 +25,7 @@ from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockMo
     ImplementationAcademicPlanSerializerForBlockModule, ImplementationAcademicPlanForModuleSerializer
 from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
 from workprogramsapp.models import DisciplineBlockModule, DisciplineBlock, ImplementationAcademicPlan, AcademicPlan, \
-    WorkProgramChangeInDisciplineBlockModule
+    WorkProgramChangeInDisciplineBlockModule, WorkProgramInFieldOfStudy, PracticeInFieldOfStudy
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, IsBlockModuleEditor, \
     IsAcademicPlanDeveloper, IsUniversalModule
 from workprogramsapp.serializers import ImplementationAcademicPlanForWPinFSSerializer
@@ -433,8 +433,27 @@ class CopyModules(APIView):
             new_changeblock = WorkProgramChangeInDisciplineBlockModule.objects.create(
                 discipline_block_module=new_module, change_type=changeblock.change_type)
             new_changeblock.work_program.add(*changeblock.work_program.all())
+            for work_program in changeblock.work_program.all():
+                zuns = WorkProgramInFieldOfStudy.objects.get(work_program=work_program,
+                                                                work_program_change_in_discipline_block_module=changeblock).zun_in_wp.all()
+                new_fs = WorkProgramInFieldOfStudy.objects.get(work_program=work_program,
+                                                               work_program_change_in_discipline_block_module=new_changeblock)
+                for zun in zuns:
+                    zun.pk = None
+                    zun.wp_in_fs = new_fs
+                    zun.save()
+
             new_changeblock.gia.add(*changeblock.gia.all())
             new_changeblock.practice.add(*changeblock.practice.all())
+            for practice in changeblock.practice.all():
+                zuns = PracticeInFieldOfStudy.objects.filter(practice=practice,
+                                                             work_program_change_in_discipline_block_module=changeblock).zun_in_practice.all()
+                new_fs = PracticeInFieldOfStudy.objects.get(practice=practice,
+                                                            work_program_change_in_discipline_block_module=new_changeblock)
+                for zun in zuns:
+                    zun.pk = None
+                    zun.zun_in_practice = new_fs
+                    zun.save()
             new_changeblock.save()
 
         serializer = DisciplineBlockModuleSerializer(new_module)
