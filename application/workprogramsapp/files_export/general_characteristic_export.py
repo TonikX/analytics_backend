@@ -223,7 +223,7 @@ def generate_context(gh):
         context["pk_prof_competences"].append(group_dict)
 
         for competence_in_group in PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-                group_of_pk=group):
+                group_of_pk=group).order_by("competence__number"):
             if not pk_dict.get(competence_in_group.competence.id):
                 pk_code_inc += 1
                 pk_dict[competence_in_group.competence.id] = pk_code_inc
@@ -254,7 +254,7 @@ def generate_context(gh):
         context["pk_foresight_competences"].append(group_dict)
 
         for competence_in_group in PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-                group_of_pk=group):
+                group_of_pk=group).order_by("competence__number"):
             if not pk_dict.get(competence_in_group.competence.id):
                 pk_code_inc += 1
                 pk_dict[competence_in_group.competence.id] = pk_code_inc
@@ -281,7 +281,7 @@ def generate_context(gh):
         context["pk_minor_competences"].append(group_dict)
 
         for competence_in_group in PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-                group_of_pk=group):
+                group_of_pk=group).order_by("competence__number"):
             if not pk_dict.get(competence_in_group.competence.id):
                 pk_code_inc += 1
                 pk_dict[competence_in_group.competence.id] = pk_code_inc

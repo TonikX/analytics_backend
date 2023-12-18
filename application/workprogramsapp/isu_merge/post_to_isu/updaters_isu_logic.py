@@ -234,7 +234,7 @@ def post_wp_to_isu(token, wp, ap_id):
             order_dict = {"order": cerf.semester,
                           "work_types": [generate_contents(type_id=certification_types[cerf.type])]}
             wp_dict["contents"].append(order_dict)
-    return generate_response(url, headers, body, "wp", wp.id, ap_id)[0]
+    return generate_response(url, headers, body, "wp", wp.id, ap_id)
 
 
 def post_module_to_isu(token, module, parent_id, block, ap_id):

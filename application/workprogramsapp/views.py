@@ -2378,6 +2378,7 @@ def CloneWorkProgramm(request):
     clone_program = WorkProgram.clone_programm(prog_id)
     clone_program.editors.add(request.user)
     clone_program.owner = request.user
+    clone_program.discipline_code = None
     clone_program.save()
 
     serializer = WorkProgramSerializer(clone_program)
