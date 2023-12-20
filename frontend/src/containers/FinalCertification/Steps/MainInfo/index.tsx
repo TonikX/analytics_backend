@@ -31,11 +31,11 @@ interface MainInfoProps extends WithStyles<typeof styles> {
 
 export const GIA_TITLES = [
     {
-        value: 'preparation',
+        value: 'Подготовка к защите и защита ВКР',
         label: 'Подготовка к защите и защита ВКР',
     },
     {
-        value: 'preparation-en',
+        value: 'Подготовка к защите и защита ВКР / Preparation for Thesis Defense and Thesis Defense',
         label: 'Подготовка к защите и защита ВКР / Preparation for Thesis Defense and Thesis Defense',
     }
 ];

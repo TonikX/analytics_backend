@@ -892,7 +892,10 @@ class SendWorkProgramToISU(APIView):
         )
         isu_logger.get_access_token(add_headers={"scope": "service.edu-complex-isu"})
         token = isu_logger.token
-        created_id = post_wp_to_isu(token, wp, -1)
+
+        created_id, error_code, response_data = post_wp_to_isu(token, wp, -1)
+        print(response_data)
+
         if created_id:
             status_response = 200
             wp.discipline_code = str(created_id)
@@ -900,7 +903,8 @@ class SendWorkProgramToISU(APIView):
             return Response(data={"wp_created_id": created_id}, status=status_response)
         else:
             status_response = 500
-            return Response(data={"error": "error when creating wp"}, status=status_response)
+            return Response(data={"error": "error when creating wp",
+                                  "isu_response":response_data["error_message"]}, status=status_response)
 
 
 class SendPracticeToISU(APIView):

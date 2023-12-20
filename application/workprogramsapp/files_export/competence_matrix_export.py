@@ -80,7 +80,8 @@ def process_changeblock(ws, level, block_module, unique_dict, competence_dict):
             if (work_program.id not in unique_dict["unique_wp"]) or (unique_dict["is_first_iter_ap"]):
                 wp_in_fs = WorkProgramInFieldOfStudy.objects.get(work_program=work_program,
                                                                  work_program_change_in_discipline_block_module=change_block)
-
+                if work_program.title=="Автоматическое машинное обучение":
+                    print("fdfd")
                 competences_in_program = {"id": work_program.id, "title": work_program.title,
                                           "competences": get_competences_wp(wp_in_fs)}
                 unique_dict["unique_wp"].append(work_program.id)
@@ -180,14 +181,17 @@ def fill_competences(ws, column_start, competence_queryset, competence_dict, nam
         competences_list = []
         pk_code_inc = 0
         for pk_type in ["prof", "fore", "min"]:
-            for comp in competence_queryset.filter(group_of_pk__type_of_pk_competence=pk_type):
+            for comp in competence_queryset.filter(group_of_pk__type_of_pk_competence=pk_type).order_by("competence__number"):
+
                 if not pk_dict.get(comp.competence.id):
                     pk_code_inc += 1
+
                     pk_dict[comp.competence.id] = pk_code_inc
                     temp_pk_code = pk_code_inc
                 else:
                     temp_pk_code = pk_dict[comp.competence.id]
                 competences_list.append(f"ПК-{temp_pk_code}")
+        print(pk_dict)
 
     # Формируем данные
     competence_dict[name_comp]["start"] = column_start
@@ -215,11 +219,11 @@ def competence_header(ws, gen_characteristic):
         group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False).distinct()"""
     pk_competences = PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
         group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False,
-        group_of_pk__type_of_pk_competence="prof").distinct() | PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+        group_of_pk__type_of_pk_competence="prof").order_by("competence__number").distinct() | PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
         group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False,
-        group_of_pk__type_of_pk_competence="fore").distinct() | PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+        group_of_pk__type_of_pk_competence="fore").order_by("competence__number").distinct() | PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
         group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False,
-        group_of_pk__type_of_pk_competence="min").distinct()
+        group_of_pk__type_of_pk_competence="min").order_by("competence__number").distinct()
     general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
         group_of_pk__educational_standard=gen_characteristic.educational_standard,
         competence__isnull=False)

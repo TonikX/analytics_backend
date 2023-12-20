@@ -49,7 +49,7 @@ class GIASerializer(serializers.ModelSerializer):
 
         if editors:
             gia.editors.set(editors)
-            gia.editors.add(request.user)
+        gia.editors.add(request.user)
 
         if not gia.gia_base:
             gia.gia_base = GIABaseTemplate.objects.create()
