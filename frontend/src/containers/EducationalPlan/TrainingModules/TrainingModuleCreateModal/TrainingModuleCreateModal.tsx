@@ -59,6 +59,8 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
         } else {
             this.props.actions.createTrainingModule({data: trainingModule});
         }
+
+        this.props.actions.closeDialog();
     }
 
     saveField = (field: string) => (e: React.ChangeEvent) => {
