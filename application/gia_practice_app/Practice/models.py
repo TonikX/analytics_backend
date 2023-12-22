@@ -158,6 +158,8 @@ class Practice(models.Model):
     evaluation_tools_v_sem = models.CharField(max_length=1024, blank=True, null=True,
                                               verbose_name="Оценочные средства по семестрам в Практике")
     number_of_semesters = models.IntegerField(blank=True, null=True, verbose_name="Количество семестров в практике")
+    weeks_start = models.CharField(max_length=1024, blank=True, null=True,
+                                              verbose_name="Недели начала практики")
 
 
 class PrerequisitesOfPractice(models.Model):

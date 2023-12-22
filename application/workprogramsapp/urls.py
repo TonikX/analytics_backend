@@ -9,7 +9,7 @@ from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView
     ChangeExpertiseView, ExpertiseCreateView, ExpertiseWorkProgramView, ExpertiseListView, ExpertiseViewById, \
     DeleteUserExpertise
 from .files_export.views import DocxFileExportView, SyllabusExportView, UploadPlans, UploadPlansAPIView, \
-    AcademicPlanGenerateXlsx, GeneralCharacteristicGenerateDocx, CompetenceMatrixGenerateExcel
+    AcademicPlanGenerateXlsx, GeneralCharacteristicGenerateDocx, CompetenceMatrixGenerateExcel, CalendarGenerateExcel
 from .folders_ans_statistic.views import FoldersListView, WorkProgramInFolderView, CreateFolderView, EditFolderView, \
     AddToFolderView, RemoveFromFolderView, DeleteFolderView, WorkProgramStatistic, \
     AcademicPlanInFolderView, AddToFolderAcademicPlanView, RemoveFromFolderAcademicPlanView, \
@@ -193,6 +193,7 @@ urlpatterns = [
     path('api/export/academic_plan/<int:pk>', AcademicPlanGenerateXlsx.as_view()),
     path('api/export/general_characteristic/<int:pk>', GeneralCharacteristicGenerateDocx.as_view()),
     path('api/export/competence_matrix/<int:pk>', CompetenceMatrixGenerateExcel.as_view()),
+    path('api/export/calendar/<int:pk>', CalendarGenerateExcel.as_view()),
 
     # Учебный планы
     path('api/academicplan', AcademicPlanListAPIView.as_view()),
