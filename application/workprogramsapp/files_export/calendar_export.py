@@ -92,9 +92,9 @@ def process_practice(ws, practice_cb):
 
 
 def process_excel_calendar(academic_plan):
-    wb_obj = openpyxl.load_workbook(
-        "C:\\Users\\s4\\Desktop\\analytics_backend\\application\\static-backend\\export_template\\calendar_2023.xlsx")
-    # wb_obj = openpyxl.load_workbook(AP_FILE_ROUTE)
+    """wb_obj = openpyxl.load_workbook(
+        "C:\\Users\\s4\\Desktop\\analytics_backend\\application\\static-backend\\export_template\\calendar_2023.xlsx")"""
+    wb_obj = openpyxl.load_workbook("/application/static-backend/export_template/calendar_2023.xlsx")
     ws = wb_obj["КУГ"]
 
     practice_cbs = academic_plan.get_all_changeblocks_from_ap(block_to_filter="Блок 2. Практика")
