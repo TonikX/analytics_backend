@@ -27,7 +27,7 @@ services:
     build:
       context: ./application
       dockerfile: Dockerfile-prod
-    command: bash -c "sleep 3 && gunicorn analytics_project.wsgi -b 0.0.0.0:8001 --workers 2 --timeout 7200";
+    command: bash -c "sleep 3 && gunicorn analytics_project.wsgi -b 0.0.0.0:8001 --workers 8 --timeout 7200";
     networks:
       nginx_net:
     volumes:
@@ -36,7 +36,7 @@ services:
       - 8000
     restart: always
     links:
-      - db
+#      - db
       - cache
   nginx:
     image: nginx:latest
