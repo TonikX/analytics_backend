@@ -119,10 +119,16 @@ const updateZUN = createLogic({
     process({getState, action}: any, dispatch, done) {
         dispatch(actions.fetchingTrue({destination: fetchingTypes.UPDATE_ZUN}));
 
-        service.updateZUN(action.payload, getWorkProgramId(getState()))
+        const {workProgramId, practiceId, ...payload} = action.payload;
+
+        service.updateZUN(payload, workProgramId, practiceId)
             .then(() => {
-                dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
-                dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
+                if (workProgramId) {
+                  dispatch(workProgramActions.getApWithCompetencesAndIndicatorsToWp())
+                  dispatch(workProgramActions.getAllCompetencesAndIndicatorsForWp())
+                } else {
+                  dispatch(practiceActions.getPractice(practiceId))
+                }
                 dispatch(actions.fetchingSuccess());
             })
             .catch((err) => {

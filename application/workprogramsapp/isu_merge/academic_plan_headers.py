@@ -58,7 +58,10 @@ def process_headers(headers: list):
         imp.op_isu_id = int(ap_header["edu_program_id"])
         imp.training_period = int(ap_header["training_period"])
         imp.language = language
-        imp.military_department = bool(ap_header)
+        try:
+            imp.military_department = bool(ap_header["military_department"])
+        except:
+            imp.military_department = False
         imp.title = ap_header["edu_program_name"]
         imp.total_intensity = int(total_intensity)
         imp.academic_plan = academic_plan

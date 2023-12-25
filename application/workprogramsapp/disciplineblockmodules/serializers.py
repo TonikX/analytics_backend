@@ -150,6 +150,13 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance, validated_data):
+
+        def reverse_universal(modules):
+            for module in modules:
+                module.type = "universal_module"
+                module.save()
+                reverse_universal(module.childs.all())
+
         type_income = validated_data.get("type")
         if type_income and instance.type != type_income and not self.context["request"].user.groups.filter(
                 name="expertise_master").exists():
@@ -157,6 +164,12 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
                 {"detail": "Только сотрудники ОСОП могут менять тип модуля"},
                 code=403,
             )
+
+        if type_income == "universal_module" or (validated_data.get("childs") and instance.type == "universal_module"):
+            if validated_data.get("childs"):
+                reverse_universal(validated_data.get("childs"))
+            else:
+                reverse_universal(instance.childs.all())
         updated_module = super(DisciplineBlockModuleCreateSerializer, self).update(instance, validated_data)
         module_group = Group.objects.get(name='blockmodule_editor')
         for user in updated_module.editors.all():
@@ -166,8 +179,6 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
         return updated_module
 
     def validate_childs(self, childs):
-        print('dd')
-        print(self.instance.childs.all())
         if self.instance.id in self.initial_data['childs'] and self.instance.id not in self.instance.childs.all():
             raise ValidationError('Модуль %s не может сослаться сам на себя' % self.instance.id)
         else:

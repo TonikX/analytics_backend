@@ -226,10 +226,9 @@ class ZunPracticeManyForAllGhViewSet(mixins.CreateModelMixin,
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         if for_all:
             prac = Practice.objects.get(zuns_for_pr=instance.practice_in_fs)
-            Practice.objects.filter(practice_in_fs__practice=prac, skills=instance.skills,
+            ZunPractice.objects.filter(practice_in_fs__practice=prac, skills=instance.skills,
                                attainments=instance.attainments,
-                               knowledge=instance.knowledge, indicator_in_zun__id=instance.indicator_in_zun.id).update(
-                skills=request.data["skills"], attainments=request.data["attainments"],
+                               knowledge=instance.knowledge, indicator_in_zun__id=instance.indicator_in_zun.id).update(skills=request.data["skills"], attainments=request.data["attainments"],
                 knowledge=request.data["knowledge"])
         if serializer.is_valid():
             serializer.save()
