@@ -191,7 +191,7 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     """
-    Детальный просмотр одного модуля с полями can_edit и rating
+    Детальный просмотр одного модуля с полями can_edit, can_add_plans и rating
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
@@ -223,6 +223,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
         newdata['status'] = "used" if is_used_in_accepted_plan else "not_used"
         newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'],
                                                                          self.request.user) and not is_used_in_accepted_plan
+        newdata['can_add_plans'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'],self.request.user)
         newdata = OrderedDict(newdata)
 
         return Response(newdata, status=status.HTTP_200_OK)
