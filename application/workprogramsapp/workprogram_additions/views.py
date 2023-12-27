@@ -119,7 +119,7 @@ def CopyContentOfWorkProgram(request):
                 top.make_clone(attrs={'discipline_section': clone_discipline})
             clone_dict = {'id': disp.id, 'clone_id': clone_discipline.id}
             disp_clone_list.append(clone_dict)
-        for eva in EvaluationTool.objects.filter():
+        for eva in EvaluationTool.objects.filter(evaluation_tool_of_outcomes__workprogram__id=old_wp.id).distinct():
             evaluation_disciplines = eva.evaluation_tools.all().filter(work_program_id=old_wp.id)
             if (evaluation_disciplines):
                 clone_eva = eva.make_clone()
