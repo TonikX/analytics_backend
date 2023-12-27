@@ -191,7 +191,7 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
     """
-    Детальный просмотр одного модуля с полями can_edit и rating
+    Детальный просмотр одного модуля с полями can_edit, can_add_plans и rating
     """
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
@@ -222,6 +222,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
         newdata['status'] = "used" if is_used_in_accepted_plan else "not_used"
         newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'],
                                                                          self.request.user) and not is_used_in_accepted_plan
+        newdata['can_add_plans'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'],self.request.user)
         newdata = OrderedDict(newdata)
 
         return Response(newdata, status=status.HTTP_200_OK)
@@ -430,7 +431,7 @@ class CopyModules(APIView):
 
         for changeblock in old_module.change_blocks_of_work_programs_in_modules.all():
             new_changeblock = WorkProgramChangeInDisciplineBlockModule.objects.create(
-                discipline_block_module=new_module, change_type=changeblock.change_type)
+                discipline_block_module=new_module, change_type=changeblock.change_type, semester_start=changeblock.semester_start)
             new_changeblock.work_program.add(*changeblock.work_program.all())
             for work_program in changeblock.work_program.all():
                 zuns = WorkProgramInFieldOfStudy.objects.get(work_program=work_program,
