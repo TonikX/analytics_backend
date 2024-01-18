@@ -16,6 +16,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
+from gia_practice_app.Practice.models import ZunPractice
 from workprogramsapp.disciplineblockmodules.search_filters import DisciplineBlockModuleFilter
 from workprogramsapp.disciplineblockmodules.serializers import DisciplineBlockModuleCreateSerializer, \
     DisciplineBlockModuleSerializer, DisciplineBlockModuleForModuleListDetailSerializer, \
@@ -431,11 +432,12 @@ class CopyModules(APIView):
 
         for changeblock in old_module.change_blocks_of_work_programs_in_modules.all():
             new_changeblock = WorkProgramChangeInDisciplineBlockModule.objects.create(
-                discipline_block_module=new_module, change_type=changeblock.change_type, semester_start=changeblock.semester_start)
+                discipline_block_module=new_module, change_type=changeblock.change_type,
+                semester_start=changeblock.semester_start)
             new_changeblock.work_program.add(*changeblock.work_program.all())
             for work_program in changeblock.work_program.all():
                 zuns = WorkProgramInFieldOfStudy.objects.get(work_program=work_program,
-                                                                work_program_change_in_discipline_block_module=changeblock).zun_in_wp.all()
+                                                             work_program_change_in_discipline_block_module=changeblock).zun_in_wp.all()
                 new_fs = WorkProgramInFieldOfStudy.objects.get(work_program=work_program,
                                                                work_program_change_in_discipline_block_module=new_changeblock)
                 for zun in zuns:
@@ -446,8 +448,10 @@ class CopyModules(APIView):
             new_changeblock.gia.add(*changeblock.gia.all())
             new_changeblock.practice.add(*changeblock.practice.all())
             for practice in changeblock.practice.all():
-                zuns = PracticeInFieldOfStudy.objects.filter(practice=practice,
-                                                             work_program_change_in_discipline_block_module=changeblock).zun_in_practice.all()
+                pracs_in_fs = PracticeInFieldOfStudy.objects.filter(practice=practice,
+                                                                    work_program_change_in_discipline_block_module=changeblock)
+                zuns = ZunPractice.objects.filter(practice_in_fs__in=pracs_in_fs)
+
                 new_fs = PracticeInFieldOfStudy.objects.get(practice=practice,
                                                             work_program_change_in_discipline_block_module=new_changeblock)
                 for zun in zuns:
