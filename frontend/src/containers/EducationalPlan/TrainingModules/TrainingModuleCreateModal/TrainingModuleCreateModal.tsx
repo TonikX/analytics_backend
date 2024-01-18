@@ -40,7 +40,7 @@ class TrainingModuleCreateModal extends React.PureComponent<TrainingModuleCreate
                     [TrainingModuleFields.ID]: get(trainingModule, TrainingModuleFields.ID),
                     [TrainingModuleFields.NAME]: get(trainingModule, TrainingModuleFields.NAME, ''),
                     [TrainingModuleFields.DESCRIPTION]: get(trainingModule, TrainingModuleFields.DESCRIPTION, ''),
-                    [TrainingModuleFields.TYPE]: get(trainingModule, TrainingModuleFields.TYPE, ''),
+                    [TrainingModuleFields.TYPE]: get(trainingModule, TrainingModuleFields.TYPE, undefined),
                     father: get(trainingModule, 'father', undefined),
                 }
             });
