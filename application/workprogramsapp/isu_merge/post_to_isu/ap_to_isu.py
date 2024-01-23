@@ -66,12 +66,12 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None, requi
                         wp_obj.save()
                     elif program_type == "gia":
                         gia_obj = changeblock.gia.all()[0]
-                        disc_id = post_gia_to_isu(token=TOKEN, gia=gia_obj, ap_id=ap.id)[0]
+                        disc_id = post_gia_to_isu(token=TOKEN, gia=gia_obj, ap_id=ap.id)
                         gia_obj.discipline_code = disc_id
                         gia_obj.save()
                     elif program_type == "prac":
                         prac_obj = changeblock.practice.all()[0]
-                        disc_id = post_practice_to_isu(token=TOKEN, practice=prac_obj, ap_id=ap.id)[0]
+                        disc_id = post_practice_to_isu(token=TOKEN, practice=prac_obj, ap_id=ap.id)
                         prac_obj.discipline_code = disc_id
                         prac_obj.save()
                     else:
