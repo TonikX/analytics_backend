@@ -41,7 +41,7 @@ def generate_response(url, headers, body, obj_name, obj_id, ap_id=None):
         return None, response.json()["error_code"], response.json()
 
 
-def post_gia_to_isu(token, gia, ap_id):
+def post_gia_to_isu(token, gia, ap_id)-> int:
     """
     from gia_practice_app.GIA.models import *
     gia = GIA.objects.get(id=134)
@@ -96,7 +96,7 @@ def post_gia_to_isu(token, gia, ap_id):
     return generate_response(url, headers, body, "gia", gia.id, ap_id)[0]
 
 
-def post_practice_to_isu(token, practice, ap_id):
+def post_practice_to_isu(token, practice, ap_id) -> int:
     """
     from gia_practice_app.Practice.models import *
     prac = Practice.objects.get(id=422)
@@ -148,7 +148,7 @@ def post_practice_to_isu(token, practice, ap_id):
     return generate_response(url, headers, body, "practice", practice.id, ap_id)[0]
 
 
-def post_wp_to_isu(token, wp, ap_id):
+def post_wp_to_isu(token, wp, ap_id) -> tuple:
     """
 
     from workprogramsapp.models import *
