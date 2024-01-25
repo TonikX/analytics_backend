@@ -239,6 +239,7 @@ def WorkProgramShortInfo(request, isu_id):
             {"moodle": work_program.moodle_link})
         newdata.update(
             {"description": work_program.description})
+        newdata.update({"bars": work_program.bars})
         try:
             status = Expertise.objects.get(work_program=work_program).get_expertise_status_display()
             if not status:
@@ -251,6 +252,7 @@ def WorkProgramShortInfo(request, isu_id):
         return Response(newdata)
     except WorkProgram.DoesNotExist:
         raise Http404
+
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
@@ -267,6 +269,7 @@ def PracticeShortInfo(request, isu_id):
             {"description": None})
         newdata.update(
             {"language": practice.language})
+        newdata.update({"bars": False})
         try:
             status = Expertise.objects.get(practice=practice).get_expertise_status_display()
             if not status:
@@ -279,6 +282,7 @@ def PracticeShortInfo(request, isu_id):
         return Response(newdata)
     except Practice.DoesNotExist:
         raise Http404
+
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
@@ -296,6 +300,7 @@ def GIAShortInfo(request, isu_id):
         gia_lang = "eng" if "/" in gia.title or "-en" in gia.title else "ru"
         newdata.update(
             {"language": gia_lang})
+        newdata.update({"bars": False})
         try:
             status = Expertise.objects.get(gia=gia).get_expertise_status_display()
             if not status:
