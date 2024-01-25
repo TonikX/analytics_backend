@@ -8,6 +8,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from django_print_sql import print_sql_decorator
 from django_super_deduper.merge import MergedModelInstance
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
@@ -2215,9 +2216,10 @@ class AcademicPlanDetailsView(generics.RetrieveAPIView):
     serializer_class = AcademicPlanSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    @print_sql_decorator(count_only=False)
     def get(self, request, **kwargs):
 
-        queryset = AcademicPlan.objects.filter(pk=self.kwargs['pk'])
+        queryset = AcademicPlan.objects.filter(pk=self.kwargs['pk']).prefetch_related("discipline_blocks_in_academic_plan", "discipline_blocks_in_academic_plan__modules_in_discipline_block").select_related("author")
         serializer = AcademicPlanSerializer(queryset, many=True, context={'request': request})
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)

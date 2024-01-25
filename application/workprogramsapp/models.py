@@ -5,6 +5,7 @@ from django.contrib.postgres.fields import JSONField, ArrayField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
+from django_cte import CTEManager
 from model_clone import CloneMixin
 from rest_framework.exceptions import ValidationError
 
@@ -779,6 +780,9 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         ('by_credit_units', 'by_credit_units'),
         ('no_more_than_n_credits', 'no_more_than_n_credits'),
     ]
+
+    cte_objects = CTEManager()
+    objects = models.Manager()
 
     type = models.CharField(choices=TYPES, max_length=100, default='faculty_module', verbose_name='Тип модуля')
     name = models.CharField(max_length=1024, verbose_name='Название модуля')
