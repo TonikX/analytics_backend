@@ -38,7 +38,7 @@ class Command(BaseCommand):
         cte = With.recursive(make_modules_cte)
         with print_sql(count_only=False):
             modules = (
-                cte.join(DisciplineBlockModule.cte_objects.all(), id=cte.col.id).annotate(recursive_id = cte.col.recursive_id,depth=cte.col.depth, p=cte.col.p).filter(descipline_block__academic_plan__id=7297).with_cte(cte)
+                cte.join(DisciplineBlockModule.cte_objects.all(), id=cte.col.id).annotate(recursive_id = cte.col.recursive_id,depth=cte.col.depth, p=cte.col.p).filter(descipline_block__academic_plan__id=7304).with_cte(cte)
             )
             print(modules)
         """for module in modules.filter():
