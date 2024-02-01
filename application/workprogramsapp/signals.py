@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from django.db.models.signals import post_save, pre_delete, pre_save
+from django.db.models.signals import post_save, pre_delete, pre_save, m2m_changed
 from django.dispatch import receiver
 
 from analytics_project import settings
@@ -9,7 +9,7 @@ from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Zun, WorkProgramIdStrUpForIsu, AcademicPlan, \
-    ImplementationAcademicPlan
+    ImplementationAcademicPlan, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.notifications.emails.send_mail import mail_sender
 from workprogramsapp.notifications.models import ExpertiseNotification, NotificationComments, \
     AcademicPlanUpdateNotification
@@ -185,3 +185,33 @@ def check_previous_mode(sender, instance, *args, **kwargs):
         mail_sender(topic=f'Учебный план "{imp.title}" поменял свой статус.',
                     text=f'Учебный план "{imp.title}" поменял свой статус на "{status}"\n https://op.itmo.ru/educational-plans/{instance.id}',
                     emails=user_email, users=user_to_send)
+
+
+@receiver(pre_save, sender=DisciplineBlockModule)
+def count_ze_if_changed(sender, instance, *args, **kwargs):
+    old_module = DisciplineBlockModule.objects.get(id=instance.id)
+
+    print(old_module.change_blocks_of_work_programs_in_modules.all())
+    print(instance.change_blocks_of_work_programs_in_modules.all())
+
+    if (instance.selection_rule != old_module.selection_rule) or \
+            (instance.selection_parametr != old_module.selection_parametr):
+        print("d4 baD")
+
+
+@receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.work_program.through)
+def count_wpcb_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    if instance.work_program.all().exists():
+        print(instance.work_program.all())
+
+
+@receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.gia.through)
+def count_wpcb_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    if instance.work_program.all().exists():
+        print(instance.work_program.all())
+
+
+@receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.practice.through)
+def count_wpcb_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    if instance.work_program.all().exists():
+        print(instance.work_program.all())
