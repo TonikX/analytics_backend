@@ -3,9 +3,12 @@ from django_print_sql import print_sql, print_sql_decorator
 
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
-from workprogramsapp.models import DisciplineBlockModule, WorkProgram
-from django.db import models
+from django.apps import apps
 
+
+from django.db import models
+DisciplineBlockModule = apps.get_model('workprogramsapp.DisciplineBlockModule')
+WorkProgram = apps.get_model('workprogramsapp.WorkProgram')
 
 def make_modules_cte_down(cte):
     # non-recursive: get root nodes
@@ -50,7 +53,6 @@ def make_modules_cte_up(cte):
     )
 
 
-@print_sql_decorator(count_only=False)
 def count_ze_module(obj: DisciplineBlockModule):
     laboriousness = 0
     childs = obj.childs.all()
@@ -99,7 +101,6 @@ def count_ze_module(obj: DisciplineBlockModule):
     return laboriousness
 
 
-
 # Передавать айди модуля в цте, возвращать объект модуля, делать запрос моудля внутри ифа. Напистаь менеджмент функцию, переинчавиющую трудоемкости всех модулей
 def rewrite_ze_up(sender, sender_id):
     parent_id = None
@@ -107,7 +108,11 @@ def rewrite_ze_up(sender, sender_id):
         module = DisciplineBlockModule.objects.get(change_blocks_of_work_programs_in_modules__id=sender_id)
     if sender == "dbm":
         module = DisciplineBlockModule.objects.get(id=sender_id)
-    module.laboriousness = count_ze_module(module)
+    print(module)
+    try:
+        module.laboriousness = count_ze_module(module)
+    except IndexError:
+        module.laboriousness = 0
     module.save()
     cte = With.recursive(make_modules_cte_up)
     # descipline_block__academic_plan__id = 7304
@@ -119,10 +124,9 @@ def rewrite_ze_up(sender, sender_id):
     for module_cte in modules:
         if module_cte.p:
             module_to_count = DisciplineBlockModule.objects.get(id=module_cte.p)
-
-            lb = count_ze_module(module_to_count)
+            try:
+                lb = count_ze_module(module_to_count)
+            except IndexError:
+                lb = 0
             module_to_count.laboriousness = lb
             module_to_count.save()
-
-
-

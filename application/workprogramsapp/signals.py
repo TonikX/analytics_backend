@@ -7,6 +7,7 @@ from dataprocessing.itmo_backends import isu_client_credentials_request
 from dataprocessing.models import User
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
+from workprogramsapp.ap_improvment.module_ze_counter import rewrite_ze_up
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Zun, WorkProgramIdStrUpForIsu, AcademicPlan, \
     ImplementationAcademicPlan, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
@@ -187,17 +188,6 @@ def check_previous_mode(sender, instance, *args, **kwargs):
                     emails=user_email, users=user_to_send)
 
 
-@receiver(pre_save, sender=DisciplineBlockModule)
-def count_ze_if_changed(sender, instance, *args, **kwargs):
-    old_module = DisciplineBlockModule.objects.get(id=instance.id)
-
-    #print(old_module.change_blocks_of_work_programs_in_modules.all())
-    #print(instance.change_blocks_of_work_programs_in_modules.all())
-
-    if (instance.selection_rule != old_module.selection_rule) or \
-            (instance.selection_parametr != old_module.selection_parametr):
-        print("d4 baD")
-
 
 @receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.work_program.through)
 def count_wpcb_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
@@ -206,12 +196,12 @@ def count_wpcb_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBloc
 
 
 @receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.gia.through)
-def count_wpcb_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
-    if instance.work_program.all().exists():
+def count_wpcb_gia_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    if instance.practice.all().exists():
         print(instance.work_program.all())
 
 
 @receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.practice.through)
-def count_wpcb_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
-    if instance.work_program.all().exists():
+def count_wpcb_ze_practice_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    if instance.gia.all().exists():
         print(instance.work_program.all())

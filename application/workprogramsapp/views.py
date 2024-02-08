@@ -2166,10 +2166,9 @@ class AcademicPlanListAPIView(generics.ListAPIView):
     filterset_fields = ['academic_plan_in_field_of_study__qualification']
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-
 class AcademicPlanListShortAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanShortSerializer
-    queryset = AcademicPlan.objects.all().prefetch_related("academic_plan_in_field_of_study", "academic_plan_in_field_of_study__field_of_study", "academic_plan_in_field_of_study__structural_unit")
+    queryset = AcademicPlan.objects.all().prefetch_related("academic_plan_in_field_of_study", "academic_plan_in_field_of_study__field_of_study", "academic_plan_in_field_of_study__structural_unit", "author")
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['academic_plan_in_field_of_study__qualification',
                      'academic_plan_in_field_of_study__title',

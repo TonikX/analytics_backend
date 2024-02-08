@@ -16,11 +16,13 @@ class Command(BaseCommand):
         def recursion_module(obj: DisciplineBlockModule):
             childs = obj.childs.all()
             unit_final_sum = 0
-            if obj.laboriousness:
-                return obj.laboriousness
+            """if obj.laboriousness:
+                return obj.laboriousness"""
             try:
                 if obj.selection_rule == "choose_n_from_m":
                     if childs.exists():
+                        for child in childs:
+                            recursion_module(child)
                         for i in range(int(obj.selection_parametr)):
                             unit_final_sum += recursion_module(childs[i])
                     else:
@@ -61,6 +63,9 @@ class Command(BaseCommand):
                                 unit_final_sum += sum([int(unit) for unit in practice.ze_v_sem.split(", ")])
 
                 elif obj.selection_rule in ["by_credit_units", "no_more_than_n_credits"]:
+                    if childs.exists():
+                        for child in childs:
+                            recursion_module(child)
                     unit_final_sum = int(obj.selection_parametr)
             except ValueError:
                 unit_final_sum = 0

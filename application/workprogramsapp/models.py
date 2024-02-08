@@ -11,6 +11,7 @@ from rest_framework.exceptions import ValidationError
 
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
+
 from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, \
     TasksForEducationalStandard
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -814,6 +815,25 @@ class DisciplineBlockModule(CloneMixin, models.Model):
 
     clone_info_json = JSONField(blank=True, null=True, verbose_name="JSON  информацией о клонировании")
     laboriousness = models.IntegerField(blank=True, null=True, verbose_name="Трудоемкость модуля")
+
+    __old_selection_parametr = None
+    __old_selection_rule = None
+
+    def __init__(self, *args, **kwargs):
+        super(DisciplineBlockModule, self).__init__(*args, **kwargs)
+        self.__old_selection_parametr = self.selection_parametr
+        self.__old_selection_rule = self.selection_rule
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None, *args, **kwargs):
+        from workprogramsapp.ap_improvment.module_ze_counter import rewrite_ze_up
+        super(DisciplineBlockModule, self).save(force_insert, force_update, *args, **kwargs)
+        if self.__old_selection_parametr != self.selection_parametr or self.__old_selection_rule != self.selection_rule:
+            rewrite_ze_up("dbm", self.id)
+            print("d4 bad")
+        self.__old_selection_parametr = self.selection_parametr
+        self.__old_selection_rule = self.selection_rule
+
 
     class Meta:
         ordering = ['order']

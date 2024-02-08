@@ -72,7 +72,6 @@ class DisciplineBlockModuleWithoutFatherForAPSerializer(serializers.ModelSeriali
 
     def to_representation(self, value):
         self.fields['childs'] = serializers.SerializerMethodField()
-        self.fields['laboriousness'] = serializers.SerializerMethodField()
         return super().to_representation(value)
 
     def get_childs(self, obj):
@@ -84,15 +83,11 @@ class DisciplineBlockModuleWithoutFatherForAPSerializer(serializers.ModelSeriali
                                               "change_blocks_of_work_programs_in_modules__practice",
                                               "change_blocks_of_work_programs_in_modules__gia", ), many=True).data
 
-    def get_laboriousness(self, obj):
-        #unit_final_sum = recursion_module(obj)
-
-        return 0 #unit_final_sum
 
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'type', 'selection_rule', 'change_blocks_of_work_programs_in_modules',
-                  'selection_parametr']
+                  'selection_parametr', "laboriousness"]
 
 
 class DisciplineBlockModuleForAPSerializer(serializers.ModelSerializer):
@@ -102,15 +97,11 @@ class DisciplineBlockModuleForAPSerializer(serializers.ModelSerializer):
 
     def to_representation(self, value):
         self.fields['childs'] = serializers.SerializerMethodField()
-        self.fields["laboriousness"] = serializers.SerializerMethodField()
+
         self.fields["can_remove"] = serializers.SerializerMethodField()
         # self.fields["ze_by_sem"] = serializers.SerializerMethodField()
         return super().to_representation(value)
 
-    def get_laboriousness(self, obj):
-        #unit_final_sum = recursion_module(obj)
-
-        return 0 #unit_final_sum
 
     def get_can_remove(self, obj):
         can_remove_bool = IsUniversalModule.check_access(obj.id, self.context['request'].user)
@@ -133,7 +124,7 @@ class DisciplineBlockModuleForAPSerializer(serializers.ModelSerializer):
     class Meta:
         model = DisciplineBlockModule
         fields = ['id', 'name', 'type', 'change_blocks_of_work_programs_in_modules', 'selection_rule',
-                  'selection_parametr']
+                  'selection_parametr', "laboriousness"]
         extra_kwargs = {
             'change_blocks_of_work_programs_in_modules': {'required': False}
         }
@@ -147,11 +138,11 @@ class DisciplineBlockForAPSerializer(serializers.ModelSerializer):
         return super().to_representation(value)
 
     def get_laboriousness(self, obj):
-        """sum_ze = 0
+        sum_ze = 0
         for module in DisciplineBlockModule.objects.filter(descipline_block=obj):
-            sum_ze += recursion_module(module)"""
+            sum_ze += module.laboriousness
 
-        return 0#sum_ze
+        return sum_ze
 
     def get_modules_in_discipline_block(self, obj):
         dbms = DisciplineBlockModule.objects.filter(descipline_block=obj).prefetch_related("childs","childs__childs", "childs__childs__childs",
