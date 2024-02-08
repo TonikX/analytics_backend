@@ -191,8 +191,8 @@ def check_previous_mode(sender, instance, *args, **kwargs):
 def count_ze_if_changed(sender, instance, *args, **kwargs):
     old_module = DisciplineBlockModule.objects.get(id=instance.id)
 
-    print(old_module.change_blocks_of_work_programs_in_modules.all())
-    print(instance.change_blocks_of_work_programs_in_modules.all())
+    #print(old_module.change_blocks_of_work_programs_in_modules.all())
+    #print(instance.change_blocks_of_work_programs_in_modules.all())
 
     if (instance.selection_rule != old_module.selection_rule) or \
             (instance.selection_parametr != old_module.selection_parametr):

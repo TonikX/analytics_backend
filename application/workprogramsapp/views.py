@@ -2169,7 +2169,7 @@ class AcademicPlanListAPIView(generics.ListAPIView):
 
 class AcademicPlanListShortAPIView(generics.ListAPIView):
     serializer_class = AcademicPlanShortSerializer
-    queryset = AcademicPlan.objects.all()
+    queryset = AcademicPlan.objects.all().prefetch_related("academic_plan_in_field_of_study", "academic_plan_in_field_of_study__field_of_study", "academic_plan_in_field_of_study__structural_unit")
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['academic_plan_in_field_of_study__qualification',
                      'academic_plan_in_field_of_study__title',
