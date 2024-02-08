@@ -25,8 +25,9 @@ def recursion_ap_to_isu(modules, lines_of_plan, block, ap, father_id=None, requi
         required = required and (module.selection_rule == "all")
         isu_module = DisciplineBlockModuleInIsu.objects.filter(module=module, isu_father_id=father_id,
                                                                academic_plan=ap).last()
-        id_created = isu_module.isu_id
-        if not isu_module:
+        if isu_module:
+            id_created = isu_module.isu_id
+        else:
             id_created = post_module_to_isu(token=TOKEN, module=module, block=block, parent_id=father_id, ap_id=ap.id)
 
             try:
