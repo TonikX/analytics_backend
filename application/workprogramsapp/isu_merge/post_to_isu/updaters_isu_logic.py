@@ -38,6 +38,8 @@ def generate_response(url, headers, body, obj_name, obj_id, ap_id=None):
         except:
             return None, response.json()["error_code"], response.json()
     else:
+        raise Exception("send error", response)
+
         return None, response.json()["error_code"], response.json()
 
 
