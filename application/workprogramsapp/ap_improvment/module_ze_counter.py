@@ -97,22 +97,21 @@ def count_ze_module(obj: DisciplineBlockModule):
                     laboriousness += sum([int(unit) for unit in practice.ze_v_sem.split(", ")])
 
     elif obj.selection_rule in ["by_credit_units", "no_more_than_n_credits"]:
-        laboriousness = int(obj.selection_parametr)
+        try:
+            laboriousness = int(obj.selection_parametr)
+        except TypeError:
+            laboriousness = 0
     return laboriousness
 
 
 # Передавать айди модуля в цте, возвращать объект модуля, делать запрос моудля внутри ифа. Напистаь менеджмент функцию, переинчавиющую трудоемкости всех модулей
-def rewrite_ze_up(sender, sender_id):
+def rewrite_ze_up(module):
     parent_id = None
-    if sender == "wpcb":
-        module = DisciplineBlockModule.objects.get(change_blocks_of_work_programs_in_modules__id=sender_id)
-    if sender == "dbm":
-        module = DisciplineBlockModule.objects.get(id=sender_id)
-    print(module)
     try:
         module.laboriousness = count_ze_module(module)
     except IndexError:
         module.laboriousness = 0
+    print(module.name)
     module.save()
     cte = With.recursive(make_modules_cte_up)
     # descipline_block__academic_plan__id = 7304

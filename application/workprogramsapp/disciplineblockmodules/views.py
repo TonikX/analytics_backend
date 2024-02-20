@@ -223,7 +223,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
             imps, many=True, ).data
         newdata['status'] = "used" if is_used_in_accepted_plan else "not_used"
         newdata['can_edit'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'],
-                                                                         self.request.user) and not is_used_in_accepted_plan
+                                                                         self.request.user) #and not is_used_in_accepted_plan
         newdata['can_add_plans'] = IsDisciplineBlockModuleEditor.check_access(self.kwargs['pk'],self.request.user)
         newdata = OrderedDict(newdata)
 

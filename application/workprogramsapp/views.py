@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.models import Items
-from .ap_improvment.serializers import AcademicPlanForAPSerializer
+from .ap_improvment.serializers import AcademicPlanForAPSerializer, WorkProgramSerializerForList
 from .educational_program.search_filters import CompetenceFilter
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
@@ -73,8 +73,8 @@ from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 
 
 class WorkProgramsListApi(generics.ListAPIView):
-    queryset = WorkProgram.objects.all()
-    serializer_class = WorkProgramSerializer
+    queryset = WorkProgram.objects.all().prefetch_related("expertise_with_rpd")
+    serializer_class = WorkProgramSerializerForList
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['discipline_code', 'title', 'editors__last_name', 'editors__first_name', 'id']
     filterset_fields = ['language',
@@ -109,6 +109,9 @@ class WorkProgramsListApi(generics.ListAPIView):
             queryset = WorkProgram.objects.filter()
         return queryset
 
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 class IndicatorListAPIView(generics.ListAPIView):
     serializer_class = IndicatorListSerializer
@@ -737,47 +740,58 @@ class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
         return Response(WorkProgramSerializer(instance, context={'request': request}).data)
 
 
+#Префетчи с экспертизами и юзерэкспертизами, передавать в сериализеры все ОС префетчами. Посмотреть сериализер на
+# наличие неиспользуемых полей. Сделать другую подгрузку Планов
 class WorkProgramDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    @print_sql_decorator(count_only=False)
     def get(self, request, **kwargs):
-        queryset = WorkProgram.objects.filter(pk=self.kwargs['pk'])
+        queryset = WorkProgram.objects.filter(pk=self.kwargs['pk']).prefetch_related("expertise_with_rpd",
+                                                                                     "expertise_with_rpd__expertse_users_in_rpd",
+                                                                                     "discipline_sections",
+                                                                                     "prerequisitesofworkprogram_set",
+                                                                                     "outcomesofworkprogram_set",
+                                                                                     "discipline_sections__evaluation_tools",
+                                                                                     "certification_evaluation_tools",
+                                                                                     "editors"
+                                                                                     )
+
         serializer = WorkProgramSerializer(queryset, many=True, context={'request': request})
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
+
         newdata = dict(serializer.data[0])
+        wp = queryset.first()
+        expertise = wp.expertise_with_rpd.all().first()
         try:
+
             newdata.update(
-                {"expertise_status": Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status})
+                {"expertise_status": expertise.expertise_status})
             newdata.update(
-                {"use_chat_with_id_expertise": Expertise.objects.get(work_program__id=self.kwargs['pk']).pk})
+                {"use_chat_with_id_expertise": expertise.pk})
 
             if request.user.is_expertise_master:
                 newdata.update({"can_see_comments": True})
             else:
                 newdata.update({"can_see_comments": False})
 
-            if (Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" or
-                Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "RE") and (
-                    WorkProgram.objects.get(
-                        pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(pk=self.kwargs['pk'],
-                                                                                                  editors__in=[
-                                                                                                      request.user])):
+            if (expertise.expertise_status == "WK" or
+                expertise.expertise_status == "RE") and (wp.owner == request.user or request.user in wp.editors.all()):
                 newdata.update({"can_edit": True})
             else:
                 newdata.update({"can_edit": False})
-        except Expertise.DoesNotExist:
-            if WorkProgram.objects.get(pk=self.kwargs['pk']).owner == request.user or WorkProgram.objects.filter(
-                    pk=self.kwargs['pk'], editors__in=[request.user]) or request.user.is_superuser:
+        except AttributeError:  # Expertise does not Exisits
+            if wp.owner == request.user or request.user in wp.editors.all() or request.user.is_superuser:
                 newdata.update({"can_edit": True, "expertise_status": False})
             else:
                 newdata.update({"can_edit": False, "expertise_status": False})
             newdata.update({"use_chat_with_id_expertise": None})
 
         try:
-            ue = UserExpertise.objects.filter(expert=request.user, expertise__work_program=self.kwargs['pk'])
+            ue = expertise.expertse_users_in_rpd.filter(expert=request.user)
             ue_save_obj = None
             for user_exp_object in ue:
                 ue_save_obj = user_exp_object
@@ -791,7 +805,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
 
             newdata.update({"can_see_comments": True})
 
-            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status in ["EX", "WK", "RE"]:
+            if expertise.expertise_status in ["EX", "WK", "RE"]:
                 newdata.update({"can_comment": True})
                 newdata.update({"user_expertise_id": ue.id})
             else:
@@ -805,14 +819,12 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                     newdata.update({"your_approve_status": "RE"})
             else:
                 newdata.update({"can_approve": True})
-            if Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "WK" or \
-                    Expertise.objects.get(work_program__id=self.kwargs['pk']).expertise_status == "AC":
+            if expertise.expertise_status == "WK" or expertise.expertise_status == "AC":
                 newdata.update({"can_approve": False})
         except:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
-        if (request.user.is_expertise_master == True or WorkProgram.objects.filter(
-                pk=self.kwargs['pk'], editors__in=[request.user])) and queryset[0].work_status == "w":
+        if (request.user.is_expertise_master == True or request.user in  wp.editors.all()) and queryset[0].work_status == "w":
             newdata.update({"can_archive": True})
         else:
             newdata.update({"can_archive": False})
@@ -827,14 +839,12 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         else:
             newdata.update({"can_add_to_folder": True})
             newdata.update({"is_student": False})
-        try:
-            newdata.update({"rating": WorkProgramInFolder.objects.get(work_program=self.kwargs['pk'],
-                                                                      folder__owner=self.request.user).work_program_rating})
-            newdata.update({"id_rating": WorkProgramInFolder.objects.get(work_program=self.kwargs['pk'],
-                                                                         folder__owner=self.request.user).id})
+        """try:
+            newdata.update({"rating": wp.work_program_in_folder.filter(folder__owner=self.request.user).first.work_program_rating})
+            newdata.update({"id_rating": wp.work_program_in_folder.filter(folder__owner=self.request.user).first.id})
         except:
 
-            newdata.update({"rating": False})
+            newdata.update({"rating": False})"""
         """competences = Competence.objects.filter(
             indicator_in_competencse__zun__wp_in_fs__work_program__id=self.kwargs['pk']).distinct()
         competences_dict = []

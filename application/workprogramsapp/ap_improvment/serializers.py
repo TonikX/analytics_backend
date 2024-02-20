@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.fields import BooleanField
 
 from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module
+from workprogramsapp.expertise.serializers import ShortExpertiseSerializer
 from workprogramsapp.models import WorkProgram, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, \
     DisciplineBlock, IsuObjectsSendLogger, AcademicPlan
 from workprogramsapp.permissions import IsUniversalModule
@@ -242,3 +243,15 @@ class AcademicPlanForAPSerializer(serializers.ModelSerializer):
             'discipline_blocks_in_academic_plan': {'required': False},
             'academic_plan_in_field_of_study': {'required': False}
         }
+
+
+class WorkProgramSerializerForList(serializers.ModelSerializer):
+    """Сериализатор рабочих программ"""
+    # prerequisites = serializers.StringRelatedField(many=True)
+    # discipline_sections = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
+    expertise_with_rpd = ShortExpertiseSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = WorkProgram
+        fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification',
+                  'title', 'expertise_with_rpd', 'work_status']

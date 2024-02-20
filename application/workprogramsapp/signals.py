@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from django.db.models.signals import post_save, pre_delete, pre_save, m2m_changed
+from django.db.models.signals import post_save, pre_delete, pre_save, m2m_changed, post_delete
 from django.dispatch import receiver
 
 from analytics_project import settings
@@ -188,20 +188,43 @@ def check_previous_mode(sender, instance, *args, **kwargs):
                     emails=user_email, users=user_to_send)
 
 
+# Перерасчет трудоемкости при изменении моудля
+@receiver(m2m_changed, sender=DisciplineBlockModule.childs.through)
+def count_module_ze_if_changed(sender, instance: DisciplineBlockModule, *args, **kwargs):
+    print("m2m called")
+    rewrite_ze_up(instance)
+    print("d4 bad")
 
+
+@receiver(post_delete, sender=DisciplineBlockModule)
+def count_module_ze_deleted_if_changed(sender, instance: DisciplineBlockModule, *args, **kwargs):
+    rewrite_ze_up(instance)
+    print("d4 bad")
+
+
+# Перерасчет трудоемкости при изменении wpcb
 @receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.work_program.through)
 def count_wpcb_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
     if instance.work_program.all().exists():
-        print(instance.work_program.all())
+        rewrite_ze_up(instance.discipline_block_module)
+        print("d4 bad")
 
 
 @receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.gia.through)
 def count_wpcb_gia_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
-    if instance.practice.all().exists():
-        print(instance.work_program.all())
+    if instance.gia.all().exists():
+        rewrite_ze_up(instance.discipline_block_module)
+        print("d4 bad")
 
 
 @receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.practice.through)
 def count_wpcb_ze_practice_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
-    if instance.gia.all().exists():
-        print(instance.work_program.all())
+    if instance.practice.all().exists():
+        rewrite_ze_up(instance.discipline_block_module)
+        print("d4 bad")
+
+
+@receiver(post_delete, sender=WorkProgramChangeInDisciplineBlockModule)
+def count_wpcb_ze_practice_if_deleted(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    rewrite_ze_up(instance.discipline_block_module)
+    print("d4 bad")
