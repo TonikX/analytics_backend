@@ -7,6 +7,7 @@ import pandas
 from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django_cte import With
 from django_filters.rest_framework import DjangoFilterBackend
 from django_print_sql import print_sql_decorator
 from django_super_deduper.merge import MergedModelInstance
@@ -22,7 +23,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.models import Items
-from .ap_improvment.serializers import AcademicPlanForAPSerializer, WorkProgramSerializerForList
+from .ap_improvment.module_ze_counter import make_modules_cte_up
+from .ap_improvment.serializers import AcademicPlanForAPSerializer, WorkProgramSerializerForList, \
+    WorkProgramSerializerCTE, DisciplineBlockForWPinFSSCTESerializer
 from .educational_program.search_filters import CompetenceFilter
 from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
@@ -73,17 +76,13 @@ from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 
 
 class WorkProgramsListApi(generics.ListAPIView):
-    queryset = WorkProgram.objects.all().prefetch_related("expertise_with_rpd")
+    queryset = WorkProgram.objects.all().select_related("structural_uni").prefetch_related("expertise_with_rpd", "editors", "prerequisites", "outcomes")
     serializer_class = WorkProgramSerializerForList
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ['discipline_code', 'title', 'editors__last_name', 'editors__first_name', 'id']
     filterset_fields = ['language',
-                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__title',
-                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__number',
-                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile',
                         'qualification',
                         'prerequisites', 'outcomes', 'structural_unit__title',
-                        'work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title',
                         'editors__last_name', 'editors__first_name', 'work_status',
                         'expertise_with_rpd__expertise_status'
                         ]
@@ -744,8 +743,37 @@ class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
 # наличие неиспользуемых полей. Сделать другую подгрузку Планов
 class WorkProgramDetailsView(generics.RetrieveAPIView):
     queryset = WorkProgram.objects.all()
-    serializer_class = WorkProgramSerializer
+    serializer_class = WorkProgramSerializerCTE
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def generate_modules(self, wp):
+        work_program_in_change_block = []
+        modules_grouped={}
+        cte = With.recursive(make_modules_cte_up)
+        modules = (
+            cte.join(DisciplineBlockModule.cte_objects.all(), id=cte.col.id).annotate(
+                recursive_name=cte.col.recursive_name,
+                recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(
+                change_blocks_of_work_programs_in_modules__work_program=wp.id).with_cte(
+                cte)
+        )
+
+        for module in modules.filter(p__isnull=True):
+            if modules_grouped.get(module.id) is not None:
+                modules_grouped[module.id]["upper_modules"].append(module.recursive_id)
+            else:
+                modules_grouped[module.id] = {"id":module.id, "name":module.name, "descipline_block": None, "upper_modules": [module.recursive_id]}
+
+        for modules_dict in modules_grouped.values():
+            upper_modules = modules_dict.pop("upper_modules")
+            discipline_block_module = modules_dict
+            discipline_block_module["descipline_block"] = DisciplineBlockForWPinFSSCTESerializer(DisciplineBlock.objects.filter(modules_in_discipline_block__id__in=upper_modules), many=True).data
+            cb_dict = {"id": None, "discipline_block_module": discipline_block_module}
+            work_program_in_change_block.append(cb_dict)
+
+        return work_program_in_change_block
+
+
 
     @print_sql_decorator(count_only=False)
     def get(self, request, **kwargs):
@@ -754,12 +782,11 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                                                                                      "discipline_sections",
                                                                                      "prerequisitesofworkprogram_set",
                                                                                      "outcomesofworkprogram_set",
-                                                                                     "discipline_sections__evaluation_tools",
                                                                                      "certification_evaluation_tools",
                                                                                      "editors"
                                                                                      )
 
-        serializer = WorkProgramSerializer(queryset, many=True, context={'request': request})
+        serializer = WorkProgramSerializerCTE(queryset, many=True, context={'request': request})
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
 
@@ -839,6 +866,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         else:
             newdata.update({"can_add_to_folder": True})
             newdata.update({"is_student": False})
+        newdata.update({"work_program_in_change_block": self.generate_modules(wp)})
         """try:
             newdata.update({"rating": wp.work_program_in_folder.filter(folder__owner=self.request.user).first.work_program_rating})
             newdata.update({"id_rating": wp.work_program_in_folder.filter(folder__owner=self.request.user).first.id})
@@ -884,6 +912,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
                                      "zuns": zuns_array})
         newdata.update({"competences": competences_dict})"""
+
         newdata = OrderedDict(newdata)
         return Response(newdata, status=status.HTTP_200_OK)
 
