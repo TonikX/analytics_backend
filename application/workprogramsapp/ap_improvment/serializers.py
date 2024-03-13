@@ -1,18 +1,20 @@
-from django_cte import With
 from rest_framework import serializers
 from rest_framework.fields import BooleanField
 
+from dataprocessing.models import Items
 from dataprocessing.serializers import userProfileSerializer, ShortStructuralUnitSerializer
-from workprogramsapp.ap_improvment.module_ze_counter import make_modules_cte_up
-from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module
+from workprogramsapp.educational_program.pk_comptencies.models import PkCompetencesInGroupOfGeneralCharacteristic
+from workprogramsapp.educational_program.pk_comptencies.serializers import \
+    IndicatorInPkCompetenceInGeneralCharacteristicSerializer
 from workprogramsapp.expertise.serializers import ShortExpertiseSerializer
 from workprogramsapp.models import WorkProgram, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, \
-    DisciplineBlock, IsuObjectsSendLogger, AcademicPlan, FieldOfStudy, ImplementationAcademicPlan
+    DisciplineBlock, IsuObjectsSendLogger, AcademicPlan, FieldOfStudy, ImplementationAcademicPlan, \
+    OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
 from workprogramsapp.permissions import IsUniversalModule
 from workprogramsapp.serializers import GIAPrimitiveSerializer, PracticePrimitiveSerializer, \
-    ImplementationAcademicPlanShortForAPSerializer, PrerequisitesOfWorkProgramInWorkProgramSerializer, \
-    OutcomesOfWorkProgramInWorkProgramSerializer, DisciplineSectionSerializer, BibliographicReferenceSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer, СertificationEvaluationToolForWorkProgramSerializer
+    ImplementationAcademicPlanShortForAPSerializer, DisciplineSectionSerializer, BibliographicReferenceSerializer, \
+    СertificationEvaluationToolForWorkProgramSerializer, \
+    EvaluationToolForOutcomsSerializer, CompetenceSerializer
 
 
 class WorkProgramForAPSerializer(serializers.ModelSerializer):
@@ -316,10 +318,10 @@ class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
         serializers = \
             DisciplineBlockForWPinFSSCTESerializer(DisciplineBlock.objects.filter(
                 modules_in_discipline_block__in=self.get_blocks_for_all_children(instance)).
-                                               select_related("academic_plan").
-                                               prefetch_related("academic_plan__academic_plan_in_field_of_study",
-                                                                "academic_plan__academic_plan_in_field_of_study__field_of_study")
-                                               , many=True)
+                                                   select_related("academic_plan").
+                                                   prefetch_related("academic_plan__academic_plan_in_field_of_study",
+                                                                    "academic_plan__academic_plan_in_field_of_study__field_of_study")
+                                                   , many=True)
         return serializers.data
 
     def get_blocks_for_all_children(self, instance, include_self=True):
@@ -351,31 +353,68 @@ class WorkProgramChangeInDisciplineBlockModuleForWPinFSRecursiveSerializer(seria
         fields = ['id', 'discipline_block_module']
 
 
+class ItemSerializer(serializers.ModelSerializer):
+    """Сериализатор Ключевого слова"""
+
+    # domain = DomainForItemSerializer()
+
+    class Meta:
+        model = Items
+        fields = ('id', 'name')
+        # depth = 1
+
+
+class OutcomesOfWorkProgramInWorkProgramCTESerializer(serializers.ModelSerializer):
+    """Сериализатор вывода результата обучения для вывода результата в рабочей программе"""
+    # item_name  = serializers.ReadOnlyField(source='item.name')
+    # item_id  = serializers.ReadOnlyField(source='item.id')
+    item = ItemSerializer()
+    evaluation_tool = EvaluationToolForOutcomsSerializer(many=True)
+
+    class Meta:
+        model = OutcomesOfWorkProgram
+        fields = ['id', 'item', 'masterylevel', 'evaluation_tool']
+        extra_kwargs = {
+            'evaluation_tool': {'required': False}
+        }
+
+
+class PrerequisitesOfWorkProgramInWorkProgramCTESerializer(serializers.ModelSerializer):
+    """Сериализатор вывода пререквизита обучения для вывода пререквизита в рабочей программе"""
+    # item_name  = serializers.ReadOnlyField(source='item.name')
+    # item_id  = serializers.ReadOnlyField(source='item.id')
+    item = ItemSerializer()
+
+    class Meta:
+        model = PrerequisitesOfWorkProgram
+        fields = ['id', 'item', 'masterylevel']
+
 
 class WorkProgramSerializerCTE(serializers.ModelSerializer):
     """Сериализатор рабочих программ"""
     # prerequisites = serializers.StringRelatedField(many=True)
-    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set',
-                                                                      many=True)
+    prerequisites = PrerequisitesOfWorkProgramInWorkProgramCTESerializer(source='prerequisitesofworkprogram_set',
+                                                                         many=True)
     # outcomes = serializers.StringRelatedField(many=True)
-    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
+    outcomes = OutcomesOfWorkProgramInWorkProgramCTESerializer(source='outcomesofworkprogram_set', many=True)
     # discipline_sections = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
     discipline_sections = DisciplineSectionSerializer(many=True)
     # discipline_certification = CertificationSerializer(many=True)
     bibliographic_reference = BibliographicReferenceSerializer(many=True, required=False)
-    #work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSRecursiveSerializer(many=True)
+    # work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSRecursiveSerializer(many=True)
     expertise_with_rpd = ShortExpertiseSerializer(many=True, read_only=True)
     certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many=True)
     editors = userProfileSerializer(many=True)
     structural_unit = ShortStructuralUnitSerializer()
-    #work_program_in_change_block_v2 = serializers.SerializerMethodField()
+
+    # work_program_in_change_block_v2 = serializers.SerializerMethodField()
 
     class Meta:
         model = WorkProgram
         fields = ['id', 'approval_date', 'authors', 'discipline_code', 'qualification', 'prerequisites', 'outcomes',
                   'title', 'hoursFirstSemester', 'hoursSecondSemester', 'discipline_sections',
                   'discipline_certification',
-                  'bibliographic_reference', 'description', 'video', #'work_program_in_change_block',
+                  'bibliographic_reference', 'description', 'video',  # 'work_program_in_change_block',
                   'expertise_with_rpd',
                   'work_status', 'certification_evaluation_tools', 'hours', 'extra_points', 'editors', 'language',
                   'structural_unit', 'have_course_project', 'have_diff_pass', 'have_pass', 'have_exam', 'lecture_hours',
@@ -402,3 +441,36 @@ class WorkProgramSerializerCTE(serializers.ModelSerializer):
         if instance.discipline_code == None and self.context.get('request'):
             data["can_send_to_isu"] = bool(self.context['request'].user.groups.filter(name="expertise_master"))
         return data
+
+
+# --------------------------------------
+# Сериализатор для компетенций
+
+class AcademicPlanForCompsSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = AcademicPlan
+        fields = ['id','approval_date']
+
+class ImplementationAcademicPlanForCompsSSerializer(serializers.ModelSerializer):
+    field_of_study = FieldOfStudyImplementationSerializer(many=True)
+
+    academic_plan = AcademicPlanForCompsSerializer()
+
+    class Meta:
+        model = ImplementationAcademicPlan
+        fields = ['id', 'year', 'field_of_study', 'title', "academic_plan"]
+
+
+# --------------------------------------
+# Сериализаторы для  матрицы компетенций
+class PkCompetencesInGroupOfGeneralCharacteristicSerializerForMatrix(serializers.ModelSerializer):
+    """Сериализатор просмотра профессиональных компетенций"""
+    indicator_of_competence_in_group_of_pk_competences = IndicatorInPkCompetenceInGeneralCharacteristicSerializer(
+        many=True)
+    competence = CompetenceSerializer()
+
+    class Meta:
+        model = PkCompetencesInGroupOfGeneralCharacteristic
+        fields = ['id', 'indicator_of_competence_in_group_of_pk_competences', 'competence']

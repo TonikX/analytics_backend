@@ -739,10 +739,19 @@ class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
         return Response(WorkProgramSerializer(instance, context={'request': request}).data)
 
 
-#Префетчи с экспертизами и юзерэкспертизами, передавать в сериализеры все ОС префетчами. Посмотреть сериализер на
+# Префетчи с экспертизами и юзерэкспертизами, передавать в сериализеры все ОС префетчами. Посмотреть сериализер на
 # наличие неиспользуемых полей. Сделать другую подгрузку Планов
 class WorkProgramDetailsView(generics.RetrieveAPIView):
-    queryset = WorkProgram.objects.all()
+    queryset = WorkProgram.objects.all().prefetch_related("expertise_with_rpd",
+                                                          "expertise_with_rpd__expertse_users_in_rpd",
+                                                          "discipline_sections",
+                                                          "discipline_sections__topics",
+                                                          "discipline_sections__evaluation_tools",
+                                                          "prerequisitesofworkprogram_set",
+                                                          "outcomesofworkprogram_set",
+                                                          "certification_evaluation_tools",
+                                                          "editors"
+                                                          )
     serializer_class = WorkProgramSerializerCTE
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -767,7 +776,10 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         for modules_dict in modules_grouped.values():
             upper_modules = modules_dict.pop("upper_modules")
             discipline_block_module = modules_dict
-            discipline_block_module["descipline_block"] = DisciplineBlockForWPinFSSCTESerializer(DisciplineBlock.objects.filter(modules_in_discipline_block__id__in=upper_modules), many=True).data
+            discipline_block_module["descipline_block"] = DisciplineBlockForWPinFSSCTESerializer(
+                DisciplineBlock.objects.filter(modules_in_discipline_block__id__in=upper_modules).prefetch_related(
+                    "academic_plan__academic_plan_in_field_of_study",
+                    "academic_plan__academic_plan_in_field_of_study__field_of_study"), many=True).data
             cb_dict = {"id": None, "discipline_block_module": discipline_block_module}
             work_program_in_change_block.append(cb_dict)
 
@@ -777,21 +789,14 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
 
     @print_sql_decorator(count_only=False)
     def get(self, request, **kwargs):
-        queryset = WorkProgram.objects.filter(pk=self.kwargs['pk']).prefetch_related("expertise_with_rpd",
-                                                                                     "expertise_with_rpd__expertse_users_in_rpd",
-                                                                                     "discipline_sections",
-                                                                                     "prerequisitesofworkprogram_set",
-                                                                                     "outcomesofworkprogram_set",
-                                                                                     "certification_evaluation_tools",
-                                                                                     "editors"
-                                                                                     )
+        queryset = self.get_object()
 
-        serializer = WorkProgramSerializerCTE(queryset, many=True, context={'request': request})
+        serializer = WorkProgramSerializerCTE(queryset, context={'request': request})
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
 
-        newdata = dict(serializer.data[0])
-        wp = queryset.first()
+        newdata = dict(serializer.data)
+        wp = queryset
         expertise = wp.expertise_with_rpd.all().first()
         try:
 
@@ -805,8 +810,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             else:
                 newdata.update({"can_see_comments": False})
 
-            if (expertise.expertise_status == "WK" or
-                expertise.expertise_status == "RE") and (wp.owner == request.user or request.user in wp.editors.all()):
+            if (expertise.expertise_status == "WK" or expertise.expertise_status == "RE") and \
+                    (wp.owner == request.user or request.user in wp.editors.all()):
                 newdata.update({"can_edit": True})
             else:
                 newdata.update({"can_edit": False})
@@ -851,11 +856,11 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
         except:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
-        if (request.user.is_expertise_master == True or request.user in  wp.editors.all()) and queryset[0].work_status == "w":
+        if (request.user.is_expertise_master == True or request.user in  wp.editors.all()) and  wp.work_status == "w":
             newdata.update({"can_archive": True})
         else:
             newdata.update({"can_archive": False})
-        if request.user.is_expertise_master and queryset[0].work_status == "a":
+        if request.user.is_expertise_master and  wp.work_status == "a":
             newdata.update({"can_return_from_archive": True})
         else:
             newdata.update({"can_return_from_archive": False})
