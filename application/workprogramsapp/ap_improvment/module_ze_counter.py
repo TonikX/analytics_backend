@@ -1,5 +1,5 @@
 from django_cte import With
-from django_print_sql import print_sql, print_sql_decorator
+#from django_print_sql import print_sql, print_sql_decorator
 
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
@@ -112,7 +112,7 @@ def rewrite_ze_up(module):
         module.laboriousness = count_ze_module(module)
     except IndexError:
         module.laboriousness = 0
-    print(module.name)
+    #print(module.name)
     module.save()
     cte = With.recursive(make_modules_cte_up)
     # descipline_block__academic_plan__id = 7304

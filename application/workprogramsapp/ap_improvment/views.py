@@ -1,5 +1,5 @@
 from django_cte import With
-from django_print_sql import print_sql_decorator
+#from django_print_sql import print_sql_decorator
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,7 +17,6 @@ from workprogramsapp.serializers import IndicatorSerializer, ImplementationAcade
 @permission_classes((IsAuthenticated,))
 # Проще генерировать словари с зунами индикаторами и компетенциями
 # Переписать логику сборки словаря
-@print_sql_decorator(count_only=False)
 def get_all_competences_and_indicators_for_wp_cte(request, wp_id):
     zuns = Zun.objects.filter(
         wp_in_fs__work_program__id=wp_id, indicator_in_zun__isnull=False).select_related("indicator_in_zun", "wp_in_fs",
@@ -75,7 +74,6 @@ def get_all_competences_and_indicators_for_wp_cte(request, wp_id):
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-@print_sql_decorator(count_only=False)
 def get_all_ap_with_competences_and_indicators_cte(request, wp_id):
     """
 

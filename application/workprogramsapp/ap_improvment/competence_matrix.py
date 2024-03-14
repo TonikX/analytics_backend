@@ -1,5 +1,5 @@
 from django_cte import With
-from django_print_sql import print_sql_decorator
+#from django_print_sql import print_sql_decorator
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -70,7 +70,6 @@ def get_competences_practice(practice_in_fs):
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-@print_sql_decorator(count_only=False)
 def GetCompetenceMatrixCTE(request, gen_pk):
     unique_wp = []  # Уникальные РПД в нескольких УП
     unique_practice = []  # Уникальные Практики в нескольких УП
