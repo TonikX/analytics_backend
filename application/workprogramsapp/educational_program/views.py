@@ -319,7 +319,6 @@ def UploadCompetences(request):
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-@print_sql_decorator(count_only=False)
 def GetCompetenceMatrix(request, gen_pk):
     unique_wp = []  # Уникальные РПД в нескольких УП
     unique_practice = []  # Уникальные Практики в нескольких УП
@@ -513,7 +512,6 @@ def gh_check(request, gh_id):
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
-@print_sql_decorator(count_only=False)
 def get_all_ap_with_competences_and_indicators(request, wp_id):
     """
 

@@ -787,7 +787,6 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
 
 
 
-    @print_sql_decorator(count_only=False)
     def get(self, request, **kwargs):
         queryset = self.get_object()
 
@@ -2260,7 +2259,6 @@ class AcademicPlanDetailsView(generics.RetrieveAPIView):
     serializer_class = AcademicPlanForAPSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-    @print_sql_decorator(count_only=False)
     def get(self, request, **kwargs):
 
         queryset = AcademicPlan.objects.filter(pk=self.kwargs['pk']).prefetch_related(
