@@ -9,7 +9,6 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django_cte import With
 from django_filters.rest_framework import DjangoFilterBackend
-from django_print_sql import print_sql_decorator
 from django_super_deduper.merge import MergedModelInstance
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema

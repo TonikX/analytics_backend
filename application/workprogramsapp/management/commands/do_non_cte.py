@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import models
 from django.db.models.functions import Concat
 from django_cte import With
-from django_print_sql import print_sql_decorator, print_sql
+#from django_print_sql import print_sql_decorator, print_sql
 
 from workprogramsapp.models import DisciplineBlockModule, DisciplineBlockModuleInIsu, AcademicPlan
 
