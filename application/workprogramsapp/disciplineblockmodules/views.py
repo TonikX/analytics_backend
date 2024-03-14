@@ -112,7 +112,7 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
 
 
     """
-    queryset = DisciplineBlockModule.objects.all()
+    queryset = DisciplineBlockModule.objects.all().prefetch_related("editors")
     serializer_class = ShortDisciplineBlockModuleForModuleListSerializer
     filterset_class = DisciplineBlockModuleFilter
     search_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name']

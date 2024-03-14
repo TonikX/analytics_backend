@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from django.db.models.signals import post_save, pre_delete, pre_save
+from django.db.models.signals import post_save, pre_delete, pre_save, m2m_changed, post_delete
 from django.dispatch import receiver
 
 from analytics_project import settings
@@ -7,9 +7,10 @@ from dataprocessing.itmo_backends import isu_client_credentials_request
 from dataprocessing.models import User
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
+from workprogramsapp.ap_improvment.module_ze_counter import rewrite_ze_up
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, Zun, WorkProgramIdStrUpForIsu, AcademicPlan, \
-    ImplementationAcademicPlan
+    ImplementationAcademicPlan, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule
 from workprogramsapp.notifications.emails.send_mail import mail_sender
 from workprogramsapp.notifications.models import ExpertiseNotification, NotificationComments, \
     AcademicPlanUpdateNotification
@@ -185,3 +186,45 @@ def check_previous_mode(sender, instance, *args, **kwargs):
         mail_sender(topic=f'Учебный план "{imp.title}" поменял свой статус.',
                     text=f'Учебный план "{imp.title}" поменял свой статус на "{status}"\n https://op.itmo.ru/educational-plans/{instance.id}',
                     emails=user_email, users=user_to_send)
+
+
+# Перерасчет трудоемкости при изменении моудля
+@receiver(m2m_changed, sender=DisciplineBlockModule.childs.through)
+def count_module_ze_if_changed(sender, instance: DisciplineBlockModule, *args, **kwargs):
+    print("m2m called")
+    rewrite_ze_up(instance)
+    print("d4 bad")
+
+
+@receiver(post_delete, sender=DisciplineBlockModule)
+def count_module_ze_deleted_if_changed(sender, instance: DisciplineBlockModule, *args, **kwargs):
+    rewrite_ze_up(instance)
+    print("d4 bad")
+
+
+# Перерасчет трудоемкости при изменении wpcb
+@receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.work_program.through)
+def count_wpcb_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    if instance.work_program.all().exists():
+        rewrite_ze_up(instance.discipline_block_module)
+        print("d4 bad")
+
+
+@receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.gia.through)
+def count_wpcb_gia_ze_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    if instance.gia.all().exists():
+        rewrite_ze_up(instance.discipline_block_module)
+        print("d4 bad")
+
+
+@receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.practice.through)
+def count_wpcb_ze_practice_if_changed(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    if instance.practice.all().exists():
+        rewrite_ze_up(instance.discipline_block_module)
+        print("d4 bad")
+
+
+@receiver(post_delete, sender=WorkProgramChangeInDisciplineBlockModule)
+def count_wpcb_ze_practice_if_deleted(sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs):
+    rewrite_ze_up(instance.discipline_block_module)
+    print("d4 bad")

@@ -13,6 +13,8 @@ from workprogramsapp.educational_program.views import GeneralCharacteristicsCrea
     GeneralCharacteristicsListAPIView, \
     GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
     GeneralCharacteristicsDetailsWithEducationalProgramView
+from ..ap_improvment.competence_matrix import GetCompetenceMatrixCTE
+from ..ap_improvment.views import get_all_competences_and_indicators_for_wp_cte, get_all_ap_with_competences_and_indicators_cte
 from ..op_slection.views import EducationalProgramRankingByProfession, EducationalProgramRankingByProfessionScientific
 from .views import ProfessionalStandardSet
 
@@ -54,9 +56,9 @@ urlpatterns = [
     # --Компетенции
     path('api/competence/upload_comptence_from_csv', UploadCompetences),
     path('api/competence/get_all_ap_with_competences_and_indicators_to_wp/<int:wp_id>',
-         get_all_ap_with_competences_and_indicators),
+         get_all_ap_with_competences_and_indicators_cte),
     path('api/competence/get_all_competences_and_indicators_for_wp/<int:wp_id>',
-         get_all_competences_and_indicators_for_wp),
+         get_all_competences_and_indicators_for_wp_cte),
     path('api/competence/zun_many_remove', zun_many_remove),
     path('api/competence/zun_many_copy', zun_copy),
     path('api/competence/zun_copy_by_gh', zun_copy_by_wps),
@@ -64,7 +66,8 @@ urlpatterns = [
     path('api/competence/comments/create', CompetenceCommentCreateView.as_view()),
 
     # --Матрица компетенций
-    path('api/general_characteristic/competence_matrix/<int:gen_pk>', GetCompetenceMatrix),
+    path('api/general_characteristic/competence_matrix/<int:gen_pk>', GetCompetenceMatrixCTE),
+    path('api/general_characteristic/competence_matrix_old/<int:gen_pk>', GetCompetenceMatrix),
 
     # --Проф. Стандарты
     path('api/competence/upload_prof_standard_from_csv', UploadProfStandards.as_view()),
