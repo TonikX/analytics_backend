@@ -65,18 +65,18 @@ class WorkProgram(CloneMixin, models.Model):
     discipline_code = models.CharField(max_length=1024, blank=True, null=True)
     subject_code = models.CharField(max_length=1024, blank=True, null=True)
     authors = models.CharField(max_length=1024, blank=True, null=True)
-    prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites', )
+    prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites')
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name='Квалификация',
                                      blank=True, null=True)
     prerequisites = models.ManyToManyField(Items, related_name='WorkProgramPrerequisites',
-                                           through='PrerequisitesOfWorkProgram', blank=True, null=True,
+                                           through='PrerequisitesOfWorkProgram', blank=True,
                                            verbose_name="Пререквизиты")
     outcomes = models.ManyToManyField(Items, related_name='WorkProgramOutcomes', through='OutcomesOfWorkProgram',
                                       verbose_name="Постреквизиты")
     title = models.CharField(max_length=1024, verbose_name="Название")
     hoursFirstSemester = models.IntegerField(blank=True, null=True, verbose_name="Количество часов в 1 семестре")
     hoursSecondSemester = models.IntegerField(blank=True, null=True, verbose_name="Количество часов в 2 семестре")
-    bibliographic_reference = models.ManyToManyField('BibliographicReference', blank=True, null=True,
+    bibliographic_reference = models.ManyToManyField('BibliographicReference', blank=True,
                                                      verbose_name='Библиогравическая_ссылка',
                                                      related_name='bibrefs')
     description = models.CharField(max_length=5000, blank=True, null=True)
@@ -89,7 +89,7 @@ class WorkProgram(CloneMixin, models.Model):
     extra_points = models.CharField(choices=extra_points_choise, max_length=1, verbose_name='Квалификация',
                                     blank=True, null=True)
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors", verbose_name="Редакторы РПД",
-                                     blank=True, null=True)
+                                     blank=True)
     language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
     have_course_project = models.BooleanField(blank=True, null=True, verbose_name="Имеет ли РПД курсовой проект")
@@ -220,7 +220,7 @@ class OutcomesOfWorkProgram(CloneMixin, models.Model):
         default=1, verbose_name="Уровень"
     )
     evaluation_tool = models.ManyToManyField('EvaluationTool', verbose_name='Оценочные средства',
-                                             related_name='evaluation_tool_of_outcomes', blank=True, null=True)
+                                             related_name='evaluation_tool_of_outcomes', blank=True)
     # _clone_many_to_many_fields =['evaluation_tool']
 
     # def __str__(self):
@@ -479,20 +479,19 @@ class GeneralCharacteristics(models.Model):
 
     educational_program = models.ManyToManyField('ImplementationAcademicPlan', verbose_name='Образовательная программа',
                                                  related_name="general_characteristics_in_educational_program",
-                                                 blank=True, null=True)
+                                                 blank=True)
     area_of_activity = models.ManyToManyField('ProfessionalStandard',
                                               verbose_name='Проф. Стандарт/Область профессиональной деятельности',
-                                              blank=True, null=True, related_name="area_in_characteristic")
+                                              blank=True, related_name="area_in_characteristic")
     additional_area_of_activity = models.ManyToManyField('ProfessionalStandard',
                                                          verbose_name='Дополнительные Области профессиональной деятельности',
-                                                         blank=True, null=True,
+                                                         blank=True,
                                                          related_name="add_area_in_characteristic")
     objects_of_activity = models.ManyToManyField(ObjectsOfActivity,
-                                                 verbose_name="Объекты проф. деятельности выпускников", blank=True,
-                                                 null=True)
+                                                 verbose_name="Объекты проф. деятельности выпускников", blank=True)
     kinds_of_activity = models.ManyToManyField(KindsOfActivity,
                                                verbose_name="Сферы профессиональной деятельности, к которому (которым) готовятся выпускники",
-                                               blank=True, null=True)
+                                               blank=True)
     tasks_of_activity = models.ForeignKey(TasksForEducationalStandard, blank=True, null=True, on_delete=models.SET_NULL,
                                           verbose_name="Тип (типы) профессиональных задач, к решению которых готовятся выпускники")
     annotation = models.TextField(max_length=55512,
@@ -507,7 +506,7 @@ class GeneralCharacteristics(models.Model):
     tasks_for_prof_standards = models.ManyToManyField(TasksForEducationalStandard,
                                                       verbose_name='Список задач образовательного стандарта',
                                                       related_name="tasks_for_prof_standards_in_educational_program",
-                                                      blank=True, null=True)
+                                                      blank=True)
     language = models.CharField(choices=languages_for_gc, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
     is_only_in_university = models.BooleanField(blank=True, null=True, verbose_name="Тольков в университете итмо?")
@@ -798,12 +797,11 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='discipline_block_modules',
                                      verbose_name='Редакторы образовательных модулей', blank=True)
     module_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID модуля в ИСУ")
-    childs = models.ManyToManyField('self', related_name="father_module", blank=True, symmetrical=False,
-                                    null=True)
+    childs = models.ManyToManyField('self', related_name="father_module", blank=True, symmetrical=False)
     # father = models.ForeignKey('self', on_delete=models.SET_NULL, related_name="inheritage_module",blank=True, null=True)
     educational_programs_to_access = models.ManyToManyField('ImplementationAcademicPlan',
                                                             verbose_name='Разрешенные образовательные программы',
-                                                            related_name="modules_to_access", blank=True, null=True)
+                                                            related_name="modules_to_access", blank=True)
 
     only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подразеделений",
                                                 blank=True, null=True, default=False)
@@ -959,7 +957,7 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
     semester_start = ArrayField(
         models.IntegerField(blank=True),
         verbose_name="В каком семестре начинается (массив)",
-        default=[]
+        default=list
     )
     semester_duration = models.IntegerField(verbose_name="Сколько семестров длится", blank=True, null=True)
 
@@ -971,14 +969,14 @@ class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
                                                 null=True)
     work_program = models.ManyToManyField('WorkProgram', verbose_name="Рабочая программа",
                                           through='WorkProgramInFieldOfStudy',
-                                          related_name="work_program_in_change_block", blank=True, null=True)
+                                          related_name="work_program_in_change_block", blank=True)
     gia = models.ManyToManyField('gia_practice_app.GIA', verbose_name="Гиа",
                                  related_name="gia_in_change_block",
-                                 through='GiaInFieldOfStudy', blank=True, null=True)
+                                 through='GiaInFieldOfStudy', blank=True)
     practice = models.ManyToManyField('gia_practice_app.Practice', verbose_name="Практики",
                                       related_name="practice_in_change_block",
                                       through='PracticeInFieldOfStudy',
-                                      blank=True, null=True)
+                                      blank=True)
     subject_code = models.CharField(max_length=1024, verbose_name="Срок сдачи в неделях", blank=True, null=True)
 
     # zuns = models.ManyToManyField('Zun', verbose_name = "Зуны", through='WorkProgramInFieldOfStudy', related_name="zuns_in_changeblock")
@@ -1056,7 +1054,7 @@ class Zun(models.Model):
     skills = models.CharField(max_length=10000, blank=True, null=True)
     attainments = models.CharField(max_length=10000, blank=True, null=True)
     items = models.ManyToManyField('OutcomesOfWorkProgram', verbose_name="Учебная сущность и уровень освоения",
-                                   blank=True, null=True, related_name="item_in_wp")
+                                   blank=True, related_name="item_in_wp")
     wp_in_fs_saved_fk_id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
 
     # def __str__(self):
@@ -1263,12 +1261,12 @@ class DisciplineSection(CloneMixin, models.Model):
     Модель для разделов дисциплин
     '''
 
-    ordinal_number = models.IntegerField(max_length=1024, verbose_name="номер раздела")
+    ordinal_number = models.IntegerField(verbose_name="номер раздела")
     name = models.CharField(max_length=1024, verbose_name="Раздел")
     work_program = models.ForeignKey('WorkProgram', on_delete=models.CASCADE, verbose_name='Рабочая программа',
                                      related_name='discipline_sections')
     evaluation_tools = models.ManyToManyField('EvaluationTool', verbose_name='Фонды оценочных средств', blank=True,
-                                              null=True, related_name='evaluation_tools')
+                                              related_name='evaluation_tools')
     # description = models.CharField(max_length=1024, verbose_name = "Раздел", blank = True, null = True)
     contact_work = models.DecimalField(verbose_name="Контактная работа", max_digits=5, decimal_places=2, blank=True,
                                        null=True)
@@ -1354,7 +1352,7 @@ class Topic(CloneMixin, models.Model):
     '''
     discipline_section = models.ForeignKey('DisciplineSection', on_delete=models.CASCADE, verbose_name="Раздел",
                                            related_name="topics")
-    number = models.IntegerField(max_length=1024, verbose_name="номер темы в разделе")
+    number = models.IntegerField(verbose_name="номер темы в разделе")
     description = models.CharField(max_length=1024, verbose_name="Описание", blank=True, null=True)
     # online_course = models.CharField(max_length=1024, verbose_name = "Реализация раздела дисциплины с помощью онлайн-курса", blank = True, null = True)
     url_online_course = models.ForeignKey(OnlineCourse, on_delete=models.CASCADE, verbose_name='Онлайн курс',
@@ -1442,7 +1440,7 @@ class Profession(models.Model):
                                          verbose_name='Профессия')
     title = models.CharField(max_length=1024, blank=True, null=True, verbose_name='Название профессии')
     skills = models.ManyToManyField(Items, related_name='profession_skils',
-                                    through='SkillsOfProfession', blank=True, null=True,
+                                    through='SkillsOfProfession', blank=True,
                                     verbose_name="Навыки")
 
     def __str__(self):
@@ -1457,7 +1455,7 @@ class Role(models.Model):
                                          verbose_name='Профессия')
     title = models.CharField(max_length=1024, blank=True, null=True, verbose_name='Название профессии')
     skills = models.ManyToManyField(Items, related_name='role_skils',
-                                    through='SkillsOfRole', blank=True, null=True,
+                                    through='SkillsOfRole', blank=True,
                                     verbose_name="Навыки")
 
     def __str__(self):

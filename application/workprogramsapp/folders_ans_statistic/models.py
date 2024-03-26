@@ -77,23 +77,42 @@ class IndividualImplementationAcademicPlanInFolder(models.Model):
 
 class Folder(models.Model):
     name = models.CharField(max_length=1024, verbose_name="Имя папки")
-    description = models.CharField(max_length=1024, verbose_name="Описание папки", blank=True, null=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Владелец папки', on_delete=models.CASCADE)
-    work_program = models.ManyToManyField("WorkProgram", verbose_name='Рабочие программы',
-                                          through=WorkProgramInFolder, related_name='works_program_folder',
-                                          blank=True,
-                                          null=True)
-    academic_plan = models.ManyToManyField("AcademicPlan", verbose_name='Академические планы',
-                                           through=AcademicPlanInFolder, related_name='academic_plans_folder',
-                                           blank=True,
-                                           null=True)
-    block_module = models.ManyToManyField("DisciplineBlockModule", verbose_name='Модули дисциплины',
-                                          through=DisciplineBlockModuleInFolder, related_name='block_modules_folder',
-                                          blank=True,
-                                          null=True)
-    individual_implementation_of_academic_plan = models.ManyToManyField("IndividualImplementationAcademicPlan",
-                                                                        verbose_name='Индивидуальные траектории',
-                                                                        through=IndividualImplementationAcademicPlanInFolder,
-                                                                        related_name='individual_implementation_of_academic_plan_folder',
-                                                                        blank=True,
-                                                                        null=True)
+    description = models.CharField(
+        max_length=1024,
+        verbose_name="Описание папки",
+        blank=True,
+        null=True
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name='Владелец папки',
+        on_delete=models.CASCADE
+    )
+    work_program = models.ManyToManyField(
+        "WorkProgram",
+        verbose_name='Рабочие программы',
+        through=WorkProgramInFolder,
+        related_name='works_program_folder',
+        blank=True
+    )
+    academic_plan = models.ManyToManyField(
+        "AcademicPlan",
+        verbose_name='Академические планы',
+        through=AcademicPlanInFolder,
+        related_name='academic_plans_folder',
+        blank=True
+    )
+    block_module = models.ManyToManyField(
+        "DisciplineBlockModule",
+        verbose_name='Модули дисциплины',
+        through=DisciplineBlockModuleInFolder,
+        related_name='block_modules_folder',
+        blank=True
+    )
+    individual_implementation_of_academic_plan = models.ManyToManyField(
+        "IndividualImplementationAcademicPlan",
+        verbose_name='Индивидуальные траектории',
+        through=IndividualImplementationAcademicPlanInFolder,
+        related_name='individual_implementation_of_academic_plan_folder',
+        blank=True
+    )

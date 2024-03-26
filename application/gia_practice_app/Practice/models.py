@@ -86,12 +86,12 @@ class Practice(models.Model):
         ('senior-inter-eng', 'преддипломная / Senior internship'),
         ('inter', 'стажировка'),
     )
-    discipline_code = models.IntegerField(max_length=1024, blank=True, null=True)
+    discipline_code = models.IntegerField(blank=True, null=True)
     title = models.CharField(max_length=1024, verbose_name="Наименование", blank=True, null=True)
 
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors_practice",
                                      verbose_name="Редакторы РПД",
-                                     blank=True, null=True)
+                                     blank=True)
 
     practice_base = models.ForeignKey('PracticeTemplate', on_delete=models.SET_NULL,
                                       verbose_name='Базовый шаблон Практики',
@@ -139,11 +139,11 @@ class Practice(models.Model):
                                                   verbose_name="Зачтено (удовлетворительно)")
     not_passed_mark = models.TextField(max_length=4096, default=UNSATISF,
                                        verbose_name="Не зачтено (неудовлетворительно)")
-    bibliographic_reference = models.ManyToManyField('workprogramsapp.BibliographicReference', blank=True, null=True,
+    bibliographic_reference = models.ManyToManyField('workprogramsapp.BibliographicReference', blank=True,
                                                      verbose_name='Рекомендуемые источники',
                                                      related_name='practise_refs')
     prerequisites = models.ManyToManyField("dataprocessing.Items", related_name='practice_prerequisites',
-                                           through='PrerequisitesOfPractice', blank=True, null=True,
+                                           through='PrerequisitesOfPractice', blank=True,
                                            verbose_name="Пререквизиты")
     outcomes = models.ManyToManyField("dataprocessing.Items", related_name='practice',
                                       through='OutcomesOfPractice',
@@ -220,6 +220,6 @@ class ZunPractice(models.Model):
     skills = models.CharField(max_length=10000, blank=True, null=True)
     attainments = models.CharField(max_length=10000, blank=True, null=True)
     items = models.ManyToManyField('OutcomesOfPractice', verbose_name="Учебная сущность и уровень освоения",
-                                   blank=True, null=True, related_name="item_in_practice")
+                                   blank=True, related_name="item_in_practice")
     wp_in_fs_saved_fk_id_str_up = models.IntegerField(verbose_name="Id строки учебного плана", blank=True, null=True)
     prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")

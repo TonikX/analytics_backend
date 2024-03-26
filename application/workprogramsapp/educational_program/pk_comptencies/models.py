@@ -41,7 +41,7 @@ class PkCompetencesInGroupOfGeneralCharacteristic(models.Model):
     professional_standard = models.ForeignKey('ProfessionalStandard', on_delete=models.SET_NULL,
                                               verbose_name="Профессиональный стандарт", blank=True, null=True)
     generalized_labor_functions = models.ManyToManyField('GeneralizedLaborFunctions',
-                                                         verbose_name="Выбранные обобщенные трудовые функции", blank=True, null=True)
+                                                         verbose_name="Выбранные обобщенные трудовые функции", blank=True)
     kinds_of_activity = models.ForeignKey('KindsOfActivity', on_delete=models.SET_NULL,
                                           verbose_name="Сферы проф. деятельности", blank=True, null=True)
     kinds_of_activity_for_miner = models.CharField(max_length=2048, verbose_name="трудовая функция", blank=True, null=True)

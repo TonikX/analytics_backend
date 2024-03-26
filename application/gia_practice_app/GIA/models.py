@@ -75,14 +75,14 @@ class GIA(models.Model):
     ]
 
 
-    discipline_code = models.IntegerField(max_length=1024, blank=True, null=True)
+    discipline_code = models.IntegerField(blank=True, null=True)
     title = models.CharField(max_length=1024, verbose_name="Наименование", blank=True, null=True)
     gia_base = models.ForeignKey('GIABaseTemplate', on_delete=models.SET_NULL,
                                  verbose_name='Базовый шаблон ГИА',
                                  related_name='gia_heir', blank=True, null=True)
 
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="editors_gia", verbose_name="Редакторы РПД",
-                                     blank=True, null=True)
+                                     blank=True)
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year], blank=True, null=True)
     authors = models.CharField(max_length=1024, verbose_name="Авторский состав", blank=True, null=True)

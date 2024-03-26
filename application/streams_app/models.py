@@ -29,9 +29,12 @@ class Classroom(models.Model):
 
     building_part = models.ForeignKey("BuildingPart", on_delete=models.CASCADE, blank=True, null=True,
                                       verbose_name="часть здания")
-    departments = models.ManyToManyField("workprogramsapp.Department", verbose_name="Факультеты", blank=True,
-                                         null=True, )
-    group = models.ManyToManyField("ClassroomGroup", blank=True, null=True,
+    departments = models.ManyToManyField(
+        "workprogramsapp.Department",
+        verbose_name="Факультеты",
+        blank=True
+    )
+    group = models.ManyToManyField("ClassroomGroup", blank=True,
                               verbose_name="группа аудитория")
 
     def __str__(self):
