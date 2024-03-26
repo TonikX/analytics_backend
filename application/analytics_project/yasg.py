@@ -6,10 +6,10 @@ from drf_yasg2 import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Django Movie",
+      title='Analytics Backend API',
       default_version='v1',
-      description="Test description",
-      license=openapi.License(name="BSD License"),
+      description='API Конструктора образовательных программ',
+      license=openapi.License(name='MIT License'),
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
