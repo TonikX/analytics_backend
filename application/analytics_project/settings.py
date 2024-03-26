@@ -19,7 +19,9 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-env = environ.Env()
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 environ.Env.read_env()  # reading .env file
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +32,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = env('DEBUG') == True
-DEBUG = True
+DEBUG = env('DEBUG')
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
@@ -335,7 +337,7 @@ sentry_sdk.init(
     }
 }"""
 
-if os.environ['DEBUG'] == True:
+if DEBUG:
     LOGGING = {
         'version': 1,
         'formatters': {
