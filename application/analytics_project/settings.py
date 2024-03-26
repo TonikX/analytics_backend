@@ -27,6 +27,9 @@ INSTALLED_APPS = [
     'dataprocessing',
     'gia_practice_app',
     'onlinecourse',
+    'records',
+    'selection_of_keywords_for_rpd',
+    'streams_app',
     'workprogramsapp',
 
     'bootstrap_pagination',
@@ -45,13 +48,10 @@ INSTALLED_APPS = [
     'djoser',
     'drf_yasg2',
     'model_clone',
-    'records',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'rest_framework_swagger',
-    'selection_of_keywords_for_rpd',
-    'streams_app',
 
     # 'ckeditor',
     # 'ckeditor_uploader',
