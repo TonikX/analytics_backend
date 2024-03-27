@@ -128,7 +128,6 @@ LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
 
 STATIC_URL = '/static-backend/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static-backend')
@@ -290,7 +289,7 @@ sentry_sdk.init(
     }
 }"""
 
-if DEBUG:
+if env('LOGGING_DEBUG', default=False):
     LOGGING = {
         'version': 1,
         'formatters': {

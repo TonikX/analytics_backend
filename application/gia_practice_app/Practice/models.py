@@ -1,6 +1,6 @@
 import datetime
 
-from django.contrib.postgres.forms import JSONField
+from django.contrib.postgres.fields import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -106,17 +106,17 @@ class Practice(models.Model):
                                         verbose_name='Структурное подразделени',
                                         related_name='practice_in_structural_unit', blank=True, null=True)
 
-    language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
+    language = models.CharField(choices=languages_for_wp, max_length=64, verbose_name='Языки',
                                 blank=True, null=True)
     qualification = models.CharField(choices=QUALIFICATION_CHOICES, max_length=1024, verbose_name='Квалификация',
                                      blank=True, null=True)
-    kind_of_practice = models.CharField(choices=kinds, max_length=15, verbose_name='Вид практики',
+    kind_of_practice = models.CharField(choices=kinds, max_length=64, verbose_name='Вид практики',
                                         blank=True, null=True)
-    type_of_practice = models.CharField(choices=types, max_length=15, verbose_name='Тип практики',
+    type_of_practice = models.CharField(choices=types, max_length=64, verbose_name='Тип практики',
                                         blank=True, null=True)
-    way_of_doing_practice = models.CharField(choices=ways, max_length=15, verbose_name='Способ прохождения практики',
+    way_of_doing_practice = models.CharField(choices=ways, max_length=64, verbose_name='Способ прохождения практики',
                                              blank=True, null=True)
-    format_practice = models.CharField(choices=formats, max_length=15, verbose_name='Формат прохождения практики',
+    format_practice = models.CharField(choices=formats, max_length=64, verbose_name='Формат прохождения практики',
                                        blank=True, null=True)
 
     features_content_and_internship = models.TextField(max_length=4096,
@@ -151,7 +151,7 @@ class Practice(models.Model):
 
     evaluation_tools_current_control = models.TextField(max_length=8192, default=EVALUATION,
                                                         verbose_name="ОЦЕНОЧНЫЕ СРЕДСТВА ДЛЯ ПРОВЕДЕНИЯ ТЕКУЩЕГО КОНТРОЛЯ И  ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ ПО ПРАКТИКЕ.Текущий контроль")
-    term_hours_info_table = JSONField()
+    term_hours_info_table = JSONField(default=dict)
     prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")
     ze_v_sem = models.CharField(max_length=1024, blank=True, null=True,
                                 verbose_name="Количество зачетных единиц по семестрам в Практике")
