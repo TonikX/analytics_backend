@@ -2,11 +2,13 @@ import csv
 import psycopg2
 from selection_of_keywords_for_rpd.recommendation_of_prerequisites.v1.connection_to_postgre import connection_to_postgre
 
+
 select_query = "select id, name from dataprocessing_items where domain_id is not null order by id asc;";
 
 unique_items = set()
 user_data = {}
 connection = connection_to_postgre()
+
 try:
     connection = connection_to_postgre()
     cursor = connection.cursor()

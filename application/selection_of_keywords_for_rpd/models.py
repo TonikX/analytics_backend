@@ -1,13 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
-
-# Получить юзеров
-
-# Получить дисциплины и описания дисциплин
-
-#
 from analytics_project import settings
 from dataprocessing.models import Items
 
