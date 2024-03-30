@@ -1,30 +1,30 @@
-import datetime
 import json
 import os
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.db import transaction
+import datetime
 
-from dataprocessing.models import User
-from streams_app.models import Classroom, BuildingPart, Building, ClassroomGroup
-from workprogramsapp.expertise.models import Expertise, UserExpertise
-from workprogramsapp.models import DisciplineBlockModule, Department
+from streams_app.models import Classroom, ClassroomGroup
 
 
 class Command(BaseCommand):
 
-    def convert_java_datetime(self, string):
+    @staticmethod
+    def convert_java_datetime(string):
         return datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%fZ")
 
     @transaction.atomic
     def handle(self, *args, **options):
         dirname = os.path.dirname(__file__)
-        filename = os.path.join(dirname, 'files/response_group.json')
+        filename = os.path.join(dirname, "files/response_group.json")
         f = open(filename, encoding="utf-8")
         data = json.load(f)
         for group_json in data:
             # Аудитории
-            group, created = ClassroomGroup.objects.get_or_create(service_id=group_json["id"])
+            group, created = ClassroomGroup.objects.get_or_create(
+                service_id=group_json["id"]
+            )
             if created:
                 group.name = group_json["name"]
                 group.version = group_json["version"]
