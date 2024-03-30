@@ -4,11 +4,7 @@ import pandas as pd
 
 
 def generate_main_dict(id_op, op_name):
-    competence_main_dict = {
-        "id_op": id_op,
-        "op_name": op_name,
-        "competence_list": []
-    }
+    competence_main_dict = {"id_op": id_op, "op_name": op_name, "competence_list": []}
     return competence_main_dict
 
 
@@ -18,7 +14,7 @@ def generate_competence_dict(id_comp, comp_name, comp_group, comp_type):
         "competence_name": comp_name,
         "competence_group": comp_group,
         "competence_type": comp_type,
-        "indicators_list": []
+        "indicators_list": [],
     }
     return competence_dict
 
@@ -27,7 +23,7 @@ def generate_indicator_dict(id_indicator, indicator_name):
     indicator_dict = {
         "id_indicator": id_indicator,
         "indicator_name": indicator_name,
-        "wp_list": []
+        "wp_list": [],
     }
     return indicator_dict
 
@@ -41,10 +37,10 @@ def names_with_id_handler(pk_name):
     def iterate_pk(offset):
         for index, char_pk in enumerate(pk_name[offset:]):
             if char_pk in russian_higher + russian_lower:
-                pk_num = pk_name[:offset + index].replace(" ", "")
+                pk_num = pk_name[: offset + index].replace(" ", "")
                 while not pk_num[-1] in all_nums:
                     pk_num = pk_num[:-1]
-                pk_title = pk_name[4 + index:]
+                pk_title = pk_name[4 + index :]
                 pk_title = re.sub(" +", " ", pk_title[0].upper() + pk_title[1:])
                 return pk_num, pk_title
 
@@ -55,7 +51,7 @@ def names_with_id_handler(pk_name):
 
 
 def competence_dict_generator(file_path):
-    competences = pd.read_csv(file_path, delimiter=';', encoding="utf-8")
+    competences = pd.read_csv(file_path, delimiter=";", encoding="utf-8")
     competence_list = []
     for i, row in competences.iterrows():
         main_dict_find_bool = False
@@ -64,20 +60,30 @@ def competence_dict_generator(file_path):
         main_dict = None
         id_op = list(map(int, str(row["ИД ОП"]).split(",")))
         try:
-            competence_id, competence_name = names_with_id_handler(row["Название компетенции"])
+            competence_id, competence_name = names_with_id_handler(
+                row["Название компетенции"]
+            )
             print(competence_id)
             print(competence_name)
         except TypeError:
-            competence_id, competence_name = "Без ИД компетенции", "Без названия компетенции"
+            competence_id, competence_name = (
+                "Без ИД компетенции",
+                "Без названия компетенции",
+            )
             # print(row["Название индикатора"])
         competence_group = row["Название группы компетенций"]
         competence_type = row["Тип компетенции"]
         try:
-            indicator_id, indicator_name = names_with_id_handler(row["Название индикатора"])
+            indicator_id, indicator_name = names_with_id_handler(
+                row["Название индикатора"]
+            )
             print(indicator_id)
             print(indicator_name)
         except TypeError:
-            indicator_id, indicator_name = "Без ИД индикатора", "Без названия индикатора"
+            indicator_id, indicator_name = (
+                "Без ИД индикатора",
+                "Без названия индикатора",
+            )
             # print(row["Название компетенции"])
         for el in competence_list:
             if el["id_op"] == id_op:
@@ -97,7 +103,9 @@ def competence_dict_generator(file_path):
                     competence_find_bool = True
                     break
         if not competence:
-            competence = generate_competence_dict(competence_id, competence_name, competence_group, competence_type)
+            competence = generate_competence_dict(
+                competence_id, competence_name, competence_group, competence_type
+            )
             main_dict["competence_list"].append(competence)
         # Добавление  ид РПД для компетенции
         indicator = generate_indicator_dict(indicator_id, indicator_name)

@@ -1,9 +1,6 @@
-import datetime
-from pprint import pprint
-
+import pandas as pd
 from django.db import transaction
-from django.db.models import Count, Q
-# Сериализаторы
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 
 from drf_yasg2 import openapi
@@ -12,65 +9,108 @@ from rest_framework import filters, mixins
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-import pandas as pd
-
-# Сериализаторы
 from rest_framework.viewsets import GenericViewSet
 
 from dataprocessing.models import Items
-from workprogramsapp.educational_program.serializers import EducationalCreateProgramSerializer, \
-    EducationalProgramSerializer, \
-    GeneralCharacteristicsSerializer, DepartmentSerializer, EducationalProgramUpdateSerializer, \
-    GeneralLaborFunctionsSerializer, KindsOfActivitySerializerForEd, EmployerSerializer, \
-    WorkProgramCompetenceIndicatorSerializer, ObjectsOfActivitySerializer, ImplementationAcademicPlanShortSerializer, \
-    CompetenceCommentSerializer, CompetenceSerializerForIndicator, \
-    IndicatorForUnfilledSerializer
-from .competence_handler import competence_dict_generator
-from .general_prof_competencies.models import IndicatorInGeneralProfCompetenceInGeneralCharacteristic, \
-    GeneralProfCompetencesInGroupOfGeneralCharacteristic, GroupOfGeneralProfCompetencesInEducationalStandard
-from .general_prof_competencies.serializers import GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer, \
-    GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer
-from .key_competences.models import IndicatorInKeyCompetenceInGeneralCharacteristic, \
-    KeyCompetencesInGroupOfGeneralCharacteristic, GroupOfKeyCompetencesInEducationalStandard
-from .key_competences.serializers import GroupOfKeyCompetencesInGeneralCharacteristicSerializer, \
-    KeyCompetencesInGroupOfGeneralCharacteristicSerializer
-from .over_professional_competencies.models import GroupOfOverProfCompetencesInEducationalStandard, \
-    OverProfCompetencesInGroupOfGeneralCharacteristic, IndicatorInOverProfCompetenceInGeneralCharacteristic
-from .over_professional_competencies.serializers import GroupOfOverProfCompetencesInGeneralCharacteristicSerializer, \
-    OverProfCompetencesInGroupOfGeneralCharacteristicSerializer
-from .pk_comptencies.models import GroupOfPkCompetencesInGeneralCharacteristic, \
-    PkCompetencesInGroupOfGeneralCharacteristic, IndicatorInPkCompetenceInGeneralCharacteristic
-from .pk_comptencies.serializers import GroupOfPkCompetencesInGeneralCharacteristicSerializer, \
-    PkCompetencesInGroupOfGeneralCharacteristicSerializer
-from .process_modules_for_matrix import recursion_module_matrix
-
-from .serializers import ProfessionalStandardSerializer
-
-from workprogramsapp.serializers import ImplementationAcademicPlanSerializer, IndicatorSerializer, \
-    WorkProgramInFieldOfStudySerializerForCb, ZunForManyCreateSerializer, WorkProgramInFieldOfStudyWithAPSerializer
-
-# --Работа с образовательной программой
-from workprogramsapp.models import EducationalProgram, GeneralCharacteristics, Department, Profession, WorkProgram, \
-    ImplementationAcademicPlan, Competence, Indicator, WorkProgramInFieldOfStudy, Zun, GeneralizedLaborFunctions, \
-    KindsOfActivity, EmployerRepresentative, DisciplineBlockModule, DisciplineBlock, \
-    WorkProgramChangeInDisciplineBlockModule, ObjectsOfActivity, AcademicPlan, CompetenceComments
+from workprogramsapp.educational_program.competence_handler import (
+    competence_dict_generator,
+)
+from workprogramsapp.educational_program.general_prof_competencies.models import (
+    GeneralProfCompetencesInGroupOfGeneralCharacteristic,
+)
+from workprogramsapp.educational_program.general_prof_competencies.serializers import (
+    GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer,
+)
+from workprogramsapp.educational_program.key_competences.models import (
+    KeyCompetencesInGroupOfGeneralCharacteristic,
+)
+from workprogramsapp.educational_program.key_competences.serializers import (
+    KeyCompetencesInGroupOfGeneralCharacteristicSerializer,
+)
+from workprogramsapp.educational_program.over_professional_competencies.models import (
+    OverProfCompetencesInGroupOfGeneralCharacteristic,
+)
+from workprogramsapp.educational_program.over_professional_competencies.serializers import (
+    OverProfCompetencesInGroupOfGeneralCharacteristicSerializer,
+)
+from workprogramsapp.educational_program.pk_comptencies.models import (
+    GroupOfPkCompetencesInGeneralCharacteristic,
+    IndicatorInPkCompetenceInGeneralCharacteristic,
+    PkCompetencesInGroupOfGeneralCharacteristic,
+)
+from workprogramsapp.educational_program.pk_comptencies.serializers import (
+    PkCompetencesInGroupOfGeneralCharacteristicSerializer,
+)
+from workprogramsapp.educational_program.process_modules_for_matrix import (
+    recursion_module_matrix,
+)
+from workprogramsapp.educational_program.serializers import (
+    CompetenceCommentSerializer,
+    CompetenceSerializerForIndicator,
+    DepartmentSerializer,
+    EducationalCreateProgramSerializer,
+    EducationalProgramSerializer,
+    EducationalProgramUpdateSerializer,
+    EmployerSerializer,
+    GeneralCharacteristicsSerializer,
+    GeneralLaborFunctionsSerializer,
+    ImplementationAcademicPlanShortSerializer,
+    IndicatorForUnfilledSerializer,
+    KindsOfActivitySerializerForEd,
+    ObjectsOfActivitySerializer,
+)
+from workprogramsapp.educational_program.serializers import (
+    ProfessionalStandardSerializer,
+)
+from workprogramsapp.expertise.serializers import (
+    WorkProgramShortForExperiseSerializerWithStructUnit,
+)
+from workprogramsapp.models import (
+    AcademicPlan,
+    Competence,
+    CompetenceComments,
+    Department,
+    DisciplineBlock,
+    DisciplineBlockModule,
+    EducationalProgram,
+    EmployerRepresentative,
+    GeneralCharacteristics,
+    GeneralizedLaborFunctions,
+    ImplementationAcademicPlan,
+    Indicator,
+    KindsOfActivity,
+    ObjectsOfActivity,
+    WorkProgram,
+    WorkProgramInFieldOfStudy,
+    Zun,
+)
 from workprogramsapp.models import ProfessionalStandard
-
-# Права доступа
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsEducationPlanDeveloper, IsExpertiseMaster
-
-# Блок реализации АПИ для КПУД интерфейсов
-from ..expertise.serializers import WorkProgramShortForExperiseSerializerWithStructUnit
-from ..notifications.emails.send_mail import mail_sender
+from workprogramsapp.notifications.emails.send_mail import mail_sender
+from workprogramsapp.permissions import (
+    IsEducationPlanDeveloper,
+    IsExpertiseMaster,
+    IsRpdDeveloperOrReadOnly,
+)
+from workprogramsapp.serializers import (
+    ImplementationAcademicPlanSerializer,
+    IndicatorSerializer,
+    WorkProgramInFieldOfStudySerializerForCb,
+    WorkProgramInFieldOfStudyWithAPSerializer,
+    ZunForManyCreateSerializer,
+)
 
 
 class EducationalProgramListAPIView(generics.ListAPIView):
     serializer_class = EducationalProgramSerializer
     queryset = EducationalProgram.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
-    search_fields = ['qualification', 'year_of_recruitment', 'manager']
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
+    search_fields = ["qualification", "year_of_recruitment", "manager"]
     # filterset_fields = ['qualification',
     #                     'implementation_of_academic_plan__academic_plan__educational_profile',
     #                     'implementation_of_academic_plan__field_of_study__title',
@@ -91,7 +131,9 @@ class EducationalProgramCreateAPIView(generics.CreateAPIView):
         general_characteristic = GeneralCharacteristics()
         general_characteristic.save()
         ep = serializer.save()
-        GeneralCharacteristics.objects.filter(id=general_characteristic.id).update(educational_program=ep.id)
+        GeneralCharacteristics.objects.filter(id=general_characteristic.id).update(
+            educational_program=ep.id
+        )
 
 
 class EducationalProgramDestroyView(generics.DestroyAPIView):
@@ -118,7 +160,7 @@ class GeneralCharacteristicsDetailsWithEducationalProgramView(generics.RetrieveA
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get(self, request, **kwargs):
-        data = GeneralCharacteristics.objects.get(educational_program=self.kwargs['pk'])
+        data = GeneralCharacteristics.objects.get(educational_program=self.kwargs["pk"])
         serializer = self.get_serializer(data)
         return Response(serializer.data)
 
@@ -127,14 +169,15 @@ class GeneralCharacteristicsListAPIView(generics.ListAPIView):
     serializer_class = GeneralCharacteristicsSerializer
     queryset = GeneralCharacteristics.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['educational_program__title',
-                     'educational_program__year',
-                     'educational_program__qualification',
-                     'educational_program__title',
-                     'educational_program__year',
-                     'educational_program__field_of_study__title',
-                     'educational_program__field_of_study__number',
-                     ]
+    search_fields = [
+        "educational_program__title",
+        "educational_program__year",
+        "educational_program__qualification",
+        "educational_program__title",
+        "educational_program__year",
+        "educational_program__field_of_study__title",
+        "educational_program__field_of_study__number",
+    ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -163,7 +206,9 @@ class GeneralCharacteristicsDetailsView(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = GeneralCharacteristicsSerializer(instance, context={'request': request})
+        serializer = GeneralCharacteristicsSerializer(
+            instance, context={"request": request}
+        )
         return Response(serializer.data)
 
 
@@ -171,7 +216,7 @@ class DepartmentListAPIView(generics.ListAPIView):
     serializer_class = DepartmentSerializer
     queryset = Department.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title']
+    search_fields = ["title"]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -202,59 +247,60 @@ class DepartmentDetailsView(generics.RetrieveAPIView):
 class ProfessionalStandardSet(viewsets.ModelViewSet):
     queryset = ProfessionalStandard.objects.all()
     serializer_class = ProfessionalStandardSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    filter_backends = (
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    )
     permission_classes = [IsRpdDeveloperOrReadOnly]
-    filterset_fields = ['title', 'code_of_prof_area'
-                        ]
-    search_fields = ['title', 'code']
+    filterset_fields = ["title", "code_of_prof_area"]
+    search_fields = ["title", "code"]
 
 
 class GeneralizedLaborFunctionsSet(viewsets.ModelViewSet):
-    """
-    CRUD для обобщенных трудовых сущностей
-    """
+    """CRUD для обобщенных трудовых сущностей."""
+
     queryset = GeneralizedLaborFunctions.objects.all()
     serializer_class = GeneralLaborFunctionsSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
-    search_fields = ['name', 'code']
+    search_fields = ["name", "code"]
 
 
 class KindsOfActivitySet(viewsets.ModelViewSet):
-    """
-    CRUD для сфер деятельности
-    """
+    """CRUD для сфер деятельности."""
+
     queryset = KindsOfActivity.objects.all()
     serializer_class = KindsOfActivitySerializerForEd
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
-    search_fields = ['name']
+    search_fields = ["name"]
 
 
 class ObjectsOfActivitySet(viewsets.ModelViewSet):
-    """
-    CRUD для сфер деятельности
-    """
+    """CRUD для сфер деятельности."""
+
     queryset = ObjectsOfActivity.objects.all()
     serializer_class = ObjectsOfActivitySerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class EmployerSet(mixins.CreateModelMixin,
-                  mixins.UpdateModelMixin,
-                  mixins.DestroyModelMixin,
-                  GenericViewSet):
-    """
-    CRUD представителей работодателей
-    """
+class EmployerSet(
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    GenericViewSet,
+):
+    """CRUD представителей работодателей."""
+
     queryset = EmployerRepresentative.objects.all()
     serializer_class = EmployerSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 @permission_classes((IsAdminUser,))
 @transaction.atomic
 def UploadCompetences(request):
@@ -268,7 +314,9 @@ def UploadCompetences(request):
         # print(op["id_op"])
         print(op["id_op"])
         try:
-            general_characteristic = GeneralCharacteristics.objects.get(educational_program__in=op["id_op"])
+            general_characteristic = GeneralCharacteristics.objects.get(
+                educational_program__in=op["id_op"]
+            )
         except GeneralCharacteristics.DoesNotExist:
             general_characteristic = GeneralCharacteristics.objects.create()
             general_characteristic.educational_program.add(*op["id_op"])
@@ -276,24 +324,36 @@ def UploadCompetences(request):
         for competence in op["competence_list"]:
             competence_to_add = None
             indicator_from_db = []
-            competence_from_db = Competence.objects.filter(name__iexact=competence["competence_name"].lower())
+            competence_from_db = Competence.objects.filter(
+                name__iexact=competence["competence_name"].lower()
+            )
             if competence_from_db:
                 for db_competence in competence_from_db:
-                    indicator_from_db = list(Indicator.objects.filter(competence=db_competence))
-                    indicator_from_db_name_list = [ind.name.lower() for ind in indicator_from_db].sort()
-                    indicators_add_list = [ind["indicator_name"].lower() for ind in
-                                           competence["indicators_list"]].sort()
+                    indicator_from_db = list(
+                        Indicator.objects.filter(competence=db_competence)
+                    )
+                    indicator_from_db_name_list = [
+                        ind.name.lower() for ind in indicator_from_db
+                    ].sort()
+                    indicators_add_list = [
+                        ind["indicator_name"].lower()
+                        for ind in competence["indicators_list"]
+                    ].sort()
                     if indicator_from_db_name_list == indicators_add_list:
                         competence_to_add = db_competence
                         break
 
             if not competence_to_add:
-                competence_to_add = Competence.objects.create(number=competence["id_competence"],
-                                                              name=competence["competence_name"])
+                competence_to_add = Competence.objects.create(
+                    number=competence["id_competence"],
+                    name=competence["competence_name"],
+                )
                 for indicator in competence["indicators_list"]:
-                    created_indicator = Indicator.objects.create(number=indicator["id_indicator"],
-                                                                 name=indicator["indicator_name"],
-                                                                 competence=competence_to_add)
+                    created_indicator = Indicator.objects.create(
+                        number=indicator["id_indicator"],
+                        name=indicator["indicator_name"],
+                        competence=competence_to_add,
+                    )
                     # Будем ли мы привязывать индикаторы к РПД теперь?
                     """for wp in indicator["wp_list"]:
                         wp_in_fos = WorkProgramInFieldOfStudy.objects.filter(work_program_id=wp,
@@ -309,15 +369,21 @@ def UploadCompetences(request):
 
             # pprint(competence_to_add)
             # pprint(indicator_from_db)
-            comp_group, created = CompGroupModel.objects.get_or_create(name=competence["competence_group"],
-                                                                       general_characteristic=general_characteristic)
-            comp_general = CompGeneralModel.objects.create(group_of_pk=comp_group, competence=competence_to_add)
+            comp_group, created = CompGroupModel.objects.get_or_create(
+                name=competence["competence_group"],
+                general_characteristic=general_characteristic,
+            )
+            comp_general = CompGeneralModel.objects.create(
+                group_of_pk=comp_group, competence=competence_to_add
+            )
             for indicator in indicator_from_db:
-                CompIndicatorModel.objects.create(competence_in_group_of_pk=comp_general, indicator=indicator)
+                CompIndicatorModel.objects.create(
+                    competence_in_group_of_pk=comp_general, indicator=indicator
+                )
     return Response("γοητεία")
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def GetCompetenceMatrix(request, gen_pk):
     unique_wp = []  # Уникальные РПД в нескольких УП
@@ -327,47 +393,82 @@ def GetCompetenceMatrix(request, gen_pk):
     academic_plans = gen_characteristic.educational_program.all()
     pk_competences = PkCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-            group_of_pk__general_characteristic_id=gen_pk, competence__isnull=False).order_by(
-            "competence").distinct("competence"),
-        many=True).data
+            group_of_pk__general_characteristic_id=gen_pk, competence__isnull=False
+        )
+        .order_by("competence")
+        .distinct("competence"),
+        many=True,
+    ).data
     general_prof_competences = GeneralProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=GeneralProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
             group_of_pk__educational_standard=gen_characteristic.educational_standard,
-            competence__isnull=False).order_by("competence__number").distinct(), many=True).data
+            competence__isnull=False,
+        )
+        .order_by("competence__number")
+        .distinct(),
+        many=True,
+    ).data
     key_competences = KeyCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=KeyCompetencesInGroupOfGeneralCharacteristic.objects.filter(
             group_of_pk__educational_standard=gen_characteristic.educational_standard,
-            competence__isnull=False).order_by("competence__number").distinct(), many=True).data
+            competence__isnull=False,
+        )
+        .order_by("competence__number")
+        .distinct(),
+        many=True,
+    ).data
     over_prof_competences = OverProfCompetencesInGroupOfGeneralCharacteristicSerializer(
         instance=OverProfCompetencesInGroupOfGeneralCharacteristic.objects.filter(
             group_of_pk__educational_standard=gen_characteristic.educational_standard,
-            competence__isnull=False).order_by("competence__number").distinct(), many=True).data
-    competence_matrix = {"pk_competences": pk_competences, "general_prof_competences": general_prof_competences,
-                         "key_competences": key_competences, "over_prof_competences": over_prof_competences, }
+            competence__isnull=False,
+        )
+        .order_by("competence__number")
+        .distinct(),
+        many=True,
+    ).data
+    competence_matrix = {
+        "pk_competences": pk_competences,
+        "general_prof_competences": general_prof_competences,
+        "key_competences": key_competences,
+        "over_prof_competences": over_prof_competences,
+    }
     matrix_list = []
     first_ap_iter = True
     for ap in academic_plans:
         academic_plan = ap.academic_plan
-        academic_plan_matrix_dict = {"academic_plan": ap.title, "ap_id": ap.id, "ap_isu_id": ap.ap_isu_id,
-                                     "discipline_blocks_in_academic_plan": []}
+        academic_plan_matrix_dict = {
+            "academic_plan": ap.title,
+            "ap_id": ap.id,
+            "ap_isu_id": ap.ap_isu_id,
+            "discipline_blocks_in_academic_plan": [],
+        }
         matrix_list.append(academic_plan_matrix_dict)
         for block in DisciplineBlock.objects.filter(academic_plan=academic_plan):
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
             # academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
-            for block_module in DisciplineBlockModule.objects.filter(descipline_block=block):
-                block_module_dict = recursion_module_matrix(block_module, unique_wp, unique_gia, unique_practice,
-                                                            first_ap_iter)
-                if block_module_dict["change_blocks_of_work_programs_in_modules"] or block_module_dict["childs"]:
+            for block_module in DisciplineBlockModule.objects.filter(
+                descipline_block=block
+            ):
+                block_module_dict = recursion_module_matrix(
+                    block_module, unique_wp, unique_gia, unique_practice, first_ap_iter
+                )
+                if (
+                    block_module_dict["change_blocks_of_work_programs_in_modules"]
+                    or block_module_dict["childs"]
+                ):
                     block_dict["modules_in_discipline_block"].append(block_module_dict)
             if block_dict["modules_in_discipline_block"]:
-                academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(block_dict)
+                academic_plan_matrix_dict["discipline_blocks_in_academic_plan"].append(
+                    block_dict
+                )
         list_to_sort = academic_plan_matrix_dict["discipline_blocks_in_academic_plan"]
-        newlist = sorted(list_to_sort, key=lambda d: d['name'])
+        newlist = sorted(list_to_sort, key=lambda d: d["name"])
         academic_plan_matrix_dict["discipline_blocks_in_academic_plan"] = newlist
         first_ap_iter = False
     competence_matrix["wp_matrix"] = matrix_list
     competence_matrix["educational_program"] = ImplementationAcademicPlanSerializer(
-        gen_characteristic.educational_program.all(), many=True).data
+        gen_characteristic.educational_program.all(), many=True
+    ).data
     # print(matrix_list)
     return Response(competence_matrix)
 
@@ -384,75 +485,96 @@ def GetCompetenceMatrix(request, gen_pk):
 
 
 @swagger_auto_schema(
-    method='post',
+    method="post",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=None,
         properties={
-            'new_status': openapi.Schema(type=openapi.TYPE_STRING,
-                                         description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
-        }
+            "new_status": openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description="Новый статус после проверки (in_work / on_check) (необязательное поле)",
+            )
+        },
     ),
-    operation_description='Метод для изменения статусов учебного плана')
-@api_view(['POST'])
+    operation_description="Метод для изменения статусов учебного плана",
+)
+@api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 @transaction.atomic
 def academ_plan_check(request, ap_id):
     ap = AcademicPlan.objects.get(id=ap_id)
     if ap is not None:
-        if ap.on_check == "on_check" and bool(request.user.groups.filter(name="expertise_master")):
-            if request.data['new_status'] == 'in_work':
+        if ap.on_check == "on_check" and bool(
+            request.user.groups.filter(name="expertise_master")
+        ):
+            if request.data["new_status"] == "in_work":
                 ap.on_check = "in_work"
                 ap.save()
-            elif request.data['new_status'] == 'verified':
+            elif request.data["new_status"] == "verified":
                 ap.on_check = "verified"
                 ap.save()
-            return Response({'message': 'status changed', 'status': True}, status=200)
-        mail_sender(topic=f'Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке',
-                    text=f'Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке',
-                    emails=['osop@itmo.ru'], users=[])
+            return Response({"message": "status changed", "status": True}, status=200)
+        mail_sender(
+            topic=f"Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке",
+            text=f"Учебный план с КОП ИД {ap.id} и ИСУ ИД {ap.ap_isu_id} готов к проверке",
+            emails=["osop@itmo.ru"],
+            users=[],
+        )
         ap.on_check = "on_check"
         ap.save()
-        return Response({'message': 'email sent', 'status': True}, status=200)
+        return Response({"message": "email sent", "status": True}, status=200)
     else:
-        return Response({'message': 'academic plan was sent', 'status': False}, status=400)
+        return Response(
+            {"message": "academic plan was sent", "status": False}, status=400
+        )
 
 
 @swagger_auto_schema(
-    method='post',
+    method="post",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=None,
         properties={
-            'block': openapi.Schema(
-                type=openapi.TYPE_INTEGER, description="id объекта discipline_blocks_in_academic_plan в учебном плане"),
-            'new_ordinal_number': openapi.Schema(
-                type=openapi.TYPE_INTEGER, description="Новый порядковый номер модуля (modules_in_discipline_block)"),
-            'old_ordinal_number': openapi.Schema(
-                type=openapi.TYPE_INTEGER, description="Старый порядковый номер модуля (modules_in_discipline_block)")
-        }
+            "block": openapi.Schema(
+                type=openapi.TYPE_INTEGER,
+                description="id объекта discipline_blocks_in_academic_plan в учебном плане",
+            ),
+            "new_ordinal_number": openapi.Schema(
+                type=openapi.TYPE_INTEGER,
+                description="Новый порядковый номер модуля (modules_in_discipline_block)",
+            ),
+            "old_ordinal_number": openapi.Schema(
+                type=openapi.TYPE_INTEGER,
+                description="Старый порядковый номер модуля (modules_in_discipline_block)",
+            ),
+        },
     ),
-    operation_description='Метод для изменения порядкового номера модуля в блоке учебного плана. '
-                          'Для удаления элемента из списка new_ordinal_number равен = -1. '
-                          'Любое другое значение - запрос на изменение порядка в списке.')
-@api_view(['POST'])
+    operation_description="Метод для изменения порядкового номера модуля в блоке учебного плана. "
+    "Для удаления элемента из списка new_ordinal_number равен = -1. "
+    "Любое другое значение - запрос на изменение порядка в списке.",
+)
+@api_view(["POST"])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def new_ordinal_numbers_for_modules_in_ap(request):
     try:
         DisciplineBlockModule.new_ordinal_number(
-            DisciplineBlock.objects.get(id=int(request.data.get('block'))),
-            int(request.data.get('old_ordinal_number')),
-            int(request.data.get('new_ordinal_number')))
+            DisciplineBlock.objects.get(id=int(request.data.get("block"))),
+            int(request.data.get("old_ordinal_number")),
+            int(request.data.get("new_ordinal_number")),
+        )
         return Response(status=200)
     except:
         return Response(status=400)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def academic_plan_all_ids_by_year(request, year):
-    academic_plan_all_ids = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=year) \
-        .values_list('id', flat=True).distinct()
+    academic_plan_all_ids = (
+        AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=year)
+        .values_list("id", flat=True)
+        .distinct()
+    )
     return Response({"academic_plan_ids": academic_plan_all_ids})
 
 
@@ -461,61 +583,72 @@ class UploadProfStandards(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         file = request.FILES["standards"]
-        standards = pd.read_csv(file, delimiter=';', encoding="utf-8")
+        standards = pd.read_csv(file, delimiter=";", encoding="utf-8")
         for i, row in standards.iterrows():
             if pd.isnull(row["Номер (регистрационный)"]):
                 break
             else:
-                ProfessionalStandard.objects.create(registration_number=int(row["Номер (регистрационный)"]),
-                                                    title=row["Название стандарта"],
-                                                    name_of_prof_area=row["Наименование области проф. деятельности"],
-                                                    code=str(row["Код ПС"]).split(".")[0],
-                                                    code_of_prof_area=str(row["Код ПС"]))
+                ProfessionalStandard.objects.create(
+                    registration_number=int(row["Номер (регистрационный)"]),
+                    title=row["Название стандарта"],
+                    name_of_prof_area=row["Наименование области проф. деятельности"],
+                    code=str(row["Код ПС"]).split(".")[0],
+                    code_of_prof_area=str(row["Код ПС"]),
+                )
 
         return Response("standards")
 
 
 @swagger_auto_schema(
-    method='post',
+    method="post",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         required=None,
         properties={
-            'new_status': openapi.Schema(type=openapi.TYPE_STRING,
-                                         description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
-        }
+            "new_status": openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description="Новый статус после проверки (in_work / on_check) (необязательное поле)",
+            )
+        },
     ),
-    operation_description='Метод для изменения статусов общей характеристики')
-@api_view(['POST'])
+    operation_description="Метод для изменения статусов общей характеристики",
+)
+@api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 @transaction.atomic
 def gh_check(request, gh_id):
     gh = GeneralCharacteristics.objects.get(id=gh_id)
     if gh is not None:
-        if gh.on_check == "on_check" and bool(request.user.groups.filter(name="expertise_master")):
-            if request.data['new_status'] == 'in_work':
+        if gh.on_check == "on_check" and bool(
+            request.user.groups.filter(name="expertise_master")
+        ):
+            if request.data["new_status"] == "in_work":
                 gh.on_check = "in_work"
                 gh.save()
-            elif request.data['new_status'] == 'verified':
+            elif request.data["new_status"] == "verified":
                 gh.on_check = "verified"
                 gh.save()
-            return Response({'message': 'status changed', 'status': True}, status=200)
-        mail_sender(topic=f'Общая характеристика с КОП ИД {gh.id} готова к проверке',
-                    text=f'Общая характеристика с КОП ИД {gh.id} готова к проверке',
-                    emails=['osop@itmo.ru'], users=[])
+            return Response({"message": "status changed", "status": True}, status=200)
+        mail_sender(
+            topic=f"Общая характеристика с КОП ИД {gh.id} готова к проверке",
+            text=f"Общая характеристика с КОП ИД {gh.id} готова к проверке",
+            emails=["osop@itmo.ru"],
+            users=[],
+        )
         gh.on_check = "on_check"
         gh.save()
-        return Response({'message': 'email sent', 'status': True}, status=200)
+        return Response({"message": "email sent", "status": True}, status=200)
     else:
-        return Response({'message': 'academic plan was sent', 'status': False}, status=400)
+        return Response(
+            {"message": "academic plan was sent", "status": False}, status=400
+        )
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def get_all_ap_with_competences_and_indicators(request, wp_id):
-    """
+    """В GET-параметры можно передать
 
-    В GET-параметры можно передать
     ap_id - id объекта AcademicPlan для фильтрации
     imp_id - id объекта ImplementationAcademicPlan для фильтрации
     year - фильтр по годам УП
@@ -525,27 +658,36 @@ def get_all_ap_with_competences_and_indicators(request, wp_id):
     year = request.GET.get("year")
     ap_list_dict = []
     competences = Competence.objects.filter(
-        indicator_in_competencse__zun__wp_in_fs__work_program__id=wp_id).distinct()
+        indicator_in_competencse__zun__wp_in_fs__work_program__id=wp_id
+    ).distinct()
     for competence in competences:
-        zuns = Zun.objects.filter(wp_in_fs__work_program__id=wp_id,
-                                  indicator_in_zun__competence__id=competence.id).order_by("indicator_in_zun__number")
+        zuns = Zun.objects.filter(
+            wp_in_fs__work_program__id=wp_id,
+            indicator_in_zun__competence__id=competence.id,
+        ).order_by("indicator_in_zun__number")
         for zun in zuns:
             try:
-                indicator = Indicator.objects.get(competence=competence.id,
-                                                  zun__id=zun.id)
+                indicator = Indicator.objects.get(
+                    competence=competence.id, zun__id=zun.id
+                )
                 indicator = IndicatorSerializer(indicator).data
             except:
                 indicator = None
 
             items_array = []
-            items = Items.objects.filter(item_in_outcomes__item_in_wp__id=zun.id,
-                                         item_in_outcomes__item_in_wp__wp_in_fs__work_program__id=wp_id,
-                                         item_in_outcomes__item_in_wp__indicator_in_zun__competence__id=competence.id)
+            items = Items.objects.filter(
+                item_in_outcomes__item_in_wp__id=zun.id,
+                item_in_outcomes__item_in_wp__wp_in_fs__work_program__id=wp_id,
+                item_in_outcomes__item_in_wp__indicator_in_zun__competence__id=competence.id,
+            )
             for item in items:
                 items_array.append({"id": item.id, "name": item.name})
             modules = DisciplineBlockModule.objects.filter(
-                change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)
-            queryset = ImplementationAcademicPlan.get_all_imp_by_modules(modules=modules).distinct()
+                change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id
+            )
+            queryset = ImplementationAcademicPlan.get_all_imp_by_modules(
+                modules=modules
+            ).distinct()
             if imp_id:
                 queryset = queryset.filter(academic_plan__id=imp_id)
             if ap_id:
@@ -559,12 +701,26 @@ def get_all_ap_with_competences_and_indicators(request, wp_id):
                         dict_with_ap = ap_dict
                         break
                 if not dict_with_ap:
-                    dict_with_ap = dict(ImplementationAcademicPlanShortSerializer(ap, many=False).data)
+                    dict_with_ap = dict(
+                        ImplementationAcademicPlanShortSerializer(ap, many=False).data
+                    )
                     dict_with_ap["competences"] = [
-                        {"id": competence.id, "name": competence.name, "number": competence.number,
-                         "zuns": [{"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
-                                   "attainments": zun.attainments, "indicator": indicator,
-                                   "items": items_array}]}]
+                        {
+                            "id": competence.id,
+                            "name": competence.name,
+                            "number": competence.number,
+                            "zuns": [
+                                {
+                                    "id": zun.id,
+                                    "knowledge": zun.knowledge,
+                                    "skills": zun.skills,
+                                    "attainments": zun.attainments,
+                                    "indicator": indicator,
+                                    "items": items_array,
+                                }
+                            ],
+                        }
+                    ]
                     ap_list_dict.append(dict_with_ap)
                 else:
                     dict_with_competences = None
@@ -573,32 +729,54 @@ def get_all_ap_with_competences_and_indicators(request, wp_id):
                             dict_with_competences = competence_dict
                     if not dict_with_competences:
                         dict_with_ap["competences"].append(
-                            {"id": competence.id, "name": competence.name, "number": competence.number,
-                             "zuns": [{"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
-                                       "attainments": zun.attainments, "indicator": indicator,
-                                       "items": items_array}]})
+                            {
+                                "id": competence.id,
+                                "name": competence.name,
+                                "number": competence.number,
+                                "zuns": [
+                                    {
+                                        "id": zun.id,
+                                        "knowledge": zun.knowledge,
+                                        "skills": zun.skills,
+                                        "attainments": zun.attainments,
+                                        "indicator": indicator,
+                                        "items": items_array,
+                                    }
+                                ],
+                            }
+                        )
                     else:
                         dict_with_competences["zuns"].append(
-                            {"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
-                             "attainments": zun.attainments, "indicator": indicator,
-                             "items": items_array})
+                            {
+                                "id": zun.id,
+                                "knowledge": zun.knowledge,
+                                "skills": zun.skills,
+                                "attainments": zun.attainments,
+                                "indicator": indicator,
+                                "items": items_array,
+                            }
+                        )
     return Response(ap_list_dict, status=200)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def get_all_competences_and_indicators_for_wp(request, wp_id):
     competences = Competence.objects.filter(
-        indicator_in_competencse__zun__wp_in_fs__work_program__id=wp_id).distinct()
+        indicator_in_competencse__zun__wp_in_fs__work_program__id=wp_id
+    ).distinct()
     competences_dict = []
     for competence in competences:
-        zuns = Zun.objects.filter(wp_in_fs__work_program__id=wp_id,
-                                  indicator_in_zun__competence__id=competence.id).order_by("indicator_in_zun__number")
+        zuns = Zun.objects.filter(
+            wp_in_fs__work_program__id=wp_id,
+            indicator_in_zun__competence__id=competence.id,
+        ).order_by("indicator_in_zun__number")
         zuns_array = []
         for zun in zuns:
             try:
-                indicator = Indicator.objects.get(competence=competence.id,
-                                                  zun__id=zun.id)
+                indicator = Indicator.objects.get(
+                    competence=competence.id, zun__id=zun.id
+                )
                 indicator = IndicatorSerializer(indicator).data
             except:
                 indicator = None
@@ -606,39 +784,59 @@ def get_all_competences_and_indicators_for_wp(request, wp_id):
             # for indicator in indicators:
             #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
             items_array = []
-            items = Items.objects.filter(item_in_outcomes__item_in_wp__id=zun.id,
-                                         item_in_outcomes__item_in_wp__wp_in_fs__work_program__id=wp_id,
-                                         item_in_outcomes__item_in_wp__indicator_in_zun__competence__id=competence.id)
+            items = Items.objects.filter(
+                item_in_outcomes__item_in_wp__id=zun.id,
+                item_in_outcomes__item_in_wp__wp_in_fs__work_program__id=wp_id,
+                item_in_outcomes__item_in_wp__indicator_in_zun__competence__id=competence.id,
+            )
             for item in items:
                 items_array.append({"id": item.id, "name": item.name})
             # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
             """queryset = ImplementationAcademicPlan.objects.filter(
                 academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)"""
             modules = DisciplineBlockModule.objects.filter(
-                change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)
-            queryset = ImplementationAcademicPlan.get_all_imp_by_modules(modules=modules)
+                change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id
+            )
+            queryset = ImplementationAcademicPlan.get_all_imp_by_modules(
+                modules=modules
+            )
             serializer = ImplementationAcademicPlanSerializer(queryset, many=True)
             if queryset.exists():
-                zuns_array.append({"id": zun.id, "knowledge": zun.knowledge, "skills": zun.skills,
-                                   "attainments": zun.attainments, "indicator": indicator,
-                                   "items": items_array, "educational_program": serializer.data,
-                                   "wp_in_fs": WorkProgramInFieldOfStudySerializerForCb(
-                                       WorkProgramInFieldOfStudy.objects.get(zun_in_wp=zun.id)).data["id"]})
-        competences_dict.append({"id": competence.id, "name": competence.name, "number": competence.number,
-                                 "zuns": zuns_array})
+                zuns_array.append(
+                    {
+                        "id": zun.id,
+                        "knowledge": zun.knowledge,
+                        "skills": zun.skills,
+                        "attainments": zun.attainments,
+                        "indicator": indicator,
+                        "items": items_array,
+                        "educational_program": serializer.data,
+                        "wp_in_fs": WorkProgramInFieldOfStudySerializerForCb(
+                            WorkProgramInFieldOfStudy.objects.get(zun_in_wp=zun.id)
+                        ).data["id"],
+                    }
+                )
+        competences_dict.append(
+            {
+                "id": competence.id,
+                "name": competence.name,
+                "number": competence.number,
+                "zuns": zuns_array,
+            }
+        )
     return Response({"competences": competences_dict})
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 def zun_many_remove(request):
-    '''
+    """
     EXAMPLE:
 
     {
         "zuns_to_delete": [1, 2, 3]
     }
-    '''
+    """
     zuns_to_delete = request.data.get("zuns_to_delete")
 
     for zun in zuns_to_delete:
@@ -652,40 +850,42 @@ class WorkProgramInFieldOfStudyWithAPByWP(generics.ListAPIView):
     serializer_class = WorkProgramInFieldOfStudyWithAPSerializer
 
     def get_queryset(self):
-        wp_id = self.kwargs['wp_id']
+        wp_id = self.kwargs["wp_id"]
         queryset = self.queryset.filter(work_program=wp_id)
         return queryset
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 def zun_copy(request):
-    '''
+    """
     EXAMPLE:
 
     {
         "zuns_to_copy": [1, 2, 3],
         "wp_in_fss" : [1, 2, 3]
     }
-    '''
+    """
     zuns_to_copy = request.data.get("zuns_to_copy")
     wp_in_fss = request.data.get("wp_in_fss")
     new_zuns = []
     for zun in zuns_to_copy:
         old_zun = Zun.objects.get(id=zun)
         for wp_in_fs in wp_in_fss:
-            new_zun = Zun.objects.create(wp_in_fs=WorkProgramInFieldOfStudy.objects.get(id=wp_in_fs),
-                                         indicator_in_zun=old_zun.indicator_in_zun)
+            new_zun = Zun.objects.create(
+                wp_in_fs=WorkProgramInFieldOfStudy.objects.get(id=wp_in_fs),
+                indicator_in_zun=old_zun.indicator_in_zun,
+            )
             new_zuns.append(new_zun)
     serializer = ZunForManyCreateSerializer(new_zuns, many=True)
 
     return Response(serializer.data, status=201)
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 def zun_copy_by_wps(request):
-    '''
+    """
     EXAMPLE:
 
     {
@@ -693,7 +893,7 @@ def zun_copy_by_wps(request):
         "wp_to_id" : 1,
         "general_characteristic_id":1
     }
-    '''
+    """
     gh_id = request.data.get("general_characteristic_id")
     wp_from_id = request.data.get("wp_from_id")
     wp_to_id = request.data.get("wp_to_id")
@@ -708,11 +908,16 @@ def zun_copy_by_wps(request):
         wp_to_changeblocks = changeblocks.filter(work_program=wp_to)
         print(wp_to_changeblocks)
         for old_zun in Zun.objects.filter(
-                wp_in_fs__work_program_change_in_discipline_block_module__in=wp_from_changeblocks):
+            wp_in_fs__work_program_change_in_discipline_block_module__in=wp_from_changeblocks
+        ):
             for wp_in_fs in WorkProgramInFieldOfStudy.objects.filter(
-                    work_program_change_in_discipline_block_module__in=wp_to_changeblocks):
+                work_program_change_in_discipline_block_module__in=wp_to_changeblocks
+            ):
                 zun_list_created.append(
-                    Zun.objects.create(indicator_in_zun=old_zun.indicator_in_zun, wp_in_fs=wp_in_fs))
+                    Zun.objects.create(
+                        indicator_in_zun=old_zun.indicator_in_zun, wp_in_fs=wp_in_fs
+                    )
+                )
 
     serializer = ZunForManyCreateSerializer(zun_list_created, many=True)
     return Response(serializer.data, status=201)
@@ -720,73 +925,93 @@ def zun_copy_by_wps(request):
 
 class CompetenceCommentsView(generics.ListAPIView):
     """
-    View для получения комментариев к компетенции
-    Комментарии можно получить или отправить, указав в адресе id компетенции,
+    View для получения комментариев к компетенции.
+    Комментарии можно получить или отправить, указав в адресе id компетенции.
     """
+
     queryset = CompetenceComments.objects.all()
     serializer_class = CompetenceCommentSerializer
 
     permission_classes = [IsExpertiseMaster]
 
     def get_queryset(self, *args, **kwargs):
-        if ('pk' in dict(self.kwargs)):
-            return CompetenceComments.objects.filter(competence__id=self.kwargs['pk'])
+        if "pk" in dict(self.kwargs):
+            return CompetenceComments.objects.filter(competence__id=self.kwargs["pk"])
         else:
             return CompetenceComments.objects.all()
 
 
 class CompetenceCommentCreateView(generics.CreateAPIView):
-    """
-    создание коммента к компетенции
-    """
+    """Создание комментария к компетенции."""
+
     queryset = CompetenceComments.objects.all()
     serializer_class = CompetenceCommentSerializer
     permission_classes = [IsExpertiseMaster]
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def get_all_unfilled_wp(request, gh_id):
     blocks_for_gh = DisciplineBlock.objects.filter(
-        academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=gh_id)
+        academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=gh_id
+    )
     wp_unfilled_set = WorkProgram.objects.none()
     for block in blocks_for_gh:
         if "1" in block.name or "2" in block.name:
             for module in block.modules_in_discipline_block.all():
-                cbs_for_block = DisciplineBlockModule.get_all_changeblocks_from_module(module)
+                cbs_for_block = DisciplineBlockModule.get_all_changeblocks_from_module(
+                    module
+                )
                 for cb_in_block in cbs_for_block:
                     wp_in_fs = cb_in_block.zuns_for_cb.all().first()
                     if not wp_in_fs:
                         continue
-                    if not Zun.objects.filter(wp_in_fs=wp_in_fs, indicator_in_zun__isnull=False).exists():
-                        wp_unfilled_set = wp_unfilled_set | WorkProgram.objects.filter(id=wp_in_fs.work_program.id)
+                    if not Zun.objects.filter(
+                        wp_in_fs=wp_in_fs, indicator_in_zun__isnull=False
+                    ).exists():
+                        wp_unfilled_set = wp_unfilled_set | WorkProgram.objects.filter(
+                            id=wp_in_fs.work_program.id
+                        )
 
         else:
             continue
-    response_data = WorkProgramShortForExperiseSerializerWithStructUnit(wp_unfilled_set, many=True)
+    response_data = WorkProgramShortForExperiseSerializerWithStructUnit(
+        wp_unfilled_set, many=True
+    )
     return Response(response_data.data, status=200)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes((IsAuthenticated,))
-def  get_all_unfilled_indicator(request, gh_id):
-    competence_with_indicators_list =[]
+def get_all_unfilled_indicator(request, gh_id):
+    competence_with_indicators_list = []
     blocks_for_gh = DisciplineBlock.objects.filter(
-        academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=gh_id)
+        academic_plan__academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=gh_id
+    )
 
     indicators_in_gh_list = list(
         Indicator.objects.filter(
-            Q(indicator_in_pk__competence_in_group_of_pk__group_of_pk__general_characteristic__id=gh_id) |
-            Q(indicator_in_opk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id) |
-            Q(indicator_in_gpk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id)|
-            Q(indicator_in_kk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id)
+            Q(
+                indicator_in_pk__competence_in_group_of_pk__group_of_pk__general_characteristic__id=gh_id
+            )
+            | Q(
+                indicator_in_opk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id
+            )
+            | Q(
+                indicator_in_gpk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id
+            )
+            | Q(
+                indicator_in_kk__competence_in_group_of_pk__group_of_pk__educational_standard__educational_standard_in_educational_program__id=gh_id
+            )
         ).distinct()
     )
     indicator_in_wp_list = []
     for block in blocks_for_gh:
         if "1" in block.name or "2" in block.name:
             for module in block.modules_in_discipline_block.all():
-                cbs_for_block = DisciplineBlockModule.get_all_changeblocks_from_module(module)
+                cbs_for_block = DisciplineBlockModule.get_all_changeblocks_from_module(
+                    module
+                )
                 for cb_in_block in cbs_for_block:
                     wp_in_fs = cb_in_block.zuns_for_cb.all().first()
                     if not wp_in_fs:
@@ -798,11 +1023,15 @@ def  get_all_unfilled_indicator(request, gh_id):
             continue
 
     indicator_unfilled_set = set(indicators_in_gh_list) - set(indicator_in_wp_list)
-    competences_with_unfilled_indicators = Competence.objects.filter(indicator_in_competencse__in=indicator_unfilled_set).distinct()
+    competences_with_unfilled_indicators = Competence.objects.filter(
+        indicator_in_competencse__in=indicator_unfilled_set
+    ).distinct()
     for competence in competences_with_unfilled_indicators:
-        indicators_in_competence= Indicator.objects.filter(competence=competence)
+        indicators_in_competence = Indicator.objects.filter(competence=competence)
         indicators_unfilled = set(indicators_in_competence) - set(indicator_in_wp_list)
         competence_serialized = dict(CompetenceSerializerForIndicator(competence).data)
-        competence_serialized["indicators"] = IndicatorForUnfilledSerializer(indicators_unfilled, many=True).data
+        competence_serialized["indicators"] = IndicatorForUnfilledSerializer(
+            indicators_unfilled, many=True
+        ).data
         competence_with_indicators_list.append(competence_serialized)
     return Response(competence_with_indicators_list, status=200)

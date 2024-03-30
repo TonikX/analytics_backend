@@ -1,25 +1,19 @@
-import datetime
-
-from django.db.models import Count
-# Сериализаторы
 from rest_framework import filters
-from rest_framework import generics, viewsets
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
+from rest_framework import viewsets
 
-# Сериализаторы
-from .serializers import OverProfCompetencesInGroupOfGeneralCharacteristicSerializer, \
-    IndicatorInOverProfCompetenceInGeneralCharacteristicSerializer, \
-    CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer, \
-    CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer, \
-    GroupOfOverProfCompetencesInGeneralCharacteristicSerializer, \
-    CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
-
-from .models import GroupOfOverProfCompetencesInEducationalStandard, OverProfCompetencesInGroupOfGeneralCharacteristic, \
-    IndicatorInOverProfCompetenceInGeneralCharacteristic
-
-# Права доступа
+from workprogramsapp.educational_program.over_professional_competencies.models import (
+    GroupOfOverProfCompetencesInEducationalStandard,
+    IndicatorInOverProfCompetenceInGeneralCharacteristic,
+    OverProfCompetencesInGroupOfGeneralCharacteristic,
+)
+from workprogramsapp.educational_program.over_professional_competencies.serializers import (
+    CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer,
+    CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer,
+    CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer,
+    GroupOfOverProfCompetencesInGeneralCharacteristicSerializer,
+    IndicatorInOverProfCompetenceInGeneralCharacteristicSerializer,
+    OverProfCompetencesInGroupOfGeneralCharacteristicSerializer,
+)
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
 
@@ -30,11 +24,11 @@ class OverProfCompetencesInGroupOfGeneralCharacteristicSet(viewsets.ModelViewSet
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action == "create":
             return CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer
-        if self.action == 'update':
+        if self.action == "update":
             return CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer
-        if self.action == 'partial_update':
+        if self.action == "partial_update":
             return CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer
         return OverProfCompetencesInGroupOfGeneralCharacteristicSerializer
 
@@ -46,26 +40,28 @@ class GroupOfOverProfCompetencesInGeneralCharacteristicsSet(viewsets.ModelViewSe
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action == "create":
             return CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer
-        if self.action == 'update':
+        if self.action == "update":
             return CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer
-        if self.action == 'partial_update':
+        if self.action == "partial_update":
             return CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer
         return GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
 
 
-class IndicatorGroupOfOverProfCompetencesInGeneralCharacteristicSet(viewsets.ModelViewSet):
+class IndicatorGroupOfOverProfCompetencesInGeneralCharacteristicSet(
+    viewsets.ModelViewSet
+):
     queryset = IndicatorInOverProfCompetenceInGeneralCharacteristic.objects.all()
     serializer_class = IndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action == "create":
             return CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
-        if self.action == 'update':
+        if self.action == "update":
             return CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
-        if self.action == 'partial_update':
+        if self.action == "partial_update":
             return CreateIndicatorInOverProfCompetenceInGeneralCharacteristicSerializer
         return GroupOfOverProfCompetencesInGeneralCharacteristicSerializer
