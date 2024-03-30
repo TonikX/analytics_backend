@@ -1,9 +1,9 @@
-from sentry_sdk import capture_exception, capture_event
+import numpy as np
+from sentry_sdk import capture_exception
 
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from workprogramsapp.models import WorkProgram, WorkProgramChangeInDisciplineBlockModule
-import numpy as np
 
 
 def sum_lists(l1, l2):
@@ -42,7 +42,9 @@ def generate_full_ze_list(ze_wp, semesters):
 
 
 def find_min_max_ze_by_term(lower_module, selection_parameter=0):
-    changeblocks = WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=lower_module)
+    changeblocks = WorkProgramChangeInDisciplineBlockModule.objects.filter(
+        discipline_block_module=lower_module
+    )
     count_for_parameter = 0
     total_min_ze_by_term = [0 for _ in range(10)]
     total_max_ze_by_term = [0 for _ in range(10)]
@@ -52,7 +54,9 @@ def find_min_max_ze_by_term(lower_module, selection_parameter=0):
         min_ze_by_term = [10 for _ in range(10)]
         max_ze_by_term = [0 for _ in range(10)]
         if changeblock.credit_units:
-            array_ze = np.array([[int(unit) for unit in changeblock.credit_units.split(", ")]])
+            array_ze = np.array(
+                [[int(unit) for unit in changeblock.credit_units.split(", ")]]
+            )
         else:
             objs = changeblock.work_program.all()
             if not objs.exists():
@@ -92,20 +96,34 @@ def recursion_module(obj):
                     unit_final_sum += recursion_module(childs[i])
             else:
                 work_programs = WorkProgram.objects.filter(
-                    work_program_in_change_block__discipline_block_module=obj)
+                    work_program_in_change_block__discipline_block_module=obj
+                )
                 if work_programs.exists():
                     for i in range(int(obj.selection_parametr)):
-                        unit_final_sum += sum([int(unit) for unit in work_programs[i].ze_v_sem.split(", ")])
+                        unit_final_sum += sum(
+                            [
+                                int(unit)
+                                for unit in work_programs[i].ze_v_sem.split(", ")
+                            ]
+                        )
 
-                gias = GIA.objects.filter(gia_in_change_block__discipline_block_module=obj)
+                gias = GIA.objects.filter(
+                    gia_in_change_block__discipline_block_module=obj
+                )
                 if gias.exists():
                     for i in range(int(obj.selection_parametr)):
-                        unit_final_sum += sum([int(unit) for unit in gias[i].ze_v_sem.split(", ")])
+                        unit_final_sum += sum(
+                            [int(unit) for unit in gias[i].ze_v_sem.split(", ")]
+                        )
 
-                practices = Practice.objects.filter(practice_in_change_block__discipline_block_module=obj)
+                practices = Practice.objects.filter(
+                    practice_in_change_block__discipline_block_module=obj
+                )
                 if practices.exists():
                     for i in range(int(obj.selection_parametr)):
-                        unit_final_sum += sum([int(unit) for unit in practices[i].ze_v_sem.split(", ")])
+                        unit_final_sum += sum(
+                            [int(unit) for unit in practices[i].ze_v_sem.split(", ")]
+                        )
 
         elif obj.selection_rule == "all" or obj.selection_rule == "any_quantity":
             if childs.exists():
@@ -113,27 +131,41 @@ def recursion_module(obj):
                     unit_final_sum += recursion_module(child)
             else:
                 work_programs = WorkProgram.objects.filter(
-                    work_program_in_change_block__discipline_block_module=obj)
+                    work_program_in_change_block__discipline_block_module=obj
+                )
                 for wp in work_programs:
-                    unit_final_sum += sum([int(unit) for unit in wp.ze_v_sem.split(", ")])
+                    unit_final_sum += sum(
+                        [int(unit) for unit in wp.ze_v_sem.split(", ")]
+                    )
 
-                gias = GIA.objects.filter(gia_in_change_block__discipline_block_module=obj)
+                gias = GIA.objects.filter(
+                    gia_in_change_block__discipline_block_module=obj
+                )
                 if gias.exists():
                     for gia in gias:
-                        unit_final_sum += sum([int(unit) for unit in gia.ze_v_sem.split(", ")])
+                        unit_final_sum += sum(
+                            [int(unit) for unit in gia.ze_v_sem.split(", ")]
+                        )
 
-                practices = Practice.objects.filter(practice_in_change_block__discipline_block_module=obj)
+                practices = Practice.objects.filter(
+                    practice_in_change_block__discipline_block_module=obj
+                )
                 if practices.exists():
                     for practice in practices:
-                        unit_final_sum += sum([int(unit) for unit in practice.ze_v_sem.split(", ")])
+                        unit_final_sum += sum(
+                            [int(unit) for unit in practice.ze_v_sem.split(", ")]
+                        )
 
         elif obj.selection_rule in ["by_credit_units", "no_more_than_n_credits"]:
             unit_final_sum = int(obj.selection_parametr)
 
         if unit_final_sum == 0:
-            for changeblock in WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=obj):
-                unit_final_sum += sum([int(unit) for unit in changeblock.credit_units.split(", ")])
-
+            for changeblock in WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                discipline_block_module=obj
+            ):
+                unit_final_sum += sum(
+                    [int(unit) for unit in changeblock.credit_units.split(", ")]
+                )
 
     # except AttributeError as e:
     #     print("a", e)
@@ -158,7 +190,9 @@ def calculate_wp_term(module, select_param=0, type_control="wp"):
     matrix_lab = []
     matrix_practice = []
     matrix_cons = []
-    change_blocks = WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=module)
+    change_blocks = WorkProgramChangeInDisciplineBlockModule.objects.filter(
+        discipline_block_module=module
+    )
     for change_block in change_blocks:
 
         objs = change_block.work_program.all()
@@ -183,16 +217,22 @@ def calculate_wp_term(module, select_param=0, type_control="wp"):
                 lab_wp = [float(unit) for unit in obj.lab_hours_v2.split(", ")]
                 matrix_lab.extend(generate_full_ze_list(lab_wp, semesters))
             if obj.practice_hours_v2:
-                practice_wp = [float(unit) for unit in obj.practice_hours_v2.split(", ")]
+                practice_wp = [
+                    float(unit) for unit in obj.practice_hours_v2.split(", ")
+                ]
                 matrix_practice.extend(generate_full_ze_list(practice_wp, semesters))
             if obj.consultation_v2:
                 cons_wp = [float(unit) for unit in obj.consultation_v2.split(", ")]
                 matrix_cons.extend(generate_full_ze_list(cons_wp, semesters))
 
-    return calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matrix_cons, select_param)
+    return calculate_ze_term(
+        matrix, matrix_lab, matrix_lecture, matrix_practice, matrix_cons, select_param
+    )
 
 
-def calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matrix_cons, select_param=0):
+def calculate_ze_term(
+    matrix, matrix_lab, matrix_lecture, matrix_practice, matrix_cons, select_param=0
+):
     max_ze_by_term = [0 for _ in range(10)]
     max_lab_by_term = [0 for _ in range(10)]
     max_lecture_by_term = [0 for _ in range(10)]
@@ -225,7 +265,13 @@ def calculate_ze_term(matrix, matrix_lab, matrix_lecture, matrix_practice, matri
                     pass
             if param_counter == select_param:
                 break
-    return max_ze_by_term, max_lab_by_term, max_lecture_by_term, max_practice_by_term, max_cons_by_term
+    return (
+        max_ze_by_term,
+        max_lab_by_term,
+        max_lecture_by_term,
+        max_practice_by_term,
+        max_cons_by_term,
+    )
 
 
 def recursion_module_per_ze(obj):
@@ -245,25 +291,44 @@ def recursion_module_per_ze(obj):
         if obj.selection_rule == "choose_n_from_m":
             if childs.exists():
                 for child in childs:
-                    max_term, max_lab, max_lec, max_prac, max_cons = recursion_module_per_ze(child)
+                    max_term, max_lab, max_lec, max_prac, max_cons = (
+                        recursion_module_per_ze(child)
+                    )
                     module_matrix.append(max_term)
                     matrix_lecture.append(max_lec)
                     matrix_lab.append(max_lab)
                     matrix_practice.append(max_prac)
                     matrix_cons.append(max_cons)
-                    max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_ze_term(
-                        module_matrix, matrix_lab, matrix_lecture, matrix_practice,
-                        matrix_cons, int(obj.selection_parametr))
+                    (
+                        max_ze_total,
+                        max_hours_lab,
+                        max_hours_lec,
+                        max_hours_practice,
+                        max_hours_cons,
+                    ) = calculate_ze_term(
+                        module_matrix,
+                        matrix_lab,
+                        matrix_lecture,
+                        matrix_practice,
+                        matrix_cons,
+                        int(obj.selection_parametr),
+                    )
 
             else:
-                max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj,
-                                                                                                                   int(
-                                                                                                                       obj.selection_parametr))
+                (
+                    max_ze_total,
+                    max_hours_lab,
+                    max_hours_lec,
+                    max_hours_practice,
+                    max_hours_cons,
+                ) = calculate_wp_term(obj, int(obj.selection_parametr))
 
         elif obj.selection_rule == "all" or obj.selection_rule == "any_quantity":
             if childs.exists():
                 for child in childs:
-                    max_term, max_lab, max_lec, max_prac, max_cons = recursion_module_per_ze(child)
+                    max_term, max_lab, max_lec, max_prac, max_cons = (
+                        recursion_module_per_ze(child)
+                    )
                     if obj.name == "Универсальная (надпрофессиональная) подготовка":
                         print(max_term)
                     max_ze_total = sum_lists(max_ze_total, max_term)
@@ -273,14 +338,24 @@ def recursion_module_per_ze(obj):
                     max_hours_cons = sum_lists(max_hours_cons, max_cons)
             else:
                 selection_param = WorkProgram.objects.filter(
-                    work_program_in_change_block__discipline_block_module=obj).count()
-                max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj,
-                                                                                                                   int(
-                                                                                                                       selection_param))
-        elif obj.selection_rule == "by_credit_units" or obj.selection_rule == "any_quantity":
+                    work_program_in_change_block__discipline_block_module=obj
+                ).count()
+                (
+                    max_ze_total,
+                    max_hours_lab,
+                    max_hours_lec,
+                    max_hours_practice,
+                    max_hours_cons,
+                ) = calculate_wp_term(obj, int(selection_param))
+        elif (
+            obj.selection_rule == "by_credit_units"
+            or obj.selection_rule == "any_quantity"
+        ):
             if childs.exists():
                 for child in childs:
-                    max_term, max_lab, max_lec, max_prac, max_cons = recursion_module_per_ze(child)
+                    max_term, max_lab, max_lec, max_prac, max_cons = (
+                        recursion_module_per_ze(child)
+                    )
                     max_ze_total = sum_lists(max_ze_total, max_term)
                     max_hours_lab = sum_lists(max_hours_lab, max_lab)
                     max_hours_lec = sum_lists(max_hours_lec, max_lec)
@@ -288,10 +363,15 @@ def recursion_module_per_ze(obj):
                     max_hours_cons = sum_lists(max_hours_cons, max_cons)
             else:
                 selection_param = WorkProgram.objects.filter(
-                    work_program_in_change_block__discipline_block_module=obj).count()
-                max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons = calculate_wp_term(obj,
-                                                                                                                   int(
-                                                                                                                       selection_param))
+                    work_program_in_change_block__discipline_block_module=obj
+                ).count()
+                (
+                    max_ze_total,
+                    max_hours_lab,
+                    max_hours_lec,
+                    max_hours_practice,
+                    max_hours_cons,
+                ) = calculate_wp_term(obj, int(selection_param))
             for i in range(len(max_ze_total)):
                 if max_ze_total[i] > int(obj.selection_parametr):
                     max_ze_total[i] = int(obj.selection_parametr)
@@ -300,7 +380,6 @@ def recursion_module_per_ze(obj):
         if sum(max_ze_total) == 0:
             _, max_res = find_min_max_ze_by_term(obj)
             max_ze_total = sum_lists(max_ze_total, max_res)
-
 
     except AttributeError as e:
         print("a", e)
@@ -315,4 +394,10 @@ def recursion_module_per_ze(obj):
         print("t", e)
         capture_exception(e)
 
-    return max_ze_total, max_hours_lab, max_hours_lec, max_hours_practice, max_hours_cons
+    return (
+        max_ze_total,
+        max_hours_lab,
+        max_hours_lec,
+        max_hours_practice,
+        max_hours_cons,
+    )
