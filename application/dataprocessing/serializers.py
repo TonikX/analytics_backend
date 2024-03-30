@@ -4,11 +4,6 @@ from rest_framework.fields import SerializerMethodField
 from workprogramsapp.models import WorkProgram
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 from .models import User, Items, Domain, Relation
-from rest_framework.settings import api_settings
-import copy
-from rest_framework.settings import api_settings
-from rest_framework.utils import html, model_meta, representation
-from collections import OrderedDict, defaultdict
 from workprogramsapp.notifications.models import EmailReset
 
 

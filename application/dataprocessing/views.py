@@ -1,25 +1,18 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from rest_framework import generics
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 import os
+
 from .models import User, Domain, Items, Relation
-from workprogramsapp.models import OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
-
-# Permissions
-from workprogramsapp.permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-
-# Api-libs
-
 from .serializers import DomainSerializer, ItemSerializer, ItemWithRelationSerializer, \
     ItemCreateSerializer, RelationSerializer, RelationUpdateSerializer, FileUploadSerializer, \
     RelationCreateSerializer, userProfileSerializer, ItemWithRelationForSearchDuplicatesSerializer, \
     DomainDetailSerializer
-
-from rest_framework import generics
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+from workprogramsapp.models import OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
 
 def handle_uploaded_file(file, filename):

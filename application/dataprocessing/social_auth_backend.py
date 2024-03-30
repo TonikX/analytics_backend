@@ -1,50 +1,5 @@
-# -*- coding: utf-8 -*-
-
-# Copyright (c) 2013 - 2015 CoNWeT Lab., Universidad Politécnica de Madrid
-
-# This file is part of WStore.
-
-# WStore is free software: you can redistribute it and/or modify
-# it under the terms of the European Union Public Licence (EUPL)
-# as published by the European Commission, either version 1.1
-# of the License, or (at your option) any later version.
-
-# WStore is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# European Union Public Licence for more details.
-
-# You should have received a copy of the European Union Public Licence
-# along with WStore.
-# If not, see <https://joinup.ec.europa.eu/software/page/eupl/licence-eupl>.
-
-"""
-FIWARE IdM OAuth2 support.
-
-This contribution adds support for FIWARE IdM OAuth2 service. The settings
-FIWARE_APP_ID and FIWARE_API_SECRET must be defined with the values
-given by FIWARE IdM application registration process.
-
-Extended permissions are supported by defining FIWARE_EXTENDED_PERMISSIONS
-setting, it must be a list of values to request.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
-"""
-
-import base64
-# from urllib import urlencode
-#from urlparse import urljoin
-#
-# from django.utils import simplejson
 from django.conf import settings
-#
-# from social_auth.utils import dsa_urlopen
-# from social_auth.backends import BaseOAuth2
 from social_core.backends.oauth import BaseOAuth2
-# from wstore.keyrock_backends import FIWARE_AUTHORIZATION_URL, FIWARE_ACCESS_TOKEN_URL,\
-#  FiwareBackend, fill_internal_user_info, FIWARE_LOGOUT_URL, get_applications, notify_acquisition
-# from wstore.models import Organization
 
 # idm configuration
 FIWARE_PROVIDER_ROLE = 'ST Provider'
