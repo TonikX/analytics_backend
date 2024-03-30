@@ -1,9 +1,9 @@
-import datetime
-from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
+import datetime
 
-from analytics_project import settings
 from .consts_for_models import *
+from analytics_project import settings
 
 
 def current_year():

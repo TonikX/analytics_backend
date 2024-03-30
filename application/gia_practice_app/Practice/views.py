@@ -1,20 +1,29 @@
 from django.db.models import Q
-from drf_yasg2 import openapi
-from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import viewsets, filters, status, mixins, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from gia_practice_app.Practice.models import Practice, PracticeTemplate, PrerequisitesOfPractice, OutcomesOfPractice, \
-    ZunPractice
-from gia_practice_app.Practice.serializers import PracticeSerializer, PracticeTemplateSerializer, \
-    PracticePrimitiveSerializer, ItemInPracticeCreateSerializer, OutcomesInPracticeCreateSerializer, \
-    PracticeInFieldOfStudyCreateSerializer, ZunPracticeForManyCreateSerializer, \
-    PracticeInFieldOfStudyForCompeteceListSerializer
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly
+from gia_practice_app.Practice.models import (
+    OutcomesOfPractice,
+    Practice,
+    PracticeTemplate,
+    PrerequisitesOfPractice,
+    ZunPractice,
+)
+from gia_practice_app.Practice.serializers import (
+    ItemInPracticeCreateSerializer,
+    OutcomesInPracticeCreateSerializer,
+    PracticeInFieldOfStudyCreateSerializer,
+    PracticeInFieldOfStudyForCompeteceListSerializer,
+    PracticePrimitiveSerializer,
+    PracticeSerializer,
+    PracticeTemplateSerializer,
+    ZunPracticeForManyCreateSerializer,
+)
 from workprogramsapp.models import PracticeInFieldOfStudy, AcademicPlan
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly
 
 
 class PracticeSet(viewsets.ModelViewSet):

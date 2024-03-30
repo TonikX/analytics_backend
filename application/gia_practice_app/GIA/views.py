@@ -2,8 +2,12 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAdminUser
 
 from gia_practice_app.GIA.models import GIA, GIABaseTemplate, CriteriaVKR
-from gia_practice_app.GIA.serializers import GIASerializer, GIABaseTemplateSerializer, CriteriaVKRSerializer, \
-    GIAPrimitiveSerializer
+from gia_practice_app.GIA.serializers import (
+    CriteriaVKRSerializer,
+    GIABaseTemplateSerializer,
+    GIAPrimitiveSerializer,
+    GIASerializer,
+)
 from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly
 
 

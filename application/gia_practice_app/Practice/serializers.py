@@ -3,16 +3,31 @@ from rest_framework.fields import SerializerMethodField
 
 from dataprocessing.models import Items
 from dataprocessing.serializers import ItemSerializer, userProfileSerializer
-from gia_practice_app.Practice.models import PracticeTemplate, Practice, PrerequisitesOfPractice, OutcomesOfPractice, \
-    ZunPractice
+from gia_practice_app.Practice.models import (
+    OutcomesOfPractice,
+    Practice,
+    PracticeTemplate,
+    PrerequisitesOfPractice,
+    ZunPractice,
+)
 from gia_practice_app.logic import get_permissions_gia_practice
 from workprogramsapp.expertise.models import Expertise, UserExpertise
 from workprogramsapp.expertise.serializers import ShortExpertiseSerializer
-from workprogramsapp.models import WorkProgramChangeInDisciplineBlockModule, Competence, Zun, Indicator, \
-    ImplementationAcademicPlan, PracticeInFieldOfStudy, DisciplineBlockModule
-from workprogramsapp.serializers import WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer, \
-    BibliographicReferenceSerializer, IndicatorSerializer, ImplementationAcademicPlanSerializer, \
-    WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer
+from workprogramsapp.models import (
+    Competence,
+    DisciplineBlockModule,
+    ImplementationAcademicPlan,
+    Indicator,
+    PracticeInFieldOfStudy,
+    WorkProgramChangeInDisciplineBlockModule,
+)
+from workprogramsapp.serializers import (
+    BibliographicReferenceSerializer,
+    ImplementationAcademicPlanSerializer,
+    IndicatorSerializer,
+    WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer,
+    WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer,
+)
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
