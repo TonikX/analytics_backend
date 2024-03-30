@@ -8,20 +8,37 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
+import json
 
+from records.serializers import (
+    AcademicPlanRealisedInYearSerializer,
+    AcademicPlansDescriptionWpSerializer,
+    ImplementationAcademicPlanWpStatisticSerializer,
+    ModulesWithoutRulesSerializer,
+    SuperShortWorkProgramSerializer,
+    WorkProgramDescriptionOnlySerializer,
+    WorkProgramDuplicatesSerializer,
+    WorkProgramEvaluationToolsStatSerializer,
+    WorkProgramInFieldOfStudySerializerForStatistic,
+    WorkProgramPrerequisitesAndOutcomesSerializer,
+    WorkProgramSerializerForStatistic,
+    WorkProgramSerializerForStatisticExtended,
+)
 from dataprocessing.models import User
 from dataprocessing.serializers import WorkProgramShortSerializer
 from workprogramsapp.expertise.models import Expertise
-from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, DisciplineBlock, \
-    DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, ImplementationAcademicPlan, FieldOfStudy, \
-    CertificationEvaluationTool
+from workprogramsapp.models import (
+    AcademicPlan,
+    CertificationEvaluationTool,
+    DisciplineBlock,
+    DisciplineBlockModule,
+    FieldOfStudy,
+    ImplementationAcademicPlan,
+    WorkProgram,
+    WorkProgramChangeInDisciplineBlockModule,
+    WorkProgramInFieldOfStudy,
+)
 from workprogramsapp.workprogram_additions.models import StructuralUnit
-from .serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
-    WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer, WorkProgramSerializerForStatisticExtended, \
-    AcademicPlansDescriptionWpSerializer, WorkProgramPrerequisitesAndOutcomesSerializer, \
-    WorkProgramDescriptionOnlySerializer, \
-    ImplementationAcademicPlanWpStatisticSerializer, WorkProgramDuplicatesSerializer, \
-    WorkProgramEvaluationToolsStatSerializer, AcademicPlanRealisedInYearSerializer, ModulesWithoutRulesSerializer
 
 
 @api_view(['GET'])

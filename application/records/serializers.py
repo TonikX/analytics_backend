@@ -1,14 +1,20 @@
 from collections import defaultdict
-
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.disciplineblockmodules.ze_module_logic import ze_cutter
 from workprogramsapp.expertise.models import Expertise
-from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, ImplementationAcademicPlan, \
-    EvaluationTool, DisciplineBlockModule
-from workprogramsapp.serializers import PrerequisitesOfWorkProgramInWorkProgramSerializer, \
-    OutcomesOfWorkProgramInWorkProgramSerializer
+from workprogramsapp.models import (
+    AcademicPlan,
+    DisciplineBlockModule,
+    EvaluationTool,
+    ImplementationAcademicPlan,
+    WorkProgram,
+    WorkProgramInFieldOfStudy,
+)
+from workprogramsapp.serializers import (
+    OutcomesOfWorkProgramInWorkProgramSerializer,
+    PrerequisitesOfWorkProgramInWorkProgramSerializer,
+)
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
