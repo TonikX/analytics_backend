@@ -7,7 +7,7 @@ from workprogramsapp.bars_merge.checkpoint_template import generate_checkpoint, 
 from workprogramsapp.bars_merge.checkpoints_dict import checkpoint_correspondence
 from workprogramsapp.bars_merge.models import HistoryOfSendingToBars
 from workprogramsapp.expertise.models import Expertise
-from workprogramsapp.models import EvaluationTool, DisciplineSection, СertificationEvaluationTool, FieldOfStudy, \
+from workprogramsapp.models import EvaluationTool, DisciplineSection, CertificationEvaluationTool, FieldOfStudy, \
     WorkProgramIdStrUpForIsu, ImplementationAcademicPlan, WorkProgram
 
 
@@ -68,7 +68,7 @@ def generate_single_checkpoint(work_program, absolute_semester, relative_semeste
             generate_checkpoint(name=eva.name, min=eva.min, max=eva.max, week=int(eva.deadline), type_id=id,
                                 key=eva.check_point, test_id=test_id))
     # Получаем все ОС ПА
-    certificate = СertificationEvaluationTool.objects.filter(work_program=work_program_id, semester=relative_semester)
+    certificate = CertificationEvaluationTool.objects.filter(work_program=work_program_id, semester=relative_semester)
     for cerf in certificate:
         # Отдельно обрабатываем случай наличия курсовика
         if int(cerf.type) == 4 or int(cerf.type) == 5:

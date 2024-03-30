@@ -14,7 +14,7 @@ from dataprocessing.serializers import WorkProgramShortSerializer
 from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.models import WorkProgram, WorkProgramInFieldOfStudy, AcademicPlan, DisciplineBlock, \
     DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, ImplementationAcademicPlan, FieldOfStudy, \
-    СertificationEvaluationTool
+    CertificationEvaluationTool
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 from .serializers import WorkProgramInFieldOfStudySerializerForStatistic, \
     WorkProgramSerializerForStatistic, SuperShortWorkProgramSerializer, WorkProgramSerializerForStatisticExtended, \
@@ -482,13 +482,13 @@ def FieldOfStudyPlanToISU(request, pk):
                                  "ЗЕ": [token for token in
                                         change.credit_units.split(',')] if change.credit_units else None,
                                  "ЭКЗ": [cerf.semester for cerf in
-                                         СertificationEvaluationTool.objects.filter(work_program=wp, type=1)],
+                                         CertificationEvaluationTool.objects.filter(work_program=wp, type=1)],
                                  "ДИФ_ЗАЧЕТ": [cerf.semester for cerf in
-                                               СertificationEvaluationTool.objects.filter(work_program=wp, type=2)],
+                                               CertificationEvaluationTool.objects.filter(work_program=wp, type=2)],
                                  "ЗАЧЕТ": [cerf.semester for cerf in
-                                           СertificationEvaluationTool.objects.filter(work_program=wp, type=3)],
+                                           CertificationEvaluationTool.objects.filter(work_program=wp, type=3)],
                                  "КП": [cerf.semester for cerf in
-                                        СertificationEvaluationTool.objects.filter(work_program=wp, type=4)],
+                                        CertificationEvaluationTool.objects.filter(work_program=wp, type=4)],
                                  "ЛЕК": [float(token) for token in
                                          wp.lecture_hours.split(",")] if wp.lecture_hours else [],
                                  "ЛАБ": [float(token) for token in

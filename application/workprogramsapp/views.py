@@ -30,7 +30,7 @@ from .expertise.models import Expertise, UserExpertise
 from .folders_ans_statistic.models import WorkProgramInFolder, AcademicPlanInFolder, DisciplineBlockModuleInFolder
 from .models import AcademicPlan, ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
     DisciplineBlockModule, DisciplineBlock, Zun, WorkProgramInFieldOfStudy, BugsLog
-from .models import FieldOfStudy, BibliographicReference, СertificationEvaluationTool
+from .models import FieldOfStudy, BibliographicReference, CertificationEvaluationTool
 from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram, EvaluationTool, DisciplineSection, \
     Topic, Indicator, Competence
 from .notifications.models import UserNotification
@@ -55,7 +55,7 @@ from .serializers import FieldOfStudySerializer, FieldOfStudyListSerializer, Wor
 from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWorkProgramSerializer, \
     ZunForManyCreateSerializer, \
     WorkProgramCreateSerializer, PrerequisitesOfWorkProgramSerializer
-from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
+from .serializers import OutcomesOfWorkProgramCreateSerializer, CertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer, WorkProgramEditorsUpdateSerializer
 from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
@@ -1025,17 +1025,17 @@ class СertificationEvaluationToolListAPI(generics.ListCreateAPIView):
     """
     API endpoint that represents a list of Evaluation Tools.
     """
-    queryset = СertificationEvaluationTool.objects.all()
-    serializer_class = СertificationEvaluationToolCreateSerializer
+    queryset = CertificationEvaluationTool.objects.all()
+    serializer_class = CertificationEvaluationToolCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class СertificationEvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+class CertificationEvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint that represents a single Evaluation Tool.
     """
-    queryset = СertificationEvaluationTool.objects.all()
-    serializer_class = СertificationEvaluationToolCreateSerializer
+    queryset = CertificationEvaluationTool.objects.all()
+    serializer_class = CertificationEvaluationToolCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
@@ -1926,9 +1926,9 @@ class FileUploadAPIView(APIView):
                     wp_obj.save()
                     print(wp_obj.id)
                     wp_count += 1
-                certification_for_wp = СertificationEvaluationTool.objects.filter(work_program=wp_obj)
+                certification_for_wp = CertificationEvaluationTool.objects.filter(work_program=wp_obj)
                 semester = 1
-                if not СertificationEvaluationTool.objects.filter(work_program=wp_obj).exists():
+                if not CertificationEvaluationTool.objects.filter(work_program=wp_obj).exists():
                     print('найдено оценочное средство')
                     semester = 1
                 else:
@@ -1937,20 +1937,20 @@ class FileUploadAPIView(APIView):
                         print('замена номеров оценочных средств')
                         if tool.semester >= semester:
                             semester = tool.semester + 1
-                if not СertificationEvaluationTool.objects.filter(work_program=wp_obj).exists():
+                if not CertificationEvaluationTool.objects.filter(work_program=wp_obj).exists():
                     print('создаются оценочные срадства')
                     if bool(data['PASS'][i]):
                         print('попытка 1')
-                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="3", semester=semester)
+                        CertificationEvaluationTool.objects.create(work_program=wp_obj, type="3", semester=semester)
                     if bool(data['DIFF'][i]):
                         print('попытка 2')
-                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="2", semester=semester)
+                        CertificationEvaluationTool.objects.create(work_program=wp_obj, type="2", semester=semester)
                     if bool(data['EXAM'][i]):
                         print('попытка 3')
-                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="1", semester=semester)
+                        CertificationEvaluationTool.objects.create(work_program=wp_obj, type="1", semester=semester)
                     if bool(data['CP'][i]):
                         print('попытка 4')
-                        СertificationEvaluationTool.objects.create(work_program=wp_obj, type="4", semester=semester)
+                        CertificationEvaluationTool.objects.create(work_program=wp_obj, type="4", semester=semester)
                     print('созданы оценочные срадства')
                 # try:
                 #     lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]

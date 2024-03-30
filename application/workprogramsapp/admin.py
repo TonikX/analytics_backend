@@ -25,7 +25,7 @@ from .models import (
     Competence, Indicator, EvaluationTool, Topic, WorkProgramInFieldOfStudy,
     RouteComposition, Route, Certification, BibliographicReference, AcademicPlan,
     ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule,
-    СertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
+    CertificationEvaluationTool, CourseCredit, CourseFieldOfStudy,
     WorkProgramIdStrUpForIsu, GeneralizedLaborFunctions,
     AcademicPlanUpdateConfiguration,
     AcademicPlanUpdateLog, GiaInFieldOfStudy, PracticeInFieldOfStudy, DisciplineBlockModuleInIsu, EmployerRepresentative,
@@ -107,7 +107,7 @@ admin.site.register(DisciplineBlockModuleInDisciplineBlock)
 admin.site.register(StructuralUnit)
 admin.site.register(UserStructuralUnit)
 
-admin.site.register(СertificationEvaluationTool)
+admin.site.register(CertificationEvaluationTool)
 admin.site.register(ExpertiseNotification)
 admin.site.register(UserNotification)
 admin.site.register(CourseCredit)

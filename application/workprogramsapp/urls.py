@@ -61,7 +61,7 @@ from .views import WorkProgramCreateAPIView, WorkProgramDetailsView, WorkProgram
 from .views import WorkProgramFullDetailsWithDisciplineCodeView, ZunManyViewSet, \
     WorkProgramInFieldOfStudyForWorkProgramList, ChangeItemsView
 from .views import WorkProgramsListApi, UserGroups, TimeoutTest, WorkProgramEditorsUpdateView
-from .views import СertificationEvaluationToolListAPI, СertificationEvaluationToolDetailAPI
+from .views import СertificationEvaluationToolListAPI, CertificationEvaluationToolDetailAPI
 from .workprogram_additions.views import CopyContentOfWorkProgram
 
 # Контроллеры
@@ -309,7 +309,7 @@ urlpatterns = [
 
     # Аттестационные оценочные средства
     path('api/certification_tools/', СertificationEvaluationToolListAPI.as_view()),
-    path('api/certification_tools/<int:pk>', СertificationEvaluationToolDetailAPI.as_view()),
+    path('api/certification_tools/<int:pk>', CertificationEvaluationToolDetailAPI.as_view()),
     url(r'^', include('workprogramsapp.educational_program.urls')),
 
     url(r'^', include('workprogramsapp.educational_program.urls')),

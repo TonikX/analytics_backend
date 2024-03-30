@@ -27,7 +27,7 @@ from workprogramsapp.educational_program.process_modules_for_matrix import get_c
 from workprogramsapp.educational_program.serializers import WorkProgramCompetenceIndicatorSerializer
 from workprogramsapp.educational_program.views import GetCompetenceMatrix
 from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
-    СertificationEvaluationTool, ImplementationAcademicPlan, FieldOfStudy, GeneralCharacteristics, WorkProgram, \
+    CertificationEvaluationTool, ImplementationAcademicPlan, FieldOfStudy, GeneralCharacteristics, WorkProgram, \
     WorkProgramInFieldOfStudy, PracticeInFieldOfStudy
 from workprogramsapp.serializers import AcademicPlanSerializer
 

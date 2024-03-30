@@ -16,7 +16,7 @@ from .expertise.models import Expertise
 from .models import WorkProgram, Indicator, Competence, OutcomesOfWorkProgram, DisciplineSection, Topic, EvaluationTool, \
     PrerequisitesOfWorkProgram, Certification, BibliographicReference, FieldOfStudy, \
     ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, DisciplineBlockModule, \
-    WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, СertificationEvaluationTool, \
+    WorkProgramChangeInDisciplineBlockModule, Zun, WorkProgramInFieldOfStudy, CertificationEvaluationTool, \
     AcademicPlanUpdateLog, AcademicPlanUpdateSchedulerConfiguration, AcademicPlanUpdateConfiguration, \
     IsuObjectsSendLogger, BugsLog
 from .permissions import IsUniversalModule, IsDisciplineBlockModuleEditor
@@ -196,19 +196,19 @@ class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
         fields = ['id', 'type', 'name', 'max', 'min', 'deadline', 'check_point', 'description', 'evaluation_criteria']
 
 
-class СertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
+class CertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
 
     class Meta:
-        model = СertificationEvaluationTool
+        model = CertificationEvaluationTool
         fields = ['id', 'type', 'name', 'description', 'deadline', 'min', 'max', 'semester', 'evaluation_criteria']
 
 
-class СertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
+class CertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
     """Сериализатор ФОСов"""
 
     class Meta:
-        model = СertificationEvaluationTool
+        model = CertificationEvaluationTool
         fields = ['id', 'type', 'name', 'description', 'deadline', 'semester', 'min', 'max', 'work_program',
                   'evaluation_criteria', 'discipline_block_module']
 
@@ -337,7 +337,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         wp = super(WorkProgramCreateSerializer, self).create(validated_data)
         for i in range(len(evaluation_tools)):
             for tool in evaluation_tools[i]:
-                СertificationEvaluationTool.objects.create(type=tool, work_program=wp, semester=i + 1)
+                CertificationEvaluationTool.objects.create(type=tool, work_program=wp, semester=i + 1)
         return wp
 
     class Meta:
@@ -377,8 +377,8 @@ class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer
 
 
 class Geeks(object):
-    def __init__(self, dictonary):
-        self.dict = bibliographic_references
+    def __init__(self, dictionary):
+        self.dict = dictionary
 
 
 class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSerializer):
@@ -1074,7 +1074,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     bibliographic_reference = BibliographicReferenceSerializer(many=True, required=False)
     work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(many=True)
     expertise_with_rpd = ShortExpertiseSerializer(many=True, read_only=True)
-    certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many=True)
+    certification_evaluation_tools = CertificationEvaluationToolForWorkProgramSerializer(many=True)
     editors = userProfileSerializer(many=True)
     structural_unit = ShortStructuralUnitSerializer()
     work_program_in_change_block_v2 = serializers.SerializerMethodField()

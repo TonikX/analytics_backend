@@ -20,7 +20,7 @@ from workprogramsapp.bars_merge.serializers import BarsEPAssociateSerializer, Ba
     HistoryOfSendingBarsSerializer
 from workprogramsapp.expertise.models import Expertise
 from workprogramsapp.models import WorkProgram, FieldOfStudy, ImplementationAcademicPlan, EvaluationTool, \
-    DisciplineSection, WorkProgramChangeInDisciplineBlockModule, СertificationEvaluationTool, \
+    DisciplineSection, WorkProgramChangeInDisciplineBlockModule, CertificationEvaluationTool, \
     WorkProgramIdStrUpForIsu
 from workprogramsapp.permissions import IsExternalUser
 
@@ -129,7 +129,7 @@ def CreateCheckPoint(request):
         list_regular.append(
             generate_checkpoint(name=eva.name, min=eva.min, max=eva.max, week=int(eva.deadline), type_id=id,
                                 key=eva.check_point))
-    certificate = СertificationEvaluationTool.objects.filter(work_program=work_program_id, semester=needed_semester)
+    certificate = CertificationEvaluationTool.objects.filter(work_program=work_program_id, semester=needed_semester)
     for cerf in certificate:
         if int(cerf.type) == 4:
             has_course_project = True
@@ -514,7 +514,7 @@ def GetWPForBARS(request, isu_wp_id):
         evaluation_tools = EvaluationTool.objects.filter(evaluation_tools__work_program__id=wp.id,
                                                          semester=sem + 1).distinct()
 
-        certificate = СertificationEvaluationTool.objects.filter(work_program__id=wp.id,
+        certificate = CertificationEvaluationTool.objects.filter(work_program__id=wp.id,
                                                                  semester=sem + 1)
         print(evaluation_tools)
         for cerf in certificate:

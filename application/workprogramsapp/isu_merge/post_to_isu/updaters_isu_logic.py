@@ -4,7 +4,7 @@ import requests
 from sentry_sdk import capture_exception
 
 from analytics_project import settings
-from workprogramsapp.models import СertificationEvaluationTool, WorkProgram, WorkProgramChangeInDisciplineBlockModule, \
+from workprogramsapp.models import CertificationEvaluationTool, WorkProgram, WorkProgramChangeInDisciplineBlockModule, \
     IsuObjectsSendLogger
 
 
@@ -225,7 +225,7 @@ def post_wp_to_isu(token, wp, ap_id) -> tuple:
             wp_dict["contents"].append(order_dict)
 
     # Относительный или абсолютный семестр? Что делать если у нас несколько семестров начала?
-    for cerf in СertificationEvaluationTool.objects.filter(work_program=wp):
+    for cerf in CertificationEvaluationTool.objects.filter(work_program=wp):
         founded = False
         for term_dict in wp_dict["contents"]:
             if term_dict["order"] == cerf.semester:

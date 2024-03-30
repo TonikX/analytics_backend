@@ -5,12 +5,12 @@ from django.contrib.auth.models import Group
 from rest_framework.fields import SerializerMethodField
 
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.models import DisciplineBlockModule, СertificationEvaluationTool, ImplementationAcademicPlan, \
+from workprogramsapp.models import DisciplineBlockModule, CertificationEvaluationTool, ImplementationAcademicPlan, \
     DisciplineBlock
 from workprogramsapp.serializers import \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockDetailAcademicSerializer, \
     DisciplineBlockForWPinFSSerializer, \
-    СertificationEvaluationToolCreateSerializer, AcademicPlanInImplementationSerializer, \
+    CertificationEvaluationToolCreateSerializer, AcademicPlanInImplementationSerializer, \
     FieldOfStudyImplementationSerializer
 
 
@@ -57,7 +57,7 @@ class DisciplineBlockModuleForModuleListDetailSerializer(serializers.ModelSerial
     def get_certification_evaluation_tools(self, obj):
         tools = СertificationEvaluationTool.objects.filter(discipline_block_module=obj)
         if tools:
-            return СertificationEvaluationToolCreateSerializer(tools, many=True).data
+            return CertificationEvaluationToolCreateSerializer(tools, many=True).data
         else:
             return None
 

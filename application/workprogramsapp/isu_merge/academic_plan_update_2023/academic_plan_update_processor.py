@@ -15,7 +15,7 @@ from workprogramsapp.isu_merge.academic_plan_update_2023.process_modules_with_ha
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
     WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration, \
-    СertificationEvaluationTool, DisciplineBlockModuleInIsu, PracticeInFieldOfStudy, GiaInFieldOfStudy
+    CertificationEvaluationTool, DisciplineBlockModuleInIsu, PracticeInFieldOfStudy, GiaInFieldOfStudy
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
@@ -194,7 +194,7 @@ class AcademicPlanUpdateProcessor:
                 elif wt_id == 4:
                     fake_srs = type_dict["volume"]
                 else:
-                    cerf = СertificationEvaluationTool(type=certification_types[wt_id],
+                    cerf = CertificationEvaluationTool(type=certification_types[wt_id],
                                                        semester=sem + 1)
                     cerf_list.append(cerf)
 
@@ -218,7 +218,7 @@ class AcademicPlanUpdateProcessor:
         work_program_object.save()
 
         for cerf_to_connect in cerf_list:
-            is_cerf_exist = СertificationEvaluationTool.objects.filter(work_program=work_program_object,
+            is_cerf_exist = CertificationEvaluationTool.objects.filter(work_program=work_program_object,
                                                                        type=cerf_to_connect.type,
                                                                        semester=cerf_to_connect.semester)
             if not is_cerf_exist.exists():
@@ -303,7 +303,7 @@ class AcademicPlanUpdateProcessor:
                 elif wt_id == 4:
                     fake_srs = type_dict["volume"]
                 else:
-                    cerf = СertificationEvaluationTool(type=certification_types[wt_id],
+                    cerf = CertificationEvaluationTool(type=certification_types[wt_id],
                                                        semester=sem + 1)
                     cerf_list.append(cerf)
 
@@ -327,7 +327,7 @@ class AcademicPlanUpdateProcessor:
         work_program_object.save()
 
         for cerf_to_connect in cerf_list:
-            is_cerf_exist = СertificationEvaluationTool.objects.filter(work_program=work_program_object,
+            is_cerf_exist = CertificationEvaluationTool.objects.filter(work_program=work_program_object,
                                                                        type=cerf_to_connect.type,
                                                                        semester=cerf_to_connect.semester)
             if not is_cerf_exist.exists():

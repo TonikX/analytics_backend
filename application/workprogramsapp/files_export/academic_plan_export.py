@@ -6,7 +6,7 @@ from analytics_project.settings import AP_FILE_ROUTE
 from workprogramsapp.disciplineblockmodules.ze_module_logic import recursion_module, generate_full_ze_list, \
     recursion_module_per_ze, sum_lists
 from workprogramsapp.models import DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
-    СertificationEvaluationTool, ImplementationAcademicPlan, FieldOfStudy
+    CertificationEvaluationTool, ImplementationAcademicPlan, FieldOfStudy
 from workprogramsapp.serializers import AcademicPlanSerializer
 
 color_list = ["4c69a9", "5f84d4","6f90d8", "8fa8e0", "afc1e9", "cfdaf2", "dfe6f6", "eff2fa", "eff2fa", "eff2fa", "eff2fa"]
@@ -78,11 +78,11 @@ def insert_cell_data_range(ws, level, column_name, data_list):
 
 def process_evaluation_tools(ws, level, wp=None, module=None, start_sem=0):
     if wp:
-        tools = СertificationEvaluationTool.objects.filter(work_program=wp)
+        tools = CertificationEvaluationTool.objects.filter(work_program=wp)
     elif module:
-        tools = СertificationEvaluationTool.objects.filter(discipline_block_module=module)
+        tools = CertificationEvaluationTool.objects.filter(discipline_block_module=module)
     else:
-        tools = СertificationEvaluationTool.objects.none()
+        tools = CertificationEvaluationTool.objects.none()
     try:
         exam_tools = ''.join(map(str, [tool.semester + start_sem for tool in tools.filter(type="1")]))
         diff_tools = ''.join(map(str, [tool.semester + start_sem for tool in tools.filter(type="2")]))

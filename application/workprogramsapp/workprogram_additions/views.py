@@ -25,7 +25,7 @@ from .serializers import AdditionalMaterialSerializer, CreateAdditionalMaterialS
 from .serializers import CompetenceFullSerializer
 from ..expertise.models import Expertise
 from ..models import WorkProgram, DisciplineSection, PrerequisitesOfWorkProgram, OutcomesOfWorkProgram, \
-    СertificationEvaluationTool, EvaluationTool, Topic, Competence, AcademicPlan, \
+    CertificationEvaluationTool, EvaluationTool, Topic, Competence, AcademicPlan, \
     WorkProgramChangeInDisciplineBlockModule
 from ..serializers import WorkProgramSerializer, CompetenceSerializer, WorkProgramShortForExperiseSerializer
 
@@ -135,9 +135,9 @@ def CopyContentOfWorkProgram(request):
                 for elem in eva_clone_list:
                     if (eva.id == elem['id']):
                         clone_outcomes.evaluation_tool.add(EvaluationTool.objects.get(pk=elem['clone_id']))
-        """for cerf in СertificationEvaluationTool.objects.filter(work_program=old_wp):
+        """for cerf in CertificationEvaluationTool.objects.filter(work_program=old_wp):
             cerf.make_clone(attrs={'work_program': new_wp})
-        for cerf in СertificationEvaluationTool.objects.filter(work_program=new_wp):
+        for cerf in CertificationEvaluationTool.objects.filter(work_program=new_wp):
             if cerf.name == "No name":
                 cerf.delete()"""
         new_wp.editors.add(*old_wp.editors.all())
@@ -211,7 +211,7 @@ def ChangeSemesterInEvaluationsCorrect(request):
             for eva in evaluation_tools:
                 eva.semester = eva.semester - min_sem + 1
                 eva.save()
-        final_tool = СertificationEvaluationTool.objects.filter(work_program=wp)
+        final_tool = CertificationEvaluationTool.objects.filter(work_program=wp)
         min_sem = 12
         for eva in final_tool:
             if eva.semester == None:
