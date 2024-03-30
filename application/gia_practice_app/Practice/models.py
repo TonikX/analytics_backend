@@ -1,8 +1,6 @@
 import datetime
-
-from django.contrib.postgres.fields import JSONField
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from analytics_project import settings
 from .consts_for_models import *
@@ -151,7 +149,7 @@ class Practice(models.Model):
 
     evaluation_tools_current_control = models.TextField(max_length=8192, default=EVALUATION,
                                                         verbose_name="ОЦЕНОЧНЫЕ СРЕДСТВА ДЛЯ ПРОВЕДЕНИЯ ТЕКУЩЕГО КОНТРОЛЯ И  ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ ПО ПРАКТИКЕ.Текущий контроль")
-    term_hours_info_table = JSONField(default=dict)
+    term_hours_info_table = models.JSONField(default=dict)
     prac_isu_id = models.IntegerField(blank=True, null=True, verbose_name="ID практики в ИСУ")
     ze_v_sem = models.CharField(max_length=1024, blank=True, null=True,
                                 verbose_name="Количество зачетных единиц по семестрам в Практике")

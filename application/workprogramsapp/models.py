@@ -1,17 +1,15 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField, ArrayField
+from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 from django_cte import CTEManager
 from model_clone import CloneMixin
-from rest_framework.exceptions import ValidationError
 
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
-
 from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, \
     TasksForEducationalStandard
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -173,7 +171,7 @@ class WorkProgram(CloneMixin, models.Model):
                 for elem in eva_clone_list:
                     if (eva.id == elem['id']):
                         clone_outcomes.evaluation_tool.add(EvaluationTool.objects.get(pk=elem['clone_id']))
-        for cerf in СertificationEvaluationTool.objects.filter(work_program=program):
+        for cerf in CertificationEvaluationTool.objects.filter(work_program=program):
             cerf.make_clone(attrs={'work_program': clone_program})
         return clone_program
 
@@ -337,7 +335,7 @@ class AcademicPlan(models.Model):
     ap_isu_id = models.PositiveIntegerField(verbose_name="ID учебного плана в ИСУ", blank=True, null=True)
     on_check = models.CharField(max_length=1024, verbose_name="Статус проверки", choices=check_status,
                                 default="in_work")
-    excel_generation_errors = JSONField(blank=True, null=True, verbose_name="Список ошибок в УП")
+    excel_generation_errors = models.JSONField(blank=True, null=True, verbose_name="Список ошибок в УП")
 
     # TODO: Добавить год набора
 
@@ -676,8 +674,8 @@ class ImplementationAcademicPlan(models.Model):
     language = models.CharField(choices=languages_for_wp, max_length=15, verbose_name='Языки',
                                 blank=True, null=True)
     title = models.CharField(max_length=1024, verbose_name='Название', blank=True, null=True)
-    old_json = JSONField(blank=True, null=True)
-    new_json = JSONField(blank=True, null=True)
+    old_json = models.JSONField(blank=True, null=True)
+    new_json = models.JSONField(blank=True, null=True)
     editors = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                      related_name='implementation_academic_plan_block_modules',
                                      verbose_name='Редакторы образовательной программы', blank=True)
@@ -695,7 +693,7 @@ class ImplementationAcademicPlan(models.Model):
                                                 verbose_name='ВУЗ партнер',
                                                 related_name='implementation_academic_plan_in_university_partner',
                                                 blank=True)
-    isu_modified_plan = JSONField(blank=True, null=True, verbose_name="JSON УП из ИСУ с модифицированным ID модулей")
+    isu_modified_plan = models.JSONField(blank=True, null=True, verbose_name="JSON УП из ИСУ с модифицированным ID модулей")
 
     def __str__(self):
         return 'НАШ ОП ид: ' + str(self.id) + ' / ' + 'ОП ИСУ ИД: ' + str(self.op_isu_id)
@@ -806,12 +804,12 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     only_for_struct_units = models.BooleanField(verbose_name="Доавбление только для тех же структрных подразеделений",
                                                 blank=True, null=True, default=False)
 
-    orderings_for_ups = JSONField(blank=True, null=True, verbose_name="Данные для сортировки в учебных планах")
-    orderings_for_modules = JSONField(blank=True, null=True, verbose_name="Данные для сортировки в модулях")
+    orderings_for_ups = models.JSONField(blank=True, null=True, verbose_name="Данные для сортировки в учебных планах")
+    orderings_for_modules = models.JSONField(blank=True, null=True, verbose_name="Данные для сортировки в модулях")
 
-    isu_ids_by_fathers = JSONField(blank=True, null=True, verbose_name="id модуля в ису по отцам")
+    isu_ids_by_fathers = models.JSONField(blank=True, null=True, verbose_name="id модуля в ису по отцам")
 
-    clone_info_json = JSONField(blank=True, null=True, verbose_name="JSON  информацией о клонировании")
+    clone_info_json = models.JSONField(blank=True, null=True, verbose_name="JSON информация о клонировании")
     laboriousness = models.IntegerField(blank=True, null=True, verbose_name="Трудоемкость модуля")
 
     __old_selection_parametr = -1
@@ -832,7 +830,6 @@ class DisciplineBlockModule(CloneMixin, models.Model):
             self.__old_selection_rule = self.selection_rule
             rewrite_ze_up(self)
             print("d4 bad")
-
 
 
     class Meta:
@@ -1223,7 +1220,7 @@ class EvaluationTool(CloneMixin, models.Model):
         return self.name
 
 
-class СertificationEvaluationTool(CloneMixin, models.Model):
+class CertificationEvaluationTool(CloneMixin, models.Model):
     '''
     Модель для аттестационных оценочных средств
     '''
@@ -1530,9 +1527,9 @@ class IsuObjectsSendLogger(models.Model):
     )
     ap_id = models.IntegerField(verbose_name="ИД УП", blank=True, null=True, )
     obj_id = models.IntegerField(verbose_name="ИД объекта")
-    generated_json = JSONField(verbose_name="Сгенерированный JSON объекта")
+    generated_json = models.JSONField(verbose_name="Сгенерированный JSON объекта")
     error_status = models.IntegerField(verbose_name="номер ошибки")
-    returned_data = JSONField(verbose_name="Вернувшийся ответ")
+    returned_data = models.JSONField(verbose_name="Вернувшийся ответ")
     date_of_sending = models.DateTimeField(default=timezone.now)
 
 
