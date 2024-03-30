@@ -74,7 +74,8 @@ def get_educational_program_main():
     disciplines = get_disciplines()
     threads = list()
     for discipline in disciplines:
-        x = threading.Thread(target=get_get_educational_program_request, args=(discipline["id"], discipline["term"]))
+        x = threading.Thread(target=get_get_educational_program_request,
+                             args=(discipline["id"], discipline["term"]))
         threads.append(x)
         x.start()
     for index, thread in enumerate(threads):
