@@ -1,7 +1,15 @@
 from rest_framework import serializers
+
 from .models import Institution, Platform, OnlineCourse
-from workprogramsapp.models import CourseCredit, CourseFieldOfStudy, FieldOfStudy, Topic, DisciplineSection, WorkProgram
 from dataprocessing.models import Items
+from workprogramsapp.models import (
+    CourseCredit,
+    CourseFieldOfStudy,
+    DisciplineSection,
+    FieldOfStudy,
+    Topic,
+    WorkProgram,
+)
 
 
 class FieldOfStudySerializer2(serializers.ModelSerializer):

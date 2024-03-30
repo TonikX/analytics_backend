@@ -1,17 +1,20 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-
-from .models import Institution, Platform, OnlineCourse
-from workprogramsapp.models import FieldOfStudy, CourseCredit, CourseFieldOfStudy
-
-from .serializers import InstitutionSerializer, PlatformSerializer, OnlineCourseSerializer, \
-    CourseCreditSerializer, CourseFieldOfStudySerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .data_onlinecourse import get_data
+from .models import Institution, Platform, OnlineCourse
+from .serializers import (
+    InstitutionSerializer,
+    PlatformSerializer,
+    OnlineCourseSerializer,
+    CourseCreditSerializer,
+    CourseFieldOfStudySerializer,
+)
+from workprogramsapp.models import FieldOfStudy, CourseCredit, CourseFieldOfStudy
 
 
 class InstitutionViewSet(viewsets.ModelViewSet):

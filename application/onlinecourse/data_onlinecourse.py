@@ -1,6 +1,6 @@
-import requests
-import pandas as pd
 import environ
+import pandas as pd
+import requests
 
 env = environ.Env()
 environ.Env.read_env()  # reading .env file

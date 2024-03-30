@@ -1,6 +1,14 @@
 from django.urls import path
-from .views import InstitutionViewSet, PlatformViewSet, OnlineCourseViewSet, CourseCreditViewSet, \
-    CourseFieldOfStudyViewSet, CourseDataAPIView
+
+from .views import (
+    CourseCreditViewSet,
+    CourseDataAPIView,
+    CourseFieldOfStudyViewSet,
+    InstitutionViewSet,
+    OnlineCourseViewSet,
+    PlatformViewSet,
+)
+
 
 urlpatterns = [
     path('api/course/institution/', InstitutionViewSet.as_view({'get': 'list'}), name='Institution-list'),

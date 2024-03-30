@@ -1,5 +1,7 @@
 from django.db import models
+
 from dataprocessing.models import Items
+
 
 class Institution(models.Model):
     """
@@ -84,6 +86,3 @@ class OnlineCourse(models.Model):
 
     def __str__(self):
         return self.title
-
-
-
