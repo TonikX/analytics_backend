@@ -1,16 +1,9 @@
-import pandas as pd
-import json
-import re
-import os
-import requests
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from workprogramsapp.models import WorkProgramIdStrUpForIsu, FieldOfStudy, WorkProgram, AcademicPlan, \
-    ImplementationAcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramChangeInDisciplineBlockModule, \
-    WorkProgramInFieldOfStudy, Zun
-from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import AcademicPlanUpdateProcessor
-import time
+from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_processor import (
+    AcademicPlanUpdateProcessor,
+)
 
 
 class FileUploadAPIView_v2(APIView):

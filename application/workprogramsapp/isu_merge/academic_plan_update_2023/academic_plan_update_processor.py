@@ -2,20 +2,21 @@ import copy
 
 from django.conf import settings
 from django.utils import timezone
-from sentry_sdk import capture_exception
 
 from gia_practice_app.GIA.models import GIABaseTemplate, GIA
 from gia_practice_app.Practice.models import Practice, PracticeTemplate
-from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_aspect import AcademicPlanUpdateAspect
-from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_utils import AcademicPlanUpdateUtils
+from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_aspect import \
+    AcademicPlanUpdateAspect
+from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_utils import \
+    AcademicPlanUpdateUtils
 from workprogramsapp.isu_merge.academic_plan_update_2023.isu_service import IsuService, IsuUser
-from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_modules_updater import \
-    discipline_block_module_object_relations_updater
-from workprogramsapp.isu_merge.academic_plan_update_2023.process_modules_with_hashes import get_ap_jsons
+from workprogramsapp.isu_merge.academic_plan_update_2023.process_modules_with_hashes import \
+    get_ap_jsons
 from workprogramsapp.models import ImplementationAcademicPlan, AcademicPlan, DisciplineBlock, \
     WorkProgramChangeInDisciplineBlockModule, WorkProgram, FieldOfStudy, DisciplineBlockModule, \
     WorkProgramInFieldOfStudy, WorkProgramIdStrUpForIsu, Zun, AcademicPlanUpdateConfiguration, \
-    CertificationEvaluationTool, DisciplineBlockModuleInIsu, PracticeInFieldOfStudy, GiaInFieldOfStudy
+    CertificationEvaluationTool, DisciplineBlockModuleInIsu, PracticeInFieldOfStudy, \
+    GiaInFieldOfStudy
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 

@@ -2,67 +2,102 @@ import json
 import os
 import re
 import time
-from django.conf import settings
-import pandas as pd
-import requests
-from requests import Response
-from workprogramsapp.models import ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
-    WorkProgram, FieldOfStudy, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramInFieldOfStudy, \
-    WorkProgramIdStrUpForIsu, Zun
-import json
-import os
-import re
-import time
 
 import pandas as pd
 import requests
 from django.conf import settings
 from requests import Response
-from workprogramsapp.models import ImplementationAcademicPlan, WorkProgramChangeInDisciplineBlockModule, \
-    WorkProgram, FieldOfStudy, AcademicPlan, DisciplineBlock, DisciplineBlockModule, WorkProgramInFieldOfStudy, \
-    WorkProgramIdStrUpForIsu, Zun
+
+from workprogramsapp.models import (
+    AcademicPlan,
+    DisciplineBlock,
+    DisciplineBlockModule,
+    FieldOfStudy,
+    ImplementationAcademicPlan,
+    WorkProgram,
+    WorkProgramChangeInDisciplineBlockModule,
+    WorkProgramIdStrUpForIsu,
+    WorkProgramInFieldOfStudy,
+    Zun,
+)
 
 
 def invoke():
-    print('началось')
+    print("началось")
     url = "https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/token"
-    auth_data = {"client_id": settings.ISU["ISU_CLIENT_ID"], "client_secret": settings.ISU["ISU_CLIENT_SECRET"],
-                 "grant_type": "client_credentials"}
+    auth_data = {
+        "client_id": settings.ISU["ISU_CLIENT_ID"],
+        "client_secret": settings.ISU["ISU_CLIENT_SECRET"],
+        "grant_type": "client_credentials",
+    }
     token_txt = requests.post(url, auth_data).text
     token = json.loads(token_txt)["access_token"]
-    headers = {'Content-Type': "application/json", 'Authorization': "Bearer " + token}
+    headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
 
-    ids = ImplementationAcademicPlan.objects.filter(ap_isu_id=10572).values_list('ap_isu_id', flat=True)
-    print('ids', ids)
+    ids = ImplementationAcademicPlan.objects.filter(ap_isu_id=10572).values_list(
+        "ap_isu_id", flat=True
+    )
+    print("ids", ids)
 
-    up = pd.DataFrame(columns=['ИД_УП', 'НС_ИД', 'ШИФР_НАПРАВЛЕНИЯ', 'НАПРАВЛЕНИЕ_ПОДГОТОВКИ', 'ОП_ИД',
-                               'ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА', 'ФАК_ИД', 'ФАКУЛЬТЕТ', 'ЯЗЫК_ОБУЧЕНИЯ',
-                               'ОБЩАЯ_ТРУДОЕМКОСТЬ', 'СРОК_ОБУЧЕНИЯ', 'УРОВЕНЬ_ОБРАЗОВАНИЯ',
-                               'ОГНП_ИД', 'ОГНП', 'ГОД_НАБОРА', 'НАИМЕНОВАНИЕ_БЛОКА', 'МОДУЛЬ_ИД',
-                               'НАИМЕНОВАНИЕ_МОДУЛЯ', 'ИД_СТР_УП', 'ВЫБОР', 'НОМЕР_ПО_ПЛАНУ',
-                               'DISC_DISC_ID', 'ДИС_ИД', 'ДИСЦИПЛИНА', 'ИД_ИСПОЛНИТЕЛЯ_ДИС', 'ИСПОЛНИТЕЛЬ_ДИС',
-                               'ЯЗЫК', 'ЭКЗ', 'ДИФ_ЗАЧЕТ', 'ЗАЧЕТ', 'КП',
-                               'ЗЕ_В_СЕМЕСТРАХ', 'ЛЕК_В_СЕМЕСТРАХ', 'ПРАК_В_СЕМЕСТРАХ', 'ЛАБ_В_СЕМЕСТРАХ'])
+    up = pd.DataFrame(
+        columns=[
+            "ИД_УП",
+            "НС_ИД",
+            "ШИФР_НАПРАВЛЕНИЯ",
+            "НАПРАВЛЕНИЕ_ПОДГОТОВКИ",
+            "ОП_ИД",
+            "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА",
+            "ФАК_ИД",
+            "ФАКУЛЬТЕТ",
+            "ЯЗЫК_ОБУЧЕНИЯ",
+            "ОБЩАЯ_ТРУДОЕМКОСТЬ",
+            "СРОК_ОБУЧЕНИЯ",
+            "УРОВЕНЬ_ОБРАЗОВАНИЯ",
+            "ОГНП_ИД",
+            "ОГНП",
+            "ГОД_НАБОРА",
+            "НАИМЕНОВАНИЕ_БЛОКА",
+            "МОДУЛЬ_ИД",
+            "НАИМЕНОВАНИЕ_МОДУЛЯ",
+            "ИД_СТР_УП",
+            "ВЫБОР",
+            "НОМЕР_ПО_ПЛАНУ",
+            "DISC_DISC_ID",
+            "ДИС_ИД",
+            "ДИСЦИПЛИНА",
+            "ИД_ИСПОЛНИТЕЛЯ_ДИС",
+            "ИСПОЛНИТЕЛЬ_ДИС",
+            "ЯЗЫК",
+            "ЭКЗ",
+            "ДИФ_ЗАЧЕТ",
+            "ЗАЧЕТ",
+            "КП",
+            "ЗЕ_В_СЕМЕСТРАХ",
+            "ЛЕК_В_СЕМЕСТРАХ",
+            "ПРАК_В_СЕМЕСТРАХ",
+            "ЛАБ_В_СЕМЕСТРАХ",
+        ]
+    )
 
     # словарь для удаления
     to_del_dict = dict()
 
     def get_up(up_id):
-        print('Get up!')
+        print("Get up!")
         up_id = str(up_id)
         # получаем новые json
-        url_ = 'https://disc.itmo.su/api/v1/academic_plans/' + up_id
+        url_ = "https://disc.itmo.su/api/v1/academic_plans/" + up_id
         page = requests.get(url_, headers=headers)
-        res = page.json()['result']
+        res = page.json()["result"]
         print(up.shape)
 
         # берём id в новых планах
-        res_new = pd.DataFrame(res['disciplines_blocks'])
+        res_new = pd.DataFrame(res["disciplines_blocks"])
         res_ids = []
         for row_index, row in res_new.iterrows():
             for modules in row[2]:
-                for disc in modules['disciplines']:
-                    res_ids.append(disc['disc_id'])
+                for disc in modules["disciplines"]:
+                    res_ids.append(disc["disc_id"])
 
         # берём старые json (должны быть названия по шаблону)
         orig = ImplementationAcademicPlan.objects.get(ap_isu_id=up_id).old_json
@@ -70,15 +105,15 @@ def invoke():
 
         jsonpath = orig
         old_res = orig
-        print('1111', old_res)
+        print("1111", old_res)
         # old_res = pd.DataFrame(old_res['disciplines_blocks'])
         # print(old_res)
         old_res_ids = []
         if old_res is not None:
-            for blocks in old_res['disciplines_blocks']:
-                for modules in blocks['discipline_modules']:
-                    for disc in modules['disciplines']:
-                        old_res_ids.append(disc['disc_id'])
+            for blocks in old_res["disciplines_blocks"]:
+                for modules in blocks["discipline_modules"]:
+                    for disc in modules["disciplines"]:
+                        old_res_ids.append(disc["disc_id"])
 
         # ищем привязки для удаления ыи для добавления
         # код будет иногда некорректно обрабатывать, если в уп DISC_ID присутствует несколько раз
@@ -88,21 +123,19 @@ def invoke():
         # print (to_add)
 
         line = [
-            res['id'],
-            res['ns_id'],
-            res['direction_code'],
-            res['direction_name'],
-            res['edu_program_id'],
-            res['edu_program_name'],
-            res['faculty_id'],
-            res['faculty_name'],
-            res['lang'],
-            res['total_intensity']
+            res["id"],
+            res["ns_id"],
+            res["direction_code"],
+            res["direction_name"],
+            res["edu_program_id"],
+            res["edu_program_name"],
+            res["faculty_id"],
+            res["faculty_name"],
+            res["lang"],
+            res["total_intensity"],
         ]
         training_period = int(
-            float(
-                res['training_period']
-            )
+            float(res["training_period"])
         )  # внезапно training_period стал приходить как строка, до этого был числом
         line.append(training_period)
         # print (type(res['training_period']))
@@ -112,80 +145,80 @@ def invoke():
             line.append("Магистр")
         else:
             line.append("Специалист")
-        line.append(res['ognp_id'])
-        line.append(res['ognp_name'])
-        line.append(res['selection_year'])
+        line.append(res["ognp_id"])
+        line.append(res["ognp_name"])
+        line.append(res["selection_year"])
 
-        res = pd.DataFrame(res['disciplines_blocks'])
+        res = pd.DataFrame(res["disciplines_blocks"])
 
         for row_index, row in res.iterrows():
             lineup = line.copy()
             lineup.append(row[1])
             for modules in row[2]:
                 linemodule = lineup.copy()
-                linemodule.append(modules['module_id '])
-                linemodule.append(modules['module_name'])  # дальше буду  менять
-                for disc in modules['disciplines']:
+                linemodule.append(modules["module_id "])
+                linemodule.append(modules["module_name"])  # дальше буду  менять
+                for disc in modules["disciplines"]:
                     linedisc = linemodule.copy()
-                    linedisc.append(disc['str_up_id'])
-                    if disc['is_optional']:
+                    linedisc.append(disc["str_up_id"])
+                    if disc["is_optional"]:
                         linedisc.append(1)
                     else:
                         linedisc.append(0)
                     # linedisc.append(disc['is_optional'])
 
-                    linedisc.append(disc['plan_order'])  # надо менять
-                    linedisc.append(disc['disc_id'])
-                    linedisc.append(disc['dis_id'])
-                    linedisc.append(disc['discipline_name'])
-                    linedisc.append(disc['discipline_doer_id'])
-                    linedisc.append(disc['discipline_doer'])
-                    linedisc.append(disc['discipline_lang'])
-                    linedisc.append(disc['exam'])  # надо добавить список
-                    linedisc.append(disc['diff_credit'])  # надо добавить список
-                    linedisc.append(disc['credit'])  # надо добавить список
-                    linedisc.append(disc['course_project'])  # надо добавить список
+                    linedisc.append(disc["plan_order"])  # надо менять
+                    linedisc.append(disc["disc_id"])
+                    linedisc.append(disc["dis_id"])
+                    linedisc.append(disc["discipline_name"])
+                    linedisc.append(disc["discipline_doer_id"])
+                    linedisc.append(disc["discipline_doer"])
+                    linedisc.append(disc["discipline_lang"])
+                    linedisc.append(disc["exam"])  # надо добавить список
+                    linedisc.append(disc["diff_credit"])  # надо добавить список
+                    linedisc.append(disc["credit"])  # надо добавить список
+                    linedisc.append(disc["course_project"])  # надо добавить список
                     # todo course_work
                     # todo format_name format_id
                     # todo university_partner -> some discipline -> discipline_doer
 
                     ze = []
-                    for sem in disc['ze']:
-                        if sem['points'] == None:
+                    for sem in disc["ze"]:
+                        if sem["points"] == None:
                             ze.append(0)
                         else:
-                            ze.append(sem['points'])
+                            ze.append(sem["points"])
                     linedisc.append(tuple(ze))
                     lec = []
                     lab = []
                     practice = []
-                    for s in disc['class_points']:
-                        if s['lesson'] is None:
+                    for s in disc["class_points"]:
+                        if s["lesson"] is None:
                             lec.append(0)
                         else:
-                            lec.append(s['lesson'])
+                            lec.append(s["lesson"])
                     linedisc.append(tuple(lec))
 
-                    for s in disc['class_points']:
-                        if s['practice'] is None:
+                    for s in disc["class_points"]:
+                        if s["practice"] is None:
                             practice.append(0)
                         else:
-                            practice.append(s['practice'])
+                            practice.append(s["practice"])
                     linedisc.append(tuple(practice))
 
-                    for s in disc['class_points']:
-                        if s['lab'] == None:
+                    for s in disc["class_points"]:
+                        if s["lab"] == None:
                             lab.append(0)
                         else:
-                            lab.append(s['lab'])
+                            lab.append(s["lab"])
                     linedisc.append(tuple(lab))
 
                     # up.loc[disc['str_up_id']] = linedisc
 
                     ### начало вставки
                     # добавил условие
-                    if disc['disc_id'] in to_add:
-                        up.loc[disc['str_up_id']] = linedisc
+                    if disc["disc_id"] in to_add:
+                        up.loc[disc["str_up_id"]] = linedisc
 
         # скачиваем и сохраняем json заменяем старые
 
@@ -202,7 +235,7 @@ def invoke():
 
     # Чистим названия дисциплин от лишних пробелов
     def clean_text(text):
-        cleaned = re.sub('\s+', ' ', text)
+        cleaned = re.sub("\s+", " ", text)
         return cleaned.strip()
 
     up["ДИСЦИПЛИНА"] = up["ДИСЦИПЛИНА"].apply(clean_text)
@@ -223,22 +256,31 @@ def invoke():
                 module = "Неизвестный модуль"
         return module
 
-    up["МОДУЛЬ"] = up.apply(lambda row: set_module(row["НАИМЕНОВАНИЕ_МОДУЛЯ"],
-                                                   row["НАИМЕНОВАНИЕ_БЛОКА"],
-                                                   row["НОМЕР_ПО_ПЛАНУ"]), axis=1)
+    up["МОДУЛЬ"] = up.apply(
+        lambda row: set_module(
+            row["НАИМЕНОВАНИЕ_МОДУЛЯ"], row["НАИМЕНОВАНИЕ_БЛОКА"], row["НОМЕР_ПО_ПЛАНУ"]
+        ),
+        axis=1,
+    )
 
     # Преобразуем номер дисциплины в число, если это не так
     def num_to_int(code, subj):
         if not code:
-            if re.match('Подготовка к защите и защита ВКР', subj, flags=re.IGNORECASE):
+            if re.match("Подготовка к защите и защита ВКР", subj, flags=re.IGNORECASE):
                 code = "ГИА"
-            elif re.match('Производственная, научно-исследовательская работа', subj, flags=re.IGNORECASE):
+            elif re.match(
+                "Производственная, научно-исследовательская работа",
+                subj,
+                flags=re.IGNORECASE,
+            ):
                 code = "П"
-            elif re.match('Производственная, технологическая', subj, flags=re.IGNORECASE):
+            elif re.match(
+                "Производственная, технологическая", subj, flags=re.IGNORECASE
+            ):
                 code = "П"
-            elif re.match('Производственная, преддипломная', subj, flags=re.IGNORECASE):
+            elif re.match("Производственная, преддипломная", subj, flags=re.IGNORECASE):
                 code = "ПП"
-            elif re.match('Иностранный язык', subj, flags=re.IGNORECASE):
+            elif re.match("Иностранный язык", subj, flags=re.IGNORECASE):
                 code = "1000"
         if not str(code).isdigit() and not str(code).isalpha():
             return str(code).replace(".", "")
@@ -247,7 +289,9 @@ def invoke():
         else:
             return str(code)
 
-    up["НОМЕР"] = up.apply(lambda row: num_to_int(row["НОМЕР_ПО_ПЛАНУ"], row["ДИСЦИПЛИНА"]), axis=1)
+    up["НОМЕР"] = up.apply(
+        lambda row: num_to_int(row["НОМЕР_ПО_ПЛАНУ"], row["ДИСЦИПЛИНА"]), axis=1
+    )
 
     # преобразуем форму контроля
     def get_semester_list(years):
@@ -272,10 +316,18 @@ def invoke():
                 terms[int(term) - 1] = 1
         return tuple(terms)
 
-    up["ЭКЗ_ПО_СЕМЕСТРАМ"] = up.apply(lambda row: set_control(row["ЭКЗ"], row["СРОК_ОБУЧЕНИЯ"]), axis=1)
-    up["ЗАЧЕТ_ПО_СЕМЕСТРАМ"] = up.apply(lambda row: set_control(row["ЗАЧЕТ"], row["СРОК_ОБУЧЕНИЯ"]), axis=1)
-    up["ДИФ_ЗАЧЕТ_ПО_СЕМЕСТРАМ"] = up.apply(lambda row: set_control(row["ДИФ_ЗАЧЕТ"], row["СРОК_ОБУЧЕНИЯ"]), axis=1)
-    up["КП_ПО_СЕМЕСТРАМ"] = up.apply(lambda row: set_control(row["КП"], row["СРОК_ОБУЧЕНИЯ"]), axis=1)
+    up["ЭКЗ_ПО_СЕМЕСТРАМ"] = up.apply(
+        lambda row: set_control(row["ЭКЗ"], row["СРОК_ОБУЧЕНИЯ"]), axis=1
+    )
+    up["ЗАЧЕТ_ПО_СЕМЕСТРАМ"] = up.apply(
+        lambda row: set_control(row["ЗАЧЕТ"], row["СРОК_ОБУЧЕНИЯ"]), axis=1
+    )
+    up["ДИФ_ЗАЧЕТ_ПО_СЕМЕСТРАМ"] = up.apply(
+        lambda row: set_control(row["ДИФ_ЗАЧЕТ"], row["СРОК_ОБУЧЕНИЯ"]), axis=1
+    )
+    up["КП_ПО_СЕМЕСТРАМ"] = up.apply(
+        lambda row: set_control(row["КП"], row["СРОК_ОБУЧЕНИЯ"]), axis=1
+    )
 
     # считаем СРС
     def hours_status(creds, lec, prac, lab):
@@ -303,18 +355,35 @@ def invoke():
 
     def set_srs(status, creds, lec, prac, lab, module):
         srs = [0 for _ in range(12)]
-        if status == "ОК" or (status == "ЗЕ есть, часов нет" and (module == "Практика" or module == "ГИА")):
+        if status == "ОК" or (
+            status == "ЗЕ есть, часов нет" and (module == "Практика" or module == "ГИА")
+        ):
             for i in range(len(creds)):
                 if creds[i] != 0:
                     srs[i] = round(creds[i] * 36 - 1.1 * (lec[i] + prac[i] + lab[i]), 1)
         return tuple(srs)
 
-    up["СРС_СТАТУС"] = up.apply(lambda row: hours_status(row["ЗЕ_В_СЕМЕСТРАХ"], row["ЛЕК_В_СЕМЕСТРАХ"],
-                                                         row["ПРАК_В_СЕМЕСТРАХ"], row["ЛАБ_В_СЕМЕСТРАХ"]), axis=1)
+    up["СРС_СТАТУС"] = up.apply(
+        lambda row: hours_status(
+            row["ЗЕ_В_СЕМЕСТРАХ"],
+            row["ЛЕК_В_СЕМЕСТРАХ"],
+            row["ПРАК_В_СЕМЕСТРАХ"],
+            row["ЛАБ_В_СЕМЕСТРАХ"],
+        ),
+        axis=1,
+    )
 
-    up["СРС"] = up.apply(lambda row: set_srs(row["СРС_СТАТУС"], row["ЗЕ_В_СЕМЕСТРАХ"], row["ЛЕК_В_СЕМЕСТРАХ"],
-                                             row["ПРАК_В_СЕМЕСТРАХ"], row["ЛАБ_В_СЕМЕСТРАХ"], row["МОДУЛЬ"]),
-                         axis=1)
+    up["СРС"] = up.apply(
+        lambda row: set_srs(
+            row["СРС_СТАТУС"],
+            row["ЗЕ_В_СЕМЕСТРАХ"],
+            row["ЛЕК_В_СЕМЕСТРАХ"],
+            row["ПРАК_В_СЕМЕСТРАХ"],
+            row["ЛАБ_В_СЕМЕСТРАХ"],
+            row["МОДУЛЬ"],
+        ),
+        axis=1,
+    )
 
     # удаляем лишние столбцы
     up = up.drop(["НОМЕР_ПО_ПЛАНУ", "СРОК_ОБУЧЕНИЯ"], axis=1)
@@ -327,8 +396,8 @@ def invoke():
     # сохранение датафрейма на добавление
 
     date_time = time.strftime("%Y%m%d-%H%M%S")
-    up.to_excel('upload/isu_merge/input_add' + date_time + '.xlsx')
-    file = 'input_add' + date_time + '.xlsx'
+    up.to_excel("upload/isu_merge/input_add" + date_time + ".xlsx")
+    file = "input_add" + date_time + ".xlsx"
 
     # не обрабатываются изменения следующего типа:
     # 1) дисциплина переехала в другой модуль (ну и ладно)
@@ -371,9 +440,12 @@ def invoke():
             print(ap)
             for wp in to_del_dict[ap]:
                 print(wp)
-                WorkProgramChangeInDisciplineBlockModule. \
-                    objects.filter(work_program=WorkProgram.objects.get(discipline_code=int(wp)),
-                                   discipline_block_module__descipline_block__academic_plan__ap_isu_id=int(ap))
+                WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                    work_program=WorkProgram.objects.get(discipline_code=int(wp)),
+                    discipline_block_module__descipline_block__academic_plan__ap_isu_id=int(
+                        ap
+                    ),
+                )
                 # WorkProgramChangeInDisciplineBlockModule.delete()
                 print(WorkProgramChangeInDisciplineBlockModule)
     except:
@@ -391,66 +463,72 @@ def invoke():
     # change = orig
     # orig = change_2
 
-    print('Успех!')
+    print("Успех!")
     return Response(status=200)
 
 
 def csv_handler(self, file):
-    print('- Импортируем csv файл')
-    if not os.path.exists('upload/'):
-        os.mkdir('upload/')
-    path = 'upload/isu_merge/' + file
+    print("- Импортируем csv файл")
+    if not os.path.exists("upload/"):
+        os.mkdir("upload/")
+    path = "upload/isu_merge/" + file
     # with open(path, 'wb+') as destination:
     #     for chunk in request.FILES['file'].chunks():
     #         destination.write(chunk)
     data = pd.read_excel(path)
-    print(data['ИД_УП'])
-    print('- Импортируем json с порядком модулей')
-    with open('workprogramsapp/modules-order.json', 'r', encoding='utf-8') as fh:
+    print(data["ИД_УП"])
+    print("- Импортируем json с порядком модулей")
+    with open("workprogramsapp/modules-order.json", "r", encoding="utf-8") as fh:
         order = json.load(fh)
-    print('- Создаем рпд и направления')
+    print("- Создаем рпд и направления")
     # создаем рпд и направления
     fs_count, wp_count, ap_count = 0, 0, 0
     for i in list(data.index.values):
         try:
             # print('clone', clone)
-            print('-- Новая СТРОКА')
-            if data['УРОВЕНЬ_ОБРАЗОВАНИЯ'][i].strip() == 'Академический бакалавр':
-                qualification = 'bachelor'
-            elif data['УРОВЕНЬ_ОБРАЗОВАНИЯ'][i].strip() == 'Магистр':
-                qualification = 'master'
+            print("-- Новая СТРОКА")
+            if data["УРОВЕНЬ_ОБРАЗОВАНИЯ"][i].strip() == "Академический бакалавр":
+                qualification = "bachelor"
+            elif data["УРОВЕНЬ_ОБРАЗОВАНИЯ"][i].strip() == "Магистр":
+                qualification = "master"
             else:
-                qualification = 'specialist'
-            print('-- Уровень образования', qualification)
-            print('--- проверяем если ОП уже существует в БД')
-            if FieldOfStudy.objects.filter(number=data['ШИФР_НАПРАВЛЕНИЯ'][i],
-                                           qualification=qualification).exists():
-                fs_obj = FieldOfStudy.objects.get(number=data['ШИФР_НАПРАВЛЕНИЯ'][i],
-                                                  qualification=qualification)  # todo добавить ОБЩАЯ_ТРУДОЕМКОСТЬ
+                qualification = "specialist"
+            print("-- Уровень образования", qualification)
+            print("--- проверяем если ОП уже существует в БД")
+            if FieldOfStudy.objects.filter(
+                number=data["ШИФР_НАПРАВЛЕНИЯ"][i], qualification=qualification
+            ).exists():
+                fs_obj = FieldOfStudy.objects.get(
+                    number=data["ШИФР_НАПРАВЛЕНИЯ"][i], qualification=qualification
+                )  # todo добавить ОБЩАЯ_ТРУДОЕМКОСТЬ
             else:
                 # Записываем в БД новую ОП
-                fs_obj = FieldOfStudy(number=data['ШИФР_НАПРАВЛЕНИЯ'][i],
-                                      title=data['НАПРАВЛЕНИЕ_ПОДГОТОВКИ'][i].strip(),
-                                      qualification=qualification)
+                fs_obj = FieldOfStudy(
+                    number=data["ШИФР_НАПРАВЛЕНИЯ"][i],
+                    title=data["НАПРАВЛЕНИЕ_ПОДГОТОВКИ"][i].strip(),
+                    qualification=qualification,
+                )
                 fs_obj.save()
                 fs_count += 1
             try:
-                wp = WorkProgram.objects.get(id=int(data['ИД_НАШ'][i]))
+                wp = WorkProgram.objects.get(id=int(data["ИД_НАШ"][i]))
                 wp_obj = wp
-                print('--- РПД найдена')
+                print("--- РПД найдена")
             except:
-                print('--- РПД не найдена')
-                wp_obj = WorkProgram(title=data['ДИСЦИПЛИНА'][i].strip(),
-                                     subject_code=data['НОМЕР'][i], qualification=qualification,
-                                     # credit_units=",".join(map(str, data['ЗЕ_В_СЕМЕСТРАХ'][i]))
-                                     )
+                print("--- РПД не найдена")
+                wp_obj = WorkProgram(
+                    title=data["ДИСЦИПЛИНА"][i].strip(),
+                    subject_code=data["НОМЕР"][i],
+                    qualification=qualification,
+                    # credit_units=",".join(map(str, data['ЗЕ_В_СЕМЕСТРАХ'][i]))
+                )
                 print("--- РПД создана")
                 wp_obj.save()
                 # print(wp_obj.id)
                 wp_count += 1
 
             def watchmaker(hours, ze):
-                print('функция вызвана')
+                print("функция вызвана")
                 ze = ze
                 sem = 0
                 all_ze_indexes_in_rpd = 0
@@ -458,7 +536,7 @@ def csv_handler(self, file):
                 for i in hours:
                     # print('ze', ze)
                     if ze[all_ze_indexes_in_rpd] >= 1.0:
-                        print('условие сработало')
+                        print("условие сработало")
                         lecture_hours_v2[sem] = i
                         sem += 1
                     all_ze_indexes_in_rpd += 1
@@ -475,196 +553,266 @@ def csv_handler(self, file):
                 return sem
 
             wp_obj.number_of_semesters = int(
-                semesters([float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")]))
+                semesters(
+                    [
+                        float(x)
+                        for x in (data["ЗЕ_В_СЕМЕСТРАХ"][i]).strip("()").split(",")
+                    ]
+                )
+            )
             wp_obj.lecture_hours_v2 = watchmaker(
-                [float(x) for x in (data['ЛЕК_В_СЕМЕСТРАХ'][i]).strip("()").split(",")],
-                [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
-            print('Записаны часы лекций:', wp_obj.lecture_hours_v2)
+                [float(x) for x in (data["ЛЕК_В_СЕМЕСТРАХ"][i]).strip("()").split(",")],
+                [float(x) for x in (data["ЗЕ_В_СЕМЕСТРАХ"][i]).strip("()").split(",")],
+            )
+            print("Записаны часы лекций:", wp_obj.lecture_hours_v2)
             wp_obj.practice_hours_v2 = watchmaker(
-                [float(x) for x in (data['ПРАК_В_СЕМЕСТРАХ'][i]).strip("()").split(",")],
-                [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
-            print('Записаны часы практик:', wp_obj.practice_hours_v2)
+                [
+                    float(x)
+                    for x in (data["ПРАК_В_СЕМЕСТРАХ"][i]).strip("()").split(",")
+                ],
+                [float(x) for x in (data["ЗЕ_В_СЕМЕСТРАХ"][i]).strip("()").split(",")],
+            )
+            print("Записаны часы практик:", wp_obj.practice_hours_v2)
             wp_obj.lab_hours_v2 = watchmaker(
-                [float(x) for x in (data['ЛАБ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")],
-                [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
-            print('Записаны часы лаб:', wp_obj.lab_hours_v2)
-            wp_obj.srs_hours_v2 = watchmaker([float(x) for x in (data['СРС'][i]).strip("()").split(",")],
-                                             [float(x) for x in (data['ЗЕ_В_СЕМЕСТРАХ'][i]).strip("()").split(",")])
-            print('Записаны часы срс:', wp_obj.srs_hours_v2)
-            wp_obj.discipline_code = data['DISC_DISC_ID'][i]
+                [float(x) for x in (data["ЛАБ_В_СЕМЕСТРАХ"][i]).strip("()").split(",")],
+                [float(x) for x in (data["ЗЕ_В_СЕМЕСТРАХ"][i]).strip("()").split(",")],
+            )
+            print("Записаны часы лаб:", wp_obj.lab_hours_v2)
+            wp_obj.srs_hours_v2 = watchmaker(
+                [float(x) for x in (data["СРС"][i]).strip("()").split(",")],
+                [float(x) for x in (data["ЗЕ_В_СЕМЕСТРАХ"][i]).strip("()").split(",")],
+            )
+            print("Записаны часы срс:", wp_obj.srs_hours_v2)
+            wp_obj.discipline_code = data["DISC_DISC_ID"][i]
             wp_obj.save()
-            print('-- Работа с образовательной программой')
-            if data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find("Русский") != -1 and data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip().find(
-                    "Английский") != -1:
+            print("-- Работа с образовательной программой")
+            if (
+                data["ЯЗЫК_ОБУЧЕНИЯ"][i].strip().find("Русский") != -1
+                and data["ЯЗЫК_ОБУЧЕНИЯ"][i].strip().find("Английский") != -1
+            ):
                 op_language = "ru/en"
-            elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Русский":
+            elif data["ЯЗЫК_ОБУЧЕНИЯ"][i].strip() == "Русский":
                 op_language = "ru"
-            elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Английский":
+            elif data["ЯЗЫК_ОБУЧЕНИЯ"][i].strip() == "Английский":
                 op_language = "en"
-            elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Казахский":
+            elif data["ЯЗЫК_ОБУЧЕНИЯ"][i].strip() == "Казахский":
                 op_language = "kz"
-            elif data['ЯЗЫК_ОБУЧЕНИЯ'][i].strip() == "Немецкий":
+            elif data["ЯЗЫК_ОБУЧЕНИЯ"][i].strip() == "Немецкий":
                 op_language = "de"
-            if ImplementationAcademicPlan.objects.filter(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
-                                                         ap_isu_id=int(data['ИД_УП'][i]),
-                                                         year=data['ГОД_НАБОРА'][i], language=op_language,
-                                                         qualification=qualification).exists():
-                iap_obj = ImplementationAcademicPlan.objects.get(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
-                                                                 ap_isu_id=int(data['ИД_УП'][i]),
-                                                                 year=data['ГОД_НАБОРА'][i], language=op_language,
-                                                                 qualification=qualification)
-                iap_obj.op_isu_id = int(data['ОП_ИД'][
-                                            i])  # todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
-                iap_obj.ap_isu_id = int(data['ИД_УП'][i])
-                iap_obj.ns_id = int(data['НС_ИД'][i])
-                iap_obj.title = data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i]
+            if ImplementationAcademicPlan.objects.filter(
+                title=data["ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА"][i],
+                ap_isu_id=int(data["ИД_УП"][i]),
+                year=data["ГОД_НАБОРА"][i],
+                language=op_language,
+                qualification=qualification,
+            ).exists():
+                iap_obj = ImplementationAcademicPlan.objects.get(
+                    title=data["ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА"][i],
+                    ap_isu_id=int(data["ИД_УП"][i]),
+                    year=data["ГОД_НАБОРА"][i],
+                    language=op_language,
+                    qualification=qualification,
+                )
+                iap_obj.op_isu_id = int(
+                    data["ОП_ИД"][i]
+                )  # todo: вернуть нс-ид (+) + записать название ОП сюда "ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА" + язык + вуз партнер
+                iap_obj.ap_isu_id = int(data["ИД_УП"][i])
+                iap_obj.ns_id = int(data["НС_ИД"][i])
+                iap_obj.title = data["ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА"][i]
                 iap_obj.field_of_study.add(fs_obj)
                 iap_obj.save()
             else:
-                iap_obj = ImplementationAcademicPlan(title=data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i],
-                                                     year=data['ГОД_НАБОРА'][i], language=op_language,
-                                                     qualification=qualification)
-                iap_obj.op_isu_id = int(data['ОП_ИД'][i])
-                iap_obj.ap_isu_id = int(data['ИД_УП'][i])
-                iap_obj.ns_id = int(data['НС_ИД'][i])
-                iap_obj.title = data['ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА'][i]
+                iap_obj = ImplementationAcademicPlan(
+                    title=data["ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА"][i],
+                    year=data["ГОД_НАБОРА"][i],
+                    language=op_language,
+                    qualification=qualification,
+                )
+                iap_obj.op_isu_id = int(data["ОП_ИД"][i])
+                iap_obj.ap_isu_id = int(data["ИД_УП"][i])
+                iap_obj.ns_id = int(data["НС_ИД"][i])
+                iap_obj.title = data["ОБРАЗОВАТЕЛЬНАЯ_ПРОГРАММА"][i]
                 iap_obj.save()
                 iap_obj.field_of_study.add(fs_obj)
                 iap_obj.save()
             # print('Связь учебного плана и направления: done')
-            print('-- Работа с учебным планом')
-            if AcademicPlan.objects.filter(ap_isu_id=int(data['ИД_УП'][i])).exists():
-                ap_obj = AcademicPlan.objects.get(ap_isu_id=int(data['ИД_УП'][i]))
+            print("-- Работа с учебным планом")
+            if AcademicPlan.objects.filter(ap_isu_id=int(data["ИД_УП"][i])).exists():
+                ap_obj = AcademicPlan.objects.get(ap_isu_id=int(data["ИД_УП"][i]))
                 iap_obj.academic_plan = ap_obj
                 iap_obj.save()
-                print('id учебного плана', ap_obj.ap_isu_id)
+                print("id учебного плана", ap_obj.ap_isu_id)
             else:
                 ap_obj = AcademicPlan()
                 # ap_obj.academic_plan_in_field_of_study.set(iap_obj)
                 # iap_obj.academic_plan = ap_obj
                 # ap_obj.typelearning = 'internal'
-                ap_obj.ap_isu_id = int(data['ИД_УП'][i])
+                ap_obj.ap_isu_id = int(data["ИД_УП"][i])
                 ap_obj.save()
-                print('------')
+                print("------")
                 iap_obj.academic_plan = ap_obj
                 iap_obj.save()
                 ap_count += 1
             # print('Учебный план: ', ap_obj)
-            print('-- Работа с блоком')
-            if DisciplineBlock.objects.filter(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(),
-                                              academic_plan=ap_obj).exists():
-                db = DisciplineBlock.objects.get(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan=ap_obj)
+            print("-- Работа с блоком")
+            if DisciplineBlock.objects.filter(
+                name=data["НАИМЕНОВАНИЕ_БЛОКА"][i].strip(), academic_plan=ap_obj
+            ).exists():
+                db = DisciplineBlock.objects.get(
+                    name=data["НАИМЕНОВАНИЕ_БЛОКА"][i].strip(), academic_plan=ap_obj
+                )
             else:
-                db = DisciplineBlock(name=data['НАИМЕНОВАНИЕ_БЛОКА'][i].strip(), academic_plan_id=ap_obj.id, )
+                db = DisciplineBlock(
+                    name=data["НАИМЕНОВАНИЕ_БЛОКА"][i].strip(),
+                    academic_plan_id=ap_obj.id,
+                )
                 db.save()
             # print('Блок: ', db)
             # Тут Денис Терещенко напишет обработчик модулей
-            print('-- Работа с модулями')
+            print("-- Работа с модулями")
 
             try:
-                o = order[(data['МОДУЛЬ'][i].strip())]
+                o = order[(data["МОДУЛЬ"][i].strip())]
             except:
-                order.update({(data['МОДУЛЬ'][i].strip()): len(order)})
-                o = order[(data['МОДУЛЬ'][i].strip())]
-            if DisciplineBlockModule.objects.filter(name=(data['МОДУЛЬ'][i].strip()),
-                                                    descipline_block=db).exists():
-                print('1')
-                mdb = DisciplineBlockModule.objects.get(name=(data['МОДУЛЬ'][i].strip()), descipline_block=db)
+                order.update({(data["МОДУЛЬ"][i].strip()): len(order)})
+                o = order[(data["МОДУЛЬ"][i].strip())]
+            if DisciplineBlockModule.objects.filter(
+                name=(data["МОДУЛЬ"][i].strip()), descipline_block=db
+            ).exists():
+                print("1")
+                mdb = DisciplineBlockModule.objects.get(
+                    name=(data["МОДУЛЬ"][i].strip()), descipline_block=db
+                )
 
             else:
-                print('2')
-                mdb = DisciplineBlockModule(name=(data['МОДУЛЬ'][i].strip()), order=o)
+                print("2")
+                mdb = DisciplineBlockModule(name=(data["МОДУЛЬ"][i].strip()), order=o)
                 mdb.save()
                 mdb.descipline_block.add(db)
 
             # print('Модуль в блоке: ', mdb)
-            print('-- Работа с блок-модулем')
-            if data['ВЫБОР'][i] == 0:
-                option = 'Required'
-            elif data['ВЫБОР'][i] == 1:
-                option = 'Optionally'
+            print("-- Работа с блок-модулем")
+            if data["ВЫБОР"][i] == 0:
+                option = "Required"
+            elif data["ВЫБОР"][i] == 1:
+                option = "Optionally"
             print("Выборность", option)
 
-            if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                    discipline_block_module=mdb, change_type=option, subject_code=data['НОМЕР'][i]).exists()):
-                wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(discipline_block_module=mdb,
-                                                                                   change_type=option,
-                                                                                   subject_code=data['НОМЕР'][i]
-                                                                                   )
+            if (
+                option == "Optionally"
+                and WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                    discipline_block_module=mdb,
+                    change_type=option,
+                    subject_code=data["НОМЕР"][i],
+                ).exists()
+            ):
+                wpchangemdb = WorkProgramChangeInDisciplineBlockModule.objects.get(
+                    discipline_block_module=mdb,
+                    change_type=option,
+                    subject_code=data["НОМЕР"][i],
+                )
                 if WorkProgramInFieldOfStudy.objects.filter(
-                        work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
+                    work_program_change_in_discipline_block_module=wpchangemdb,
+                    work_program=wp_obj,
+                ).exists():
                     wpinfs = WorkProgramInFieldOfStudy.objects.get(
-                        work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
+                        work_program_change_in_discipline_block_module=wpchangemdb,
+                        work_program=wp_obj,
+                    )
                     # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                     wpinfs.save()
                 else:
-                    wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
-                                                       work_program=wp_obj)
+                    wpinfs = WorkProgramInFieldOfStudy(
+                        work_program_change_in_discipline_block_module=wpchangemdb,
+                        work_program=wp_obj,
+                    )
                     # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                     wpinfs.save()
-            elif WorkProgramChangeInDisciplineBlockModule.objects.filter(discipline_block_module=mdb,
-                                                                         change_type=option,
-                                                                         work_program=wp_obj
-                                                                         ).exists():
-                print('exist', wp_obj)
+            elif WorkProgramChangeInDisciplineBlockModule.objects.filter(
+                discipline_block_module=mdb, change_type=option, work_program=wp_obj
+            ).exists():
+                print("exist", wp_obj)
                 wpinfs = WorkProgramInFieldOfStudy.objects.get(
                     work_program_change_in_discipline_block_module=WorkProgramChangeInDisciplineBlockModule.objects.get(
                         discipline_block_module=mdb,
                         change_type=option,
-                        work_program=wp_obj
-                    ), work_program=wp_obj)
+                        work_program=wp_obj,
+                    ),
+                    work_program=wp_obj,
+                )
                 # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                 wpinfs.save()
             else:
                 wpchangemdb = WorkProgramChangeInDisciplineBlockModule()
-                wpchangemdb.credit_units = data['ЗЕ_В_СЕМЕСТРАХ'][i].strip("()")
-                print('wpchangemdb.credit_units', wpchangemdb.credit_units)
+                wpchangemdb.credit_units = data["ЗЕ_В_СЕМЕСТРАХ"][i].strip("()")
+                print("wpchangemdb.credit_units", wpchangemdb.credit_units)
                 wpchangemdb.change_type = option
                 wpchangemdb.discipline_block_module = mdb
-                wpchangemdb.subject_code = data['НОМЕР'][i]
+                wpchangemdb.subject_code = data["НОМЕР"][i]
                 wpchangemdb.save()
                 if WorkProgramInFieldOfStudy.objects.filter(
-                        work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj).exists():
+                    work_program_change_in_discipline_block_module=wpchangemdb,
+                    work_program=wp_obj,
+                ).exists():
                     wpinfs = WorkProgramInFieldOfStudy.objects.get(
-                        work_program_change_in_discipline_block_module=wpchangemdb, work_program=wp_obj)
+                        work_program_change_in_discipline_block_module=wpchangemdb,
+                        work_program=wp_obj,
+                    )
                     # wpinfs.id_str_up = int(data['ИД_СТР_УП'][i])
                     wpinfs.save()
                     print("Нашли рпд в направлении", wpinfs)
                 else:
-                    wpinfs = WorkProgramInFieldOfStudy(work_program_change_in_discipline_block_module=wpchangemdb,
-                                                       work_program=wp_obj)
+                    wpinfs = WorkProgramInFieldOfStudy(
+                        work_program_change_in_discipline_block_module=wpchangemdb,
+                        work_program=wp_obj,
+                    )
                     wpinfs.save()
                     print("Сохранили рпд в направлении", wpinfs)
             try:
-                WorkProgramIdStrUpForIsu.objects.get(id_str_up=int(data['ИД_СТР_УП'][i]),
-                                                     ns_id=int(data['НС_ИД'][i]),
-                                                     work_program_in_field_of_study=wpinfs)
-                print('ddddddddddddddddd', WorkProgramIdStrUpForIsu.objects.get(id_str_up=int(data['ИД_СТР_УП'][i]),
-                                                                                ns_id=int(data['НС_ИД'][i]),
-                                                                                work_program_in_field_of_study=wpinfs))
+                WorkProgramIdStrUpForIsu.objects.get(
+                    id_str_up=int(data["ИД_СТР_УП"][i]),
+                    ns_id=int(data["НС_ИД"][i]),
+                    work_program_in_field_of_study=wpinfs,
+                )
+                print(
+                    "ddddddddddddddddd",
+                    WorkProgramIdStrUpForIsu.objects.get(
+                        id_str_up=int(data["ИД_СТР_УП"][i]),
+                        ns_id=int(data["НС_ИД"][i]),
+                        work_program_in_field_of_study=wpinfs,
+                    ),
+                )
             except WorkProgramIdStrUpForIsu.DoesNotExist:
-                wpinfs_id_str_up = WorkProgramIdStrUpForIsu(id_str_up=int(data['ИД_СТР_УП'][i]),
-                                                            ns_id=int(data['НС_ИД'][i]),
-                                                            work_program_in_field_of_study=wpinfs)
-                wpinfs_id_str_up.number = data['НОМЕР'][i]
-                wpinfs_id_str_up.dis_id = data['ДИС_ИД'][i]
-                wpinfs_id_str_up.ze_v_sem = data['ЗЕ_В_СЕМЕСТРАХ'][i].strip("()")
-                wpinfs_id_str_up.lec_v_sem = data['ЛЕК_В_СЕМЕСТРАХ'][i].strip("()")
-                wpinfs_id_str_up.prak_v_sem = data['ПРАК_В_СЕМЕСТРАХ'][i].strip("()")
-                wpinfs_id_str_up.lab_v_sem = data['ЛАБ_В_СЕМЕСТРАХ'][i].strip("()")
-                wpinfs_id_str_up.ekz_v_sem = data['ЭКЗ_ПО_СЕМЕСТРАМ'][i].strip("()")
-                wpinfs_id_str_up.zach_v_sem = data['ЗАЧЕТ_ПО_СЕМЕСТРАМ'][i].strip("()")
-                wpinfs_id_str_up.dif_zach_v_sem = data['ДИФ_ЗАЧЕТ_ПО_СЕМЕСТРАМ'][i].strip("()")
-                wpinfs_id_str_up.kp_v_sem = data['КП_ПО_СЕМЕСТРАМ'][i].strip("()")
+                wpinfs_id_str_up = WorkProgramIdStrUpForIsu(
+                    id_str_up=int(data["ИД_СТР_УП"][i]),
+                    ns_id=int(data["НС_ИД"][i]),
+                    work_program_in_field_of_study=wpinfs,
+                )
+                wpinfs_id_str_up.number = data["НОМЕР"][i]
+                wpinfs_id_str_up.dis_id = data["ДИС_ИД"][i]
+                wpinfs_id_str_up.ze_v_sem = data["ЗЕ_В_СЕМЕСТРАХ"][i].strip("()")
+                wpinfs_id_str_up.lec_v_sem = data["ЛЕК_В_СЕМЕСТРАХ"][i].strip("()")
+                wpinfs_id_str_up.prak_v_sem = data["ПРАК_В_СЕМЕСТРАХ"][i].strip("()")
+                wpinfs_id_str_up.lab_v_sem = data["ЛАБ_В_СЕМЕСТРАХ"][i].strip("()")
+                wpinfs_id_str_up.ekz_v_sem = data["ЭКЗ_ПО_СЕМЕСТРАМ"][i].strip("()")
+                wpinfs_id_str_up.zach_v_sem = data["ЗАЧЕТ_ПО_СЕМЕСТРАМ"][i].strip("()")
+                wpinfs_id_str_up.dif_zach_v_sem = data["ДИФ_ЗАЧЕТ_ПО_СЕМЕСТРАМ"][
+                    i
+                ].strip("()")
+                wpinfs_id_str_up.kp_v_sem = data["КП_ПО_СЕМЕСТРАМ"][i].strip("()")
                 wpinfs_id_str_up.save()
             except:
-                print('---- Ошибка с количеством WorkProgramIdStrUpForIsu.id_str_up')
-            for zun in Zun.objects.filter(wp_in_fs_saved_fk_id_str_up=int(data['ИД_СТР_УП'][i])):
+                print("---- Ошибка с количеством WorkProgramIdStrUpForIsu.id_str_up")
+            for zun in Zun.objects.filter(
+                wp_in_fs_saved_fk_id_str_up=int(data["ИД_СТР_УП"][i])
+            ):
                 zun.wp_in_fs = wpinfs
                 zun.save()
-            print('Рабочая программа дисциплины записана в модуль: done')
+            print("Рабочая программа дисциплины записана в модуль: done")
         except Exception as e:
             print(e)
-            print('Строка ', i, 'не записалась, проверьте на опечатки или пустые значения')
+            print(
+                "Строка ", i, "не записалась, проверьте на опечатки или пустые значения"
+            )
             continue
-    print(f'Записано: Учебные планы:{ap_count}, РПД:{wp_count}, Направления:{fs_count}')
+    print(f"Записано: Учебные планы:{ap_count}, РПД:{wp_count}, Направления:{fs_count}")

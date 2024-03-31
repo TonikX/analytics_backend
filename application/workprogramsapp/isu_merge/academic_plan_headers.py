@@ -1,7 +1,15 @@
 from django.db import transaction
 
-from workprogramsapp.models import FieldOfStudy, AcademicPlan, DisciplineBlock, ImplementationAcademicPlan
-from workprogramsapp.workprogram_additions.models import UniversityPartner, StructuralUnit
+from workprogramsapp.models import (
+    AcademicPlan,
+    DisciplineBlock,
+    FieldOfStudy,
+    ImplementationAcademicPlan,
+)
+from workprogramsapp.workprogram_additions.models import (
+    StructuralUnit,
+    UniversityPartner,
+)
 
 
 def get_qualification(direction_code: str) -> str:
@@ -36,19 +44,33 @@ def process_headers(headers: list):
         except AttributeError:
             pass
 
-        field_of_study, created = FieldOfStudy.objects.get_or_create(qualification=qualification_name,
-                                                                     title=ap_header["direction_name"],
-                                                                     number=ap_header["direction_code"])
+        field_of_study, created = FieldOfStudy.objects.get_or_create(
+            qualification=qualification_name,
+            title=ap_header["direction_name"],
+            number=ap_header["direction_code"],
+        )
         # print("FOS----------->", field_of_study, created)
-        academic_plan, created = AcademicPlan.objects.get_or_create(ap_isu_id=ap_header["id"])
+        academic_plan, created = AcademicPlan.objects.get_or_create(
+            ap_isu_id=ap_header["id"]
+        )
         # print("AP----------->", academic_plan, created)
         if created:
-            DisciplineBlock.objects.create(name="Блок 1. Модули (дисциплины)", academic_plan=academic_plan)
-            DisciplineBlock.objects.create(name="Блок 2. Практика", academic_plan=academic_plan)
-            DisciplineBlock.objects.create(name="Блок 3. ГИА", academic_plan=academic_plan)
-            DisciplineBlock.objects.create(name="Блок 4. Факультативные модули (дисциплины)",
-                                           academic_plan=academic_plan)
-        imp, created = ImplementationAcademicPlan.objects.get_or_create(ap_isu_id=ap_header["id"])
+            DisciplineBlock.objects.create(
+                name="Блок 1. Модули (дисциплины)", academic_plan=academic_plan
+            )
+            DisciplineBlock.objects.create(
+                name="Блок 2. Практика", academic_plan=academic_plan
+            )
+            DisciplineBlock.objects.create(
+                name="Блок 3. ГИА", academic_plan=academic_plan
+            )
+            DisciplineBlock.objects.create(
+                name="Блок 4. Факультативные модули (дисциплины)",
+                academic_plan=academic_plan,
+            )
+        imp, created = ImplementationAcademicPlan.objects.get_or_create(
+            ap_isu_id=ap_header["id"]
+        )
         # print("IMP----------->", imp, created)
         if created:
             imp.field_of_study.add(field_of_study)
@@ -68,18 +90,20 @@ def process_headers(headers: list):
         imp.year = 2024
         imp.qualification = qualification_name
         imp.save()
-        print('!!', ImplementationAcademicPlan.objects.filter(id=imp.id))
-        print('!!!!!!', ap_header["edu_program_name"])
+        print("!!", ImplementationAcademicPlan.objects.filter(id=imp.id))
+        print("!!!!!!", ap_header["edu_program_name"])
         # print(created)
         if ap_header["university_partner"]:
-            partner, created = UniversityPartner.objects.get_or_create(title=ap_header["university_partner"],
-                                                                       country=ap_header["up_country"])
+            partner, created = UniversityPartner.objects.get_or_create(
+                title=ap_header["university_partner"], country=ap_header["up_country"]
+            )
             if partner not in imp.university_partner.all():
                 imp.university_partner.add(partner)
             # print("PARTNER----------->", partner, created)
         if ap_header["faculty_id"]:
-            unit, created = StructuralUnit.objects.get_or_create(isu_id=ap_header["faculty_id"],
-                                                                 title=ap_header["faculty_name"])
+            unit, created = StructuralUnit.objects.get_or_create(
+                isu_id=ap_header["faculty_id"], title=ap_header["faculty_name"]
+            )
             imp.structural_unit = unit
             # print("UNIT---------->", unit, created)
 
