@@ -1,28 +1,19 @@
-import datetime
-
-from django.db.models import Count
-# Сериализаторы
-from rest_framework import filters
-from rest_framework import generics, viewsets
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
-from django.shortcuts import get_object_or_404
-from collections import OrderedDict
-from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from rest_framework import viewsets
 
 from .models import FeedbackRecord
 from .serializers import FeedbackRecordSerializer
-# CreateElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer
-from ..folders_ans_statistic.models import IndividualImplementationAcademicPlanInFolder
 
 
 class FeedbackRecordSet(viewsets.ModelViewSet):
     queryset = FeedbackRecord.objects.all()
     serializer_class = FeedbackRecordSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    filter_backends = (
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    )
     # filterset_fields = ['implementation_of_academic_plan__academic_plan__educational_profile',
     #                     'implementation_of_academic_plan__field_of_study__title',
     #                     'implementation_of_academic_plan__field_of_study__number',
