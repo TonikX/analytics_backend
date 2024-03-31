@@ -146,9 +146,6 @@ admin.site.register(individualization_models.DisciplineBlockModuleInDisciplineBl
 admin.site.register(
     individualization_models.ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
 )
-admin.site.register(
-    individualization_models.ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
-)
 admin.site.register(individualization_models.IndividualImplementationAcademicPlan)
 admin.site.register(
     individualization_models.WorkProgramInWorkProgramChangeInDisciplineBlockModule
