@@ -8,7 +8,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = environ.Env(DEBUG=(bool, False))
-environ.Env.read_env()
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
 
@@ -16,7 +16,9 @@ DEBUG = env("DEBUG")
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
-# ALLOWED_HOSTS = ['94.250.249.177', '94.250.249.177:8000', 'localhost', '127.0.0.1']
+ONLINECOURSE_CERT = env("ONLINECOURSE_CERT")
+ONLINECOURSE_KEY = env("ONLINECOURSE_KEY")
+
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 # APPEND_SLASH  =  False
@@ -101,7 +103,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "analytics_project.wsgi.application"
 
-DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES = {"default": env.db_url("DATABASE_URL")}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
