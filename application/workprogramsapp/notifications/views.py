@@ -1,15 +1,14 @@
 from rest_framework import generics
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-
-from dataprocessing.models import User
 from workprogramsapp.notifications.models import UserNotification
-from workprogramsapp.notifications.serializers import NotificationSerializer, NotificationCreateSerializer
+from workprogramsapp.notifications.serializers import (
+    NotificationCreateSerializer,
+    NotificationSerializer,
+)
 
 
-# РПД
 class NotificationListView(generics.ListAPIView):
     queryset = UserNotification.objects.all()
     serializer_class = NotificationSerializer
@@ -32,5 +31,3 @@ class CreateCustomNotification(generics.CreateAPIView):
     queryset = UserNotification.objects.all()
     serializer_class = NotificationCreateSerializer
     permission_classes = [IsAdminUser]
-
-

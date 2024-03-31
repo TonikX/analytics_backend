@@ -1,15 +1,14 @@
-# Библиотеки для сариализации
 from rest_framework import serializers
 
 from dataprocessing.models import User
 from workprogramsapp.expertise.common_serializers import ShortExpertiseSerializer
-from workprogramsapp.expertise.serializers import CommentSerializer, CommentSerializerFull
-from workprogramsapp.notifications.models import UserNotification, ExpertiseNotification, NotificationComments, \
-    AcademicPlanUpdateNotification
-
-
-# Модели данных
-# Сериализаторы
+from workprogramsapp.expertise.serializers import CommentSerializerFull
+from workprogramsapp.notifications.models import (
+    AcademicPlanUpdateNotification,
+    ExpertiseNotification,
+    NotificationComments,
+    UserNotification,
+)
 
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -21,7 +20,10 @@ class NotificationSerializer(serializers.ModelSerializer):
     def get_expertise(self, instance):
         try:
             exp = ExpertiseNotificationSerializer(
-                instance=ExpertiseNotification.objects.get(usernotification_ptr_id=instance.id)).data
+                instance=ExpertiseNotification.objects.get(
+                    usernotification_ptr_id=instance.id
+                )
+            ).data
             return exp
         except ExpertiseNotification.DoesNotExist:
             return None
@@ -29,7 +31,10 @@ class NotificationSerializer(serializers.ModelSerializer):
     def get_expertise_comment(self, instance):
         try:
             exp = ExpertiseCommentsNotificationSerializer(
-                instance=NotificationComments.objects.get(usernotification_ptr_id=instance.id)).data
+                instance=NotificationComments.objects.get(
+                    usernotification_ptr_id=instance.id
+                )
+            ).data
             return exp
         except NotificationComments.DoesNotExist:
             return None
@@ -37,14 +42,18 @@ class NotificationSerializer(serializers.ModelSerializer):
     def get_academic_plan(self, instance):
         try:
             ap = AcademicPlanUpdateNotificationSerializer(
-                instance=AcademicPlanUpdateNotification.objects.get(usernotification_ptr_id=instance.id)).data
+                instance=AcademicPlanUpdateNotification.objects.get(
+                    usernotification_ptr_id=instance.id
+                )
+            ).data
             return ap
         except AcademicPlanUpdateNotification.DoesNotExist:
             return None
 
     def get_basic(self, instance):
         return NotificationCreateSerializer(
-            instance=UserNotification.objects.get(id=instance.id)).data
+            instance=UserNotification.objects.get(id=instance.id)
+        ).data
 
     class Meta:
         model = UserNotification
@@ -79,7 +88,9 @@ class NotificationCreateSerializer(serializers.ModelSerializer):
         if not validated_data["user"]:
             users = User.objects.all()
             for user in users:
-                UserNotification.objects.create(user=user, message=validated_data["message"])
+                UserNotification.objects.create(
+                    user=user, message=validated_data["message"]
+                )
             return validated_data
         notification = UserNotification.objects.create(**validated_data)
         return notification
