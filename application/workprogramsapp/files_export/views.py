@@ -1,6 +1,7 @@
 import datetime
 import re
 from collections import OrderedDict
+from tempfile import NamedTemporaryFile
 
 import html2text
 from django.http import HttpResponse
@@ -8,7 +9,7 @@ from docx import Document
 from docxtpl import DocxTemplate, RichText
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
-from openpyxl.writer.excel import save_virtual_workbook
+from openpyxl import Workbook
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.generics import CreateAPIView
@@ -32,6 +33,20 @@ from workprogramsapp.models import (
     Zun,
 )
 from workprogramsapp.serializers import WorkProgramSerializer
+
+
+def save_virtual_workbook(workbook: Workbook) -> bytes:
+    """
+    Возвращает in-memory workbook, подходящий для ответа Django.
+    Замена deprecated-функции из openpyxl.
+    """
+    with NamedTemporaryFile() as tmp:
+        tmp.close()
+        workbook.save(tmp.name)
+        with open(tmp.name, "rb") as f:
+            f.seek(0)
+            new_file_object = f.read()
+    return new_file_object
 
 
 def get_hours(hour_str: str):
