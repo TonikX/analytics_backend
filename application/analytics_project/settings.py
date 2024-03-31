@@ -7,52 +7,48 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-env = environ.Env(
-    DEBUG=(bool, False)
-)
+env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env()
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env("SECRET_KEY")
 
-DEBUG = env('DEBUG')
+DEBUG = env("DEBUG")
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
 # ALLOWED_HOSTS = ['94.250.249.177', '94.250.249.177:8000', 'localhost', '127.0.0.1']
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 # APPEND_SLASH  =  False
 
 INSTALLED_APPS = [
-    'dataprocessing',
-    'gia_practice_app',
-    'onlinecourse',
-    'records',
-    'selection_of_keywords_for_rpd',
-    'streams_app',
-    'workprogramsapp',
-
-    'bootstrap_pagination',
-    'cachalot',
-    'corsheaders',
-    'crispy_forms',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.messages',
-    'django.contrib.sessions',
-    'django.contrib.staticfiles',
-    'django_filters',
-    'django_summernote',
-    'django_tables2',
-    'djoser',
-    'drf_yasg2',
-    'model_clone',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'rest_framework_simplejwt',
-    'rest_framework_swagger',
-
+    "dataprocessing",
+    "gia_practice_app",
+    "onlinecourse",
+    "records",
+    "selection_of_keywords_for_rpd",
+    "streams_app",
+    "workprogramsapp",
+    "bootstrap_pagination",
+    "cachalot",
+    "corsheaders",
+    "crispy_forms",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.messages",
+    "django.contrib.sessions",
+    "django.contrib.staticfiles",
+    "django_filters",
+    "django_summernote",
+    "django_tables2",
+    "djoser",
+    "drf_yasg2",
+    "model_clone",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "rest_framework_simplejwt",
+    "rest_framework_swagger",
     # 'ckeditor',
     # 'ckeditor_uploader',
     # 'django_extensions',
@@ -65,15 +61,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 'social_django.middleware.SocialAuthExceptionMiddleware',
     # 'django.middleware.common.BrokenLinkEmailsMiddleware',
     # 'django.middleware.common.CommonMiddleware',
@@ -84,19 +79,19 @@ MIDDLEWARE = [
 #     'dataprocessing.CorsMiddleware',
 # ]
 
-ROOT_URLCONF = 'analytics_project.urls'
+ROOT_URLCONF = "analytics_project.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
                 # 'social_django.context_processors.backends',
                 # 'social_django.context_processors.login_redirect',
             ],
@@ -104,76 +99,75 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'analytics_project.wsgi.application'
+WSGI_APPLICATION = "analytics_project.wsgi.application"
 
-DATABASES = {'default': env.db('DATABASE_URL')}
+DATABASES = {"default": env.db("DATABASE_URL")}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = "ru-ru"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = True
 
-STATIC_URL = '/static-backend/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static-backend')
+STATIC_URL = "/static-backend/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static-backend")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-AUTH_USER_MODEL = 'dataprocessing.User'
+AUTH_USER_MODEL = "dataprocessing.User"
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAdminUser',
-        'rest_framework.permissions.AllowAny',
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAdminUser",
+        "rest_framework.permissions.AllowAny",
     ),
-    'PAGE_SIZE': 10,
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+    "PAGE_SIZE": 10,
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ),
-    'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
-    'DEFAULT_PAGINATION_CLASS':
-        'rest_framework_json_api.pagination.PageNumberPagination',
-    'DEFAULT_PARSER_CLASSES': (
-        'rest_framework.parsers.JSONParser',
+    "EXCEPTION_HANDLER": "rest_framework_json_api.exceptions.exception_handler",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework_json_api.pagination.PageNumberPagination",
+    "DEFAULT_PARSER_CLASSES": (
+        "rest_framework.parsers.JSONParser",
         # 'rest_framework_json_api.parsers.JSONParser',
-        'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.MultiPartParser'
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.MultiPartParser",
     ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
         # 'rest_framework_json_api.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
+        "rest_framework.renderers.BrowsableAPIRenderer",
     ),
-    'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    "DEFAULT_METADATA_CLASS": "rest_framework_json_api.metadata.JSONAPIMetadata",
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 SIMPLE_JWT = {
     # 'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=480),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=480),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -181,7 +175,7 @@ AUTHENTICATION_BACKENDS = [
     # 'dataprocessing.social_auth_backend.FiwareAuth',
     # 'social_core.backends.facebook.FacebookOAuth2',
     # 'dataprocessing.itmo_backends.ItmoOAuth2',
-    'django.contrib.auth.backends.ModelBackend'
+    "django.contrib.auth.backends.ModelBackend"
 ]
 
 # SOCIAL_AUTH_ITMOOAUTH2_KEY = ''
@@ -215,126 +209,117 @@ CORS_ORIGIN_ALLOW_ALL = True
 # ]
 
 DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
+    "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
     # 'ACTIVATION_URL': '#/activate/{uid}/{token}',
     # 'SEND_ACTIVATION_EMAIL': True,
     # 'SERIALIZERS': {},
-    'SET_USERNAME_RETYPE': True,
-    'SERIALIZERS': {
-        'user': 'dataprocessing.serializers.UserBaseSerializer',
-        'current_user': 'dataprocessing.serializers.UserBaseSerializer',
+    "SET_USERNAME_RETYPE": True,
+    "SERIALIZERS": {
+        "user": "dataprocessing.serializers.UserBaseSerializer",
+        "current_user": "dataprocessing.serializers.UserBaseSerializer",
         # 'user_create': 'dataprocessing.serializers.UserSerializer',
     },
 }
 
 SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'api_key': {
-            'type': 'apiKey',
-            'in': 'header',
-            'name': 'Authorization'
-        }
+    "SECURITY_DEFINITIONS": {
+        "api_key": {"type": "apiKey", "in": "header", "name": "Authorization"}
     },
-    'DEFAULT_AUTO_SCHEMA_CLASS': 'analytics_project.yasg_tag_class.CustomAutoSchema'
+    "DEFAULT_AUTO_SCHEMA_CLASS": "analytics_project.yasg_tag_class.CustomAutoSchema",
 }
 
 ISU = {
-    'ISU_CLIENT_ID': env('ISU_CLIENT_ID'),
-    'ISU_CLIENT_SECRET': env('ISU_CLIENT_SECRET'),
-    'ISU_REDIRECT_URI': env('ISU_REDIRECT_URI'),
-    'ISU_FINISH_URI': env('ISU_FINISH_URI_WITH_PROTOCOL'),
-
+    "ISU_CLIENT_ID": env("ISU_CLIENT_ID"),
+    "ISU_CLIENT_SECRET": env("ISU_CLIENT_SECRET"),
+    "ISU_REDIRECT_URI": env("ISU_REDIRECT_URI"),
+    "ISU_FINISH_URI": env("ISU_FINISH_URI_WITH_PROTOCOL"),
 }
 
 BARS = {
-    'BARS_LOGIN': env('BARS_LOGIN'),
-    'BARS_PASSWORD': env('BARS_PASSWORD'),
-    'BARS_URL': env('BARS_URL'),
+    "BARS_LOGIN": env("BARS_LOGIN"),
+    "BARS_PASSWORD": env("BARS_PASSWORD"),
+    "BARS_URL": env("BARS_URL"),
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 # EMAIL_USE_SSL = env('EMAIL_USE_SSL')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-URL_FRONT = env('URL_FRONT')
-AP_FILE_ROUTE = env('AP_FILE_ROUTE')
-ISU_URL_UPDATERS = env('ISU_URL_UPDATERS')
-LAN_TOKEN = env('LAN_TOKEN')
+URL_FRONT = env("URL_FRONT")
+AP_FILE_ROUTE = env("AP_FILE_ROUTE")
+ISU_URL_UPDATERS = env("ISU_URL_UPDATERS")
+LAN_TOKEN = env("LAN_TOKEN")
 
 sentry_sdk.init(
-    dsn=env('SENTRY_URL'),
+    dsn=env("SENTRY_URL"),
     integrations=[
         DjangoIntegration(),
     ],
-
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     # We recommend adjusting this value in production.
     traces_sample_rate=1.0,
-
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True
+    send_default_pii=True,
 )
 
-"""CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'cache:11211',
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+        "LOCATION": "cache:11211",
     }
-}"""
+}
 
-if env('LOGGING_DEBUG', default=False):
+if env("LOGGING_DEBUG", default=False):
     LOGGING = {
-        'version': 1,
-        'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s]- %(message)s'}
-
+        "version": 1,
+        "formatters": {
+            "standard": {"format": "%(asctime)s [%(levelname)s]- %(message)s"}
         },
-        'handlers': {
-            'django_error': {
-                'level': 'DEBUG',
-                'class': 'logging.StreamHandler',
-                'formatter': 'standard'
+        "handlers": {
+            "django_error": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "standard",
             },
-            'info': {
-                'level': 'DEBUG',
-                'class': 'logging.StreamHandler',
-                'formatter': 'standard'
+            "info": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "standard",
             },
-            'console': {
-                'level': 'DEBUG',
-                'class': 'logging.StreamHandler',
-                'formatter': 'standard'
-            }
+            "console": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "standard",
+            },
         },
-        'loggers': {
-            'info': {
-                'handlers': ['info', 'console'],
-                'level': 'DEBUG',
-                'propagate': True
+        "loggers": {
+            "info": {
+                "handlers": ["info", "console"],
+                "level": "DEBUG",
+                "propagate": True,
             },
-            'django': {
-                'handlers': ['console'],
-                'level': 'INFO',
-                'propagate': True,
+            "django": {
+                "handlers": ["console"],
+                "level": "INFO",
+                "propagate": True,
             },
-            'django.request': {
-                'handlers': ['django_error', 'console'],
-                'level': 'DEBUG',
-                'propagate': True,
+            "django.request": {
+                "handlers": ["django_error", "console"],
+                "level": "DEBUG",
+                "propagate": True,
             },
-            'django.db.backends': {
-                'handlers': ['console'],
-                'level': 'DEBUG',
-            }
+            "django.db.backends": {
+                "handlers": ["console"],
+                "level": "DEBUG",
+            },
         },
     }
