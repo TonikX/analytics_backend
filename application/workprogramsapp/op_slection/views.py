@@ -3,16 +3,27 @@ import random
 
 from django.db.models import Count
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from dataprocessing.models import Items
 from workprogramsapp.educational_program.serializers import EducationalProgramSerializer
-from workprogramsapp.individualization.models import IndividualImplementationAcademicPlan, \
-    WorkProgramInWorkProgramChangeInDisciplineBlockModule, DisciplineBlockModuleInDisciplineBlock
-from workprogramsapp.models import Profession, WorkProgram, AcademicPlan, DisciplineBlockModule, \
-    WorkProgramChangeInDisciplineBlockModule, EducationalProgram, SkillsOfProfession, ImplementationAcademicPlan, \
-    DisciplineBlock
+from workprogramsapp.individualization.models import (
+    DisciplineBlockModuleInDisciplineBlock,
+    IndividualImplementationAcademicPlan,
+    WorkProgramInWorkProgramChangeInDisciplineBlockModule,
+)
+from workprogramsapp.models import (
+    AcademicPlan,
+    DisciplineBlock,
+    DisciplineBlockModule,
+    EducationalProgram,
+    ImplementationAcademicPlan,
+    Profession,
+    SkillsOfProfession,
+    WorkProgram,
+    WorkProgramChangeInDisciplineBlockModule,
+)
 from workprogramsapp.op_slection.temp__skills_array import skill_sorter
 from workprogramsapp.profession.serializers import ProfessionSerializer
 from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
