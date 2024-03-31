@@ -21,9 +21,16 @@ ONLINECOURSE_KEY = env("ONLINECOURSE_KEY")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
-# APPEND_SLASH  =  False
+DJANGO_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.messages",
+    "django.contrib.sessions",
+    "django.contrib.staticfiles",
+]
 
-INSTALLED_APPS = [
+LOCAL_APPS = [
     "dataprocessing",
     "gia_practice_app",
     "onlinecourse",
@@ -31,16 +38,13 @@ INSTALLED_APPS = [
     "selection_of_keywords_for_rpd",
     "streams_app",
     "workprogramsapp",
+]
+
+THIRD_PARTY_APPS = [
     "bootstrap_pagination",
     "cachalot",
     "corsheaders",
     "crispy_forms",
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.messages",
-    "django.contrib.sessions",
-    "django.contrib.staticfiles",
     "django_filters",
     "django_summernote",
     "django_tables2",
@@ -51,16 +55,9 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "rest_framework_swagger",
-    # 'ckeditor',
-    # 'ckeditor_uploader',
-    # 'django_extensions',
-    # 'oauth2_provider',
-    # 'rest_framework_social_oauth2',
-    # 'rest_social_auth',
-    # 'social_auth',
-    # 'social_django',
-    # 'social_django',
 ]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -71,14 +68,14 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # 'social_django.middleware.SocialAuthExceptionMiddleware',
-    # 'django.middleware.common.BrokenLinkEmailsMiddleware',
-    # 'django.middleware.common.CommonMiddleware',
-    # 'dataprocessing.CorsMiddleware',
+    # "social_django.middleware.SocialAuthExceptionMiddleware",
+    # "django.middleware.common.BrokenLinkEmailsMiddleware",
+    # "django.middleware.common.CommonMiddleware",
+    # "dataprocessing.CorsMiddleware",
 ]
 
 # MIDDLEWARE_CLASSES = [
-#     'dataprocessing.CorsMiddleware',
+#     "dataprocessing.CorsMiddleware",
 # ]
 
 ROOT_URLCONF = "analytics_project.urls"
@@ -94,8 +91,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # 'social_django.context_processors.backends',
-                # 'social_django.context_processors.login_redirect',
+                # "social_django.context_processors.backends",
+                # "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -152,13 +149,13 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework_json_api.pagination.PageNumberPagination",
     "DEFAULT_PARSER_CLASSES": (
         "rest_framework.parsers.JSONParser",
-        # 'rest_framework_json_api.parsers.JSONParser',
+        # "rest_framework_json_api.parsers.JSONParser",
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
     ),
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
-        # 'rest_framework_json_api.renderers.JSONRenderer',
+        # "rest_framework_json_api.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
     "DEFAULT_METADATA_CLASS": "rest_framework_json_api.metadata.JSONAPIMetadata",
@@ -167,60 +164,60 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    # 'AUTH_HEADER_TYPES': ('JWT',),
+    # "AUTH_HEADER_TYPES": ("JWT",),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=480),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
 AUTHENTICATION_BACKENDS = [
-    # 'social_core.backends.github.GithubOAuth2',
-    # 'dataprocessing.social_auth_backend.FiwareAuth',
-    # 'social_core.backends.facebook.FacebookOAuth2',
-    # 'dataprocessing.itmo_backends.ItmoOAuth2',
+    # "social_core.backends.github.GithubOAuth2",
+    # "dataprocessing.social_auth_backend.FiwareAuth",
+    # "social_core.backends.facebook.FacebookOAuth2",
+    # "dataprocessing.itmo_backends.ItmoOAuth2",
     "django.contrib.auth.backends.ModelBackend"
 ]
 
-# SOCIAL_AUTH_ITMOOAUTH2_KEY = ''
-# SOCIAL_AUTH_ITMOOAUTH2_SECRET = ''
+# SOCIAL_AUTH_ITMOOAUTH2_KEY = ""
+# SOCIAL_AUTH_ITMOOAUTH2_SECRET = ""
 
-# CLIENT = 'nexoVnlgoNJnTuZ3CNBcbHgayXmhRjJUYfOb'
-# SECRET = 'GV4SDAMfv5pgE3jzblcW7HUcND5pywqQL4be'
+# CLIENT = "nexoVnlgoNJnTuZ3CNBcbHgayXmhRjJUYfOb"
+# SECRET = "GV4SDAMfv5pgE3jzblcW7HUcND5pywqQL4be"
 
-# SOCIAL_AUTH_AUTH0_DOMAIN = os.getenv('SOCIAL_AUTH_AUTH0_DOMAIN')
-# SOCIAL_AUTH_AUTH0_KEY = os.getenv('SOCIAL_AUTH_AUTH0_KEY')
-# SOCIAL_AUTH_AUTH0_SECRET = os.getenv('SOCIAL_AUTH_AUTH0_SECRET')
+# SOCIAL_AUTH_AUTH0_DOMAIN = env("SOCIAL_AUTH_AUTH0_DOMAIN")
+# SOCIAL_AUTH_AUTH0_KEY = env("SOCIAL_AUTH_AUTH0_KEY")
+# SOCIAL_AUTH_AUTH0_SECRET = env("SOCIAL_AUTH_AUTH0_SECRET")
 
-# FIWARE_APP_ID = ''
-# FIWARE_API_SECRET = ''
-# FIWARE_IDM_ENDPOINT = 'https://login.itmo.ru/cas/oauth2.0/authorize'
+# FIWARE_APP_ID = ""
+# FIWARE_API_SECRET = ""
+# FIWARE_IDM_ENDPOINT = "https://login.itmo.ru/cas/oauth2.0/authorize"
 
 # FIWARE_IDM_API_VERSION = 2
-# FIWARE_KEYSTONE_ENDPOINT = 'http://cloud.lab.fiware.org:4731'
+# FIWARE_KEYSTONE_ENDPOINT = "http://cloud.lab.fiware.org:4731"
 
-# SOCIAL_AUTH_ENABLED_BACKENDS = ('fiware',)
+# SOCIAL_AUTH_ENABLED_BACKENDS = ("fiware",)
 # SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 
 CORS_ORIGIN_ALLOW_ALL = True
 # #CORS_ALLOW_CREDENTIALS = True
 # SESSION_COOKIE_SAMESITE = False
 # CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:8080',
+#     "http://localhost:8080",
 # ]
 # CORS_ORIGIN_REGEX_WHITELIST = [
-#     'http://localhost:8080',
+#     "http://localhost:8080",
 # ]
 
 DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
-    # 'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    # 'SEND_ACTIVATION_EMAIL': True,
-    # 'SERIALIZERS': {},
+    # "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    # "SEND_ACTIVATION_EMAIL": True,
+    # "SERIALIZERS": {},
     "SET_USERNAME_RETYPE": True,
     "SERIALIZERS": {
         "user": "dataprocessing.serializers.UserBaseSerializer",
         "current_user": "dataprocessing.serializers.UserBaseSerializer",
-        # 'user_create': 'dataprocessing.serializers.UserSerializer',
+        # "user_create": "dataprocessing.serializers.UserSerializer",
     },
 }
 
@@ -249,7 +246,7 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS")
-# EMAIL_USE_SSL = env('EMAIL_USE_SSL')
+# EMAIL_USE_SSL = env("EMAIL_USE_SSL")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
