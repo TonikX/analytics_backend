@@ -8,7 +8,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         plans = AcademicPlan.objects.filter(academic_plan_in_field_of_study__year=2023)
         for plan in plans:
-            imps = ImplementationAcademicPlan.objects.filter(academic_plan=plan).order_by("-id")
+            imps = ImplementationAcademicPlan.objects.filter(
+                academic_plan=plan
+            ).order_by("-id")
             if len(imps) > 1:
                 print(imps)
                 for i in range(len(imps)):
