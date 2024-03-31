@@ -38,7 +38,7 @@ class ShortImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 class WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+    """Сериализатор вывода группы профессиональных компетенций."""
 
     class Meta:
         model = WorkProgramInWorkProgramChangeInDisciplineBlockModule
@@ -48,7 +48,7 @@ class WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
 class CreateWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор создания и редактирования группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+    """Сериализатор создания и редактирования группы профессиональных компетенций."""
 
     class Meta:
         model = WorkProgramInWorkProgramChangeInDisciplineBlockModule
@@ -56,7 +56,7 @@ class CreateWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
 
 
 class IndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
-    """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+    """Сериализатор вывода группы профессиональных компетенций."""
 
     implementation_of_academic_plan = ImplementationAcademicPlanSerializerIndividual()
     user = userProfileSerializer()
@@ -67,7 +67,7 @@ class IndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer
 
 
 class ShortIndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
-    """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+    """Сериализатор вывода группы профессиональных компетенций."""
 
     implementation_of_academic_plan = ImplementationAcademicPlanSerializerIndividual()
     user = userProfileSerializer()
@@ -78,7 +78,7 @@ class ShortIndividualImplementationAcademicPlanSerializer(serializers.ModelSeria
 
 
 class CreateIndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
-    """Сериализатор создания и редактирования группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+    """Сериализатор создания и редактирования группы профессиональных компетенций."""
 
     class Meta:
         model = IndividualImplementationAcademicPlan
@@ -86,7 +86,7 @@ class CreateIndividualImplementationAcademicPlanSerializer(serializers.ModelSeri
 
 
 class DisciplineBlockModuleInDisciplineBlockSerializer(serializers.ModelSerializer):
-    """Сериализатор для работы с выбор модуля в блоке учебного плана"""
+    """Сериализатор для работы с выбором модуля в блоке учебного плана."""
 
     class Meta:
         model = DisciplineBlockModuleInDisciplineBlock
@@ -96,7 +96,6 @@ class DisciplineBlockModuleInDisciplineBlockSerializer(serializers.ModelSerializ
 class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор для работы с выбор модуля в блоке учебного плана"""
 
     class Meta:
         model = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
