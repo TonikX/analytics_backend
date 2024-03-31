@@ -1,11 +1,6 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db import models
-
-from analytics_project import settings
-
 import datetime
 
-from workprogramsapp.workprogram_additions.GIA.consts_for_models import *
+from django.core.validators import MaxValueValidator
 
 
 def current_year():
@@ -14,5 +9,3 @@ def current_year():
 
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
-
-
