@@ -44,6 +44,11 @@ class UserExpertiseListView(generics.ListAPIView):
     permission_classes = [IsMemberOfExpertise]
 
     def get_queryset(self, *args, **kwargs):
+
+        # Обработка для drf-yasg (https://github.com/axnsan12/drf-yasg/issues/333)
+        if getattr(self, "swagger_fake_view", False):
+            return UserExpertise.objects.none()
+
         if "pk" in dict(self.kwargs):
             return UserExpertise.objects.filter(
                 expertise=self.kwargs["pk"], expert=self.request.user
@@ -142,7 +147,10 @@ class ExpertiseListView(generics.ListAPIView):
     ]
 
     def get_queryset(self):
-        # Note the use of `get_queryset()` instead of `self.queryset`
+
+        if getattr(self, "swagger_fake_view", False):
+            return Expertise.objects.none()
+
         request = self.request
         if request.user.groups.filter(name="expertise_master"):
             queryset = Expertise.objects.all()
