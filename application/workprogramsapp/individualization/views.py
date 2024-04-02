@@ -177,11 +177,15 @@ class IndividualImplementationAcademicPlanForUser(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
 
+    def get_queryset(self, *args, **kwargs):
+
+        if getattr(self, "swagger_fake_view", False):
+            return IndividualImplementationAcademicPlan.objects.none()
+
     def list(self, request, **kwargs):
         """
         Вывод всех результатов для одной рабочей программы по id
         """
-        # Note the use of `get_queryset()` instead of `self.queryset`
         queryset = IndividualImplementationAcademicPlan.objects.filter(
             user=self.request.user
         )
