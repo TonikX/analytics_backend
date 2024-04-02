@@ -36,6 +36,10 @@ class FoldersListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
+
+        if getattr(self, "swagger_fake_view", False):
+            return Folder.objects.none()
+
         return Folder.objects.filter(owner=self.request.user)
 
 
