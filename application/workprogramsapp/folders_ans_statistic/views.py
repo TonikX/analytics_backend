@@ -50,6 +50,10 @@ class WorkProgramInFolderView(generics.ListAPIView):
     permission_classes = [IsOwnerOfFolder]
 
     def get_queryset(self, *args, **kwargs):
+
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgramInFolder.objects.none()
+
         try:
             return WorkProgramInFolder.objects.filter(
                 folder=self.kwargs["pk"], folder__owner=self.request.user
@@ -112,6 +116,10 @@ class AcademicPlanInFolderView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
+
+        if getattr(self, "swagger_fake_view", False):
+            return AcademicPlanInFolder.objects.none()
+
         try:
             return AcademicPlanInFolder.objects.filter(
                 folder=self.kwargs["pk"], folder__owner=self.request.user
@@ -147,6 +155,10 @@ class ModuleInFolderView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
+
+        if getattr(self, "swagger_fake_view", False):
+            return DisciplineBlockModuleInFolder.objects.none()
+
         try:
             return DisciplineBlockModuleInFolder.objects.filter(
                 folder=self.kwargs["pk"], folder__owner=self.request.user
@@ -182,6 +194,10 @@ class IndividualImplementationAcademicPlanInFolderView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
+
+        if getattr(self, "swagger_fake_view", False):
+            return IndividualImplementationAcademicPlanInFolder.objects.none()
+
         try:
             return IndividualImplementationAcademicPlanInFolder.objects.filter(
                 folder=self.kwargs["pk"], folder__owner=self.request.user
