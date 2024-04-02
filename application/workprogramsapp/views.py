@@ -2,6 +2,7 @@ import json
 import os
 import re
 from collections import OrderedDict
+from datetime import datetime
 
 import pandas
 from django.db import transaction
@@ -21,90 +22,91 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.models import Items
-from .ap_improvment.module_ze_counter import make_modules_cte_up_for_wp
-from .ap_improvment.serializers import AcademicPlanForAPSerializer, WorkProgramSerializerForList, \
-    WorkProgramSerializerCTE, DisciplineBlockForWPinFSSCTESerializer
-from .educational_program.search_filters import CompetenceFilter
-from .expertise.models import Expertise, UserExpertise
-from .folders_ans_statistic.models import AcademicPlanInFolder
-from .models import (
+from workprogramsapp.ap_improvment.module_ze_counter import make_modules_cte_up_for_wp
+from workprogramsapp.ap_improvment.serializers import (
+    AcademicPlanForAPSerializer,
+    DisciplineBlockForWPinFSSCTESerializer,
+    WorkProgramSerializerCTE,
+    WorkProgramSerializerForList,
+)
+from workprogramsapp.educational_program.search_filters import CompetenceFilter
+from workprogramsapp.expertise.models import Expertise, UserExpertise
+from workprogramsapp.folders_ans_statistic.models import AcademicPlanInFolder
+from workprogramsapp.models import (
     AcademicPlan,
+    BibliographicReference,
     BugsLog,
+    CertificationEvaluationTool,
+    Competence,
     DisciplineBlock,
     DisciplineBlockModule,
-    ImplementationAcademicPlan,
-    WorkProgramChangeInDisciplineBlockModule,
-    WorkProgramInFieldOfStudy,
-    Zun,
-)
-from .models import (
-    Competence,
     DisciplineSection,
     EvaluationTool,
+    FieldOfStudy,
+    ImplementationAcademicPlan,
     Indicator,
     OutcomesOfWorkProgram,
     PrerequisitesOfWorkProgram,
     Topic,
     WorkProgram,
+    WorkProgramChangeInDisciplineBlockModule,
+    WorkProgramInFieldOfStudy,
+    Zun,
 )
-from .models import FieldOfStudy, BibliographicReference, CertificationEvaluationTool
-from .notifications.models import UserNotification
-# Права доступа
-from .permissions import (
+from workprogramsapp.notifications.models import UserNotification
+from workprogramsapp.permissions import (
     IsAcademicPlanDeveloper,
     IsOwnerOrDodWorkerOrReadOnly,
     IsOwnerOrReadOnly,
     IsRpdDeveloperOrReadOnly,
 )
-from .serializers import (
+from workprogramsapp.serializers import (
     AcademicPlanCreateSerializer,
     AcademicPlanSerializer,
     AcademicPlanSerializerForList,
     AcademicPlanShortSerializer,
+    BibliographicReferenceSerializer,
     BugsLogSerializer,
+    CertificationEvaluationToolCreateSerializer,
+    CompetenceSerializer,
     CompetenceWithStandardSerializer,
+    EvaluationToolCreateSerializer,
+    EvaluationToolForWorkProgramSerializer,
     EvaluationToolListSerializer,
+    FieldOfStudyListSerializer,
+    FieldOfStudySerializer,
     ImplementationAcademicPlanCreateSerializer,
     ImplementationAcademicPlanSerializer,
+    IndicatorListSerializer,
+    IndicatorSerializer,
+    OutcomesOfWorkProgramCreateSerializer,
+    OutcomesOfWorkProgramSerializer,
+    PrerequisitesOfWorkProgramCreateSerializer,
+    PrerequisitesOfWorkProgramSerializer,
+    SectionSerializer,
+    TopicCreateSerializer,
+    TopicSerializer,
     WorkProgramArchiveUpdateSerializer,
+    WorkProgramBibliographicReferenceUpdateSerializer,
     WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer,
     WorkProgramChangeInDisciplineBlockModuleSerializer,
     WorkProgramChangeInDisciplineBlockModuleUpdateSerializer,
+    WorkProgramCreateSerializer,
+    WorkProgramEditorsUpdateSerializer,
     WorkProgramForIndividualRoutesSerializer,
     WorkProgramInFieldOfStudyCreateSerializer,
+    WorkProgramInFieldOfStudyForCompeteceListSerializer,
     WorkProgramInFieldOfStudySerializer,
+    WorkProgramSerializer,
     ZunCreateSaveSerializer,
     ZunCreateSerializer,
+    ZunForManyCreateSerializer,
     ZunSerializer,
 )
-from .serializers import (
-    BibliographicReferenceSerializer,
-    EvaluationToolCreateSerializer,
-    EvaluationToolForWorkProgramSerializer,
-    IndicatorListSerializer,
-    PrerequisitesOfWorkProgramCreateSerializer,
-    WorkProgramBibliographicReferenceUpdateSerializer,
+from workprogramsapp.workprogram_additions.models import (
+    StructuralUnit,
+    UserStructuralUnit,
 )
-from .serializers import (
-    CertificationEvaluationToolCreateSerializer,
-    OutcomesOfWorkProgramCreateSerializer,
-)
-from .serializers import (
-    CompetenceSerializer,
-    IndicatorSerializer,
-    OutcomesOfWorkProgramSerializer,
-    PrerequisitesOfWorkProgramSerializer,
-    WorkProgramCreateSerializer,
-    ZunForManyCreateSerializer,
-)
-from .serializers import (
-    FieldOfStudyListSerializer,
-    FieldOfStudySerializer,
-    WorkProgramInFieldOfStudyForCompeteceListSerializer,
-)
-from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
-from .serializers import WorkProgramSerializer, WorkProgramEditorsUpdateSerializer
-from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 
 
 class WorkProgramsListApi(generics.ListAPIView):
@@ -2078,7 +2080,7 @@ def handle_uploaded_csv(file, filename):
     # sys_df = pandas.read_excel('discipline_code/discipline_bank_updated5.xlsx')
     print("IPv4_code generating")
     processed_data, db = IPv4_code_ver2.generate_df_w_unique_code(in_df, sys_df)
-    now = datetime.datetime.now().isoformat("-").split(".")[0].replace(":", "-")
+    now = datetime.now().isoformat("-").split(".")[0].replace(":", "-")
     db.to_excel(
         "discipline_code/discipline_bank_updated_{}.xlsx".format(now), index=False
     )
