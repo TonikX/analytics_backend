@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -502,8 +503,12 @@ class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        pk = self.kwargs["pk"]
-        return WorkProgram.objects.filter(zuns_for_wp__zuns_for_wp__id_str_up=pk)
+
+        try:
+            pk = self.kwargs["pk"]
+            return WorkProgram.objects.filter(zuns_for_wp__zuns_for_wp__id_str_up=pk)
+        except KeyError:
+            NotFound()
 
     def get_object(self):
         queryset = self.get_queryset()
@@ -742,8 +747,15 @@ class GetAllWPsByEditor(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        pk = self.kwargs["pk"]
-        return WorkProgram.objects.filter(editors__pk=pk)
+
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgram.objects.none()
+
+        try:
+            pk = self.kwargs["pk"]
+            return WorkProgram.objects.filter(editors__pk=pk)
+        except KeyError:
+            return NotFound()
 
 
 class GetAllWPsWithEmptyField(generics.ListAPIView):
@@ -763,6 +775,10 @@ class GetAllWPsWithEmptyField(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgram.objects.none()
+
         field = self.request.query_params["field"]
         if field == "ED":
             return WorkProgram.objects.filter(editors__isnull=True)
@@ -844,6 +860,10 @@ class WorkProgramRealisedInYear(generics.ListAPIView):
     lookup_url_kwarg = "year"
 
     def get_queryset(self):
+
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgram.objects.none()
+
         year_of_sending = self.request.query_params.get(self.lookup_url_kwarg).split(
             "/"
         )[0]
