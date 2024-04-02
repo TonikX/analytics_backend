@@ -18,7 +18,12 @@ from dataprocessing.models import User
 class GetAuthenticationCodeISU(ListAPIView):
     permission_classes = [AllowAny]
 
-    def get(self, request):
+    def get_queryset(self, *args, **kwargs):
+
+        if getattr(self, "swagger_fake_view", False):
+            return User.objects.none()
+
+    def get(self, request, **kwargs):
         cas_auth_uri = (
             "https://id.itmo.ru/auth/realms/itmo/protocol/openid-connect/auth?"
             "response_type=code&"
@@ -40,7 +45,12 @@ class AuthenticateByCodeISU(ListAPIView):
 
         return hashlib.sha256(password_rule).hexdigest()
 
-    def get(self, request):
+    def get_queryset(self, *args, **kwargs):
+
+        if getattr(self, "swagger_fake_view", False):
+            return User.objects.none()
+
+    def get(self, request, **kwargs):
 
         # Забираем код авторизации из GET параметра
         authorization_code = request.GET["code"]
