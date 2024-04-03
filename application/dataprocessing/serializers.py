@@ -28,6 +28,7 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
+        ref_name = "DataprocessingShortStructuralUnitSerializer"
         model = StructuralUnit
         fields = "__all__"
 

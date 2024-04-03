@@ -359,6 +359,7 @@ class ItemSerializer(serializers.ModelSerializer):
     # domain = DomainForItemSerializer()
 
     class Meta:
+        ref_name = "ItemSerializerApImprovment"
         model = Items
         fields = ('id', 'name')
         # depth = 1
