@@ -225,6 +225,10 @@ class PracticeInFieldOfStudyForWorkProgramList(generics.ListAPIView):
     serializer_class = PracticeInFieldOfStudyForCompeteceListSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return PracticeInFieldOfStudy.objects.none()
+
     def list(self, request, **kwargs):
         """
         Вывод учебных планов для одной рабочей программы по id
