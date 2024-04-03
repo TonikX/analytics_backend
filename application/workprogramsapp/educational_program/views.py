@@ -850,6 +850,10 @@ class WorkProgramInFieldOfStudyWithAPByWP(generics.ListAPIView):
     serializer_class = WorkProgramInFieldOfStudyWithAPSerializer
 
     def get_queryset(self):
+
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgramInFieldOfStudy.objects.none()
+
         wp_id = self.kwargs["wp_id"]
         queryset = self.queryset.filter(work_program=wp_id)
         return queryset
