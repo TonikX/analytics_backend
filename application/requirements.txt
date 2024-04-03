@@ -1,4 +1,4 @@
-APScheduler==3.9.0
+APScheduler==3.10.4
 deepdiff==5.7.0
 Django==3.2.25
 django-allauth==0.61.1
