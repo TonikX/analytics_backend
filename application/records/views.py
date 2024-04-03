@@ -188,7 +188,6 @@ def WpWithSimilarCode(request):
         .annotate(total=Count("discipline_code"))
         .filter(total__gt=1)
     )
-    print(wp_counter_code)
     similar_codes = []
     for wp in wp_counter_code:
         similar_codes.append(wp["discipline_code"])
@@ -288,7 +287,6 @@ def StructuralUnitWp(request):
         status_filter = request.query_params["status"]
     except KeyError:
         status_filter = ""
-    print(status_filter)
     units = StructuralUnit.objects.all()
     result = []
     for unit in units:
@@ -420,7 +418,6 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
         structural_units = request.query_params.getlist("structural_unit_id")
         year = request.query_params.getlist("year")
         editors = request.query_params.getlist("editor_id")
-        print(status_filter, structural_units, year, editors)
 
         queryset = WorkProgram.objects.all()
 
@@ -444,7 +441,6 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
             temp_year = year
             for y in temp_year:
                 for i in range(1, 13, 2):
-                    print(i)
                     cred_regex = r""
                     for j in range(1, 13, 2):
                         if j == i:
@@ -664,10 +660,6 @@ def FieldOfStudyPlanToISU(request, pk):
                                 }
                             )
         implementation_list.append(wp_isu_list)
-        print("step complete")
-        # print(serializer.data)
-    print(len(implementation_list))
-    print(ImplementationAcademicPlan.objects.all().count())
     with open("ap_all.json", "w", encoding="utf-8") as file:
         file.write(
             json.dumps(implementation_list, ensure_ascii=False, indent=4)
