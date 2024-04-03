@@ -543,7 +543,7 @@ class DocxFileExportView(generics.ListAPIView):
     """
 
     queryset = WorkProgram.objects.all()
-    serializer = WorkProgramSerializer
+    serializer_class = WorkProgramSerializer
     permission_classes = [AllowAny]
 
     def combine_word_documents(self, filename, files):
@@ -662,7 +662,7 @@ class SyllabusExportView(generics.ListAPIView):
     """Возвращает РПД в формате docx в браузере"""
 
     queryset = WorkProgram.objects.all()
-    serializer = WorkProgramSerializer
+    serializer_class = WorkProgramSerializer
     permission_classes = [
         IsAuthenticated,
     ]
@@ -700,7 +700,7 @@ class AcademicPlanGenerateXlsx(generics.ListAPIView):
     """Возвращает РПД в формате docx в браузере"""
 
     queryset = WorkProgram.objects.all()
-    serializer = WorkProgramSerializer
+    serializer_class = WorkProgramSerializer
     # permission_classes = [IsAuthenticated, ]
     permission_classes = [AllowAny]
 
@@ -728,7 +728,7 @@ class GeneralCharacteristicGenerateDocx(generics.ListAPIView):
     """Возвращает ОХ в формате docx в браузере"""
 
     queryset = WorkProgram.objects.all()
-    serializer = WorkProgramSerializer
+    serializer_class = WorkProgramSerializer
     # permission_classes = [IsAuthenticated, ]
     permission_classes = [AllowAny]
 
@@ -755,7 +755,7 @@ class CompetenceMatrixGenerateExcel(generics.ListAPIView):
     """Возвращает матрицу компетенций в формате excel в браузере"""
 
     queryset = WorkProgram.objects.all()
-    serializer = WorkProgramSerializer
+    serializer_class = WorkProgramSerializer
     # permission_classes = [IsAuthenticated, ]
     permission_classes = [AllowAny]
 
@@ -790,6 +790,12 @@ def UploadPlans(request):
 
 class UploadPlansAPIView(CreateAPIView):
     parser_classes = (MultiPartParser,)
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     @swagger_auto_schema(
         operation_description="Создание ОП по xlsx-файлу  c ОП 2023 года",

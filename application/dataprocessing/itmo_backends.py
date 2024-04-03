@@ -18,6 +18,12 @@ from dataprocessing.models import User
 class GetAuthenticationCodeISU(ListAPIView):
     permission_classes = [AllowAny]
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def get_queryset(self, *args, **kwargs):
 
         if getattr(self, "swagger_fake_view", False):
@@ -36,6 +42,12 @@ class GetAuthenticationCodeISU(ListAPIView):
 
 class AuthenticateByCodeISU(ListAPIView):
     permission_classes = [AllowAny]
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     @staticmethod
     def new_password_with_random(isu, given_name):

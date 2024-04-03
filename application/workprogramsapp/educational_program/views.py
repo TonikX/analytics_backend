@@ -581,6 +581,12 @@ def academic_plan_all_ids_by_year(request, year):
 @permission_classes((IsAdminUser,))
 class UploadProfStandards(CreateAPIView):
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def post(self, request, *args, **kwargs):
         file = request.FILES["standards"]
         standards = pd.read_csv(file, delimiter=";", encoding="utf-8")
