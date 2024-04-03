@@ -559,6 +559,10 @@ class OutcomesOfWorkProgramList(generics.ListAPIView):
     serializer_class = OutcomesOfWorkProgramSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return OutcomesOfWorkProgram.objects.none()
+
     def list(self, request, **kwargs):
         """
         Вывод всех результатов для одной рабочей программы по id
@@ -624,6 +628,10 @@ class OutcomesForWorkProgramChangeBlock(generics.ListAPIView):
     serializer_class = PrerequisitesOfWorkProgramSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return OutcomesOfWorkProgram.objects.none()
+
     def list(self, request, **kwargs):
         """
         Вывод всех результатов для одной рабочей программы по id
@@ -639,6 +647,10 @@ class OutcomesForWorkProgramChangeBlock(generics.ListAPIView):
 class PrerequisitesOfWorkProgramList(generics.ListAPIView):
     serializer_class = PrerequisitesOfWorkProgramSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return PrerequisitesOfWorkProgram.objects.none()
 
     def list(self, request, **kwargs):
         """
@@ -660,6 +672,10 @@ class WorkProgramsWithOutcomesToPrerequisitesForThisWPView(generics.ListAPIView)
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgram.objects.none()
+
     def list(self, request, **kwargs):
         prerequisites_of_this_wp = PrerequisitesOfWorkProgram.objects.filter(
             workprogram__discipline_code=self.kwargs["discipline_code"]
@@ -678,6 +694,10 @@ class WorkProgramsWithPrerequisitesToOutocomesForThisWPView(generics.ListAPIView
 
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgram.objects.none()
 
     def list(self, request, **kwargs):
         outcomes_of_this_wp = OutcomesOfWorkProgram.objects.filter(
@@ -698,6 +718,10 @@ class WorkProgramsWithOutocomesForThisWPView(generics.ListAPIView):
 
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgram.objects.none()
 
     def list(self, request, **kwargs):
         outcomes_of_this_wp = OutcomesOfWorkProgram.objects.filter(
@@ -1700,12 +1724,14 @@ class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
     serializer_class = BibliographicReferenceSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return BibliographicReference.objects.none()
+
     def list(self, request, **kwargs):
         """
         Вывод всех результатов для одной рабочей программы по id
         """
-        # Note the use of `get_queryset()` instead of `self.queryset`
-        # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
         queryset = WorkProgram.objects.get(
             id=self.kwargs["workprogram_id"]
         ).bibliographic_reference.all()
@@ -1738,6 +1764,10 @@ class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
     serializer_class = EvaluationToolForWorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return FieldOfStudy.objects.none()
+
     def list(self, request, **kwargs):
         """
         Вывод учебных планов для одной рабочей программы по id
@@ -1758,6 +1788,10 @@ class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
 class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
     serializer_class = WorkProgramInFieldOfStudyForCompeteceListSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgramInFieldOfStudy.objects.none()
 
     def list(self, request, **kwargs):
         """
@@ -1795,6 +1829,10 @@ class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
 class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
     serializer_class = WorkProgramInFieldOfStudyForCompeteceListSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return WorkProgramInFieldOfStudy.objects.none()
 
     def list(self, request, **kwargs):
         """
