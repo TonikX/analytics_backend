@@ -1,7 +1,0 @@
-* Mod Jen 04 2020 Dmitry Vengerov <hardbeat34@gmail.com> 1.0.0
-- 1.0.0
-- Add Dockerfile
-- Add docker-compose.yml 
-- Folders:
-+ Rename server to backend 
-+ Decompose frontend and backend
