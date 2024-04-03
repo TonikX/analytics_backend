@@ -8,11 +8,10 @@ from gia_practice_app.Practice.models import (
     ZunPractice,
 )
 
-
-admin.site.register(GIABaseTemplate)
 admin.site.register(CriteriaVKR)
 admin.site.register(GIA)
+admin.site.register(GIABaseTemplate)
+admin.site.register(OutcomesOfPractice)
 admin.site.register(Practice)
 admin.site.register(PracticeTemplate)
 admin.site.register(ZunPractice)
-admin.site.register(OutcomesOfPractice)

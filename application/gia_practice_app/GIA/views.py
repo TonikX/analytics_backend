@@ -8,7 +8,10 @@ from gia_practice_app.GIA.serializers import (
     GIAPrimitiveSerializer,
     GIASerializer,
 )
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly
+from workprogramsapp.permissions import (
+    IsOwnerOrDodWorkerOrReadOnly,
+    IsRpdDeveloperOrReadOnly,
+)
 
 
 class GIASet(viewsets.ModelViewSet):
@@ -17,10 +20,16 @@ class GIASet(viewsets.ModelViewSet):
     serializer_class = GIASerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
-    search_fields = ["discipline_code", "title", "id", 'editors__first_name', 'editors__last_name']
+    search_fields = [
+        "discipline_code",
+        "title",
+        "id",
+        "editors__first_name",
+        "editors__last_name",
+    ]
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == "list":
             return GIAPrimitiveSerializer
         return GIASerializer
 
