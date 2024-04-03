@@ -1,27 +1,101 @@
-__pycache__/*
-.idea
-mysql-data
-dbs
-/application/workprogramsapp/migrations
-**/migrations/*
-/application/discipline_code
-**/.env
-**/.env.production
-.env
-/application/export
-nginx/ssl/data/
-frontend/.env.production
-**/discipline_code/*
-**/upload/*
-**/media/*
-**/certificates/*
-/frontend/.env.production
+# Project Specific
+application/export/
+dataprocessing_frontend_vue/
+templates/
+upload/
+media/
+certificates/
 
-rpd-env/
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+**/migrations/*
+!*/migrations/__init__.py
+
+# React
+node_modules/
+
+# nginx
+nginx/ssl/data/
+
+# Virtual Environment
 venv/
+.venv/
+rpd-env/
+.env
+ENV/
+env.bak/
+venv.bak/
+
+# PyCharm
+.idea/
+
+# Sphinx documentation
+docs/_build/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS Files
 .DS_Store
-*.csh
-*.ps1
-*.fish
-*.pyc
-*.cfg
+
+# C extensions
+*.so
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
