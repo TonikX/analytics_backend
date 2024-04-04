@@ -26,6 +26,8 @@ venv/
 .venv/
 rpd-env/
 .env
+.env.test
+.env.production
 ENV/
 env.bak/
 venv.bak/
