@@ -2257,12 +2257,13 @@ class AcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlanForAPSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
+    #@print_sql_decorator(count_only=False)
     def get(self, request, **kwargs):
 
         queryset = AcademicPlan.objects.filter(pk=self.kwargs['pk']).prefetch_related(
             "discipline_blocks_in_academic_plan", "discipline_blocks_in_academic_plan__modules_in_discipline_block",
-            "academic_plan_in_field_of_study", "academic_plan_in_field_of_study__field_of_study", "academic_plan_in_field_of_study__field_of_study").select_related("author")
+            "academic_plan_in_field_of_study", "academic_plan_in_field_of_study__field_of_study",
+            "academic_plan_in_field_of_study__field_of_study").select_related("author")
         serializer = AcademicPlanForAPSerializer(queryset, many=True, context={'request': request})
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
