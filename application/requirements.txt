@@ -40,7 +40,7 @@ psycopg2==2.9.9
 PyMySQL==0.9.3
 python-docx==0.8.10
 python-memcached==1.59
-requests==2.22.0
+requests==2.31.0
 rest-social-auth==4.2.0
 sentry-sdk==1.9.0
 social-auth-core==3.3.3
