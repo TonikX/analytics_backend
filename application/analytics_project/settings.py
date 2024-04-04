@@ -328,12 +328,12 @@ sentry_sdk.init(
     send_default_pii=True
 )
 
-CACHES = {
+"""CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': 'cache:11211',
     }
-}
+}"""
 
 if os.environ['DEBUG'] == True:
     LOGGING = {
@@ -383,3 +383,11 @@ if os.environ['DEBUG'] == True:
         },
     }
 
+
+"""LOGGING = {'version': 1,
+    "handlers":{"console": {"class": "logging.StreamHandler"},},
+    "loggers": {
+        "django.db.backends": {"handlers": ['console'],
+                               "level":"DEBUG"}
+    }
+}"""
