@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import time
 from collections import OrderedDict
 from datetime import datetime
 
@@ -435,9 +436,7 @@ class CompetencesListView(generics.ListAPIView):
 
 
 class CompetenceListView(APIView):
-    """
-    Список компетеций.
-    """
+    """Список компетеций."""
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -448,9 +447,7 @@ class CompetenceListView(APIView):
 
 
 class CompetenceUpdateView(APIView):
-    """
-    Редактирование (обновление) компетенции
-    """
+    """Редактирование (обновление) компетенции."""
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -477,9 +474,7 @@ class CompetenceUpdateView(APIView):
 
 
 class CompetenceIndicatorDetailView(APIView):
-    """
-    Индикаторы компетенции.
-    """
+    """Индикаторы компетенции."""
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -490,9 +485,7 @@ class CompetenceIndicatorDetailView(APIView):
 
 
 class DeleteIndicatorFromCompetenceView(APIView):
-    """
-    Удаление индикатора из компетенции
-    """
+    """Удаление индикатора из компетенции."""
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -508,9 +501,7 @@ class DeleteIndicatorFromCompetenceView(APIView):
 
 
 class AddIndicatorToCompetenceView(APIView):
-    """
-    Добавление индикатора в компетенцию (Создание индикатора)
-    """
+    """Добавление индикатора в компетенцию (Создание индикатора)."""
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
@@ -538,10 +529,8 @@ class OutcomesOfWorkProgramList(generics.ListAPIView):
             return OutcomesOfWorkProgram.objects.none()
 
     def list(self, request, **kwargs):
-        """
-        Вывод всех результатов для одной рабочей программы по id
-        """
-        # Note the use of `get_queryset()` instead of `self.queryset`
+        """Вывод всех результатов для одной рабочей программы по id."""
+
         queryset = OutcomesOfWorkProgram.objects.filter(
             workprogram__id=self.kwargs["workprogram_id"]
         )
@@ -607,9 +596,7 @@ class OutcomesForWorkProgramChangeBlock(generics.ListAPIView):
             return OutcomesOfWorkProgram.objects.none()
 
     def list(self, request, **kwargs):
-        """
-        Вывод всех результатов для одной рабочей программы по id
-        """
+        """Вывод всех результатов для одной рабочей программы по id."""
         # Note the use of `get_queryset()` instead of `self.queryset`
         queryset = OutcomesOfWorkProgram.objects.filter(
             workprogram__id=self.kwargs["workprogram_id"]
@@ -627,10 +614,8 @@ class PrerequisitesOfWorkProgramList(generics.ListAPIView):
             return PrerequisitesOfWorkProgram.objects.none()
 
     def list(self, request, **kwargs):
-        """
-        Вывод всех результатов для одной рабочей программы по id
-        """
-        # Note the use of `get_queryset()` instead of `self.queryset`
+        """Вывод всех результатов для одной рабочей программы по id."""
+
         queryset = PrerequisitesOfWorkProgram.objects.filter(
             workprogram__id=self.kwargs["workprogram_id"]
         )
@@ -640,7 +625,8 @@ class PrerequisitesOfWorkProgramList(generics.ListAPIView):
 
 class WorkProgramsWithOutcomesToPrerequisitesForThisWPView(generics.ListAPIView):
     """
-    Дисциплины, в которых в качестве результатов заявлены те ключевые слова, которые являются пререквизитами для этой дисциплины
+    Дисциплины у которых в качестве результатов заявлены ключевые слова
+    являющиеся пререквизитами для этой дисциплины.
     """
 
     serializer_class = WorkProgramSerializer
@@ -663,7 +649,8 @@ class WorkProgramsWithOutcomesToPrerequisitesForThisWPView(generics.ListAPIView)
 
 class WorkProgramsWithPrerequisitesToOutocomesForThisWPView(generics.ListAPIView):
     """
-    Дисциплины, у которых а качестве пререквизитов указаны ключевые слова, являющиеся результатами по этой дисциплине
+    Дисциплины у которых в качестве пререквизитов указаны ключевые слова
+    являющиеся результатами по этой дисциплине.
     """
 
     serializer_class = WorkProgramSerializer
@@ -686,9 +673,7 @@ class WorkProgramsWithPrerequisitesToOutocomesForThisWPView(generics.ListAPIView
 
 
 class WorkProgramsWithOutocomesForThisWPView(generics.ListAPIView):
-    """
-    Дисциплины, в которых есть такие же результаты
-    """
+    """Дисциплины, в которых есть такие же результаты."""
 
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
@@ -756,9 +741,6 @@ class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-# Блок эндпоинтов рабочей программы
-
-
 class WorkProgramCreateAPIView(generics.CreateAPIView):
     """
     API для создание рабочей програмы
@@ -794,7 +776,6 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        # print(request.data['id'])
         try:
             if request.data["implementation_format"] == "online":
                 DisciplineSection.objects.filter(work_program=serializer.data["id"])
@@ -806,11 +787,9 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
                         + section.laboratory
                         + section.practical_lessons
                     )
-                    # section.contact_work = 0
                     section.lecture_classes = 0
                     section.laboratory = 0
                     section.practical_lessons = 0
-                    # section.SRO = 0
                     section.save()
             elif (
                 request.data["implementation_format"] == "mixed"
@@ -820,11 +799,9 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
                 for section in DisciplineSection.objects.filter(
                     work_program=serializer.data["id"]
                 ):
-                    # section.contact_work = (section.consultations/21*11)
                     section.lecture_classes = section.consultations / 3
                     section.laboratory = section.consultations / 3
                     section.practical_lessons = section.consultations / 3
-                    # section.SRO = (section.consultations/8*2)
                     section.consultations = 0
                     section.save()
         except:
@@ -1050,11 +1027,8 @@ class WorkProgramDetailsWithDisciplineCodeView(generics.ListAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get(self, request, **kwargs):
-        """
-        Вывод всех результатов для одной рабочей программы по id
-        """
-        # Note the use of `get_queryset()` instead of `self.queryset`
-        # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
+        """Вывод всех результатов для одной рабочей программы по id."""
+
         try:
             print(
                 "f",
@@ -1082,9 +1056,7 @@ class WorkProgramFullDetailsWithDisciplineCodeView(generics.ListAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def get(self, request, **kwargs):
-        """
-        Вывод всех результатов для одной рабочей программы по id
-        """
+        """Вывод всех результатов для одной рабочей программы по id."""
         try:
             print(
                 "f",
@@ -1110,9 +1082,7 @@ class WorkProgramFullDetailsWithDisciplineCodeView(generics.ListAPIView):
 
 
 class TopicsListAPI(generics.ListAPIView):
-    """
-    API endpoint that represents a list of Topics.
-    """
+    """Эндпоинт, представляющий список тем."""
 
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
@@ -1120,16 +1090,13 @@ class TopicsListAPI(generics.ListAPIView):
 
 
 class TopicCreateAPI(generics.CreateAPIView):
-    """
-    API endpoint that represents a list of Topics.
-    """
+    """Эндпоинт для создания тем."""
 
     queryset = Topic.objects.all()
     serializer_class = TopicCreateSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def perform_create(self, serializer):
-        # print (Topic.objects.filter(discipline_section = serializer.validated_data['discipline_section']).count()+1)
         serializer.save(
             number=Topic.objects.filter(
                 discipline_section=serializer.validated_data["discipline_section"]
@@ -1139,9 +1106,7 @@ class TopicCreateAPI(generics.CreateAPIView):
 
 
 class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single Topic.
-    """
+    """Эндпоинт, представляющий конкретную тему."""
 
     queryset = Topic.objects.all()
     serializer_class = TopicCreateSerializer
@@ -1157,9 +1122,7 @@ class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class EvaluationToolListAPI(generics.ListCreateAPIView):
-    """
-    API endpoint that represents a list of Evaluation Tools.
-    """
+    """endpoint that represents a list of Evaluation Tools."""
 
     queryset = EvaluationTool.objects.all()
     serializer_class = EvaluationToolListSerializer
@@ -1167,9 +1130,7 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
 
 
 class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single Evaluation Tool.
-    """
+    """endpoint that represents a single Evaluation Tool."""
 
     queryset = EvaluationTool.objects.all()
     serializer_class = EvaluationToolCreateSerializer
@@ -1177,9 +1138,7 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class СertificationEvaluationToolListAPI(generics.ListCreateAPIView):
-    """
-    API endpoint that represents a list of Evaluation Tools.
-    """
+    """Эндпоинт, представляющий список оценочных средств."""
 
     queryset = CertificationEvaluationTool.objects.all()
     serializer_class = CertificationEvaluationToolCreateSerializer
@@ -1187,9 +1146,7 @@ class СertificationEvaluationToolListAPI(generics.ListCreateAPIView):
 
 
 class CertificationEvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single Evaluation Tool.
-    """
+    """Эндпоинт, представляющий конкретное оценочное средство."""
 
     queryset = CertificationEvaluationTool.objects.all()
     serializer_class = CertificationEvaluationToolCreateSerializer
@@ -1197,9 +1154,7 @@ class CertificationEvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView
 
 
 class WorkProgramInFieldOfStudyListAPI(generics.ListCreateAPIView):
-    """
-    API endpoint that represents a list of WorkProgramInFieldOfStudy.
-    """
+    """Эндпоинт, представляющий список РПД в области исследования."""
 
     queryset = WorkProgramInFieldOfStudy.objects.all()
     serializer_class = WorkProgramInFieldOfStudyCreateSerializer
@@ -1207,9 +1162,7 @@ class WorkProgramInFieldOfStudyListAPI(generics.ListCreateAPIView):
 
 
 class WorkProgramInFieldOfStudyDetailAPI(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single WorkProgramInFieldOfStudy.
-    """
+    """Эндпоинт, представляющий конкретную РПД в области исследования."""
 
     queryset = WorkProgramInFieldOfStudy.objects.all()
     serializer_class = WorkProgramInFieldOfStudyCreateSerializer
@@ -1217,9 +1170,7 @@ class WorkProgramInFieldOfStudyDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ZunListAPI(generics.ListCreateAPIView):
-    """
-    API endpoint that represents a list of Zun.
-    """
+    """Эндпоинт, представляющий список Зунов."""
 
     serializer_class = ZunCreateSerializer
     queryset = Zun.objects.all()
@@ -1280,9 +1231,7 @@ class ZunListAPI(generics.ListCreateAPIView):
 
 
 class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single Zun.я
-    """
+    """Эндпоинт, представляющий конкретный Зун."""
 
     queryset = Zun.objects.all()
     serializer_class = ZunCreateSerializer
@@ -1300,9 +1249,7 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
-    """
-    API endpoint that represents a list of Discipline Sections.
-    """
+    """Эндпоинт, представляющий список разделов дисциплин."""
 
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
@@ -1310,9 +1257,7 @@ class DisciplineSectionListAPI(generics.ListCreateAPIView):
 
 
 class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single Discipline Section.
-    """
+    """Эндпоинт, представляющий конкретный раздел дисциплин."""
 
     queryset = DisciplineSection.objects.all()
     serializer_class = SectionSerializer
@@ -1328,9 +1273,7 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Удаление, редактирование, просмотр образовательной программы (направления) по id
-    """
+    """Удаление, редактирование, просмотр образовательной программы (направления) по id"""
 
     queryset = FieldOfStudy.objects.all()
     serializer_class = FieldOfStudySerializer
@@ -1338,9 +1281,7 @@ class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class FieldOfStudyListCreateView(generics.ListCreateAPIView):
-    """
-    Отображение списка ОП(направлений), создание образовательной программы (напрвления)
-    """
+    """Отображение списка ОП(направлений), создание образовательной программы (напрвления)"""
 
     queryset = FieldOfStudy.objects.all()
     serializer_class = FieldOfStudyListSerializer
@@ -1391,7 +1332,7 @@ def merge(primary_object, alias_objects):
 
 
 def get_generic_fields():
-    """Return a list of all GenericForeignKeys in all models."""
+    """Возвращает список всех GenericForeignKeys во всех моделях."""
     generic_fields = []
     for model in apps.get_models():
         for field_name, field in model.__dict__.items():
@@ -1402,11 +1343,6 @@ def get_generic_fields():
 
 @transaction.atomic()
 def merge_model_instances(primary_object, alias_objects):
-    """
-    Merge several model instances into one, the `primary_object`.
-    Use this function to merge model objects and migrate all of the related
-    fields from the alias objects the primary object.
-    """
     generic_fields = get_generic_fields()
 
     related_fields = list(
@@ -1496,9 +1432,7 @@ def ChangeItemsView(request):
 
 
 class FileUploadWorkProgramOutcomesAPIView(APIView):
-    """
-    API эндпоинт для добавления данных о РПД из csv-файла, спарсенного с online.edu.ru
-    """
+    """Эндпоинт для добавления данных о РПД из csv-файла с online.edu.ru."""
 
     def post(self, request):
 
@@ -1606,9 +1540,7 @@ class BibliographicReferenceInWorkProgramList(generics.ListAPIView):
             return BibliographicReference.objects.none()
 
     def list(self, request, **kwargs):
-        """
-        Вывод всех результатов для одной рабочей программы по id
-        """
+        """Вывод всех результатов для одной рабочей программы по id."""
         queryset = WorkProgram.objects.get(
             id=self.kwargs["workprogram_id"]
         ).bibliographic_reference.all()
@@ -1622,9 +1554,7 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
     queryset = EvaluationTool
 
     def list(self, request, **kwargs):
-        """
-        Вывод всех результатов для одной рабочей программы по id
-        """
+        """Вывод всех результатов для одной рабочей программы по id."""
         try:
             queryset = EvaluationTool.objects.filter(
                 evaluation_tools__in=DisciplineSection.objects.filter(
@@ -1646,9 +1576,7 @@ class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
             return FieldOfStudy.objects.none()
 
     def list(self, request, **kwargs):
-        """
-        Вывод учебных планов для одной рабочей программы по id
-        """
+        """Вывод учебных планов для одной рабочей программы по id."""
 
         try:
             queryset = FieldOfStudy.objects.filter(
@@ -1671,12 +1599,9 @@ class WorkProgramInFieldOfStudyForWorkProgramList(generics.ListAPIView):
             return WorkProgramInFieldOfStudy.objects.none()
 
     def list(self, request, **kwargs):
-        """
-        Вывод учебных планов для одной рабочей программы по id
-        """
+        """Вывод учебных планов для одной рабочей программы по id."""
         queryset = WorkProgramInFieldOfStudy.objects.filter(
             work_program__id=self.kwargs["workprogram_id"],
-            # work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study = self.kwargs['ap_id']
         ).distinct()
 
         modules = DisciplineBlockModule.objects.none()
@@ -1712,9 +1637,7 @@ class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
             return WorkProgramInFieldOfStudy.objects.none()
 
     def list(self, request, **kwargs):
-        """
-        Вывод учебных планов для одной рабочей программы по id
-        """
+        """Вывод учебных планов для одной рабочей программы по id."""
         aps = AcademicPlan.objects.filter(
             academic_plan_in_field_of_study__general_characteristics_in_educational_program__id=int(
                 self.kwargs["gh_id"]
@@ -1771,9 +1694,7 @@ class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
 
 
 def handle_uploaded_file_v2(file, filename):
-    """
-    Обработка файла csv спарсенного с online.edu.ru
-    """
+    """Обработка файла csv с online.edu.ru."""
 
     if not os.path.exists("upload/"):
         os.mkdir("upload/")
@@ -1788,9 +1709,7 @@ def handle_uploaded_file_v2(file, filename):
 
 
 def handle_uploaded_file(file, filename):
-    """
-    Обработка файла csv спарсенного с online.edu.ru
-    """
+    """Обработка файла csv с online.edu.ru."""
 
     if not os.path.exists("upload/"):
         os.mkdir("upload/")
@@ -1807,9 +1726,7 @@ def handle_uploaded_file(file, filename):
 
 
 class FileUploadWorkProgramAPIView(APIView):
-    """
-    API эндпоинт для добавления данных о РПД из csv-файла, спарсенного с online.edu.ru
-    """
+    """Эндпоинт для добавления данных о РПД из csv-файла с online.edu.ru."""
 
     def post(self, request):
 
@@ -1910,9 +1827,6 @@ class FileUploadWorkProgramAPIView(APIView):
 
 
 def handle_uploaded_csv(file, filename):
-    """
-    Обработка файла csv
-    """
 
     if not os.path.exists("upload/"):
         os.mkdir("upload/")
@@ -1972,9 +1886,7 @@ def handle_uploaded_csv(file, filename):
 
 
 class FileUploadAPIView(APIView):
-    """
-    API-endpoint для загрузки файла sub_2019_2020_new
-    """
+    """Эндпоинт для загрузки файла sub_2019_2020_new."""
 
     def post(self, request):
 
@@ -2539,9 +2451,6 @@ class AcademicPlanDetailsView(generics.RetrieveAPIView):
 
 
 class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
-    """
-    API endpoint that represents a list of Topics.
-    """
 
     queryset = ImplementationAcademicPlan.objects.all()
     serializer_class = ImplementationAcademicPlanCreateSerializer
@@ -2549,9 +2458,7 @@ class ImplementationAcademicPlanAPIView(generics.CreateAPIView):
 
 
 class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
-    """
-    Класс для вывода информации о списке ОП
-    """
+    """Эндпоинт для вывода информации о списке ОП."""
 
     serializer_class = ImplementationAcademicPlanSerializer
     queryset = ImplementationAcademicPlan.objects.all()
@@ -2629,9 +2536,7 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateView(generics.UpdateAPIView)
 
 
 class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
-    """
-    Отображение списка ОП(направлений), создание образовательной программы (напрвления)
-    """
+    """Отображение списка ОП(направлений), создание образовательной программы (направления)."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramInFieldOfStudySerializer
@@ -2679,7 +2584,7 @@ def CloneWorkProgramm(request):
     """
     Апи для клонирования рабочей программы
     Запрашивает id программы для клоинрования в поле program_id для тела запроса типа form-data
-    В ответе передается число - айди созданной копии
+    В ответе передается число - айди созданной копии.
     """
     prog_id = request.data.get("program_id")
     clone_program = WorkProgram.clone_programm(prog_id)
@@ -2730,7 +2635,6 @@ def DisciplinesByNumber(request):
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def TimeoutTest(request):
-    import time
 
     timer = 0
     while True:
