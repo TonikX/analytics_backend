@@ -1137,7 +1137,7 @@ class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-class СertificationEvaluationToolListAPI(generics.ListCreateAPIView):
+class CertificationEvaluationToolListAPI(generics.ListCreateAPIView):
     """Эндпоинт, представляющий список оценочных средств."""
 
     queryset = CertificationEvaluationTool.objects.all()

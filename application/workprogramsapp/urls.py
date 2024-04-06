@@ -491,7 +491,7 @@ urlpatterns = [
     # Аттестационные оценочные средства
     path(
         "api/certification_tools/",
-        wpa_views.СertificationEvaluationToolListAPI.as_view(),
+        wpa_views.CertificationEvaluationToolListAPI.as_view(),
     ),
     path(
         "api/certification_tools/<int:pk>",
