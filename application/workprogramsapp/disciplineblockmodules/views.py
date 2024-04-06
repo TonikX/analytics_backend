@@ -311,7 +311,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 
 @swagger_auto_schema(tags=["Discipline Blocks"], method="post")
 @api_view(["POST"])
-@permission_classes((IsBlockModuleEditor))
+@permission_classes([IsBlockModuleEditor])
 def InsertModule(request):
     """
     Апи для вставки модуля в другой блок.
