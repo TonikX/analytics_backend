@@ -5,6 +5,8 @@ from collections import OrderedDict
 from datetime import datetime
 
 import pandas
+from django.apps import apps
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -22,6 +24,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.models import Items
+from dataprocessing.serializers import FileUploadSerializer
+from discipline_code import IPv4_code_ver2
 from workprogramsapp.ap_improvment.module_ze_counter import make_modules_cte_up_for_wp
 from workprogramsapp.ap_improvment.serializers import (
     AcademicPlanForAPSerializer,
@@ -122,16 +126,6 @@ class WorkProgramsListApi(generics.ListAPIView):
                         ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-    # def list(self, request, **kwargs):
-    #     """
-    #     Вывод всех результатов для одной рабочей программы по id
-    #     """
-    #     # Note the use of `get_queryset()` instead of `self.queryset`
-    #     # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
-    #     if request.GET.get('field') == True:
-    #         queryset = WorkProgram.objects.filter(editors=request.use)
-    #     return Response(serializer.data)
-
     def get_queryset(self):
         if self.request.GET.get("filter") == "my":
             queryset = WorkProgram.objects.filter(editors=self.request.user)
@@ -187,16 +181,6 @@ class ZunManyViewSet(viewsets.ModelViewSet):
     http_method_names = ["post", "delete", "patch"]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-    # @swagger_auto_schema(
-    #     request_body=openapi.Schema(
-    #         type=openapi.TYPE_OBJECT,
-    #         required=None,
-    #         properties={
-    #             'new_status': openapi.Schema(type=openapi.TYPE_STRING,
-    #                                          description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
-    #         }
-    #     ),
-    #     operation_description='Метод для изменения статусов учебного плана')
     def create(self, request, *args, **kwargs):
         """
         Example:
@@ -297,16 +281,6 @@ class ZunManyForAllGhViewSet(viewsets.ModelViewSet):
     http_method_names = ["post", "delete", "patch"]
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
-    # @swagger_auto_schema(
-    #     request_body=openapi.Schema(
-    #         type=openapi.TYPE_OBJECT,
-    #         required=None,
-    #         properties={
-    #             'new_status': openapi.Schema(type=openapi.TYPE_STRING,
-    #                                          description="Новый статус после проверки (in_work / on_check) (необязательное поле)")
-    #         }
-    #     ),
-    #     operation_description='Метод для изменения статусов учебного плана')
     def create(self, request, *args, **kwargs):
         """
         Example:
@@ -882,8 +856,6 @@ class WorkProgramEditorsUpdateView(generics.UpdateAPIView):
         except Expertise.DoesNotExist:
             pass
         if getattr(instance, "_prefetched_objects_cache", None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
         return Response(
@@ -1113,8 +1085,6 @@ class WorkProgramFullDetailsWithDisciplineCodeView(generics.ListAPIView):
         """
         Вывод всех результатов для одной рабочей программы по id
         """
-        # Note the use of `get_queryset()` instead of `self.queryset`
-        # queryset = BibliographicReference.objects.filter(workprogram__id=self.kwargs['workprogram_id'])
         try:
             print(
                 "f",
@@ -1319,11 +1289,6 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def delete(self, request, **kwargs):
-        # for competences_id in request.data.getlist('comment_id[]'):
-        #     competences_id = int(competences_id)
-        #     zuns = Zun.objects.filter(indicator_in_zun__competence__id = competences_id, wp_in_fs = request.data["wp_in_fs"])
-        #     for zun in zuns:
-        #         zun.delete()
 
         zuns = Zun.objects.filter(
             indicator_in_zun__competence__id=kwargs["competences_id"],
@@ -1332,34 +1297,6 @@ class ZunDetailAPI(generics.RetrieveUpdateDestroyAPIView):
         for zun in zuns:
             zun.delete()
         return Response(status=204)
-
-    # def update(self, request, *args, **kwargs):
-    #     for new_zun in request.data:
-    #         print ('wp_changeblock', new_zun.get('wp_changeblock'))
-    #         print (Zun.objects.get(id = kwargs['pk']).items)
-    #         wp_changeblock_id = int(new_zun.get('wp_changeblock'))
-    #         print ('wp_changeblock_id', wp_changeblock_id)
-    #         wp_cb = WorkProgramChangeInDisciplineBlockModule.objects.filter(id = wp_changeblock_id)
-    #         if Zun.objects.get(id = kwargs['pk']):
-    #             for item in new_zun.get('items'):
-    #                 print ('item', item)
-    #         new_zun = {"id": Zun.objects.get(id = kwargs['pk']).id, "wp_in_fs" : Zun.objects.get(id = kwargs['pk']).wp_in_fs.id, "indicator_in_zun" : Indicator.objects.filter(id = int(new_zun.get('indicator_in_zun')))[0].id, "items": new_zun.get('items')}
-    #         print(new_zun)
-    #         serializer = ZunCreateSaveSerializer(Zun.objects.get(id = kwargs['pk']), data = new_zun)
-    #         #print (serializer)
-    #
-    #         if serializer.is_valid(raise_exception=True):
-    #             old_zun = Zun.objects.get(id = kwargs['pk']).items.clear()
-    #             serializer.save()
-    #             print ("Сохранение прошло")
-    #             #return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #         else:
-    #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    #
-    #     print ('чейнж блок', wp_cb)
-    #     response_serializer = WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(wp_cb, many=True)
-    #     return Response(response_serializer.data)
-    #     # return Response(serializer.data)
 
 
 class DisciplineSectionListAPI(generics.ListCreateAPIView):
@@ -1447,57 +1384,10 @@ def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
         return Response(status=400)
 
 
-# def merge(queryset):
-#     main = queryset[0]
-#     tail = queryset[1:]
-#
-#     related = main._meta.get_fields()
-#
-#     valnames = dict()
-#     for r in related:
-#         valnames.setdefault(r.model, []).append(r.field.name)
-#
-#     for place in tail:
-#         for model, field_names in valnames.iteritems():
-#             for field_name in field_names:
-#                 print(**{field_name: place})
-#                 print(**{field_name: main})
-#                 print()
-#                 model.objects.filter(**{field_name: place}).update(**{field_name: main})
-#
-#         place.delete()
-
-# self.message_user(request, "%s is merged with other places, now you can give it a canonical name." % main)
-
-
-# class MyMergedModelInstance(MergedModelInstance):
-# """
-#     Custom way to handle Issue #11: Ignore models with managed = False
-#     Also, ignore auditlog models.
-# """
-# def _handle_o2m_related_field(self, related_field: Field, alias_object: Model):
-#     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
-#         return super()._handle_o2m_related_field(related_field, alias_object)
-#
-# def _handle_m2m_related_field(self, related_field: Field, alias_object: Model):
-#     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
-#         return super()._handle_m2m_related_field(related_field, alias_object)
-#
-# def _handle_o2o_related_field(self, related_field: Field, alias_object: Model):
-#     if not alias_object._meta.managed and "auditlog" not in alias_object._meta.model_name:
-#         return super()._handle_o2o_related_field(related_field, alias_object)
-
-
 @transaction.atomic()
 def merge(primary_object, alias_objects):
-    # if not isinstance(alias_objects, list):
-    #     alias_objects = [alias_objects]
     MergedModelInstance.create(primary_object, alias_objects, keep_old=False)
     return primary_object
-
-
-from django.apps import apps
-from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 def get_generic_fields():
@@ -1519,7 +1409,6 @@ def merge_model_instances(primary_object, alias_objects):
     """
     generic_fields = get_generic_fields()
 
-    # get related fields
     related_fields = list(
         filter(lambda x: x.is_relation is True, primary_object._meta.get_fields())
     )
@@ -1528,13 +1417,10 @@ def merge_model_instances(primary_object, alias_objects):
 
     related_fields = list(filter(lambda x: x.many_to_many is False, related_fields))
 
-    # Loop through all alias objects and migrate their references to the
-    # primary object
     deleted_objects = []
     deleted_objects_count = 0
     for alias_object in alias_objects:
-        # Migrate all foreign key references from alias object to primary
-        # object.
+        # Migrate all foreign key references from alias object to primary object.
         for many_to_many_field in many_to_many_fields:
             alias_varname = many_to_many_field.name
             related_objects = getattr(alias_object, alias_varname)
@@ -1580,8 +1466,6 @@ def merge_model_instances(primary_object, alias_objects):
                     setattr(primary_object, alias_varname, related_object)
                     primary_object.save()
                 elif related_field.one_to_one:
-                    # self.stdout.write("Deleted {} with id {}\n".format(
-                    #     related_object, related_object.id))
                     related_object.delete()
 
         for field in generic_fields:
@@ -1596,8 +1480,6 @@ def merge_model_instances(primary_object, alias_objects):
         if alias_object.id:
             print("!!")
             deleted_objects += [alias_object]
-            # self.stdout.write("Deleted {} with id {}\n".format(
-            #     alias_object, alias_object.id))
             alias_object.delete()
             deleted_objects_count += 1
 
@@ -1655,14 +1537,12 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
                 if WorkProgram.objects.filter(
                     discipline_code=data["DIS_CODE"][i]
                 ).exists():
-                    # если запись уже есть то апдейтим
                     wp_obj = WorkProgram.objects.filter(
                         discipline_code=data["DIS_CODE"][i]
                     )[0]
                     if len(outcomes_items) != 0:
                         for item in outcomes_items:
                             print("item", item)
-                            # print ('jj', OutcomesOfWorkProgram.objects.filter(item = item, workprogram = wp_obj)[0])
                             if OutcomesOfWorkProgram.objects.filter(
                                 item=item, workprogram=wp_obj
                             ).exists():
@@ -1683,9 +1563,6 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
             return Response(
                 {"Message": "Data not loaded"}, status=status.HTTP_400_BAD_REQUEST
             )
-
-
-# Блок эндпоинтов рабочей программы
 
 
 class BibliographicReferenceListCreateAPIView(generics.ListCreateAPIView):
@@ -1893,11 +1770,6 @@ class WorkProgramInFieldOfStudyForWorkProgramForGHList(generics.ListAPIView):
         return Response(serializer.data)
 
 
-# Блок эндпоинтов для обрабоки файлов
-
-from dataprocessing.serializers import FileUploadSerializer
-
-
 def handle_uploaded_file_v2(file, filename):
     """
     Обработка файла csv спарсенного с online.edu.ru
@@ -1912,8 +1784,6 @@ def handle_uploaded_file_v2(file, filename):
             destination.write(chunk)
 
     df = pandas.read_csv(path, sep=";", encoding="utf-8")
-    # df.dropna(subset=['Направления подготовки'], inplace = True)
-    # df = df.drop(['Unnamed: 0'], axis=1)
     return df
 
 
@@ -1950,8 +1820,6 @@ class FileUploadWorkProgramAPIView(APIView):
         data.fillna("не задано", inplace=True)
         for i in range(len(data)):
             try:
-
-                # получаем список всех объектов-пререквизитов для дисциплины
                 prerequisite = data["Ключевые слова-пререквизиты"][i].split(", ")
                 prerequisite_items = []
 
@@ -1967,7 +1835,6 @@ class FileUploadWorkProgramAPIView(APIView):
                 prerequisite_items = Items.objects.filter(name__in=prerequisite_items)
                 print("Pre--", prerequisite_items)
 
-                # получаем список всех объектов-результатов для дисциплины
                 outcomes = data["Ключевые слова содержания"][i].split(", ")
                 outcomes_items = []
 
@@ -1984,7 +1851,6 @@ class FileUploadWorkProgramAPIView(APIView):
                 outcomes_items = Items.objects.filter(name__in=outcomes_items)
                 print("Outcomes--", outcomes_items)
 
-                # получаем список всех направленний для дисциплины
                 field_of_study = data["Направления подготовки"][i].split(
                     "                                         "
                 )
@@ -2005,7 +1871,6 @@ class FileUploadWorkProgramAPIView(APIView):
                 print(fs_list)
 
                 if WorkProgram.objects.filter(title=data["Название курса"][i]).exists():
-                    # если запись уже есть то апдейтим
                     wp_obj = WorkProgram.objects.get(title=data["Название курса"][i])
                     if len(prerequisite_items) != 0:
                         for item in prerequisite_items:
@@ -2019,13 +1884,6 @@ class FileUploadWorkProgramAPIView(APIView):
                                 item=item, workprogram=wp_obj
                             )
                             out_obj.save()
-                    """
-                       Данная таблица больше не используется. Для дальнейшей работы код нужно заменить.
-                       Связь направления и РПД реализована через таблицу WorkProgramInFieldOfStudy.
-                    """
-                    # for fs in fs_list:
-                    #    fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
-                    #    fswp_obj.save()
 
                 else:
 
@@ -2045,21 +1903,10 @@ class FileUploadWorkProgramAPIView(APIView):
                                 item=item, workprogram=wp_obj
                             )
                             out_obj.save()
-                    """
-                       Данная таблица больше не используется. Для дальнейшей работы код нужно заменить.
-                       Связь направления и РПД реализована через таблицу WorkProgramInFieldOfStudy.
-                    """
-                    # for fs in fs_list:
-                    #    fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs, work_program = wp_obj)
-                    #    fswp_obj.save()
-
             except:
                 print(i)
                 continue
         return Response(status=200)
-
-
-from discipline_code import IPv4_code_ver2
 
 
 def handle_uploaded_csv(file, filename):
@@ -2114,8 +1961,6 @@ def handle_uploaded_csv(file, filename):
         }
     )
 
-    # df.to_excel("discipline_code/discipline_bank_updated5.xlsx", index=False)
-    # sys_df = pandas.read_excel('discipline_code/discipline_bank_updated5.xlsx')
     print("IPv4_code generating")
     processed_data, db = IPv4_code_ver2.generate_df_w_unique_code(in_df, sys_df)
     now = datetime.now().isoformat("-").split(".")[0].replace(":", "-")
@@ -2132,10 +1977,6 @@ class FileUploadAPIView(APIView):
     """
 
     def post(self, request):
-        print("Working")
-
-        # serializer = FileUploadSerializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
 
         data = handle_uploaded_csv(request.FILES["file"], str(request.FILES["file"]))
         print(len(data["SUBJECT"].drop_duplicates().to_list()))
@@ -2143,21 +1984,15 @@ class FileUploadAPIView(APIView):
         with open(
             "workprogramsapp/modules-order.json",
             "r",
-            # with open('/application/workprogramsapp/modules-order.json', 'r',
             encoding="utf-8",
         ) as fh:  # открываем файл на чтение
             order = json.load(fh)
-
-        # data['CREDITS'].fillna('0', inplace=True)
-        # берем только первые 3 семестраа
-        # data = data[(data['SEMESTER']<5)]
 
         print("============Создаю рпд и направления============")
         # создаем рпд и направления
         fs_count, wp_count, ap_count = 0, 0, 0
         for i in list(data.index.values):
             try:
-                # print('clone', clone)
                 print("---Новая строка---")
                 if data["DEGREE"][i].strip() == "Академический бакалавр":
                     qualification = "bachelor"
@@ -2176,7 +2011,6 @@ class FileUploadAPIView(APIView):
                     & (data["YEAR"] == data["YEAR"][i])
                 ]
                 print(units.index.values)
-                # units = data[(data['SUBFIELDNAME']==data['SUBFIELDNAME'][i])&(data['CYCLE']==data['CYCLE'][i])&(data['COMPONENT']==data['COMPONENT'][i])&(data['SUBJECT']==data['SUBJECT'][i])].drop_duplicates()
                 try:
                     for u in units.index.values:
                         if pandas.isna(units["CREDITS"][u]) or units["CREDITS"][u] == 0:
@@ -2200,7 +2034,6 @@ class FileUploadAPIView(APIView):
                     )
                 else:
                     # Записываем в БД новую ОП
-                    #
                     fs_obj = FieldOfStudy(
                         number=data["SUBFIELDCODE"][i],
                         title=data["MAJOR_NAME"][i].strip(),
@@ -2211,7 +2044,6 @@ class FileUploadAPIView(APIView):
 
                 print("Направление подготовки: ", fs_obj)
                 # Проверяем если Дисцпилина уже есть в БД
-                #
                 print(data["SUBJECT"][i].strip(), data["DIS_CODE"][i])
                 regex = r"^[0-9]{2}\." + str(data["DIS_CODE"][i])[3] + "."
                 print(regex)
@@ -2232,7 +2064,6 @@ class FileUploadAPIView(APIView):
                     discipline_code__iregex=regex,
                 ).distinct()
                 print("Найдена РПД: ", wp_list)
-                # print(WorkProgram.objects.get(discipline_code=data['DIS_CODE'][i], title=data['SUBJECT'][i].strip()))
                 if wp_list.exists():
                     wp_obj = WorkProgram.objects.get(pk=wp_list[0].id)
                     if not wp_obj.old_discipline_code:
@@ -2259,19 +2090,7 @@ class FileUploadAPIView(APIView):
                             wp_obj = WorkProgram.clone_programm(wp_obj.id)
                             wp_obj.discipline_code = data["DIS_CODE"][i]
                             wp_obj.save()
-
-                    """   # если да, то получаем объект
-                    #
-                    print('1', WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
-                                                          discipline_code=data['DIS_CODE'][i]))
-                    wp_obj = WorkProgram.objects.get(title=data['SUBJECT'][i].strip(),
-                                                     discipline_code=data['DIS_CODE'][i])
-                    wp_obj.discipline_code = data['DIS_CODE'][i]  # заменить в параметры
-                    wp_obj.credit_units = ",".join(map(str, credit_units))  # убрать
-                    print('2', wp_obj)"""
                 else:
-                    # если нет, то записываем в БД
-
                     wp_obj = WorkProgram(
                         title=data["SUBJECT"][i].strip(),
                         discipline_code=data["DIS_CODE"][i],
@@ -2323,16 +2142,6 @@ class FileUploadAPIView(APIView):
                             work_program=wp_obj, type="4", semester=semester
                         )
                     print("созданы оценочные срадства")
-                # try:
-                #     lecture_array = [float(x) for x in wp_obj.lecture_hours.split(",")]
-                # except:
-                #     wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
-                #     wp_obj.practice_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
-                #     wp_obj.lab_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
-                #     wp_obj.srs_hours = str([0 for _ in range(10)])[1:-1].replace(" ", "")
-                # if ',' not in wp_obj.lecture_hours and '.' not in wp_obj.lecture_hours:
-                # print('1', len(list(wp_obj.lecture_hours)))
-                # print('2', not wp_obj.lecture_hours)
                 if not wp_obj.lecture_hours:
                     print("попытка создать массивыдля данных о семестрах")
                     wp_obj.lecture_hours = str([0 for _ in range(10)])[1:-1].replace(
@@ -2430,19 +2239,6 @@ class FileUploadAPIView(APIView):
                 wp_obj.save()
                 print("Рабочая программа дисциплины: ", wp_obj)
 
-                """
-                   Данная таблица больше не используется. Для дальнейшей работы код нужно заменить.
-                   Связь направления и РПД реализована через таблицу WorkProgramInFieldOfStudy.
-                """
-                # if FieldOfStudyWorkProgram.objects.filter(field_of_study = fs_obj, work_program = wp_obj).exists():
-                #    print('FieldOfStudyWorkProgram exist')
-                # else:
-                # Теперь записываем в FieldOfStudyWorkProgram
-                # fswp_obj = FieldOfStudyWorkProgram(field_of_study = fs_obj, work_program = wp_obj)
-                # fswp_obj.save()
-
-                # print('Связь рабочей программы и дисциплины: done')
-
                 if AcademicPlan.objects.filter(
                     qualification=qualification,
                     year=data["YEAR"][i],
@@ -2453,16 +2249,11 @@ class FileUploadAPIView(APIView):
                         year=data["YEAR"][i],
                         educational_profile=data["SUBFIELDNAME"][i].strip(),
                     )
-                    # EP_ID - учебный план
                     ap_obj.ap_isu_id = int(data["EP_ID"][i])
                     ap_obj.save()
                     print("старый", ap_obj)
 
                 else:
-                    # if data['TYPELEARNING'][i].strip() == "традиционное":
-                    #     typelearning = 'internal'
-                    # else:
-                    #     typelearning = 'extramural'
                     typelearning = "internal"
                     print(typelearning)
                     ap_obj = AcademicPlan(
@@ -2488,7 +2279,6 @@ class FileUploadAPIView(APIView):
                     )
                     iap_obj.op_isu_id = int(data["OP_ID"][i])
                     iap_obj.save()
-                    # OP_ID - образовательная программа
                     print("ImplementationAcademicPlan exist")
                 else:
                     iap_obj = ImplementationAcademicPlan(
@@ -2562,7 +2352,6 @@ class FileUploadAPIView(APIView):
                             work_program=wp_obj,
                         )
                         wpinfs.save()
-                    # wpchangemdb.work_program.add(wp_obj)
                 elif WorkProgramChangeInDisciplineBlockModule.objects.filter(
                     discipline_block_module=mdb,
                     change_type=data["ISOPTION"][i],
@@ -2610,16 +2399,6 @@ class FileUploadAPIView(APIView):
                         ).count()
                         > 1
                     ):
-                        # wp_obj2 = WorkProgram.objects.filter(title=data['SUBJECT'][i].strip(),
-                        #                                     zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__name=
-                        #                                     data['COMPONENT'][i].strip(),
-                        #                                     zuns_for_wp__work_program_change_in_discipline_block_module__change_type=
-                        #                                     data['ISOPTION'][i],
-                        #                                     zuns_for_wp__work_program_change_in_discipline_block_module = wpchangemdb,
-                        #                                     )[0]
-                        # print ('НАЙДЕНА ПОВТОРНАЯ РПД',  wp_obj)
-                        # wpinfs.work_program = wp_obj2
-                        # wpinfs.save()
                         if clone:
                             print("УДАЛЯЕТСЯ СКЛОНИРОВАННАЯ рпд")
                             wp_obj.delete()
@@ -2628,13 +2407,6 @@ class FileUploadAPIView(APIView):
                     pass
 
                 print("Рабочая программа дисциплины записана в модуль: done")
-
-                # if Zun.objects.filter(wp_in_fs = wpinfs).exists():
-                #     pass
-                # else:
-                #     zun = Zun(wp_in_fs = wpinfs)
-                #     zun.save()
-                #     #wpchangemdb.work_program.add(wp_obj)
 
             except Exception as e:
                 print(e)
@@ -2794,8 +2566,6 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
         "field_of_study__title",
         "field_of_study__number",
         "field_of_study__qualification",
-        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
-        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
         "year",
     ]
     filterset_fields = [
@@ -2803,11 +2573,6 @@ class ImplementationAcademicPlanListAPIView(generics.ListAPIView):
         "field_of_study__title",
         "field_of_study__number",
         "field_of_study__qualification",
-        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__name',
-        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__name',
-        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__prerequisites__id',
-        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__outcomes__id',
-        # 'academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program__structural_unit__title',
         "year",
     ]
     permission_classes = [IsRpdDeveloperOrReadOnly]
@@ -3001,7 +2766,6 @@ class WorkProgramArchiveUpdateView(generics.UpdateAPIView):
 class BugsLogView(generics.CreateAPIView):
     name = "Загрузка файла ТЗ заказа"
     permission_classes = [IsAuthenticated]
-    # parser_classes = (parsers.FormParser, parsers.MultiPartParser)
     serializer_class = BugsLogSerializer
     queryset = BugsLog.objects.all()
 
