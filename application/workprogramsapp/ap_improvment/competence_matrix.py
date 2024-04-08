@@ -1,5 +1,4 @@
 from django_cte import With
-#from django_print_sql import print_sql_decorator
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -66,7 +65,6 @@ def get_competences_practice(practice_in_fs):
                                                "number": competence.number,
                                                "zuns": [zuns_obj]}
     return {"competences": list(competences_dict.values())}
-
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
