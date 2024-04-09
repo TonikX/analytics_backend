@@ -157,7 +157,7 @@ class AcademicPlansStatisticSerializer(serializers.ModelSerializer):
 
 
 class RecordWorkProgramSerializer(serializers.ModelSerializer):
-    # editors = userProfileSerializer(many=True)
+
     class Meta:
         model = WorkProgram
         fields = [
@@ -172,7 +172,6 @@ class RecordWorkProgramSerializer(serializers.ModelSerializer):
 
 
 class RecordAcademicPlanSerializer(serializers.ModelSerializer):
-    print()
 
     class Meta:
         model = AcademicPlan
@@ -189,7 +188,6 @@ class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
         wp_all = WorkProgram.objects.none()
         for change in instance.get_all_changeblocks_from_ap():
             wp_all = wp_all | change.work_program.all()
-        print(instance.id, len(wp_all))
         return WorkProgramDescriptionOnlySerializer(
             instance=wp_all.distinct(), many=True
         ).data
@@ -301,7 +299,7 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
                     semester_start = []
             for wp in changeblock.work_program.all():
                 try:
-                    # print(wp.ze_v_sem, wp.title)
+
                     ze_v_sem = [int(unit) for unit in wp.ze_v_sem.split(", ")]
                     duration = len([el for el in ze_v_sem if el != 0])
                 except TypeError:
@@ -359,7 +357,6 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
 
 
 class ModulesWithoutRulesSerializer(serializers.ModelSerializer):
-    # editors = userProfileSerializer(many=True)
 
     class Meta:
         model = DisciplineBlockModule
