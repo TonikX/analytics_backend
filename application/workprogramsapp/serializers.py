@@ -87,7 +87,6 @@ class AcademicPlanUpdateSchedulerConfigurationSerializer(serializers.ModelSerial
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
-    """Сериализатор Индикаторов"""
 
     class Meta:
         model = Indicator
@@ -101,7 +100,6 @@ class EducationalStandardListSerializer(serializers.ModelSerializer):
 
 
 class CompetenceWithStandardSerializer(serializers.ModelSerializer):
-    """Сериализатор Компетенций"""
 
     educational_standard = serializers.SerializerMethodField()
 
@@ -128,7 +126,6 @@ class CompetenceWithStandardSerializer(serializers.ModelSerializer):
 
 
 class CompetenceSerializer(serializers.ModelSerializer):
-    """Сериализатор Компетенций"""
 
     class Meta:
         model = Competence
@@ -136,7 +133,6 @@ class CompetenceSerializer(serializers.ModelSerializer):
 
 
 class CompetenceForEPSerializer(serializers.ModelSerializer):
-    """Сериализатор Компетенций"""
 
     indicator_in_competencse = IndicatorSerializer(many=True)
 
@@ -160,9 +156,6 @@ class IndicatorListWithoutCompetenceSerializer(serializers.ModelSerializer):
 
 
 class FieldOfStudyImplementationSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор образовательных программ (направлений)
-    """
 
     class Meta:
         model = FieldOfStudy
@@ -209,7 +202,6 @@ class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
 
 
 class OutcomesOfWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор работы с результатом обучения"""
 
     item = ItemSerializer()
 
@@ -219,7 +211,6 @@ class OutcomesOfWorkProgramSerializer(serializers.ModelSerializer):
 
 
 class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор создания результата обучения"""
 
     class Meta:
         model = OutcomesOfWorkProgram
@@ -228,7 +219,6 @@ class OutcomesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
 
 
 class EvaluationToolSerializer(serializers.ModelSerializer):
-    """Сериализатор ФОСов"""
 
     class Meta:
         model = EvaluationTool
@@ -236,7 +226,6 @@ class EvaluationToolSerializer(serializers.ModelSerializer):
 
 
 class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
-    """Сериализатор ФОСов"""
 
     class Meta:
         model = EvaluationTool
@@ -254,7 +243,6 @@ class EvaluationToolForOutcomsSerializer(serializers.ModelSerializer):
 
 
 class CertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор ФОСов"""
 
     class Meta:
         model = CertificationEvaluationTool
@@ -272,7 +260,6 @@ class CertificationEvaluationToolForWorkProgramSerializer(serializers.ModelSeria
 
 
 class CertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор ФОСов"""
 
     class Meta:
         model = CertificationEvaluationTool
@@ -292,7 +279,6 @@ class CertificationEvaluationToolCreateSerializer(serializers.ModelSerializer):
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор вывода результата обучения для вывода результата в рабочей программе"""
 
     item = ItemSerializer()
     evaluation_tool = EvaluationToolForOutcomsSerializer(many=True)
@@ -304,7 +290,6 @@ class OutcomesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
 
 
 class PrerequisitesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор создания пререквизита обучения"""
 
     class Meta:
         model = PrerequisitesOfWorkProgram
@@ -312,7 +297,6 @@ class PrerequisitesOfWorkProgramCreateSerializer(serializers.ModelSerializer):
 
 
 class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор создания пререквизита обучения"""
 
     item = ItemSerializer()
 
@@ -322,7 +306,6 @@ class PrerequisitesOfWorkProgramSerializer(serializers.ModelSerializer):
 
 
 class PrerequisitesOfWorkProgramInWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор вывода пререквизита обучения для вывода пререквизита в рабочей программе"""
 
     item = ItemSerializer()
 
@@ -332,7 +315,6 @@ class PrerequisitesOfWorkProgramInWorkProgramSerializer(serializers.ModelSeriali
 
 
 class TopicSerializer(serializers.ModelSerializer):
-    """Сериализатор Тем"""
 
     url_online_course = OnlineCourseSerializer(required=False)
     additional_materials_for_topic = AdditionalMaterialSerializer(many=True)
@@ -350,7 +332,6 @@ class TopicSerializer(serializers.ModelSerializer):
 
 
 class TopicCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор Тем"""
 
     class Meta:
         model = Topic
@@ -365,7 +346,6 @@ class TopicCreateSerializer(serializers.ModelSerializer):
 
 
 class SectionSerializer(serializers.ModelSerializer):
-    """Сериализатор Разделов"""
 
     class Meta:
         model = DisciplineSection
@@ -373,7 +353,6 @@ class SectionSerializer(serializers.ModelSerializer):
 
 
 class BibliographicReferenceSerializer(serializers.ModelSerializer):
-    """Сериализатор Разделов"""
 
     class Meta:
         model = BibliographicReference
@@ -381,7 +360,6 @@ class BibliographicReferenceSerializer(serializers.ModelSerializer):
 
 
 class DisciplineSectionSerializer(serializers.ModelSerializer):
-    """Сериализатор Разделов"""
 
     topics = TopicSerializer(many=True)
     evaluation_tools = EvaluationToolSerializer(many=True)
@@ -405,7 +383,6 @@ class DisciplineSectionSerializer(serializers.ModelSerializer):
 
 
 class CertificationSerializer(serializers.ModelSerializer):
-    """Сериализатор аттестации"""
 
     class Meta:
         model = Certification
@@ -413,7 +390,6 @@ class CertificationSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramForIndividualRoutesSerializer(serializers.ModelSerializer):
-    """Сериализатор рабочих программ"""
 
     prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(
         source="prerequisitesofworkprogram_set", many=True
@@ -435,7 +411,6 @@ class WorkProgramForIndividualRoutesSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор для создания рабочих программ"""
 
     evaluation_tools = serializers.ListField(
         write_only=True,
@@ -494,7 +469,6 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramEditorsUpdateSerializer(serializers.ModelSerializer):
-    """Сериализатор для создания рабочих программ"""
 
     class Meta:
         model = WorkProgram
@@ -502,7 +476,6 @@ class WorkProgramEditorsUpdateSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramArchiveUpdateSerializer(serializers.ModelSerializer):
-    """Сериализатор для отправки РПД в архив"""
 
     class Meta:
         model = WorkProgram
@@ -510,7 +483,6 @@ class WorkProgramArchiveUpdateSerializer(serializers.ModelSerializer):
 
 
 class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор Разделов"""
 
     class Meta:
         model = BibliographicReference
@@ -523,7 +495,6 @@ class Geeks(object):
 
 
 class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSerializer):
-    """Сериализатор для создания рабочих программ"""
 
     class Meta:
         model = WorkProgram
@@ -531,7 +502,6 @@ class WorkProgramBibliographicReferenceUpdateSerializer(serializers.ModelSeriali
 
 
 class DisciplineSectionForEvaluationToolsSerializer(serializers.ModelSerializer):
-    """Сериализатор Разделов для оценочных средств"""
 
     class Meta:
         model = DisciplineSection
@@ -539,9 +509,6 @@ class DisciplineSectionForEvaluationToolsSerializer(serializers.ModelSerializer)
 
 
 class FieldOfStudySerializer(serializers.ModelSerializer):
-    """
-    Сериализатор образовательных программ (направлений)
-    """
 
     class Meta:
         model = FieldOfStudy
@@ -549,7 +516,6 @@ class FieldOfStudySerializer(serializers.ModelSerializer):
 
 
 class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор ФОСов"""
 
     descipline_sections = DisciplineSectionForEvaluationToolsSerializer(
         many=True, source="evaluation_tools"
@@ -573,7 +539,6 @@ class EvaluationToolForWorkProgramSerializer(serializers.ModelSerializer):
 
 
 class EvaluationToolCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор ФОСов"""
 
     descipline_sections = serializers.PrimaryKeyRelatedField(
         many=True, source="evaluation_tools", queryset=DisciplineSection.objects.all()
@@ -596,7 +561,6 @@ class EvaluationToolCreateSerializer(serializers.ModelSerializer):
 
 
 class EvaluationToolListSerializer(serializers.ModelSerializer):
-    """Сериализатор ФОСов для ListView"""
 
     descipline_sections = serializers.PrimaryKeyRelatedField(
         many=True, source="evaluation_tools", queryset=DisciplineSection.objects.all()
@@ -631,7 +595,6 @@ class EvaluationToolListSerializer(serializers.ModelSerializer):
 
 
 class ZunSerializer(serializers.ModelSerializer):
-    """Сериализатор Зунов"""
 
     indicator_in_zun = IndicatorListSerializer()
 
@@ -641,7 +604,6 @@ class ZunSerializer(serializers.ModelSerializer):
 
 
 class ZunForManyCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор создания нескольких Зунов"""
 
     class Meta:
         model = Zun
@@ -657,7 +619,6 @@ class ZunForManyCreateSerializer(serializers.ModelSerializer):
 
 
 class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
-    """Сериализатор Зунов"""
 
     indicator_in_zun = IndicatorListSerializer()
     items = OutcomesOfWorkProgramSerializer(many=True)
@@ -668,7 +629,6 @@ class ZunForDetailAcademicPlanSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramInFieldOfStudySerializerForCb(serializers.ModelSerializer):
-    """Сериализатор Зунов"""
 
     zun_in_wp = ZunForDetailAcademicPlanSerializer(many=True)
 
@@ -678,7 +638,6 @@ class WorkProgramInFieldOfStudySerializerForCb(serializers.ModelSerializer):
 
 
 class ZunCreateSerializer(serializers.Serializer):
-    """Сериализатор Зунов"""
 
     indicator_in_zun = serializers.PrimaryKeyRelatedField(
         queryset=Indicator.objects.all()
@@ -695,7 +654,6 @@ class ZunCreateSerializer(serializers.Serializer):
 
 
 class ZunCreateSaveSerializer(serializers.ModelSerializer):
-    """Сериализатор Сохранения Зунов"""
 
     def update(self, instance, validated_data):
         instance.indicator_in_zun = validated_data.get(
@@ -714,7 +672,6 @@ class ZunCreateSaveSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramInFieldOfStudyCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор Зунов"""
 
     zun_in_wp = ZunCreateSerializer(many=True, read_only=True)
 
@@ -735,7 +692,6 @@ class RecursiveField(serializers.Serializer):
 
 
 class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
-    """Сериализатор рабочих программ"""
 
     zuns_for_wp = serializers.SerializerMethodField("clarify_zuns_for_wp")
 
@@ -1174,7 +1130,6 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramShortForExperiseSerializer(serializers.ModelSerializer):
-    """Сериализатор рабочих программ"""
 
     class Meta:
         model = WorkProgram
@@ -1334,7 +1289,6 @@ class WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
 
 
 class WorkProgramInFieldOfStudySerializer(serializers.ModelSerializer):
-    """Сериализатор рабочих программ"""
 
     prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(
         source="prerequisitesofworkprogram_set", many=True
@@ -1381,7 +1335,6 @@ class WorkProgramInFieldOfStudyWithAPSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramSerializer(serializers.ModelSerializer):
-    """Сериализатор рабочих программ"""
 
     prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(
         source="prerequisitesofworkprogram_set", many=True
@@ -1458,9 +1411,6 @@ class WorkProgramSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        """
-        Create and return a new `Snippet` instance, given the validated data.
-        """
         return WorkProgram.objects.create(**validated_data)
 
     def get_work_program_in_change_block_v2(self, instance):
@@ -1561,9 +1511,6 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 
 
 class FieldOfStudyListSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор образовательных программ (направлений)
-    """
 
     implementation_academic_plan_in_field_of_study = (
         ImplementationAcademicPlanSerializer(many=True)
@@ -1601,7 +1548,6 @@ class WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer(
 
 
 class WorkProgramInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializer):
-    """Сериализатор Зунов"""
 
     work_program_change_in_discipline_block_module = (
         WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer()
@@ -1613,7 +1559,6 @@ class WorkProgramInFieldOfStudyForCompeteceListSerializer(serializers.ModelSeria
 
 
 class WorkProgramInFieldOfStudyShortSerializer(serializers.ModelSerializer):
-    """Сериализатор рабочих программ"""
 
     work_program_in_change_block = (
         WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
