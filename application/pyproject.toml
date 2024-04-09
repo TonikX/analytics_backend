@@ -64,6 +64,7 @@ dev = [
     "pip-tools",
     "django-extensions",
     "pytest",
+    "tox",
 ]
 
 [project.urls]
