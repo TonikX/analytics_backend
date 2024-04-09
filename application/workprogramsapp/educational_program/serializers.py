@@ -161,7 +161,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     group_of_general_prof_competences = SerializerMethodField(required=False)
     group_of_key_competences = SerializerMethodField()
     group_of_over_prof_competences = SerializerMethodField()
-    # group_of_pk_competences = GroupOfPkCompetencesInGeneralCharacteristicSerializer(many=True, required=False)
+
     group_of_pk_competences_prof = SerializerMethodField()
     group_of_pk_competences_foresight = SerializerMethodField()
     group_of_pk_competences_minor = SerializerMethodField()
@@ -341,10 +341,6 @@ class WorkProgramCompetenceIndicatorSerializer(serializers.ModelSerializer):
                     indicator = IndicatorSerializer(indicator).data
                 except:
                     indicator = None
-                # indicators_array = []
-                # for indicator in indicators:
-                #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
-                # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
 
                 zuns_array.append(
                     {
@@ -387,8 +383,6 @@ class ImplementationAcademicPlanShortSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanInImplementationSerializer()
     field_of_study = FieldOfStudyImplementationSerializer(many=True)
 
-    # academic_plan = AcademicPlanSerializer()
-
     class Meta:
         model = ImplementationAcademicPlan
         fields = [
@@ -420,7 +414,6 @@ class CompetenceSerializerForIndicator(serializers.ModelSerializer):
 
 
 class IndicatorForUnfilledSerializer(serializers.ModelSerializer):
-    # competence = CompetenceSerializerForIndicator
 
     class Meta:
         model = Indicator
