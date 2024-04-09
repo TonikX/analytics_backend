@@ -1,3 +1,5 @@
+from typing import Union
+
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 from rest_framework.fields import BooleanField, SerializerMethodField
@@ -165,7 +167,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
     group_of_pk_competences_minor = SerializerMethodField()
     group_of_pk_competences_additional_qualification = SerializerMethodField()
 
-    def get_group_of_pk_competences_prof(self, instance):
+    def get_group_of_pk_competences_prof(self, instance) -> dict:
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(
                 general_characteristic=instance, type_of_pk_competence="prof"
@@ -173,7 +175,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
             many=True,
         ).data
 
-    def get_group_of_pk_competences_foresight(self, instance):
+    def get_group_of_pk_competences_foresight(self, instance) -> dict:
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(
                 general_characteristic=instance, type_of_pk_competence="fore"
@@ -181,7 +183,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
             many=True,
         ).data
 
-    def get_group_of_pk_competences_minor(self, instance):
+    def get_group_of_pk_competences_minor(self, instance) -> dict:
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(
                 general_characteristic=instance, type_of_pk_competence="min"
@@ -189,7 +191,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
             many=True,
         ).data
 
-    def get_group_of_pk_competences_additional_qualification(self, instance):
+    def get_group_of_pk_competences_additional_qualification(self, instance) -> dict:
         return GroupOfPkCompetencesInGeneralCharacteristicSerializer(
             instance=GroupOfPkCompetencesInGeneralCharacteristic.objects.filter(
                 general_characteristic=instance, type_of_pk_competence="add_qual"
@@ -197,7 +199,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
             many=True,
         ).data
 
-    def get_group_of_general_prof_competences(self, instance):
+    def get_group_of_general_prof_competences(self, instance) -> Union[dict, None]:
         try:
             return GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer(
                 instance=GroupOfGeneralProfCompetencesInEducationalStandard.objects.filter(
@@ -208,7 +210,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         except GroupOfGeneralProfCompetencesInEducationalStandard.DoesNotExist:
             return None
 
-    def get_group_of_key_competences(self, instance):
+    def get_group_of_key_competences(self, instance) -> Union[dict, None]:
         try:
             return GroupOfKeyCompetencesInGeneralCharacteristicSerializer(
                 instance=GroupOfKeyCompetencesInEducationalStandard.objects.filter(
@@ -219,7 +221,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         except GroupOfGeneralProfCompetencesInEducationalStandard.DoesNotExist:
             return None
 
-    def get_group_of_over_prof_competences(self, instance):
+    def get_group_of_over_prof_competences(self, instance) -> Union[dict, None]:
         try:
             return GroupOfOverProfCompetencesInGeneralCharacteristicSerializer(
                 instance=GroupOfOverProfCompetencesInEducationalStandard.objects.filter(
@@ -320,7 +322,7 @@ class WorkProgramCompetenceIndicatorSerializer(serializers.ModelSerializer):
 
     competences = SerializerMethodField()
 
-    def get_competences(self, instance):
+    def get_competences(self, instance) -> dict:
         competences = Competence.objects.filter(
             indicator_in_competencse__zun__wp_in_fs__work_program=instance
         ).distinct()
