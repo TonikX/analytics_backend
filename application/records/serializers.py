@@ -1,4 +1,5 @@
 from collections import defaultdict
+
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
@@ -21,7 +22,7 @@ from workprogramsapp.workprogram_additions.models import StructuralUnit
 class ImplementationAcademicPlanForStatisticSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id', 'ap_isu_id', 'year', 'title']
+        fields = ["id", "ap_isu_id", "year", "title"]
 
 
 class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
@@ -35,7 +36,7 @@ class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'discipline_code', 'title', 'description', 'status']
+        fields = ["id", "discipline_code", "title", "description", "status"]
 
 
 class WorkProgramEvaluationToolsStatSerializer(serializers.ModelSerializer):
@@ -43,13 +44,15 @@ class WorkProgramEvaluationToolsStatSerializer(serializers.ModelSerializer):
 
     def get_tools_counter(self, instance):
         types_dict = defaultdict(int)
-        for eva in EvaluationTool.objects.filter(evaluation_tools__work_program=instance):
+        for eva in EvaluationTool.objects.filter(
+            evaluation_tools__work_program=instance
+        ):
             types_dict[eva.type] += 1
         return types_dict
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'discipline_code', 'title', 'tools_counter']
+        fields = ["id", "discipline_code", "title", "tools_counter"]
 
 
 class WorkProgramDuplicatesSerializer(serializers.Serializer):
@@ -83,7 +86,7 @@ class WorkProgramSerializerForStatistic(serializers.ModelSerializer):
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'title', 'discipline_code', "editors"]
+        fields = ["id", "title", "discipline_code", "editors"]
 
 
 class WorkProgramSerializerForStatisticExtended(serializers.ModelSerializer):
@@ -94,17 +97,26 @@ class WorkProgramSerializerForStatisticExtended(serializers.ModelSerializer):
     def get_academic_plans(self, instance):
         return AcademicPlansStatisticSerializer(
             instance=AcademicPlan.objects.filter(
-                discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=instance.id),
-            many=True).data
+                discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=instance.id
+            ),
+            many=True,
+        ).data
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'title', "structural_unit", 'discipline_code', "editors", "academic_plans"]
+        fields = [
+            "id",
+            "title",
+            "structural_unit",
+            "discipline_code",
+            "editors",
+            "academic_plans",
+        ]
 
 
 class Meta:
     model = WorkProgram
-    fields = ['id', 'title', 'discipline_code', "editors", "academic_plans"]
+    fields = ["id", "title", "discipline_code", "editors", "academic_plans"]
 
 
 class WorkProgramInFieldOfStudySerializerForStatistic(serializers.ModelSerializer):
@@ -126,22 +138,37 @@ class StructuralUnitWithWpSerializer(serializers.ModelSerializer):
 class SuperShortWorkProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkProgram
-        fields = ['id', 'title', 'discipline_code']
+        fields = ["id", "title", "discipline_code"]
 
 
 class AcademicPlansStatisticSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'educational_profile', 'number', 'approval_date', 'year', 'education_form', 'qualification',
-                  'author']
+        fields = [
+            "id",
+            "educational_profile",
+            "number",
+            "approval_date",
+            "year",
+            "education_form",
+            "qualification",
+            "author",
+        ]
 
 
 class RecordWorkProgramSerializer(serializers.ModelSerializer):
     # editors = userProfileSerializer(many=True)
     class Meta:
         model = WorkProgram
-        fields = ['id', 'title', 'structural_unit', 'editors', 'language', 'discipline_sections',
-                  'work_program_in_change_block']
+        fields = [
+            "id",
+            "title",
+            "structural_unit",
+            "editors",
+            "language",
+            "discipline_sections",
+            "work_program_in_change_block",
+        ]
 
 
 class RecordAcademicPlanSerializer(serializers.ModelSerializer):
@@ -149,33 +176,44 @@ class RecordAcademicPlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AcademicPlan
-        fields = ['number']
+        fields = ["number"]
 
 
 class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
     wp_in_academic_plan = serializers.SerializerMethodField()
-    academic_plan_in_field_of_study = ImplementationAcademicPlanForStatisticSerializer(many=True)
+    academic_plan_in_field_of_study = ImplementationAcademicPlanForStatisticSerializer(
+        many=True
+    )
 
     def get_wp_in_academic_plan(self, instance):
         wp_all = WorkProgram.objects.none()
         for change in instance.get_all_changeblocks_from_ap():
             wp_all = wp_all | change.work_program.all()
         print(instance.id, len(wp_all))
-        return WorkProgramDescriptionOnlySerializer(instance=wp_all.distinct(), many=True).data
+        return WorkProgramDescriptionOnlySerializer(
+            instance=wp_all.distinct(), many=True
+        ).data
 
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'academic_plan_in_field_of_study', 'wp_in_academic_plan', ]
+        fields = [
+            "id",
+            "academic_plan_in_field_of_study",
+            "wp_in_academic_plan",
+        ]
 
 
 class WorkProgramPrerequisitesAndOutcomesSerializer(serializers.ModelSerializer):
-    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(source='prerequisitesofworkprogram_set',
-                                                                      many=True)
-    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(source='outcomesofworkprogram_set', many=True)
+    prerequisites = PrerequisitesOfWorkProgramInWorkProgramSerializer(
+        source="prerequisitesofworkprogram_set", many=True
+    )
+    outcomes = OutcomesOfWorkProgramInWorkProgramSerializer(
+        source="outcomesofworkprogram_set", many=True
+    )
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'title', 'prerequisites', 'outcomes']
+        fields = ["id", "title", "prerequisites", "outcomes"]
 
 
 class ImplementationAcademicPlanWpStatisticSerializer(serializers.ModelSerializer):
@@ -185,28 +223,55 @@ class ImplementationAcademicPlanWpStatisticSerializer(serializers.ModelSerialize
     wp_with_editors = serializers.SerializerMethodField()
 
     def get_total_count_of_wp(self, obj):
-        return WorkProgram.objects.filter(
-            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj).distinct().count()
+        return (
+            WorkProgram.objects.filter(
+                zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj
+            )
+            .distinct()
+            .count()
+        )
 
     def get_accepted_wp(self, obj):
-        return WorkProgram.objects.filter(
-            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
-            expertise_with_rpd__expertise_status="AC").distinct().count()
+        return (
+            WorkProgram.objects.filter(
+                zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
+                expertise_with_rpd__expertise_status="AC",
+            )
+            .distinct()
+            .count()
+        )
 
     def get_wp_on_expertise(self, obj):
-        return WorkProgram.objects.filter(
-            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
-            expertise_with_rpd__expertise_status__in=["WK", "EX"]).distinct().count()
+        return (
+            WorkProgram.objects.filter(
+                zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
+                expertise_with_rpd__expertise_status__in=["WK", "EX"],
+            )
+            .distinct()
+            .count()
+        )
 
     def get_wp_with_editors(self, obj):
-        return WorkProgram.objects.filter(
-            zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
-            editors__isnull=False).distinct().count()
+        return (
+            WorkProgram.objects.filter(
+                zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
+                editors__isnull=False,
+            )
+            .distinct()
+            .count()
+        )
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['academic_plan', 'title', 'year', 'total_count_of_wp', 'wp_with_editors', 'accepted_wp',
-                  'wp_on_expertise']
+        fields = [
+            "academic_plan",
+            "title",
+            "year",
+            "total_count_of_wp",
+            "wp_with_editors",
+            "accepted_wp",
+            "wp_on_expertise",
+        ]
 
 
 class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
@@ -217,7 +282,7 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
         return ImplementationAcademicPlan.objects.get(academic_plan=instance).title
 
     def get_work_programs(self, instance):
-        request = self.context['request']
+        request = self.context["request"]
         year_of_sending = int(request.query_params.get("year").split("/")[0])
         plan_year = ImplementationAcademicPlan.objects.get(academic_plan=instance).year
         wps = []
@@ -236,7 +301,7 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
                     semester_start = []
             for wp in changeblock.work_program.all():
                 try:
-                    #print(wp.ze_v_sem, wp.title)
+                    # print(wp.ze_v_sem, wp.title)
                     ze_v_sem = [int(unit) for unit in wp.ze_v_sem.split(", ")]
                     duration = len([el for el in ze_v_sem if el != 0])
                 except TypeError:
@@ -244,9 +309,17 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
                 except AttributeError:
                     continue
                 for sem in semester_start:
-                    sem = sem-1
-                    if plan_year + sem // 2 <= year_of_sending <= plan_year + (sem + duration-1) // 2:
-                        wps.append(SuperShortWorkProgramSerializer(instance=wp, ).data)
+                    sem = sem - 1
+                    if (
+                        plan_year + sem // 2
+                        <= year_of_sending
+                        <= plan_year + (sem + duration - 1) // 2
+                    ):
+                        wps.append(
+                            SuperShortWorkProgramSerializer(
+                                instance=wp,
+                            ).data
+                        )
         return wps
 
     """def get_work_programs(self, instance):
@@ -277,12 +350,17 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AcademicPlan
-        fields = ['id', 'ap_isu_id', 'title', 'work_programs', ]
+        fields = [
+            "id",
+            "ap_isu_id",
+            "title",
+            "work_programs",
+        ]
 
 
 class ModulesWithoutRulesSerializer(serializers.ModelSerializer):
-    #editors = userProfileSerializer(many=True)
+    # editors = userProfileSerializer(many=True)
 
     class Meta:
         model = DisciplineBlockModule
-        fields = ['id', 'name', 'editors']
+        fields = ["id", "name", "editors"]
