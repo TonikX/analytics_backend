@@ -6,6 +6,7 @@ import pandas
 from django.conf import settings
 from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters
 from rest_framework import permissions
 from rest_framework import status
@@ -75,6 +76,12 @@ from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 class UpdateAcademicPlansView(APIView):
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def post(self, request):
         updater = AcademicPlanUpdateProcessor()
         updater.update_academic_plans()
@@ -82,6 +89,12 @@ class UpdateAcademicPlansView(APIView):
 
 
 class UpdateAcademicPlans2023View(APIView):
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     def post(self, request):
         updater = AcademicPlanUpdateProcessor_2023()
@@ -151,6 +164,12 @@ class AcademicPlanUpdateSchedulerConfigurationView(RetrieveAPIView):
 class AcademicPlanUpdateSchedulerConfigurationUpdateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def put(self, request, **kwargs):
         queryset = AcademicPlanUpdateSchedulerConfiguration.objects.all()
 
@@ -171,6 +190,12 @@ class AcademicPlanUpdateSchedulerConfigurationUpdateView(APIView):
 class AcademicPlanUpdateExcelCreatorView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def get(self, request):
         creator = AcademicPlanExcelCreator()
         filename, mime_type = creator.create_excel_file()
@@ -187,6 +212,12 @@ class FileUploadAPIView(APIView):
     """
     API-endpoint для загрузки файла sub_2019_2020_new
     """
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     # @transaction.atomic
     def post(self, request):
@@ -704,7 +735,12 @@ class FileUploadOldVersionAPIView(APIView):
     API-endpoint для загрузки файла sub_2019_2020_new
     """
 
-    # @transaction.atomic
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def post(self, request):
         print("- Импортируем csv файл")
         if not os.path.exists("upload/"):
@@ -1099,6 +1135,12 @@ class FileUploadOldVersionAPIView(APIView):
 
 class UpdateAcademicPlansHeadersView(APIView):
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def post(self, request):
         isu_service = IsuService(
             IsuUser(settings.ISU["ISU_CLIENT_ID"], settings.ISU["ISU_CLIENT_SECRET"])
@@ -1118,6 +1160,12 @@ class SendAcademicPlansLinesToIsu(APIView):
 
     permission_classes = [IsExpertiseMasterStrict]
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def post(self, request):
         request_data = request.data
         ap = AcademicPlan.objects.get(id=request_data["ap_id"])
@@ -1131,6 +1179,7 @@ class SendAcademicPlansLinesToIsu(APIView):
 
 
 class IsuHistoryListView(ListAPIView):
+
     queryset = IsuObjectsSendLogger.objects.all()
     serializer_class = IsuHistoryListViewSerializer
     filter_backends = [
@@ -1152,6 +1201,12 @@ class SendWorkProgramToISU(APIView):
     """
 
     permission_classes = [IsExpertiseMasterStrict]
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     def post(self, request):
         wp_id = request.data.get("wp_id")
@@ -1199,6 +1254,12 @@ class SendPracticeToISU(APIView):
 
     permission_classes = [IsExpertiseMasterStrict]
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def post(self, request):
         practice_id = request.data.get("practice_id")
         try:
@@ -1240,6 +1301,12 @@ class SendGIAToISU(APIView):
 
     permission_classes = [IsExpertiseMasterStrict]
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def post(self, request):
         gia_id = request.data.get("gia_id")
         try:
@@ -1272,6 +1339,12 @@ class SendGIAToISU(APIView):
 
 class UpdateModulesRelationships(APIView):
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def get(self, request):
         isu_service = IsuService(
             IsuUser(settings.ISU["ISU_CLIENT_ID"], settings.ISU["ISU_CLIENT_SECRET"])
@@ -1282,6 +1355,7 @@ class UpdateModulesRelationships(APIView):
         return Response(data={"plans_created"}, status=200)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def IsuModulesDuplicates(request):

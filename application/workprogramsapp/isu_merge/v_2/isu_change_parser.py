@@ -3,7 +3,9 @@ from ast import literal_eval
 
 import pandas as pd
 from deepdiff import DeepDiff
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import api_view
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from workprogramsapp.models import (
@@ -13,8 +15,9 @@ from workprogramsapp.models import (
 )
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET", "POST"])
-def ChangeParser(request):
+def ChangeParser(request: Request) -> Response:
     iap = 4024
 
     change = ImplementationAcademicPlan.objects.get(id=iap).old_json
