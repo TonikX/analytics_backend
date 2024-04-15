@@ -4,6 +4,7 @@ from html import unescape
 
 import requests as rq
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, filters, status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -17,12 +18,9 @@ from workprogramsapp.bibliographic_reference.serializers import (
 from workprogramsapp.models import BibliographicReference
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
-@permission_classes(
-    [
-        IsAuthenticated,
-    ]
-)
+@permission_classes((IsAuthenticated,))
 def SearchInEBSCO(request):
     """
     Эндпоинт для поиска источника в Электронно-Библиотечной Системе EBSCO
