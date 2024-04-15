@@ -440,6 +440,12 @@ class CompetenceListView(APIView):
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def get(self, request):
         competences = Competence.objects.all()
         serializer = CompetenceSerializer(competences, many=True)
@@ -450,6 +456,12 @@ class CompetenceUpdateView(APIView):
     """Редактирование (обновление) компетенции."""
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     def get(self, request, pk):
         competence = get_object_or_404(Competence, pk=pk)
@@ -478,6 +490,12 @@ class CompetenceIndicatorDetailView(APIView):
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def get(self, request, pk):
         indicators = Indicator.objects.filter(competence=pk)
         serializer = IndicatorSerializer(indicators, many=True)
@@ -488,6 +506,12 @@ class DeleteIndicatorFromCompetenceView(APIView):
     """Удаление индикатора из компетенции."""
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     def post(self, request):
         competence_pk = request.data.get("competence_pk")
@@ -504,6 +528,12 @@ class AddIndicatorToCompetenceView(APIView):
     """Добавление индикатора в компетенцию (Создание индикатора)."""
 
     permission_classes = [IsRpdDeveloperOrReadOnly]
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     def post(self, request):
         number = request.data.get("number")
@@ -1434,6 +1464,12 @@ def ChangeItemsView(request):
 class FileUploadWorkProgramOutcomesAPIView(APIView):
     """Эндпоинт для добавления данных о РПД из csv-файла с online.edu.ru."""
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def post(self, request):
 
         serializer = FileUploadSerializer(data=request.data)
@@ -1552,6 +1588,10 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
     serializer_class = EvaluationToolForWorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
     queryset = EvaluationTool
+
+    def get_queryset(self, *args, **kwargs):
+        if getattr(self, "swagger_fake_view", False):
+            return FieldOfStudy.objects.none()
 
     def list(self, request, **kwargs):
         """Вывод всех результатов для одной рабочей программы по id."""
@@ -1728,6 +1768,12 @@ def handle_uploaded_file(file, filename):
 class FileUploadWorkProgramAPIView(APIView):
     """Эндпоинт для добавления данных о РПД из csv-файла с online.edu.ru."""
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     def post(self, request):
 
         serializer = FileUploadSerializer(data=request.data)
@@ -1887,6 +1933,12 @@ def handle_uploaded_csv(file, filename):
 
 class FileUploadAPIView(APIView):
     """Эндпоинт для загрузки файла sub_2019_2020_new."""
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     def post(self, request):
 
