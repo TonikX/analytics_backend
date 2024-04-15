@@ -1,3 +1,5 @@
+from typing import Optional, Dict
+
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
@@ -43,11 +45,10 @@ class GIASerializer(serializers.ModelSerializer):
     gia_in_change_block = SerializerMethodField()
     permissions_info = SerializerMethodField()
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> GIA:
         request = self.context.get("request")
         editors = validated_data.pop("editors", None)
         gia = GIA.objects.create(**validated_data)
-        print(gia)
 
         if editors:
             gia.editors.set(editors)
@@ -58,7 +59,7 @@ class GIASerializer(serializers.ModelSerializer):
             gia.save()
         return gia
 
-    def get_permissions_info(self, instance):
+    def get_permissions_info(self, instance) -> Dict[str, Optional[bool]]:
         request = self.context.get("request")
         try:
             exp = Expertise.objects.get(gia=instance)
@@ -78,7 +79,7 @@ class GIASerializer(serializers.ModelSerializer):
 
         return get_permissions_gia_practice(instance, exp, user_exp, request)
 
-    def get_gia_in_change_block(self, instance):
+    def get_gia_in_change_block(self, instance) -> dict:
         return WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
             instance=WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 gia=instance

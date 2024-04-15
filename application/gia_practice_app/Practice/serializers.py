@@ -1,3 +1,5 @@
+from typing import Optional, OrderedDict, List, Dict
+
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
@@ -83,7 +85,7 @@ class PracticeSerializer(serializers.ModelSerializer):
     permissions_info = SerializerMethodField()
     prac_isu_id = SerializerMethodField()
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> Practice:
         request = self.context.get("request")
         editors = validated_data.pop("editors", None)
         bibliographic_reference = validated_data.pop("bibliographic_reference", None)
@@ -99,7 +101,7 @@ class PracticeSerializer(serializers.ModelSerializer):
             practice.save()
         return practice
 
-    def get_permissions_info(self, instance):
+    def get_permissions_info(self, instance) -> Dict[str, Optional[bool]]:
         request = self.context.get("request")
         try:
             exp = Expertise.objects.get(practice=instance)
@@ -119,7 +121,7 @@ class PracticeSerializer(serializers.ModelSerializer):
 
         return get_permissions_gia_practice(instance, exp, user_exp, request)
 
-    def get_practice_in_change_block(self, instance):
+    def get_practice_in_change_block(self, instance) -> dict:
         return WorkProgramChangeInDisciplineBlockModuleForWPinFSSerializer(
             instance=WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 practice=instance
@@ -127,10 +129,10 @@ class PracticeSerializer(serializers.ModelSerializer):
             many=True,
         ).data
 
-    def get_prac_isu_id(self, instance):
+    def get_prac_isu_id(self, instance) -> str:
         return instance.discipline_code
 
-    def to_representation(self, value):
+    def to_representation(self, value) -> OrderedDict:
         self.fields["bibliographic_reference"] = BibliographicReferenceSerializer(
             required=False, many=True
         )
@@ -157,7 +159,7 @@ class PracticeSerializer(serializers.ModelSerializer):
             )
         return data
 
-    def get_competences(self, instance):
+    def get_competences(self, instance) -> List[dict]:
         competences = Competence.objects.filter(
             indicator_in_competencse__zun_practice__practice_in_fs__practice__id=instance.id
         ).distinct()
