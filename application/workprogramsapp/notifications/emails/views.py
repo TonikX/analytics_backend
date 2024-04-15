@@ -4,6 +4,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.shortcuts import redirect
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
@@ -19,6 +20,7 @@ from workprogramsapp.notifications.emails.serializers import (
 from workprogramsapp.notifications.models import EmailReset
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes(
     [
@@ -71,6 +73,7 @@ class EmailSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def email_reset_request(request):
@@ -117,6 +120,7 @@ def email_reset_request(request):
         return Response({"error": "empty mail"}, 404)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def email_reset_confirm(request):
@@ -144,6 +148,7 @@ def email_reset_confirm(request):
         return Response({"error": "Invalid key"})
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def CustomConfirmEmailView(request, key):
