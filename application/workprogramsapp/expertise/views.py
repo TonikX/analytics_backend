@@ -1,6 +1,7 @@
 import datetime
 
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound
@@ -238,6 +239,7 @@ class DeleteUserExpertise(generics.DestroyAPIView):
     permission_classes = [IsExpertiseMaster]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def UpdateCommentStatus(request):
@@ -273,12 +275,9 @@ def UpdateCommentStatus(request):
         return Response(status=400)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
-@permission_classes(
-    [
-        IsRpdDeveloperOrReadOnly,
-    ]
-)
+@permission_classes((IsRpdDeveloperOrReadOnly,))
 def ExpertiseHistory(request, pk=None):
     """Получение полной истории экспертизы по ее id."""
     if not pk:
@@ -311,6 +310,7 @@ def ExpertiseHistory(request, pk=None):
     return Response(history_response, status=200)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def ChangeStatusesOfExpertiseWP(request):

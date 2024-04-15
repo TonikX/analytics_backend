@@ -1,4 +1,5 @@
 import datetime
+from typing import Dict
 
 from rest_framework import serializers
 
@@ -54,7 +55,7 @@ class ExpertiseSerializer(serializers.ModelSerializer):
 
     user_status_in_expertise = serializers.SerializerMethodField()
 
-    def get_user_status_in_expertise(self, instance):
+    def get_user_status_in_expertise(self, instance) -> Dict[str, bool]:
         request = self.context.get("request")
         user_statuses = {
             "expertise_master": False,
@@ -100,7 +101,7 @@ class ExpertiseSerializer(serializers.ModelSerializer):
 
         return user_statuses
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> Expertise:
         try:
             exp_type = validated_data["expertise_type"]
         except KeyError:
@@ -195,26 +196,13 @@ class ExpertiseSerializer(serializers.ModelSerializer):
         )
         return super().to_representation(value)
 
-    def get_experts(self, instance):
+    def get_experts(self, instance) -> dict:
         experts_instances = instance.experts.filter()
         return userProfileSerializer(experts_instances, many=True).data
 
     class Meta:
         model = Expertise
         fields = "__all__"
-
-
-# class ExpertiseWithUsersStatusSerializer(serializers.ModelSerializer):
-#     """
-#     Автоматически добавляет пользователя-создателя как лидера экспертизы
-#     """
-#     work_program = WorkProgramShortForExperiseSerializer(many=False, read_only=True)
-#     expertse_users_in_rpd = UserExpertiseForExpertiseSerializer(many=True, read_only=True)
-#
-#
-#     class Meta:
-#         model = Expertise
-#         fields = ['work_program', 'expertse_users_in_rpdd']
 
 
 class CommentSerializer(serializers.ModelSerializer):
