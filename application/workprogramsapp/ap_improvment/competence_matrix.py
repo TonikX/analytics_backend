@@ -119,13 +119,14 @@ def GetCompetenceMatrixCTE(request, gen_pk):
             if not ("1" in block.name or "2" in block.name):
                 continue
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
-
-            cte = With.recursive(make_modules_cte_down)
+            cte = With(None, "module_cte", False)
+            cte.query = make_modules_cte_down(cte, DisciplineBlockModule.cte_objects.filter(
+                descipline_block=block)).query
             modules = (
-                cte.join(DisciplineBlockModule.cte_objects.all(), id=cte.col.id).annotate(
+                cte.join(DisciplineBlockModule.cte_objects.filter(descipline_block=block), id=cte.col.id).annotate(
                     recursive_name=cte.col.recursive_name,
                     recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(
-                    descipline_block=block, p__isnull=True).with_cte(
+                     p__isnull=True).with_cte(
                     cte)
             )
             modules_lower_ids = [module.recursive_id for module in modules]

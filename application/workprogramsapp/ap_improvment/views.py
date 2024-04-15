@@ -20,15 +20,19 @@ from workprogramsapp.serializers import IndicatorSerializer, ImplementationAcade
 def get_all_competences_and_indicators_for_wp_cte(request, wp_id):
     zuns = Zun.objects.filter(
         wp_in_fs__work_program__id=wp_id, indicator_in_zun__isnull=False).select_related("indicator_in_zun", "wp_in_fs",
-                                                         "indicator_in_zun__competence").prefetch_related(
+                                                                                         "indicator_in_zun__competence").prefetch_related(
         "items", "items__item").distinct()
     competences_dict = {}
-    cte = With.recursive(make_modules_cte_up)
+    cte = With(None, "module_cte", False)
+    cte.query = make_modules_cte_up(cte, DisciplineBlockModule.cte_objects.filter(
+        change_blocks_of_work_programs_in_modules__work_program=wp_id)).query
     modules = (
-        cte.join(DisciplineBlockModule.cte_objects.all(), id=cte.col.id).annotate(
+        cte.join(
+            DisciplineBlockModule.cte_objects.filter(change_blocks_of_work_programs_in_modules__work_program=wp_id, ),
+            id=cte.col.id).annotate(
             recursive_name=cte.col.recursive_name,
             recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(
-            change_blocks_of_work_programs_in_modules__work_program=wp_id, p__isnull=True).with_cte(
+            p__isnull=True).with_cte(
             cte)
     )
     for module in modules:
@@ -86,12 +90,16 @@ def get_all_ap_with_competences_and_indicators_cte(request, wp_id):
     imp_id = request.GET.get("imp_id")
 
     competences_dict = {}
-    cte = With.recursive(make_modules_cte_up)
+    cte = With(None, "module_cte", False)
+    cte.query = make_modules_cte_up(cte, DisciplineBlockModule.cte_objects.filter(
+        change_blocks_of_work_programs_in_modules__work_program=wp_id)).query
     modules = (
-        cte.join(DisciplineBlockModule.cte_objects.all(), id=cte.col.id).annotate(
+        cte.join(
+            DisciplineBlockModule.cte_objects.filter(change_blocks_of_work_programs_in_modules__work_program=wp_id, )
+            , id=cte.col.id).annotate(
             recursive_name=cte.col.recursive_name,
             recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(
-            change_blocks_of_work_programs_in_modules__work_program=wp_id, p__isnull=True).with_cte(
+            p__isnull=True).with_cte(
             cte)
     )
     if ap_id:

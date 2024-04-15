@@ -757,12 +757,15 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
     def generate_modules(self, wp):
         work_program_in_change_block = []
         modules_grouped={}
-        cte = With.recursive(make_modules_cte_up)
+        cte = With(None, "module_cte", False)
+        cte.query = make_modules_cte_up(cte, DisciplineBlockModule.cte_objects.filter(
+                change_blocks_of_work_programs_in_modules__work_program=wp.id)).query
+
         modules = (
-            cte.join(DisciplineBlockModule.cte_objects.all(), id=cte.col.id).annotate(
+            cte.join(DisciplineBlockModule.cte_objects.filter(
+                change_blocks_of_work_programs_in_modules__work_program=wp.id), id=cte.col.id).annotate(
                 recursive_name=cte.col.recursive_name,
-                recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(
-                change_blocks_of_work_programs_in_modules__work_program=wp.id).with_cte(
+                recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).with_cte(
                 cte)
         )
 
