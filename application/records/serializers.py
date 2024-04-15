@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import List, DefaultDict
 
 from rest_framework import serializers
 
@@ -28,7 +29,7 @@ class ImplementationAcademicPlanForStatisticSerializer(serializers.ModelSerializ
 class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
 
-    def get_status(self, instance):
+    def get_status(self, instance) -> str:
         try:
             return Expertise.objects.get(work_program=instance).expertise_status
         except Expertise.DoesNotExist:
@@ -42,7 +43,7 @@ class WorkProgramDescriptionOnlySerializer(serializers.ModelSerializer):
 class WorkProgramEvaluationToolsStatSerializer(serializers.ModelSerializer):
     tools_counter = serializers.SerializerMethodField()
 
-    def get_tools_counter(self, instance):
+    def get_tools_counter(self, instance) -> DefaultDict:
         types_dict = defaultdict(int)
         for eva in EvaluationTool.objects.filter(
             evaluation_tools__work_program=instance
@@ -94,7 +95,7 @@ class WorkProgramSerializerForStatisticExtended(serializers.ModelSerializer):
     academic_plans = serializers.SerializerMethodField()
     structural_unit = ShortStructuralUnitSerializerRecord(many=False)
 
-    def get_academic_plans(self, instance):
+    def get_academic_plans(self, instance) -> dict:
         return AcademicPlansStatisticSerializer(
             instance=AcademicPlan.objects.filter(
                 discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=instance.id
@@ -184,7 +185,7 @@ class AcademicPlansDescriptionWpSerializer(serializers.ModelSerializer):
         many=True
     )
 
-    def get_wp_in_academic_plan(self, instance):
+    def get_wp_in_academic_plan(self, instance) -> dict:
         wp_all = WorkProgram.objects.none()
         for change in instance.get_all_changeblocks_from_ap():
             wp_all = wp_all | change.work_program.all()
@@ -220,7 +221,7 @@ class ImplementationAcademicPlanWpStatisticSerializer(serializers.ModelSerialize
     wp_on_expertise = serializers.SerializerMethodField()
     wp_with_editors = serializers.SerializerMethodField()
 
-    def get_total_count_of_wp(self, obj):
+    def get_total_count_of_wp(self, obj) -> int:
         return (
             WorkProgram.objects.filter(
                 zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj
@@ -229,7 +230,7 @@ class ImplementationAcademicPlanWpStatisticSerializer(serializers.ModelSerialize
             .count()
         )
 
-    def get_accepted_wp(self, obj):
+    def get_accepted_wp(self, obj) -> int:
         return (
             WorkProgram.objects.filter(
                 zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
@@ -239,7 +240,7 @@ class ImplementationAcademicPlanWpStatisticSerializer(serializers.ModelSerialize
             .count()
         )
 
-    def get_wp_on_expertise(self, obj):
+    def get_wp_on_expertise(self, obj) -> int:
         return (
             WorkProgram.objects.filter(
                 zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
@@ -249,7 +250,7 @@ class ImplementationAcademicPlanWpStatisticSerializer(serializers.ModelSerialize
             .count()
         )
 
-    def get_wp_with_editors(self, obj):
+    def get_wp_with_editors(self, obj) -> int:
         return (
             WorkProgram.objects.filter(
                 zuns_for_wp__work_program_change_in_discipline_block_module__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study=obj,
@@ -276,10 +277,10 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
     work_programs = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
 
-    def get_title(self, instance):
+    def get_title(self, instance) -> str:
         return ImplementationAcademicPlan.objects.get(academic_plan=instance).title
 
-    def get_work_programs(self, instance):
+    def get_work_programs(self, instance) -> List[dict]:
         request = self.context["request"]
         year_of_sending = int(request.query_params.get("year").split("/")[0])
         plan_year = ImplementationAcademicPlan.objects.get(academic_plan=instance).year
@@ -319,32 +320,6 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
                             ).data
                         )
         return wps
-
-    """def get_work_programs(self, instance):
-        request = self.context['request']
-        year_of_sending = request.query_params.get("year").split("/")[0]
-        object_list = None
-        wps_list = WorkProgram.objects.filter(
-            work_program_in_change_block__discipline_block_module__descipline_block__academic_plan=instance)
-
-        for now_semester in range(12):
-            many_term_regex = r""
-            for i in range(12):
-                if i == now_semester:
-                    many_term_regex += "(([^0]\.[0-9])|([^0])),\s"
-                else:
-                    many_term_regex += "(([0-9]\.[0-9])|[0-9]),\s"
-            many_term_regex = many_term_regex[:-3]
-            wp_for_year = wps_list.filter(
-                work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year=int(
-                    year_of_sending) - now_semester // 2,
-                zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=many_term_regex)
-            if object_list:
-                object_list = object_list | wp_for_year
-            else:
-                object_list = wp_for_year
-        object_list=object_list.distinct()
-        return SuperShortWorkProgramSerializer(instance=object_list, many=True).data"""
 
     class Meta:
         model = AcademicPlan
