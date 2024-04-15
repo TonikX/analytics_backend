@@ -1,8 +1,8 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg2 import openapi
-from drf_yasg2.utils import swagger_auto_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import filters, generics
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -100,6 +100,7 @@ class UserStructuralUnitSet(viewsets.ModelViewSet):
         return UserStructuralUnitSerializer
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def CopyContentOfWorkProgram(request):
@@ -193,6 +194,7 @@ def CopyContentOfWorkProgram(request):
         return Response(status=400)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def ReconnectWorkProgram(request):
@@ -229,6 +231,7 @@ class CompetencesSet(viewsets.ModelViewSet):
         return CompetenceSerializer
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def ChangeSemesterInEvaluationsCorrect(request):
@@ -266,6 +269,7 @@ def ChangeSemesterInEvaluationsCorrect(request):
     return Response(serializer.data)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def WorkProgramShortInfo(request, isu_id):
@@ -292,6 +296,7 @@ def WorkProgramShortInfo(request, isu_id):
         raise Http404
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def PracticeShortInfo(request, isu_id):
@@ -319,6 +324,7 @@ def PracticeShortInfo(request, isu_id):
         raise Http404
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def GIAShortInfo(request, isu_id):
@@ -358,17 +364,19 @@ class WorkProgramItemsPrerequisitesView(generics.RetrieveAPIView):
         return obj
 
 
-@swagger_auto_schema(
-    method="GET",
-    manual_parameters=[
-        openapi.Parameter(
-            "block",
-            openapi.IN_QUERY,
+@extend_schema(
+    methods=["GET"],
+    request=None,
+    responses=None,
+    parameters=[
+        OpenApiParameter(
+            name="block",
+            location=OpenApiParameter.QUERY,
             description="Номер блока для фильтрации",
-            type=openapi.TYPE_INTEGER,
+            type=OpenApiTypes.INT,
         )
     ],
-    operation_description="Метод для изменения статусов учебного плана",
+    description="Метод для изменения статусов учебного плана",
 )
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
