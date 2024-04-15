@@ -1,4 +1,5 @@
 from django.db.models import Q
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, filters, status, mixins, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -302,6 +303,7 @@ class ZunPracticeManyForAllGhViewSet(
             return Response({"message": "failed", "details": serializer.errors})
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 def zun_many_remove(request):
