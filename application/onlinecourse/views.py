@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -89,6 +90,7 @@ class CourseDataAPIView(APIView):
     Контроллер для загрузки данных из реестра онлайн курсов
     """
 
+    @extend_schema(request=None, responses=None)
     def post(self, request):
         print("Data parsing started")
         (
