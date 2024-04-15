@@ -1,4 +1,5 @@
 from ast import literal_eval
+from typing import Any
 
 from rest_framework import serializers
 
@@ -32,7 +33,7 @@ class BarsWorkProgramsAssociateSerializer(serializers.ModelSerializer):
 class HistoryOfSendingBarsSerializer(serializers.ModelSerializer):
     json_request_format = serializers.SerializerMethodField()
 
-    def get_json_request_format(self, obj):
+    def get_json_request_format(self, obj) -> Any:
         return literal_eval(obj.request_text)
 
     """def to_representation(self, value):

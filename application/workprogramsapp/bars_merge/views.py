@@ -1,6 +1,7 @@
 from datetime import date
 
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -50,6 +51,7 @@ from workprogramsapp.models import (
 from workprogramsapp.permissions import IsExternalUser
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def FindSimilarEP(request):
@@ -79,6 +81,7 @@ def FindSimilarEP(request):
     return Response(serializer.data)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def FindSimilarWP(request):
@@ -99,6 +102,7 @@ def FindSimilarWP(request):
     return Response(serializer.data)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def CreateCheckPoint(request):
@@ -226,6 +230,7 @@ def CreateCheckPoint(request):
     return Response(checkpoint_plan)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def SendCheckpointsForAcceptedWP(request):
@@ -731,6 +736,7 @@ def SendCheckpointsForAcceptedWP(request):
     return Response(all_sends)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsExternalUser,))
 def postAcademicNTCheckpoints(request):
@@ -780,6 +786,7 @@ class BarsHistoryListView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def AddAcceptedWpToTableForAcceptedWp(request):
@@ -799,6 +806,7 @@ def AddAcceptedWpToTableForAcceptedWp(request):
         return Response("Неправильное ключевое слово")
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def SetBarsPointerTrueToWP(request):
@@ -819,6 +827,7 @@ def SetBarsPointerTrueToWP(request):
     return Response("Надеюсь, ничего не сломалось")
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def GetWPForBARS(request, isu_wp_id):
