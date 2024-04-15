@@ -329,6 +329,13 @@ def InsertModule(request):
 
 
 class InsertModuleInBlockAP(APIView):
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     permission_classes = [IsAdminUser]
     my_tags = ["Discipline Blocks"]
 
@@ -422,6 +429,13 @@ class InsertModuleInBlockAP(APIView):
 
 
 class WorkWithBlocksApiView(APIView):
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     permission_classes = [IsAcademicPlanDeveloper, IsUniversalModule]
     my_tags = ["Discipline Blocks"]
 
@@ -492,6 +506,13 @@ class WorkWithBlocksApiView(APIView):
 
 
 class CopyModulesToAnotherAPView(APIView):
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     permission_classes = [IsAdminUser]
     my_tags = ["Discipline Blocks"]
 
@@ -542,6 +563,13 @@ class CopyModulesToAnotherAPView(APIView):
 
 
 class CopyModules(APIView):
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
+
     permission_classes = [IsBlockModuleEditor, IsUniversalModule]
     my_tags = ["Discipline Blocks"]
 
