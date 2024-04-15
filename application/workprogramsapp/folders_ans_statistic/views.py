@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound
@@ -226,6 +227,7 @@ class RemoveFromFolderImplementationAcademicPlanView(generics.DestroyAPIView):
     serializer_class = IndividualImplementationAcademicPlanInFolderSerializer
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def WorkProgramStatistic(request, pk):
