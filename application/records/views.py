@@ -3,6 +3,7 @@ import json
 from django.db.models.aggregates import Count
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotFound
@@ -43,6 +44,7 @@ from workprogramsapp.models import (
 from workprogramsapp.workprogram_additions.models import StructuralUnit
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def StructuralUnits(request):
@@ -58,6 +60,7 @@ def StructuralUnits(request):
     return Response(results)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def AcademicPlans(request):
@@ -85,6 +88,7 @@ class OneAcademicPlanWithDescriptionWp(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def report_of_number_of_workprograms_by_qualification(request, qualification):
@@ -105,6 +109,12 @@ class RecordOfWorkProgramQuality(APIView):
     """
 
     permission_classes = [AllowAny]
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    def get_serializer_class(self):
+        pass
 
     def get(self, request):
         queryset = WorkProgram.objects.all()
@@ -131,6 +141,7 @@ class RecordOfWorkProgramQuality(APIView):
         )
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def number_of_academplans_by_qualification_and_year(request, qualification, year):
@@ -148,6 +159,7 @@ def number_of_academplans_by_qualification_and_year(request, qualification, year
     )
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def EmptyStringWp(request):
@@ -163,6 +175,7 @@ def EmptyStringWp(request):
     return Response(serializer.data)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def WpWithoutAP(request):
@@ -176,6 +189,7 @@ def WpWithoutAP(request):
     return Response(serializer.data)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def WpWithSimilarCode(request):
@@ -198,6 +212,7 @@ def WpWithSimilarCode(request):
     return Response(serializer.data)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def WpWithSimilarCodeGrouped(request):
@@ -223,6 +238,7 @@ def WpWithSimilarCodeGrouped(request):
     return Response(similar_codes)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def SimpleStatistic(request):
@@ -260,6 +276,7 @@ def SimpleStatistic(request):
     )
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def WpWithoutStructuralUnit(request):
@@ -272,6 +289,7 @@ def WpWithoutStructuralUnit(request):
     return Response(serializer.data)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def StructuralUnitWp(request):
@@ -342,6 +360,7 @@ class WorkProgramDetailsWithApAndSemesters1(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def WorkProgramDetailsWithApAndSemesters_old(request):
@@ -460,6 +479,7 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
         return result
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def GetDuplicates(request):
@@ -513,6 +533,7 @@ class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
         return obj
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAdminUser,))
 def FieldOfStudyPlanToISU(request, pk):
@@ -668,6 +689,7 @@ def FieldOfStudyPlanToISU(request, pk):
     return Response("я очинь люблю чоколадние орещки")
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def AllWpShort(request):
@@ -686,6 +708,7 @@ class AllAcademicPlanWithDescriptionWp(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def EditorsByWPStatuses(request):
@@ -784,6 +807,7 @@ class AllAcademicPlansWpExpertiseStatisticView(generics.ListAPIView):
     permission_classes = [AllowAny]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def GetCoursesWithWP(request):
