@@ -2,6 +2,7 @@ import datetime
 import random
 
 from django.db.models import Count
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -29,6 +30,7 @@ from workprogramsapp.profession.serializers import ProfessionSerializer
 from workprogramsapp.serializers import ImplementationAcademicPlanSerializer
 
 
+@extend_schema(request=None,responses=None)
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
 def CreateProfessionByKeywords(request):
@@ -55,6 +57,7 @@ def CreateProfessionByKeywords(request):
     return Response(serializer.data)
 
 
+@extend_schema(request=None,responses=None)
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def EducationalProgramRankingByProfessionScientific(request):
@@ -231,7 +234,7 @@ def EducationalProgramRankingByProfessionScientific(request):
             list_of_educational_program.append(updated_serializer)
     return Response(list_of_educational_program)
 
-
+@extend_schema(request=None,responses=None)
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def EducationalProgramRankingByProfession(request):
