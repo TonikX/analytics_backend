@@ -2,11 +2,8 @@ import pandas as pd
 from django.db import transaction
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
-
-from drf_yasg2 import openapi
-from drf_yasg2.utils import swagger_auto_schema
-from rest_framework import filters, mixins
-from rest_framework import generics, viewsets
+from drf_spectacular.utils import extend_schema, inline_serializer, OpenApiResponse
+from rest_framework import filters, mixins, serializers, generics, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -300,6 +297,7 @@ class EmployerSet(
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 @transaction.atomic
@@ -383,6 +381,7 @@ def UploadCompetences(request):
     return Response("γοητεία")
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def GetCompetenceMatrix(request, gen_pk):
@@ -473,30 +472,37 @@ def GetCompetenceMatrix(request, gen_pk):
     return Response(competence_matrix)
 
 
-# @api_view(['POST'])
-# @permission_classes((IsAuthenticated,))
-# @transaction.atomic
-# def academ_plan_check(request):
-#
-#     if .objects.filter(user = request.user, read = False).count()>0:
-#         return Response({'message': 'you have new notifications', 'status': True}, status=200)
-#     else:
-#         return Response({'message': 'you have not new notifications', 'status': False}, status=400)
-
-
-@swagger_auto_schema(
-    method="post",
-    request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=None,
-        properties={
-            "new_status": openapi.Schema(
-                type=openapi.TYPE_STRING,
-                description="Новый статус после проверки (in_work / on_check) (необязательное поле)",
+@extend_schema(
+    methods=["POST"],
+    request=inline_serializer(
+        name="NewStatusSerializer",
+        fields={
+            "new_status": serializers.CharField(
+                required=False,
+                help_text="Новый статус после проверки (in_work / on_check) (необязательное)",
             )
         },
     ),
-    operation_description="Метод для изменения статусов учебного плана",
+    responses={
+        200: OpenApiResponse(
+            response=inline_serializer(
+                name="Response200Serializer",
+                fields={
+                    "message": serializers.CharField(default="email sent"),
+                    "status": serializers.BooleanField(default=True),
+                },
+            )
+        ),
+        400: OpenApiResponse(
+            response=inline_serializer(
+                name="AcademicPlanCheckResponse400Serializer",
+                fields={
+                    "message": serializers.CharField(default="academic plan was sent"),
+                    "status": serializers.BooleanField(default=False),
+                },
+            )
+        ),
+    },
 )
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
@@ -529,28 +535,25 @@ def academ_plan_check(request, ap_id):
         )
 
 
-@swagger_auto_schema(
-    method="post",
-    request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=None,
-        properties={
-            "block": openapi.Schema(
-                type=openapi.TYPE_INTEGER,
-                description="id объекта discipline_blocks_in_academic_plan в учебном плане",
+@extend_schema(
+    methods=["POST"],
+    request=inline_serializer(
+        name="NewOrdinalNumbersSerializer",
+        fields={
+            "block": serializers.IntegerField(
+                help_text="id объекта discipline_blocks_in_academic_plan в учебном плане",
             ),
-            "new_ordinal_number": openapi.Schema(
-                type=openapi.TYPE_INTEGER,
-                description="Новый порядковый номер модуля (modules_in_discipline_block)",
+            "new_ordinal_number": serializers.IntegerField(
+                help_text="Новый порядковый номер модуля (modules_in_discipline_block)"
             ),
-            "old_ordinal_number": openapi.Schema(
-                type=openapi.TYPE_INTEGER,
-                description="Старый порядковый номер модуля (modules_in_discipline_block)",
+            "old_ordinal_number": serializers.IntegerField(
+                help_text="Старый порядковый номер модуля (modules_in_discipline_block)"
             ),
         },
     ),
-    operation_description="Метод для изменения порядкового номера модуля в блоке учебного плана. "
-    "Для удаления элемента из списка new_ordinal_number равен = -1. "
+    responses={200: None, 400: None},
+    description="Метод для изменения порядкового номера модуля в блоке учебного плана."
+    "Для удаления элемента из списка new_ordinal_number равен = -1."
     "Любое другое значение - запрос на изменение порядка в списке.",
 )
 @api_view(["POST"])
@@ -567,6 +570,7 @@ def new_ordinal_numbers_for_modules_in_ap(request):
         return Response(status=400)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def academic_plan_all_ids_by_year(request, year):
@@ -605,19 +609,19 @@ class UploadProfStandards(CreateAPIView):
         return Response("standards")
 
 
-@swagger_auto_schema(
-    method="post",
-    request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        required=None,
-        properties={
-            "new_status": openapi.Schema(
-                type=openapi.TYPE_STRING,
-                description="Новый статус после проверки (in_work / on_check) (необязательное поле)",
+@extend_schema(
+    methods=["POST"],
+    request=inline_serializer(
+        name="NewStatusSerializer",
+        fields={
+            "new_status": serializers.CharField(
+                required=False,
+                help_text="Новый статус после проверки (in_work / on_check) (необязательное)",
             )
         },
     ),
-    operation_description="Метод для изменения статусов общей характеристики",
+    responses=None,
+    description="Метод для изменения статусов общей характеристики",
 )
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
@@ -650,6 +654,7 @@ def gh_check(request, gh_id):
         )
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def get_all_ap_with_competences_and_indicators(request, wp_id):
@@ -765,6 +770,7 @@ def get_all_ap_with_competences_and_indicators(request, wp_id):
     return Response(ap_list_dict, status=200)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def get_all_competences_and_indicators_for_wp(request, wp_id):
@@ -833,6 +839,7 @@ def get_all_competences_and_indicators_for_wp(request, wp_id):
     return Response({"competences": competences_dict})
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 def zun_many_remove(request):
@@ -865,6 +872,7 @@ class WorkProgramInFieldOfStudyWithAPByWP(generics.ListAPIView):
         return queryset
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 def zun_copy(request):
@@ -892,6 +900,7 @@ def zun_copy(request):
     return Response(serializer.data, status=201)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 def zun_copy_by_wps(request):
@@ -959,6 +968,7 @@ class CompetenceCommentCreateView(generics.CreateAPIView):
     permission_classes = [IsExpertiseMaster]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def get_all_unfilled_wp(request, gh_id):
@@ -991,6 +1001,7 @@ def get_all_unfilled_wp(request, gh_id):
     return Response(response_data.data, status=200)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def get_all_unfilled_indicator(request, gh_id):
