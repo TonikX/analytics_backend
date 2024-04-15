@@ -263,7 +263,7 @@ class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSeriali
     editors = userProfileSerializer(many=True)
     status = serializers.SerializerMethodField()
 
-    def get_status(self, obj):
+    def get_status(self, obj) -> str:
         imps = ImplementationAcademicPlan.get_all_imp_by_modules([obj])
         is_used_in_accepted_plan = bool(
             imps.exclude(academic_plan__on_check="in_work").exists()

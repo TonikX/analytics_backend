@@ -3,9 +3,14 @@ from collections import OrderedDict
 
 from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg2 import openapi
-from drf_yasg2.utils import swagger_auto_schema
-from rest_framework import generics, filters, status
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiParameter,
+    inline_serializer,
+    OpenApiResponse,
+)
+from rest_framework import generics, filters, status, serializers
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -148,52 +153,47 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
         filters.OrderingFilter,
         DjangoFilterBackend,
     ]
-    # filterset_fields = ['id', 'module_isu_id', 'name', 'descipline_block__name',]
     permission_classes = [IsBlockModuleEditor]
-    my_tags = ["Discipline Blocks"]
-    id_module_for_filter_struct = openapi.Parameter(
-        "id_module_for_filter_struct",
-        openapi.IN_QUERY,
-        description="Находит модули с подходящим структурными "
-        "подразделениями переданного id модуля",
-        type=openapi.TYPE_INTEGER,
-    )
-    filter_non_struct = openapi.Parameter(
-        "filter_non_struct",
-        openapi.IN_QUERY,
-        description="Если true, то Находит модули, которые разрешено добавлять любым "
-        "подразделениям (если применять вместе с "
-        "id_module_for_filter_struct, результаты запросов объединятся)",
-        type=openapi.TYPE_BOOLEAN,
-    )
-    for_user = openapi.Parameter(
-        "for_user",
-        openapi.IN_QUERY,
-        description="Если true находит все модули, принадлежащие запрашивающему юзеру",
-        type=openapi.TYPE_BOOLEAN,
-    )
-    without_me = openapi.Parameter(
-        "without_me",
-        openapi.IN_QUERY,
-        description="исключить модуль из вывода в списке по id",
-        type=openapi.TYPE_INTEGER,
-    )
-    allowed_to_add_ap_id = openapi.Parameter(
-        "allowed_to_add_ap_id",
-        openapi.IN_QUERY,
-        description="id ImplementationAcademicPlan для поиска всех доступных "
-        "для него модулей",
-        type=openapi.TYPE_INTEGER,
-    )
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            id_module_for_filter_struct,
-            filter_non_struct,
-            for_user,
-            without_me,
-            allowed_to_add_ap_id,
-        ]
+    @extend_schema(
+        methods=["GET"],
+        tags=["Discipline Blocks"],
+        parameters=[
+            OpenApiParameter(
+                name="id_module_for_filter_struct",
+                location=OpenApiParameter.QUERY,
+                description="""Находит модули с подходящими структурными подразделениями
+                            переданного id модуля""",
+                type=OpenApiTypes.INT,
+            ),
+            OpenApiParameter(
+                name="filter_non_struct",
+                location=OpenApiParameter.QUERY,
+                description="""Если true, то находит модули, которые разрешено добавлять любым
+                подразделениям (если применять вместе с id_module_for_filter_struct,
+                результаты запросов объединятся)""",
+                type=OpenApiTypes.BOOL,
+            ),
+            OpenApiParameter(
+                name="for_user",
+                location=OpenApiParameter.QUERY,
+                description="Если true находит все модули, принадлежащие запрашивающему юзеру",
+                type=OpenApiTypes.BOOL,
+            ),
+            OpenApiParameter(
+                name="without_me",
+                location=OpenApiParameter.QUERY,
+                description="исключить модуль из вывода в списке по id",
+                type=OpenApiTypes.INT,
+            ),
+            OpenApiParameter(
+                name="allowed_to_add_ap_id",
+                location=OpenApiParameter.QUERY,
+                description="id ImplementationAcademicPlan для поиска всех доступных "
+                "для него модулей",
+                type=OpenApiTypes.INT,
+            ),
+        ],
     )
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -309,7 +309,9 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
         return Response(newdata, status=status.HTTP_200_OK)
 
 
-@swagger_auto_schema(tags=["Discipline Blocks"], method="post")
+@extend_schema(
+    methods=["POST"], tags=["Discipline Blocks"], request=None, responses=None
+)
 @api_view(["POST"])
 @permission_classes([IsBlockModuleEditor])
 def InsertModule(request):
@@ -337,65 +339,36 @@ class InsertModuleInBlockAP(APIView):
         pass
 
     permission_classes = [IsAdminUser]
-    my_tags = ["Discipline Blocks"]
 
-    discipline_block_name = openapi.Parameter(
-        "discipline_block_name",
-        openapi.IN_FORM,
-        description="Имя блока",
-        type=openapi.TYPE_STRING,
-    )
-    modules = openapi.Parameter(
-        "modules",
-        openapi.IN_FORM,
-        description="массив id модулей",
-        items=openapi.Items(type=openapi.TYPE_INTEGER),
-        type=openapi.TYPE_ARRAY,
-    )
-    aps = openapi.Parameter(
-        "aps",
-        openapi.IN_FORM,
-        description="массив id планов",
-        items=openapi.Items(type=openapi.TYPE_INTEGER),
-        type=openapi.TYPE_ARRAY,
-    )
-
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=["version"],
-            properties={
-                "modules": openapi.Schema(
-                    type=openapi.TYPE_ARRAY,
-                    items=openapi.Items(type=openapi.TYPE_INTEGER),
+    @extend_schema(
+        methods=["POST"],
+        tags=["Discipline Blocks"],
+        request=inline_serializer(
+            name="InsertModuleInBlockAPSerializer",
+            fields={
+                "modules": serializers.ListSerializer(
+                    child=serializers.IntegerField(),
                 ),
-                "discipline_block_name": openapi.Schema(type=openapi.TYPE_STRING),
-                "aps": openapi.Schema(
-                    type=openapi.TYPE_ARRAY,
-                    items=openapi.Items(type=openapi.TYPE_INTEGER),
+                "discipline_block_name": serializers.CharField(),
+                "aps": serializers.ListSerializer(
+                    child=serializers.IntegerField(),
                 ),
-                "year_for_all_ap": openapi.Parameter(
-                    "year_for_all_ap",
-                    openapi.IN_QUERY,
-                    description="year_for_all_ap",
-                    type=openapi.TYPE_INTEGER,
-                ),
+                "year_for_all_ap": serializers.IntegerField(),
             },
         ),
         responses={
-            201: openapi.Response(
+            201: OpenApiResponse(
                 description="count of created data",
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        "count_of_added_modules": openapi.Schema(
-                            type=openapi.TYPE_INTEGER
-                        ),
+                response=inline_serializer(
+                    name="InsertModuleInBlockAP201Serializer",
+                    fields={
+                        "count_of_added_modules": serializers.IntegerField(),
                     },
                 ),
             )
         },
-        operation_description="Метод для добавления модуля во все указанные планы в определнный блок (по имени)",
+        description="""Метод для добавления модуля во все указанные планы
+                    в определнный блок (по имени)""",
     )
     @transaction.atomic
     def post(self, request):
@@ -437,35 +410,18 @@ class WorkWithBlocksApiView(APIView):
         pass
 
     permission_classes = [IsAcademicPlanDeveloper, IsUniversalModule]
-    my_tags = ["Discipline Blocks"]
 
-    descipline_block = openapi.Parameter(
-        "descipline_block",
-        openapi.IN_FORM,
-        description="id блока",
-        type=openapi.TYPE_INTEGER,
-    )
-    module = openapi.Parameter(
-        "module",
-        openapi.IN_FORM,
-        description="массив id модулей",
-        items=openapi.Items(type=openapi.TYPE_INTEGER),
-        type=openapi.TYPE_ARRAY,
-    )
-
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=["version"],
-            properties={
-                "modules": openapi.Schema(
-                    type=openapi.TYPE_ARRAY,
-                    items=openapi.Items(type=openapi.TYPE_INTEGER),
-                ),
-                "descipline_block": openapi.Schema(type=openapi.TYPE_INTEGER),
+    @extend_schema(
+        methods=["POST"],
+        tags=["Discipline Blocks"],
+        request=inline_serializer(
+            name="WorkWithBlocksApiViewSerializer",
+            fields={
+                "modules": serializers.ListSerializer(child=serializers.IntegerField()),
+                "descipline_block": serializers.IntegerField(),
             },
         ),
-        operation_description="Метод для обновления связей с блоками",
+        description="Метод для обновления связей с блоками",
     )
     def post(self, request):
         """Метод для обновления связей с блоками."""
@@ -487,11 +443,19 @@ class WorkWithBlocksApiView(APIView):
             return Response(status=status.HTTP_201_CREATED)
         return Response(request_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter("module", openapi.IN_QUERY, type="integer"),
-            openapi.Parameter("descipline_block", openapi.IN_QUERY, type="integer"),
-        ]
+    @extend_schema(
+        methods=["DELETE"],
+        tags=["Discipline Blocks"],
+        parameters=[
+            OpenApiParameter(
+                name="module", location=OpenApiParameter.QUERY, type=OpenApiTypes.INT
+            ),
+            OpenApiParameter(
+                name="descipline_block",
+                location=OpenApiParameter.QUERY,
+                type=OpenApiTypes.INT,
+            ),
+        ],
     )
     def delete(self, request):
         """Метод для удаления связи блока и модуля."""
@@ -514,32 +478,19 @@ class CopyModulesToAnotherAPView(APIView):
         pass
 
     permission_classes = [IsAdminUser]
-    my_tags = ["Discipline Blocks"]
 
-    ap_from = openapi.Parameter(
-        "ap_from",
-        openapi.IN_FORM,
-        description="id УП из которого копировать",
-        type=openapi.TYPE_INTEGER,
-    )
-    ap_to = openapi.Parameter(
-        "ap_to",
-        openapi.IN_FORM,
-        description="id УП куда копировать",
-        type=openapi.TYPE_INTEGER,
-    )
-
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=["version"],
-            properties={
-                "ap_from": openapi.Schema(type=openapi.TYPE_INTEGER),
-                "ap_to": openapi.Schema(type=openapi.TYPE_INTEGER),
+    @extend_schema(
+        methods=["POST"],
+        tags=["Discipline Blocks"],
+        request=inline_serializer(
+            name="CopyModulesToAnotherAPIViewSerializer",
+            fields={
+                "ap_from": serializers.IntegerField(),
+                "ap_to": serializers.IntegerField(),
             },
         ),
         responses={
-            201: openapi.Response(
+            201: OpenApiResponse(
                 description="created info",
             )
         },
@@ -571,25 +522,20 @@ class CopyModules(APIView):
         pass
 
     permission_classes = [IsBlockModuleEditor, IsUniversalModule]
-    my_tags = ["Discipline Blocks"]
 
-    module_id = openapi.Parameter(
-        "module_id",
-        openapi.IN_FORM,
-        description="id модуля, который надо скопировать",
-        type=openapi.TYPE_INTEGER,
-    )
-
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            required=["version"],
-            properties={
-                "module_id": openapi.Schema(type=openapi.TYPE_INTEGER),
+    @extend_schema(
+        methods=["POST"],
+        tags=["Discipline Blocks"],
+        request=inline_serializer(
+            name="CopyModulesAPIViewSerializer",
+            fields={
+                "module_id": serializers.IntegerField(),
             },
         ),
         responses={
-            201: openapi.Response("created info", DisciplineBlockModuleSerializer)
+            201: OpenApiResponse(
+                response=DisciplineBlockModuleSerializer, description="created info"
+            )
         },
     )
     @transaction.atomic
@@ -625,7 +571,7 @@ class CopyModules(APIView):
             ]
         new_module.clone_info_json = new_clone_info
         new_module.save()
-        print(old_module.childs.all())
+
         new_module.editors.add(user)
         new_module.childs.add(*old_module.childs.all())
 
