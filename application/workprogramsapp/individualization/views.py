@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework import status
@@ -196,6 +197,7 @@ class IndividualImplementationAcademicPlanForUser(generics.ListAPIView):
         return self.get_paginated_response(serializer.data)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 def SaveImplementationAcademicPlans(request):
