@@ -1,3 +1,5 @@
+from typing import List
+
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
@@ -48,7 +50,7 @@ class UserBaseSerializer(serializers.ModelSerializer):
             user.save()
         return user
 
-    def is_named_bar(self, object):
+    def is_named_bar(self, object) -> bool:
         try:
             EmailReset.objects.get(user=object, email=object.email, status=True)
             return True
@@ -80,7 +82,7 @@ class DomainDetailSerializer(serializers.ModelSerializer):
     )
     items = SerializerMethodField()
 
-    def get_items(self, instance):
+    def get_items(self, instance) -> dict:
         return ItemShortSerializer(
             Items.objects.filter(domain=instance), many=True
         ).data
@@ -169,7 +171,7 @@ class ItemWithRelationSerializer(serializers.ModelSerializer):
         )
         depth = 1
 
-    def get_relation_with_item(self, obj):
+    def get_relation_with_item(self, obj) -> List[dict]:
         """ "obj is a Items instance. Returns list of dicts"""
         qset = Relation.objects.filter(item1=obj)
         return [RelationInSerializer(i).data for i in qset]

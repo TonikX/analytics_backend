@@ -1,6 +1,7 @@
 import os
 
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters
 from rest_framework import generics
 from rest_framework import status
@@ -421,6 +422,7 @@ class FileUploadAPIView(APIView):
     API endpoint to upload txt-file with keywords.
     """
 
+    @extend_schema(request=None, responses=None)
     def post(self, request):
 
         serializer = FileUploadSerializer(data=request.data)
