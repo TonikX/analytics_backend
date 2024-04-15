@@ -14,6 +14,8 @@ from django.shortcuts import get_object_or_404
 from django_cte import With
 from django_filters.rest_framework import DjangoFilterBackend
 from django_super_deduper.merge import MergedModelInstance
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_yasg2 import openapi
 from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import filters
@@ -1320,6 +1322,23 @@ class FieldOfStudyListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
+@extend_schema(
+    methods=["GET", "POST"],
+    parameters=[
+        OpenApiParameter(
+            name="descipline_section",
+            type=OpenApiTypes.INT,
+            description="id раздела дисциплины",
+        ),
+        OpenApiParameter(
+            name="new_ordinal_number",
+            type=OpenApiTypes.INT,
+            description="Новый порядок дисциплины в разделе",
+        ),
+    ],
+    request=None,
+    responses=None,
+)
 @api_view(["GET", "POST"])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def NewOrdinalNumbersForDesciplineSectionAPI(request):
@@ -1332,6 +1351,19 @@ def NewOrdinalNumbersForDesciplineSectionAPI(request):
         return Response(status=400)
 
 
+@extend_schema(
+    methods=["GET", "POST"],
+    parameters=[
+        OpenApiParameter(name="topic", type=OpenApiTypes.INT, description="id темы"),
+        OpenApiParameter(
+            name="new_ordinal_number",
+            type=OpenApiTypes.INT,
+            description="Новый порядок темы в разделе",
+        ),
+    ],
+    request=None,
+    responses=None,
+)
 @api_view(["GET", "POST"])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def NewOrdinalNumbersForTopicAPI(request):
@@ -1344,6 +1376,23 @@ def NewOrdinalNumbersForTopicAPI(request):
         return Response(status=400)
 
 
+@extend_schema(
+    methods=["GET", "POST"],
+    parameters=[
+        OpenApiParameter(
+            name="old_descipline_code",
+            type=OpenApiTypes.INT,
+            description="Старый код дисциплины",
+        ),
+        OpenApiParameter(
+            name="new_descipline_code",
+            type=OpenApiTypes.INT,
+            description="Новый код дисциплины",
+        ),
+    ],
+    request=None,
+    responses=None,
+)
 @api_view(["GET", "POST"])
 def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
     old_descipline_code = request.data.get("old_descipline_code")
@@ -1450,6 +1499,7 @@ def merge_model_instances(primary_object, alias_objects):
             deleted_objects_count += 1
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET", "POST"])
 def ChangeItemsView(request):
     try:
@@ -2630,6 +2680,7 @@ class ZunUpdateView(generics.UpdateAPIView):
 # Конец блока ендпоинтов рабочей программы
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def CloneWorkProgramm(request):
@@ -2649,6 +2700,7 @@ def CloneWorkProgramm(request):
     return Response(status=200, data=serializer.data)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def UserGroups(request):
@@ -2667,6 +2719,7 @@ def UserGroups(request):
     return Response({"groups": groups_names, "notification_nums": notification_nums})
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 def DisciplinesByNumber(request):
     try:
@@ -2684,6 +2737,7 @@ def DisciplinesByNumber(request):
         return Response(status=400)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def TimeoutTest(request):
