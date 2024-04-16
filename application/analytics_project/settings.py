@@ -3,9 +3,12 @@ from datetime import timedelta
 
 import environ
 import sentry_sdk
+from pyproject_parser import PyProject
 from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+pyproject = PyProject.load(filename=BASE_DIR + "/pyproject.toml").to_dict()
 
 env = environ.Env(
     DEBUG=(bool, False),
@@ -55,7 +58,8 @@ THIRD_PARTY_APPS = [
     "django_summernote",
     "django_tables2",
     "djoser",
-    "drf_yasg2",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
     "model_clone",
     "rest_framework",
     "rest_framework.authtoken",
@@ -80,9 +84,15 @@ MIDDLEWARE = [
     # "dataprocessing.CorsMiddleware",
 ]
 
-# MIDDLEWARE_CLASSES = [
-#     "dataprocessing.CorsMiddleware",
-# ]
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Analytics Backend API",
+    "DESCRIPTION": "API Конструктора ОП",
+    "VERSION": str(pyproject["project"]["version"]),
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+}
 
 ROOT_URLCONF = "analytics_project.urls"
 
@@ -165,7 +175,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
     "DEFAULT_METADATA_CLASS": "rest_framework_json_api.metadata.JSONAPIMetadata",
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
