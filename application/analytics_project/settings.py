@@ -65,6 +65,13 @@ THIRD_PARTY_APPS = [
     "rest_framework_swagger",
 ]
 
+# Приложения только для среды разработки. Включаются при DEBUG=True.
+# Не использовать в продуктиве!
+DEV_APPS =[
+    "debug_toolbar",
+    "django_extensions",
+]
+
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
@@ -293,11 +300,6 @@ CACHES = {
 
 # Секция только для целей разработки. Не выставлять DEBUG=True в продуктиве!
 if DEBUG:
-
-    DEV_APPS =[
-        "debug_toolbar",
-        "django_extensions",
-    ]
 
     INSTALLED_APPS += DEV_APPS
 
