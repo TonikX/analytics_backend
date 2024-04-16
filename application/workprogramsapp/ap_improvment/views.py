@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from dataprocessing.models import Items
-from workprogramsapp.ap_improvment.module_ze_counter import make_modules_cte_up
+from workprogramsapp.ap_improvment.module_ze_counter import make_modules_cte_up, make_modules_cte_up_for_wp
 from workprogramsapp.ap_improvment.serializers import ImplementationAcademicPlanForCompsSSerializer
 from workprogramsapp.models import Competence, Zun, Indicator, DisciplineBlockModule, ImplementationAcademicPlan, \
     WorkProgramInFieldOfStudy
@@ -24,23 +24,14 @@ def get_all_competences_and_indicators_for_wp_cte(request, wp_id):
         "items", "items__item").distinct()
     competences_dict = {}
     cte = With(None, "module_cte", False)
-    cte.query = make_modules_cte_up(cte, DisciplineBlockModule.cte_objects.filter(
-        change_blocks_of_work_programs_in_modules__work_program=wp_id)).query
-    modules = (
-        cte.join(
-            DisciplineBlockModule.cte_objects.filter(change_blocks_of_work_programs_in_modules__work_program=wp_id, ),
-            id=cte.col.id).annotate(
-            recursive_name=cte.col.recursive_name,
-            recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(
-            p__isnull=True).with_cte(
-            cte)
-    )
+    cte.query = make_modules_cte_up_for_wp(cte, wp_id).query
+    modules = cte.queryset().with_cte(cte).filter(descipline_block__id__isnull=False)
     for module in modules:
-        module.zuns_ids = [zun.id for zun in Zun.objects.filter(
-            wp_in_fs__work_program_change_in_discipline_block_module__discipline_block_module__id=module.id)]
+        module["zuns_ids"] = [zun.id for zun in Zun.objects.filter(
+            wp_in_fs__work_program_change_in_discipline_block_module__discipline_block_module__id=module["recursive_id"])]
         imps = ImplementationAcademicPlan.objects.filter(
-            academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__id=module.recursive_id).select_related("academic_plan").prefetch_related("field_of_study")
-        module.serialized_imps = ImplementationAcademicPlanForCompsSSerializer(imps, many=True).data
+            academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__id=module["id"]).select_related("academic_plan").prefetch_related("field_of_study")
+        module["serialized_imps"] = ImplementationAcademicPlanForCompsSSerializer(imps, many=True).data
     for zun in zuns:
         indicator = zun.indicator_in_zun
         indicator_dict = IndicatorSerializer(indicator).data
@@ -51,8 +42,8 @@ def get_all_competences_and_indicators_for_wp_cte(request, wp_id):
         #queryset_imps = ImplementationAcademicPlan.objects.none()
         serialized_imps = []
         for module in modules:
-            if zun.id in module.zuns_ids:
-                serialized_imps.extend(module.serialized_imps)
+            if zun.id in module["zuns_ids"]:
+                serialized_imps.extend(module["serialized_imps"])
         """modules_for_zun = modules.filter(change_blocks_of_work_programs_in_modules__zuns_for_cb__zun_in_wp__id=zun.id)
 
         modules_ids = [module.recursive_id for module in modules_for_zun]
@@ -91,17 +82,8 @@ def get_all_ap_with_competences_and_indicators_cte(request, wp_id):
 
     competences_dict = {}
     cte = With(None, "module_cte", False)
-    cte.query = make_modules_cte_up(cte, DisciplineBlockModule.cte_objects.filter(
-        change_blocks_of_work_programs_in_modules__work_program=wp_id)).query
-    modules = (
-        cte.join(
-            DisciplineBlockModule.cte_objects.filter(change_blocks_of_work_programs_in_modules__work_program=wp_id, )
-            , id=cte.col.id).annotate(
-            recursive_name=cte.col.recursive_name,
-            recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(
-            p__isnull=True).with_cte(
-            cte)
-    )
+    cte.query = make_modules_cte_up_for_wp(cte, wp_id).query
+    modules = cte.queryset().with_cte(cte).filter(descipline_block__id__isnull=False)
     if ap_id:
         imp = ImplementationAcademicPlan.objects.get(academic_plan__id=ap_id)
     if imp_id:
@@ -111,8 +93,8 @@ def get_all_ap_with_competences_and_indicators_cte(request, wp_id):
     lower_modules = []
 
     for module in modules:
-        if module.recursive_id in upper_modules_id:
-            lower_modules.append(module.id)
+        if module["id"] in upper_modules_id:
+            lower_modules.append(module["recursive_id"])
 
     zuns = Zun.objects.filter(
         wp_in_fs__work_program_change_in_discipline_block_module__discipline_block_module__id__in=lower_modules,

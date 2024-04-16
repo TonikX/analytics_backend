@@ -3,7 +3,7 @@ from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from workprogramsapp.ap_improvment.module_ze_counter import make_modules_cte_down
+from workprogramsapp.ap_improvment.module_ze_counter import make_modules_cte_down, make_modules_cte_down_for_matrix
 from workprogramsapp.ap_improvment.serializers import ImplementationAcademicPlanForCompsSSerializer, \
     PkCompetencesInGroupOfGeneralCharacteristicSerializerForMatrix
 from workprogramsapp.educational_program.general_prof_competencies.models import \
@@ -120,16 +120,16 @@ def GetCompetenceMatrixCTE(request, gen_pk):
                 continue
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
             cte = With(None, "module_cte", False)
-            cte.query = make_modules_cte_down(cte, DisciplineBlockModule.cte_objects.filter(
-                descipline_block=block)).query
-            modules = (
+            cte.query = make_modules_cte_down_for_matrix(cte, block.id).query
+            #modules = cte.queryset().with_cte(cte).filter(descipline_block__id__isnull=False)
+            """modules = (
                 cte.join(DisciplineBlockModule.cte_objects.filter(descipline_block=block), id=cte.col.id).annotate(
                     recursive_name=cte.col.recursive_name,
-                    recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(
-                     p__isnull=True).with_cte(
+                    recursive_id=cte.col.recursive_id, depth=cte.col.depth).filter().with_cte(
                     cte)
-            )
-            modules_lower_ids = [module.recursive_id for module in modules]
+            )"""
+            modules = cte.queryset().with_cte(cte).filter(childs__isnull=True)
+            modules_lower_ids = [module["id"] for module in modules]
             modules_lower = DisciplineBlockModule.objects.filter(id__in=modules_lower_ids). \
                 prefetch_related("change_blocks_of_work_programs_in_modules",
                                  "change_blocks_of_work_programs_in_modules__zuns_for_cb",
