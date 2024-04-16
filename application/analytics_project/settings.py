@@ -50,10 +50,8 @@ LOCAL_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    "bootstrap_pagination",
     "cachalot",
     "corsheaders",
-    "crispy_forms",
     "django_filters",
     "django_summernote",
     "django_tables2",
