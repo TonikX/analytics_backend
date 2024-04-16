@@ -291,9 +291,16 @@ CACHES = {
     }
 }
 
+# Секция только для целей разработки. Не выставлять DEBUG=True в продуктиве!
 if DEBUG:
 
-    INSTALLED_APPS.append("debug_toolbar")
+    DEV_APPS =[
+        "debug_toolbar",
+        "django_extensions",
+    ]
+
+    INSTALLED_APPS += DEV_APPS
+
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
     DEBUG_TOOLBAR_PANELS = [
