@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
-from django.urls import path
+from django.conf.urls import include
+from django.urls import path, re_path
 from rest_framework.routers import DefaultRouter
 
 from workprogramsapp.individualization.views import (
@@ -46,5 +46,5 @@ urlpatterns = [
         "api/individualization/individual_path/electives/create",
         ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleCreateAPIView.as_view(),
     ),
-    url(r"^", include(router.urls)),
+    re_path(r"^", include(router.urls)),
 ]

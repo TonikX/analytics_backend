@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
-from django.urls import path
+from django.conf.urls import include
+from django.urls import path, re_path
 from rest_framework.routers import DefaultRouter
 
 from workprogramsapp.notifications.emails.views import (
@@ -24,5 +24,5 @@ urlpatterns = [
     path("api/email/send_email", CreateMail, name="mail_creation"),
     path("api/notifications/create", CreateCustomNotification.as_view()),
     path("api/notifications/list", NotificationListView.as_view()),
-    url(r"^", include(router.urls)),
+    re_path(r"^", include(router.urls)),
 ]

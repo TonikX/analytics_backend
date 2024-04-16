@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
-from django.urls import path
+from django.conf.urls import include
+from django.urls import path, re_path
 from rest_framework.routers import DefaultRouter
 
 from gia_practice_app.Practice.views import (
@@ -26,7 +26,7 @@ router.register(
     basename="prerequisites-practice",
 )
 router.register(
-    r"api/practice-outcomes", OutcomesPracticeSet, basename="prerequisites-practice"
+    r"api/practice-outcomes", OutcomesPracticeSet, basename="practice-outcomes"
 )
 router.register(
     r"api/practice-in-field-of-study",
@@ -51,5 +51,5 @@ urlpatterns = [
         PracticeInFieldOfStudyForWorkProgramList.as_view(),
     ),
     path("api/zun/practice-many-remove", zun_many_remove),
-    url(r"^", include(router.urls)),
+    re_path(r"^", include(router.urls)),
 ]

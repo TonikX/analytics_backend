@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
-from django.urls.conf import path
+from django.conf.urls import include
+from django.urls.conf import path, re_path
 from rest_framework.routers import DefaultRouter
 
 from workprogramsapp.workprogram_additions.views import (
@@ -45,5 +45,5 @@ urlpatterns = [
         "api/workprogram/make_evaluation_tools_correct",
         ChangeSemesterInEvaluationsCorrect,
     ),
-    url(r"^", include(router.urls)),
+    re_path(r"^", include(router.urls)),
 ]

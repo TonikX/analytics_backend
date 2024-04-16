@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
-from django.urls import path
+from django.conf.urls import include
+from django.urls import path, re_path
 from rest_framework.routers import DefaultRouter
 
 from workprogramsapp import views as wpa_views
@@ -65,15 +65,15 @@ urlpatterns = [
     # Рабочая программа
     path("api/workprograms/", wpa_views.WorkProgramsListApi.as_view()),
     path("api/workprogram/create", wpa_views.WorkProgramCreateAPIView.as_view()),
-    url(
+    re_path(
         r"^api/workprogram/outcomes/prerequisites/relations/(?P<discipline_code>[0-9.]+)/$",
         wpa_views.WorkProgramsWithOutcomesToPrerequisitesForThisWPView.as_view(),
     ),
-    url(
+    re_path(
         r"^api/workprogram/prerequisites/outcomes/relations/(?P<discipline_code>[0-9.]+)/$",
         wpa_views.WorkProgramsWithPrerequisitesToOutocomesForThisWPView.as_view(),
     ),
-    url(
+    re_path(
         r"^api/workprogram/outcomes/relations/(?P<discipline_code>[0-9.]+)/$",
         wpa_views.WorkProgramsWithOutocomesForThisWPView.as_view(),
     ),
@@ -104,11 +104,11 @@ urlpatterns = [
     ),
     path("api/workprogram/change_items", wpa_views.ChangeItemsView),
     # path('api/workprogram/itemrelations/<char:discipline_code>', WorkProgramDetailsWithDisciplineCodeView.as_view()),
-    url(
+    re_path(
         r"^api/workprogram/itemrelations/(?P<discipline_code>[0-9.]+)/$",
         wpa_views.WorkProgramDetailsWithDisciplineCodeView.as_view(),
     ),
-    url(
+    re_path(
         r"^api/workprogram/fullitemrelations/(?P<discipline_code>[0-9.]+)/$",
         wpa_views.WorkProgramFullDetailsWithDisciplineCodeView.as_view(),
     ),
@@ -497,21 +497,21 @@ urlpatterns = [
         "api/certification_tools/<int:pk>",
         wpa_views.CertificationEvaluationToolDetailAPI.as_view(),
     ),
-    url(r"^", include("workprogramsapp.educational_program.urls")),
-    url(r"^", include("workprogramsapp.educational_program.urls")),
-    url(r"^", include("workprogramsapp.workprogram_additions.urls")),
-    url(r"^", include("workprogramsapp.bars_merge.urls")),
-    url(r"^", include("workprogramsapp.individualization.urls")),
-    url(r"^", include("workprogramsapp.isu_merge.urls")),
-    url(r"^", include("workprogramsapp.notifications.urls")),
-    url(r"^", include("workprogramsapp.feedback.urls")),
+    re_path(r"^", include("workprogramsapp.educational_program.urls")),
+    re_path(r"^", include("workprogramsapp.educational_program.urls")),
+    re_path(r"^", include("workprogramsapp.workprogram_additions.urls")),
+    re_path(r"^", include("workprogramsapp.bars_merge.urls")),
+    re_path(r"^", include("workprogramsapp.individualization.urls")),
+    re_path(r"^", include("workprogramsapp.isu_merge.urls")),
+    re_path(r"^", include("workprogramsapp.notifications.urls")),
+    re_path(r"^", include("workprogramsapp.feedback.urls")),
     path("api/nginx_timeout_test/", wpa_views.TimeoutTest),
-    url(r"^", include(router.urls)),
+    re_path(r"^", include(router.urls)),
     path("api/nginx_timeout_test/", wpa_views.TimeoutTest),
-    url(r"^", include("workprogramsapp.expertise.urls")),
-    url(r"^", include("workprogramsapp.educational_program.educational_standart.urls")),
-    url(r"^", include("gia_practice_app.GIA.urls")),
-    url(r"^", include("gia_practice_app.Practice.urls")),
-    url(r"^", include("workprogramsapp.bibliographic_reference.urls")),
-    url(r"^", include("workprogramsapp.disciplineblockmodules.urls")),
+    re_path(r"^", include("workprogramsapp.expertise.urls")),
+    re_path(r"^", include("workprogramsapp.educational_program.educational_standart.urls")),
+    re_path(r"^", include("gia_practice_app.GIA.urls")),
+    re_path(r"^", include("gia_practice_app.Practice.urls")),
+    re_path(r"^", include("workprogramsapp.bibliographic_reference.urls")),
+    re_path(r"^", include("workprogramsapp.disciplineblockmodules.urls")),
 ]

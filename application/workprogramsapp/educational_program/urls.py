@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
-from django.urls import path
+from django.conf.urls import include
+from django.urls import path, re_path
 from rest_framework.routers import DefaultRouter
 
 <<<<<<< HEAD
@@ -166,17 +166,17 @@ urlpatterns = [
         "api/wp_in_fs/get_by_wp_id/<int:wp_id>",
         WorkProgramInFieldOfStudyWithAPByWP.as_view(),
     ),
-    url(r"^", include(router.urls)),
-    url(r"^", include("workprogramsapp.educational_program.key_competences.urls")),
-    url(
+    re_path(r"^", include(router.urls)),
+    re_path(r"^", include("workprogramsapp.educational_program.key_competences.urls")),
+    re_path(
         r"^",
         include(
             "workprogramsapp.educational_program.over_professional_competencies.urls"
         ),
     ),
-    url(
+    re_path(
         r"^",
         include("workprogramsapp.educational_program.general_prof_competencies.urls"),
     ),
-    url(r"^", include("workprogramsapp.educational_program.pk_comptencies.urls")),
+    re_path(r"^", include("workprogramsapp.educational_program.pk_comptencies.urls")),
 ]
