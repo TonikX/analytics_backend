@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.11
 ENV PYTHONUNBUFFERED 1
 WORKDIR /application
 COPY requirements.txt /server
@@ -20,5 +20,6 @@ ENV LC_ALL ru_RU.UTF-8
 ENV TZ Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN pip install --upgrade pip
+RUN python -m pip install -U pip
+RUN python -m pip install -U setuptools wheel
 RUN pip install -r requirements.txt

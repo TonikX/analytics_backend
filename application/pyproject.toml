@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "analytics_backend"
 version = "2.0.0"
-requires-python = "==3.9"
+requires-python = "==3.11"
 dependencies = [
     "APScheduler==3.10.4",
     "Django==3.2.25",
