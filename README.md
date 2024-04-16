@@ -6,7 +6,7 @@
 
 Бэкенд проекта содержится в папке application
 
-На данный момент используется версия Python 3.9
+На данный момент используется версия Python 3.11
 
 ### Подготовка проекта
 
@@ -31,7 +31,7 @@
 
 ### Локальное развертывание
 
-1) Убедитесь, что используете нужную версию Python
+1) Убедитесь, что используете нужную версию Python. Актуальную версию можно посмотреть в pyproject.toml.
     ```bash
     python --version
     ```
@@ -54,18 +54,18 @@
     python -m pip install pip-tools
     ```
 
-4) Скомпилируйте и установите requirements.txt (см. документацию pip-tools)
+4) Перейдите в папку application и установите зависимости (см. документацию pip-tools)
     ```bash
-    pip-compile --output-file=requirements.txt pyproject.toml
-    pip install -r requirements.txt
-    ```
-   или
-   ```bash
-   pip-compile --extra=dev --output-file=requirements-dev.txt pyproject.toml
-   pip install -r requirements-dev.txt
+   cd ./application
+   
+   # Для среды разработки
+   pip-sync requirements-dev.txt
+   
+   # Для продуктивной среды
+   pip-sync requirements.txt
    ```
 5) Фейканите миграции (так как БД уже заполнена данными). Если будут появляться ошибки о взаимных импортах, закомментируйте зависимости в миграциях.
-   (да, такой подход - это bad practice)
+   (да, такой подход - это bad practice, но на данный момент миграции в проекте не распространяются)
    ```bash
    python manage.py makemigrations
    python manage.py migrate --fake
@@ -91,4 +91,22 @@
 5) Запустите проект
    ```bash
    npm start
+   ```
+
+## Соглашения о качестве кода
+
+1) Обновляйте зависимости только в файле pyproject.toml.
+   Не добавляйте в него субзависимости, которые не используются в проекте напрямую.
+   После обновлений в pyproject.toml запустите эти команды, чтобы обновить файлы requirements.
+
+   ```bash
+   # В папке application
+   pip-compile --rebuild --output-file=requirements.txt pyproject.toml
+   pip-compile --rebuild --extra=dev --output-file=requirements-dev.txt pyproject.toml
+   ```
+   Устанавливайте зависимости только через команду pip-sync
+   ```bash
+   pip-sync requirements.txt
+   # или
+   pip-sync requirements-dev.txt
    ```
