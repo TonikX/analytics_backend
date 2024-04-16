@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
@@ -30,4 +31,11 @@ urlpatterns = [
     # url(r'^login/', include('rest_social_auth.urls_jwt')),
 ]
 
+# swagger docs
 urlpatterns += doc_url
+
+# django-debug-toolbar
+if settings.DEBUG:
+    urlpatterns += [
+        path("__debug__/", include("debug_toolbar.urls")),
+    ]
