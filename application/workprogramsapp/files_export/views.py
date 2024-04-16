@@ -7,8 +7,7 @@ import html2text
 from django.http import HttpResponse
 from docx import Document
 from docxtpl import DocxTemplate, RichText
-from drf_yasg2 import openapi
-from drf_yasg2.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema
 from openpyxl import Workbook
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes, action
@@ -788,6 +787,7 @@ def UploadPlans(request):
     return Response(plans_processor(file))
 
 
+@permission_classes(())
 class UploadPlansAPIView(CreateAPIView):
     parser_classes = (MultiPartParser,)
 
@@ -797,19 +797,18 @@ class UploadPlansAPIView(CreateAPIView):
     def get_serializer_class(self):
         pass
 
-    @swagger_auto_schema(
-        operation_description="Создание ОП по xlsx-файлу  c ОП 2023 года",
-        manual_parameters=[
-            openapi.Parameter(
-                "plans",
-                openapi.IN_FORM,
-                type=openapi.TYPE_FILE,
-                description="xlsx-файл",
-            )
-        ],
+    @extend_schema(
+        methods=["POST"],
+        description="Создание ОП по xlsx-файлу c ОП 2023 года",
+        request={
+            "multipart/form-data": {
+                "type": "object",
+                "properties": {"plans": {"type": "string", "format": "binary"}},
+            }
+        },
+        responses=None,
     )
     @action(detail=False, methods=["post"])
     def post(self, request, **kwargs):
         file = request.FILES["plans"]
-        print(file)
         return Response(status=201, data={"rows_passed": plans_processor(file)})

@@ -16,8 +16,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django_super_deduper.merge import MergedModelInstance
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter
-from drf_yasg2 import openapi
-from drf_yasg2.utils import swagger_auto_schema
 from rest_framework import filters
 from rest_framework import generics, viewsets
 from rest_framework import status
@@ -368,21 +366,24 @@ class CompetencesListView(generics.ListAPIView):
     filterset_class = CompetenceFilter
     search_fields = ["name", "number"]
     permission_classes = [IsRpdDeveloperOrReadOnly]
-    ap_id = openapi.Parameter(
-        "ap_id",
-        openapi.IN_QUERY,
-        description="выводит все компетенции по айди Impmplementation-a входящие в связанный ОХ",
-        type=openapi.TYPE_INTEGER,
-    )
 
-    in_standard = openapi.Parameter(
-        "in_standard",
-        openapi.IN_QUERY,
-        description="Выводит все ПК или компетенции, входящие в Образовательные стандарты",
-        type=openapi.TYPE_BOOLEAN,
+    @extend_schema(
+        methods=["GET"],
+        parameters=[
+            OpenApiParameter(
+                name="ap_id",
+                location=OpenApiParameter.QUERY,
+                description="выводит все компетенции по айди Impmplementation-a входящие в связанный ОХ",
+                type=OpenApiTypes.BOOL,
+            ),
+            OpenApiParameter(
+                name="in_standard",
+                location=OpenApiParameter.QUERY,
+                description="Выводит все ПК или компетенции, входящие в Образовательные стандарты",
+                type=OpenApiTypes.BOOL,
+            ),
+        ],
     )
-
-    @swagger_auto_schema(manual_parameters=[ap_id, in_standard])
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 

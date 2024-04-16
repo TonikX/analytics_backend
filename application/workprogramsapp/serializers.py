@@ -1,3 +1,5 @@
+from typing import OrderedDict
+
 from django.contrib.auth.models import Group
 from django.db.models import Q
 from rest_framework import serializers
@@ -103,7 +105,7 @@ class CompetenceWithStandardSerializer(serializers.ModelSerializer):
 
     educational_standard = serializers.SerializerMethodField()
 
-    def get_educational_standard(self, instance):
+    def get_educational_standard(self, instance) -> dict:
         key_filter = Q(
             group_of_key_competences__competence_in_group_of_key_competences__competence=instance
         )
@@ -420,7 +422,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
         ),
     )
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> WorkProgram:
 
         evaluation_tools = validated_data.pop("evaluation_tools", None)
         wp = super(WorkProgramCreateSerializer, self).create(validated_data)
@@ -567,7 +569,7 @@ class EvaluationToolListSerializer(serializers.ModelSerializer):
     )
     wp_id = serializers.SerializerMethodField()
 
-    def get_wp_id(self, instance):
+    def get_wp_id(self, instance) -> int:
         try:
             id_wp = WorkProgram.objects.filter(
                 discipline_sections__evaluation_tools=instance
@@ -686,7 +688,7 @@ class WorkProgramInFieldOfStudyCreateSerializer(serializers.ModelSerializer):
 
 
 class RecursiveField(serializers.Serializer):
-    def to_representation(self, value):
+    def to_representation(self, value) -> OrderedDict:
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
 
@@ -697,12 +699,12 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
 
     wp_in_fs_id = serializers.SerializerMethodField("wp_in_fs_id_get")
 
-    def to_representation(self, value):
+    def to_representation(self, value) -> OrderedDict:
 
         self.fields["wp_status"] = serializers.SerializerMethodField()
         return super().to_representation(value)
 
-    def get_wp_status(self, value):
+    def get_wp_status(self, value) -> str:
         try:
             wp_status = value.expertise_with_rpd.all()[0].expertise_status
         except IndexError:
@@ -726,15 +728,20 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
             "number_of_semesters",
         ]
 
-    def clarify_zuns_for_wp(self, obj, *args, **kwargs):
+    def clarify_zuns_for_wp(self, obj, *args, **kwargs) -> dict:
         zuns_for_wp_objects = obj.zuns_for_wp.all().filter(
-            work_program_change_in_discipline_block_module=self.context.get('parent_cb_id'), work_program=obj.id)
-        serializers = WorkProgramInFieldOfStudySerializerForCb(zuns_for_wp_objects, many=True)
+            work_program_change_in_discipline_block_module=self.context.get("parent_cb_id"),
+            work_program=obj.id
+        )
+        serializers = WorkProgramInFieldOfStudySerializerForCb(
+            zuns_for_wp_objects,
+            many=True
+        )
         return serializers.data
 
-    def wp_in_fs_id_get(self, obj, *args, **kwargs):
+    def wp_in_fs_id_get(self, obj, *args, **kwargs) -> int:
         return obj.zuns_for_wp.all().filter(
-            work_program_change_in_discipline_block_module=self.context.get('parent_cb_id'),
+            work_program_change_in_discipline_block_module=self.context.get("parent_cb_id"),
             work_program=obj.id
         )[0].id
 
@@ -757,7 +764,7 @@ class WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(
             "semester_duration",
         ]
 
-    def get_id_of_wpcb(self, obj):
+    def get_id_of_wpcb(self, obj) -> dict:
         work_program = WorkProgram.objects.filter(work_program_in_change_block=obj.id)
         serializers = WorkProgramForDisciplineBlockSerializer(
             work_program, many=True, context={"parent_cb_id": obj.id}
@@ -769,14 +776,14 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
 
     work_program = serializers.SerializerMethodField("get_id_of_wpcb")
 
-    def to_representation(self, value):
+    def to_representation(self, value) -> OrderedDict:
         self.fields["gia"] = GIAPrimitiveSerializer(required=False, many=True)
         self.fields["practice"] = PracticePrimitiveSerializer(required=False, many=True)
         self.fields["semester_start"] = serializers.SerializerMethodField()
 
         return super().to_representation(value)
 
-    def get_semester_start(self, obj):
+    def get_semester_start(self, obj) -> list:
         if obj.semester_start:
             return obj.semester_start
         else:
@@ -805,9 +812,13 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
             "semester_duration",
         ]
 
-    def get_id_of_wpcb(self, obj):
+    def get_id_of_wpcb(self, obj) -> dict:
         work_program = obj.work_program
-        serializers = WorkProgramForDisciplineBlockSerializer(work_program, many=True, context={'parent_cb_id': obj.id})
+        serializers = WorkProgramForDisciplineBlockSerializer(
+            work_program,
+            many=True,
+            context={'parent_cb_id': obj.id}
+        )
         return serializers.data
 
 
@@ -816,7 +827,7 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
         WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
     )
 
-    def to_representation(self, value):
+    def to_representation(self, value) -> OrderedDict:
         self.fields["childs"] = serializers.SerializerMethodField()
         self.fields["laboriousness"] = serializers.SerializerMethodField()
         return super().to_representation(value)
@@ -831,9 +842,8 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
                                               "change_blocks_of_work_programs_in_modules__practice",
                                               "change_blocks_of_work_programs_in_modules__gia", ), many=True).data"""
 
-    def get_laboriousness(self, obj):
+    def get_laboriousness(self, obj) -> int:
         unit_final_sum = recursion_module(obj)
-
         return unit_final_sum
 
     class Meta:
@@ -853,27 +863,27 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
         WorkProgramChangeInDisciplineBlockModuleSerializer(many=True)
     )
 
-    def to_representation(self, value):
+    def to_representation(self, value) -> OrderedDict:
         self.fields["childs"] = serializers.SerializerMethodField()
         self.fields["laboriousness"] = serializers.SerializerMethodField()
         self.fields["can_remove"] = serializers.SerializerMethodField()
-
         return super().to_representation(value)
 
-    def get_laboriousness(self, obj):
+    def get_laboriousness(self, obj) -> int:
         unit_final_sum = recursion_module(obj)
-
         return unit_final_sum
 
-    def get_can_remove(self, obj):
+    def get_can_remove(self, obj) -> bool:
         can_remove_bool = IsUniversalModule.check_access(
             obj.id, self.context["request"].user
         )
         return can_remove_bool
 
-    def get_childs(self, obj):
+    def get_childs(self, obj) -> dict:
         return DisciplineBlockModuleWithoutFatherSerializer(
-            obj.childs.all(), many=True).data
+            obj.childs.all(),
+            many=True
+        ).data
         """.prefetch_related("childs__childs", "childs", "change_blocks_of_work_programs_in_modules",
                                               "change_blocks_of_work_programs_in_modules__work_program",
                                               "change_blocks_of_work_programs_in_modules__work_program__zuns_for_wp",
@@ -899,18 +909,17 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 class DisciplineBlockSerializer(serializers.ModelSerializer):
     modules_in_discipline_block = serializers.SerializerMethodField()
 
-    def to_representation(self, value):
+    def to_representation(self, value) -> OrderedDict:
         self.fields["laboriousness"] = serializers.SerializerMethodField()
         return super().to_representation(value)
 
-    def get_laboriousness(self, obj):
+    def get_laboriousness(self, obj) -> int:
         sum_ze = 0
         for module in DisciplineBlockModule.objects.filter(descipline_block=obj):
             sum_ze += recursion_module(module)
-
         return sum_ze
 
-    def get_modules_in_discipline_block(self, obj):
+    def get_modules_in_discipline_block(self, obj) -> dict:
         dbms = DisciplineBlockModule.objects.filter(descipline_block=obj)
         """.prefetch_related("childs",
                                                                                            "change_blocks_of_work_programs_in_modules",
@@ -996,7 +1005,7 @@ class AcademicPlanSerializer(serializers.ModelSerializer):
         many=True
     )
 
-    def to_representation(self, instance):
+    def to_representation(self, instance) -> OrderedDict:
         self.fields["discipline_blocks_in_academic_plan"] = DisciplineBlockSerializer(
             many=True, required=False, context={"request": self.context["request"]}
         )
@@ -1097,7 +1106,7 @@ class AcademicPlanCreateSerializer(serializers.ModelSerializer):
         source="academic_plan_in_field_of_study.field_of_study.id", write_only=True
     )
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> AcademicPlan:
         try:
             ap_in_fs = validated_data.pop("academic_plan_in_field_of_study")
             fos_pk = ap_in_fs["field_of_study"]["id"]
@@ -1176,8 +1185,7 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateSerializer(
         many=True, queryset=Practice.objects.all()
     )
 
-    def to_representation(self, value):
-
+    def to_representation(self, value) -> OrderedDict:
         return super().to_representation(value)
 
     class Meta:
@@ -1246,7 +1254,7 @@ class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
         model = DisciplineBlockModule
         fields = ["id", "name", "descipline_block"]
 
-    def get_descipline_block(self, instance):
+    def get_descipline_block(self, instance) -> dict:
         serializers = DisciplineBlockForWPinFSSerializer(
             DisciplineBlock.objects.filter(
                 modules_in_discipline_block__in=self.get_blocks_for_all_children(
@@ -1257,7 +1265,7 @@ class DisciplineBlockModuleForWPinFSSerializer(serializers.ModelSerializer):
         )
         return serializers.data
 
-    def get_blocks_for_all_children(self, instance, include_self=True):
+    def get_blocks_for_all_children(self, instance, include_self=True) -> list:
         r = []
         if include_self:
             r.append(instance)
@@ -1413,7 +1421,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return WorkProgram.objects.create(**validated_data)
 
-    def get_work_program_in_change_block_v2(self, instance):
+    def get_work_program_in_change_block_v2(self, instance) -> dict:
         serializers = DisciplineBlockModuleForWPinFSSerializer(
             DisciplineBlockModule.objects.filter(
                 change_blocks_of_work_programs_in_modules__work_program=instance
@@ -1422,7 +1430,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
         )
         return serializers.data
 
-    def to_representation(self, instance):
+    def to_representation(self, instance) -> OrderedDict:
         data = super().to_representation(instance)
         if instance.discipline_code == None and self.context.get("request"):
             data["can_send_to_isu"] = bool(
@@ -1458,7 +1466,7 @@ class AcademicPlanShortSerializer(serializers.ModelSerializer):
         many=True
     )
 
-    def to_representation(self, instance):
+    def to_representation(self, instance) -> OrderedDict:
         data = super().to_representation(instance)
         data["can_edit"] = self.context["request"].user.id == instance.author or bool(
             self.context["request"].user.groups.filter(name="academic_plan_developer")
