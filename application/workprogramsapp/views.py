@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from dataprocessing.models import Items
-from .ap_improvment.module_ze_counter import make_modules_cte_up
+from .ap_improvment.module_ze_counter import make_modules_cte_up,  make_modules_cte_up_for_wp
 from .ap_improvment.serializers import AcademicPlanForAPSerializer, WorkProgramSerializerForList, \
     WorkProgramSerializerCTE, DisciplineBlockForWPinFSSCTESerializer
 from .educational_program.search_filters import CompetenceFilter
@@ -753,24 +753,18 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                                                           )
     serializer_class = WorkProgramSerializerCTE
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
     def generate_modules(self, wp):
         work_program_in_change_block = []
         modules_grouped={}
-        cte = With.recursive(make_modules_cte_up)
-        modules = (
-            cte.join(DisciplineBlockModule.cte_objects.all(), id=cte.col.id).annotate(
-                recursive_name=cte.col.recursive_name,
-                recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(
-                change_blocks_of_work_programs_in_modules__work_program=wp.id).with_cte(
-                cte)
-        )
-
-        for module in modules.filter(p__isnull=True):
-            if modules_grouped.get(module.id) is not None:
-                modules_grouped[module.id]["upper_modules"].append(module.recursive_id)
+        cte = With(None, "module_cte", False)
+        cte.query = make_modules_cte_up_for_wp(cte, wp.id).query
+        #print(cte.queryset().with_cte(cte).filter(descipline_block__id__isnull=False))
+        modules = cte.queryset().with_cte(cte).filter(descipline_block__id__isnull=False)
+        for module in modules:
+            if modules_grouped.get(module["recursive_id"]) is not None:
+                modules_grouped[module["recursive_id"]]["upper_modules"].append(module["id"])
             else:
-                modules_grouped[module.id] = {"id":module.id, "name":module.name, "descipline_block": None, "upper_modules": [module.recursive_id]}
+                modules_grouped[module["recursive_id"]] = {"id":module["recursive_id"], "name":module["recursive_name"], "descipline_block": None, "upper_modules": [module["id"]]}
 
         for modules_dict in modules_grouped.values():
             upper_modules = modules_dict.pop("upper_modules")
@@ -2257,12 +2251,13 @@ class AcademicPlanDetailsView(generics.RetrieveAPIView):
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlanForAPSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
-
+    #@print_sql_decorator(count_only=False)
     def get(self, request, **kwargs):
 
         queryset = AcademicPlan.objects.filter(pk=self.kwargs['pk']).prefetch_related(
             "discipline_blocks_in_academic_plan", "discipline_blocks_in_academic_plan__modules_in_discipline_block",
-            "academic_plan_in_field_of_study", "academic_plan_in_field_of_study__field_of_study", "academic_plan_in_field_of_study__field_of_study").select_related("author")
+            "academic_plan_in_field_of_study", "academic_plan_in_field_of_study__field_of_study",
+            "academic_plan_in_field_of_study__field_of_study").select_related("author")
         serializer = AcademicPlanForAPSerializer(queryset, many=True, context={'request': request})
         if len(serializer.data) == 0:
             return Response({"detail": "Not found."}, status.HTTP_404_NOT_FOUND)
