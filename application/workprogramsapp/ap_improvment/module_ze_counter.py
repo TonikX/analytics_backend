@@ -10,6 +10,27 @@ from django.db import models
 DisciplineBlockModule = apps.get_model('workprogramsapp.DisciplineBlockModule')
 WorkProgram = apps.get_model('workprogramsapp.WorkProgram')
 
+
+def make_modules_cte_down_for_matrix(cte, block_id):
+    # non-recursive: get root nodes
+    return DisciplineBlockModule.cte_objects.values(
+        "id", "name", "order",
+        recursive_id=models.F("id"),
+        recursive_name=models.F("name"),
+        # db = models.F("descipline_block__id"),
+        # full_name=models.F('name'),
+        depth=models.Value(1, output_field=models.IntegerField()),
+    ).filter(descipline_block__id=block_id).union(
+        # recursive union: get descendants
+        cte.join(DisciplineBlockModule, father_module=cte.col.id).values(
+            "id", "name",  "order",
+            recursive_id=cte.col.recursive_id,
+            recursive_name=cte.col.recursive_name,
+            depth=cte.col.depth + models.Value(1, output_field=models.IntegerField()),
+        ),
+        all=True,
+    )
+
 def make_modules_cte_down(cte):
     # non-recursive: get root nodes
     return DisciplineBlockModule.cte_objects.values(
@@ -32,8 +53,47 @@ def make_modules_cte_down(cte):
         all=True,
     )
 
+def make_modules_cte_up_for_wp(cte, wp_id):
+    # non-recursive: get root nodes
+    return DisciplineBlockModule.cte_objects.values(
+        "id", "name", "descipline_block__id", "order",
+        recursive_id=models.F("id"),
+        recursive_name=models.F("name"),
+        # full_name=models.F('name'),
+        depth=models.Value(1, output_field=models.IntegerField()),
+    ).filter(change_blocks_of_work_programs_in_modules__work_program__id=wp_id).union(
+        # recursive union: get descendants
+        cte.join(DisciplineBlockModule, childs=cte.col.id).values(
+            "id", "name", "descipline_block__id", "order",
+            recursive_id=cte.col.recursive_id,
+            recursive_name=cte.col.recursive_name,
+            #db=cte.col.db,
+            depth=cte.col.depth + models.Value(1, output_field=models.IntegerField()),
+        ),
+        all=True,
+    )
 
-def make_modules_cte_up(cte):
+def make_modules_cte_up_for_module(cte, module_id):
+    # non-recursive: get root nodes
+    return DisciplineBlockModule.cte_objects.values(
+        "id", "name", "father_module__id","order",
+        recursive_id=models.F("id"),
+        recursive_name=models.F("name"),
+        # full_name=models.F('name'),
+        depth=models.Value(1, output_field=models.IntegerField()),
+    ).filter(id=module_id).union(
+        # recursive union: get descendants
+        cte.join(DisciplineBlockModule, childs=cte.col.id).values(
+            "id", "name", "father_module__id", "order",
+            recursive_id=cte.col.recursive_id,
+            recursive_name=cte.col.recursive_name,
+            #db=cte.col.db,
+            depth=cte.col.depth + models.Value(1, output_field=models.IntegerField()),
+        ),
+        all=True,
+    )
+
+def make_modules_cte_up(cte, filtered_module=DisciplineBlockModule.objects.all()):
     # non-recursive: get root nodes
     return DisciplineBlockModule.cte_objects.values(
         "id", "name",
@@ -43,7 +103,7 @@ def make_modules_cte_up(cte):
         depth=models.Value(1, output_field=models.IntegerField()),
     ).union(
         # recursive union: get descendants
-        cte.join(DisciplineBlockModule.cte_objects.all(), father_module=cte.col.id).values(
+        cte.join(filtered_module, father_module=cte.col.id).values(
             "id", "name",
             p=cte.col.p,
             recursive_id=cte.col.recursive_id,
@@ -112,21 +172,20 @@ def rewrite_ze_up(module):
         module.laboriousness = count_ze_module(module)
     except IndexError:
         module.laboriousness = 0
-    #print(module.name)
+    # print(module.name)
     module.save()
-    cte = With.recursive(make_modules_cte_up)
+    cte = With(None, "module_cte", False)
+    cte.query = make_modules_cte_up_for_module(cte, module.id).query
     # descipline_block__academic_plan__id = 7304
-    modules = (
-        cte.join(DisciplineBlockModule.cte_objects.all(), id=cte.col.id).annotate(
-            recursive_name=cte.col.recursive_name,
-            recursive_id=cte.col.recursive_id, depth=cte.col.depth, p=cte.col.p).filter(id=module.id).with_cte(cte)
-    )
+    modules = cte.queryset().with_cte(cte)
     for module_cte in modules:
-        if module_cte.p:
-            module_to_count = DisciplineBlockModule.objects.get(id=module_cte.p)
+        if module_cte.get("father_module__id"):
+            module_to_count = DisciplineBlockModule.objects.get(id=module_cte["father_module__id"])
             try:
                 lb = count_ze_module(module_to_count)
             except IndexError:
+                lb = 0
+            except TypeError:
                 lb = 0
             module_to_count.laboriousness = lb
             module_to_count.save()
