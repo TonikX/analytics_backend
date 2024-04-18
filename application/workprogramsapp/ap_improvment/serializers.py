@@ -3,17 +3,20 @@ from rest_framework.fields import BooleanField
 
 from dataprocessing.models import Items
 from dataprocessing.serializers import userProfileSerializer, ShortStructuralUnitSerializer
-from workprogramsapp.educational_program.pk_comptencies.models import PkCompetencesInGroupOfGeneralCharacteristic
+from workprogramsapp.educational_program.pk_comptencies.models import \
+    PkCompetencesInGroupOfGeneralCharacteristic
 from workprogramsapp.educational_program.pk_comptencies.serializers import \
     IndicatorInPkCompetenceInGeneralCharacteristicSerializer
 from workprogramsapp.expertise.serializers import ShortExpertiseSerializer
-from workprogramsapp.models import WorkProgram, WorkProgramChangeInDisciplineBlockModule, DisciplineBlockModule, \
+from workprogramsapp.models import WorkProgram, WorkProgramChangeInDisciplineBlockModule, \
+    DisciplineBlockModule, \
     DisciplineBlock, IsuObjectsSendLogger, AcademicPlan, FieldOfStudy, ImplementationAcademicPlan, \
     OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
 from workprogramsapp.permissions import IsUniversalModule
 from workprogramsapp.serializers import GIAPrimitiveSerializer, PracticePrimitiveSerializer, \
-    ImplementationAcademicPlanShortForAPSerializer, DisciplineSectionSerializer, BibliographicReferenceSerializer, \
-    СertificationEvaluationToolForWorkProgramSerializer, \
+    ImplementationAcademicPlanShortForAPSerializer, DisciplineSectionSerializer, \
+    BibliographicReferenceSerializer, \
+    CertificationEvaluationToolForWorkProgramSerializer, \
     EvaluationToolForOutcomsSerializer, CompetenceSerializer
 
 
@@ -404,7 +407,7 @@ class WorkProgramSerializerCTE(serializers.ModelSerializer):
     bibliographic_reference = BibliographicReferenceSerializer(many=True, required=False)
     # work_program_in_change_block = WorkProgramChangeInDisciplineBlockModuleForWPinFSRecursiveSerializer(many=True)
     expertise_with_rpd = ShortExpertiseSerializer(many=True, read_only=True)
-    certification_evaluation_tools = СertificationEvaluationToolForWorkProgramSerializer(many=True)
+    certification_evaluation_tools = CertificationEvaluationToolForWorkProgramSerializer(many=True)
     editors = userProfileSerializer(many=True)
     structural_unit = ShortStructuralUnitSerializer()
 
