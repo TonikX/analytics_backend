@@ -2,23 +2,11 @@ from django.conf.urls import include
 from django.urls import path, re_path
 from rest_framework.routers import DefaultRouter
 
-<<<<<<< HEAD
-from workprogramsapp.educational_program.views import EducationalProgramCreateAPIView, EducationalProgramListAPIView, \
-    EducationalProgramDetailsView, EducationalProgramDestroyView, EducationalProgramUpdateView, UploadCompetences, \
-    GeneralizedLaborFunctionsSet, KindsOfActivitySet, EmployerSet, GetCompetenceMatrix, ObjectsOfActivitySet, \
-    academ_plan_check, UploadProfStandards, new_ordinal_numbers_for_modules_in_ap, gh_check, \
-    get_all_ap_with_competences_and_indicators, get_all_competences_and_indicators_for_wp, zun_many_remove, \
-    WorkProgramInFieldOfStudyWithAPByWP, zun_copy, zun_copy_by_wps, CompetenceCommentsView, CompetenceCommentCreateView, \
-    get_all_unfilled_wp, get_all_unfilled_indicator
-from workprogramsapp.educational_program.views import GeneralCharacteristicsCreateAPIView, \
-    GeneralCharacteristicsListAPIView, \
-    GeneralCharacteristicsDetailsView, GeneralCharacteristicsDestroyView, GeneralCharacteristicsUpdateView, \
-    GeneralCharacteristicsDetailsWithEducationalProgramView
-from ..ap_improvment.competence_matrix import GetCompetenceMatrixCTE
-from ..ap_improvment.views import get_all_competences_and_indicators_for_wp_cte, get_all_ap_with_competences_and_indicators_cte
-from ..op_slection.views import EducationalProgramRankingByProfession, EducationalProgramRankingByProfessionScientific
-from .views import ProfessionalStandardSet
-=======
+from workprogramsapp.ap_improvment.competence_matrix import GetCompetenceMatrixCTE
+from workprogramsapp.ap_improvment.views import (
+    get_all_competences_and_indicators_for_wp_cte,
+    get_all_ap_with_competences_and_indicators_cte,
+)
 from workprogramsapp.educational_program.views import (
     CompetenceCommentCreateView,
     CompetenceCommentsView,
@@ -36,8 +24,6 @@ from workprogramsapp.educational_program.views import (
     UploadProfStandards,
     WorkProgramInFieldOfStudyWithAPByWP,
     academ_plan_check,
-    get_all_ap_with_competences_and_indicators,
-    get_all_competences_and_indicators_for_wp,
     get_all_unfilled_indicator,
     get_all_unfilled_wp,
     gh_check,
@@ -59,7 +45,6 @@ from workprogramsapp.op_slection.views import (
     EducationalProgramRankingByProfession,
     EducationalProgramRankingByProfessionScientific,
 )
->>>>>>> 84249b16 (chore(educational_program): Файлы отформатированы по black)
 
 router = DefaultRouter()
 
