@@ -115,6 +115,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = "analytics_project.asgi.application"
 WSGI_APPLICATION = "analytics_project.wsgi.application"
 
 DATABASES = {"default": env.db_url("DATABASE_URL")}
