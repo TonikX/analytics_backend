@@ -98,8 +98,6 @@ def process_changeblock(ws, level, block_module, unique_dict, competence_dict):
                     work_program=work_program,
                     work_program_change_in_discipline_block_module=change_block,
                 )
-                if work_program.title == "Автоматическое машинное обучение":
-                    print("fdfd")
                 competences_in_program = {
                     "id": work_program.id,
                     "title": work_program.title,
@@ -128,7 +126,6 @@ def process_changeblock(ws, level, block_module, unique_dict, competence_dict):
 
             else:
                 pass
-                # print(work_program)
         for practice in Practice.objects.filter(practice_in_change_block=change_block):
             if (practice.id not in unique_dict["unique_practice"]) or (
                 unique_dict["is_first_iter_ap"]
@@ -160,7 +157,6 @@ def process_changeblock(ws, level, block_module, unique_dict, competence_dict):
                 level += 1
             else:
                 pass
-                # print(work_program)
         for gia in GIA.objects.filter(gia_in_change_block=change_block):
             if (gia.id not in unique_dict["unique_gia"]) or (
                 unique_dict["is_first_iter_ap"]
@@ -178,7 +174,6 @@ def process_changeblock(ws, level, block_module, unique_dict, competence_dict):
 
 
 def recursion_module_matrix(ws, level, modules, unique_dict, competence_dict, depth):
-    # print(level)
     for block_module in modules:
         fill_row(ws, level, color_list[depth])
         insert_cell_data(
@@ -266,7 +261,6 @@ def fill_competences(
                 else:
                     temp_pk_code = pk_dict[comp.competence.id]
                 competences_list.append(f"ПК-{temp_pk_code}")
-        print(pk_dict)
 
     # Формируем данные
     competence_dict[name_comp]["start"] = column_start

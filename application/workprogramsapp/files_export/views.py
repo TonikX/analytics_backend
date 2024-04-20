@@ -201,7 +201,6 @@ def render_context(context, **kwargs):
     if context["number_of_semesters"] == 0:
         context["number_of_semesters"] = 1
     for i in context["discipline_sections"]:
-        print(context["discipline_sections"])
         online_names, topics_list = [], []
         if i["contact_work"] is None:
             i["contact_work"] = ""
@@ -247,7 +246,6 @@ def render_context(context, **kwargs):
                 pass
             else:
                 online_sections.append(i["ordinal_number"])
-                print("online_sections", online_sections)
                 online_list_number += 1
                 online_names.append(
                     "{} (url: {})".format(
@@ -307,7 +305,6 @@ def render_context(context, **kwargs):
         SRO,
         total_hours,
     ]
-    print("ff", all_laboratory)
     template_context["all_total_hours"] = [
         round(el, 2)
         for el in [
@@ -492,7 +489,7 @@ def render_context(context, **kwargs):
             else:
                 pass
         except Exception as e:
-            print(e)
+            pass
     template_context["certification_evaluation_tools_semestr_1"] = (
         certification_evaluation_tools_semestr_1
     )
@@ -527,8 +524,6 @@ def render_context(context, **kwargs):
     template_context["extra_points"] = context["extra_points"]
     template_context["discipline_section"] = context["discipline_sections"]
     template_context["bars"] = context["bars"]
-    print("bib", template_context["bibliographic_reference"])
-    print(semester)
     return template_context, filename
     # , evaluation_tools_pdf_docs
 
@@ -652,7 +647,6 @@ def render_context_syllabus(context, **kwargs):
         "<[^>]*>", "", str(context["bibliographic_reference"])
     )
     filename = "Syllabus_" + str(context["title"]) + str(kwargs["year"]) + ".docx"
-    print("bib", template_context["bibliographic_reference"])
 
     return template_context, filename
 
@@ -681,7 +675,6 @@ class SyllabusExportView(generics.ListAPIView):
             year=kwargs["year"],
         )
         tpl.render(context)
-        print(context["bibliographic_reference"])
         # tpl.save('/application/upload/'+filename) #-- сохранение в папку локально (нужно указать актуальный путь!)
 
         response = HttpResponse(
@@ -783,7 +776,6 @@ def UploadPlans(request):
     Метод принимает xlsx-файл с планами 2023 года
     """
     file = request.FILES["plans"]
-    print(file)
     return Response(plans_processor(file))
 
 
