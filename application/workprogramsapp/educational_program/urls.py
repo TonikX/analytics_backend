@@ -2,8 +2,8 @@ from django.conf.urls import include
 from django.urls import path, re_path
 from rest_framework.routers import DefaultRouter
 
-from workprogramsapp.ap_improvment.competence_matrix import GetCompetenceMatrixCTE
-from workprogramsapp.ap_improvment.views import (
+from workprogramsapp.ap_improvement.competence_matrix import GetCompetenceMatrixCTE
+from workprogramsapp.ap_improvement.views import (
     get_all_competences_and_indicators_for_wp_cte,
     get_all_ap_with_competences_and_indicators_cte,
 )

@@ -7,7 +7,7 @@ from dataprocessing.itmo_backends import isu_client_credentials_request
 from dataprocessing.models import User
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
-from workprogramsapp.ap_improvment.module_ze_counter import rewrite_ze_up
+from workprogramsapp.ap_improvement.module_ze_counter import rewrite_ze_up
 from workprogramsapp.expertise.models import UserExpertise, Expertise, ExpertiseComments
 from workprogramsapp.models import (
     AcademicPlan,

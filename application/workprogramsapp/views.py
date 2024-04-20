@@ -27,8 +27,8 @@ from rest_framework.views import APIView
 from dataprocessing.models import Items
 from dataprocessing.serializers import FileUploadSerializer
 from discipline_code import IPv4_code_ver2
-from workprogramsapp.ap_improvment.module_ze_counter import make_modules_cte_up_for_wp
-from workprogramsapp.ap_improvment.serializers import (
+from workprogramsapp.ap_improvement.module_ze_counter import make_modules_cte_up_for_wp
+from workprogramsapp.ap_improvement.serializers import (
     AcademicPlanForAPSerializer,
     DisciplineBlockForWPinFSSCTESerializer,
     WorkProgramSerializerCTE,

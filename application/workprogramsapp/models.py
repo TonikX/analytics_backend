@@ -1313,7 +1313,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None, *args, **kwargs):
-        from workprogramsapp.ap_improvment.module_ze_counter import rewrite_ze_up
+        from workprogramsapp.ap_improvement.module_ze_counter import rewrite_ze_up
         super(DisciplineBlockModule, self).save(force_insert, force_update, *args, **kwargs)
         if self.__old_selection_parametr != self.selection_parametr or self.__old_selection_rule != self.selection_rule:
             self.__old_selection_parametr = self.selection_parametr
