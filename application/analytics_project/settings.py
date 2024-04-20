@@ -20,15 +20,15 @@ env = environ.Env(
 )
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-PROJECT_HOST = env("PROJECT_HOST")
-PROJECT_PORT = env("PROJECT_PORT")
+PROJECT_HOST = env.str("PROJECT_HOST")
+PROJECT_PORT = env.str("PROJECT_PORT")
 
 Runserver.default_addr = PROJECT_HOST
 Runserver.default_port = PROJECT_PORT
 
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env.str("SECRET_KEY")
 
-DEBUG = env("DEBUG")
+DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
@@ -207,39 +207,39 @@ SWAGGER_SETTINGS = {
     "DEFAULT_AUTO_SCHEMA_CLASS": "analytics_project.yasg_tag_class.CustomAutoSchema",
 }
 
-ONLINECOURSE_CERT = env("ONLINECOURSE_CERT")
-ONLINECOURSE_KEY = env("ONLINECOURSE_KEY")
+ONLINECOURSE_CERT = env.str("ONLINECOURSE_CERT")
+ONLINECOURSE_KEY = env.str("ONLINECOURSE_KEY")
 
 ISU = {
-    "ISU_CLIENT_ID": env("ISU_CLIENT_ID"),
-    "ISU_CLIENT_SECRET": env("ISU_CLIENT_SECRET"),
-    "ISU_REDIRECT_URI": env("ISU_REDIRECT_URI"),
-    "ISU_FINISH_URI": env("ISU_FINISH_URI_WITH_PROTOCOL"),
+    "ISU_CLIENT_ID": env.str("ISU_CLIENT_ID"),
+    "ISU_CLIENT_SECRET": env.str("ISU_CLIENT_SECRET"),
+    "ISU_REDIRECT_URI": env.str("ISU_REDIRECT_URI"),
+    "ISU_FINISH_URI": env.str("ISU_FINISH_URI_WITH_PROTOCOL"),
 }
 
 BARS = {
-    "BARS_LOGIN": env("BARS_LOGIN"),
-    "BARS_PASSWORD": env("BARS_PASSWORD"),
-    "BARS_URL": env("BARS_URL"),
+    "BARS_LOGIN": env.str("BARS_LOGIN"),
+    "BARS_PASSWORD": env.str("BARS_PASSWORD"),
+    "BARS_URL": env.str("BARS_URL"),
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_PORT = env("EMAIL_PORT")
-EMAIL_USE_TLS = env("EMAIL_USE_TLS")
-EMAIL_USE_SSL = env("EMAIL_USE_SSL", default=False)
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
+EMAIL_HOST = env.str("EMAIL_HOST")
+EMAIL_PORT = env.str("EMAIL_PORT")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS")
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", default=False)
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-URL_FRONT = env("URL_FRONT")
-AP_FILE_ROUTE = env("AP_FILE_ROUTE")
-ISU_URL_UPDATERS = env("ISU_URL_UPDATERS")
-LAN_TOKEN = env("LAN_TOKEN")
+URL_FRONT = env.str("URL_FRONT")
+AP_FILE_ROUTE = env.str("AP_FILE_ROUTE")
+ISU_URL_UPDATERS = env.str("ISU_URL_UPDATERS")
+LAN_TOKEN = env.str("LAN_TOKEN")
 
 sentry_sdk.init(
-    dsn=env("SENTRY_URL"),
+    dsn=env.str("SENTRY_URL"),
     integrations=[
         DjangoIntegration(),
     ],
@@ -255,7 +255,7 @@ sentry_sdk.init(
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": env("MEMCACHE_LOCATION"),
+        "LOCATION": env.str("MEMCACHE_LOCATION"),
     }
 }
 
@@ -286,7 +286,7 @@ if DEBUG:
         "SHOW_TOOLBAR_CALLBACK": lambda request: True,
     }
 
-if env("LOGGING_DEBUG", default=False):
+if env.bool("LOGGING_DEBUG", default=False):
     LOGGING = {
         "version": 1,
         "formatters": {
