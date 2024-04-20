@@ -6,7 +6,7 @@ from workprogramsapp import views as wpa_views
 from workprogramsapp.educational_program import views as ep_views
 from workprogramsapp.expertise import views as expertise_views
 from workprogramsapp.files_export import views as fe_views
-from workprogramsapp.folders_ans_statistic import views as fas_views
+from workprogramsapp.folders_and_statistics import views as fas_views
 from workprogramsapp.op_slection.views import CreateProfessionByKeywords
 from workprogramsapp.profession import views as profession_views
 from workprogramsapp.workprogram_additions.views import CopyContentOfWorkProgram
@@ -509,7 +509,9 @@ urlpatterns = [
     re_path(r"^", include(router.urls)),
     path("api/nginx_timeout_test/", wpa_views.TimeoutTest),
     re_path(r"^", include("workprogramsapp.expertise.urls")),
-    re_path(r"^", include("workprogramsapp.educational_program.educational_standart.urls")),
+    re_path(
+        r"^", include("workprogramsapp.educational_program.educational_standart.urls")
+    ),
     re_path(r"^", include("gia_practice_app.GIA.urls")),
     re_path(r"^", include("gia_practice_app.Practice.urls")),
     re_path(r"^", include("workprogramsapp.bibliographic_reference.urls")),

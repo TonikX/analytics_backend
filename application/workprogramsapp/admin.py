@@ -16,7 +16,7 @@ from workprogramsapp.educational_program.over_professional_competencies import (
 from workprogramsapp.educational_program.pk_comptencies import models as ep_pkc_models
 from workprogramsapp.expertise import models as expertise_models
 from workprogramsapp.feedback.models import FeedbackRecord
-from workprogramsapp.folders_ans_statistic import models as folder_models
+from workprogramsapp.folders_and_statistics import models as folder_models
 from workprogramsapp.individualization import models as individualization_models
 from workprogramsapp.notifications import models as notifications_models
 from workprogramsapp.workprogram_additions import models as wp_add_models

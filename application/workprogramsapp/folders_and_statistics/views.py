@@ -5,14 +5,14 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from workprogramsapp.folders_ans_statistic.models import (
+from workprogramsapp.folders_and_statistics.models import (
     AcademicPlanInFolder,
     DisciplineBlockModuleInFolder,
     Folder,
     IndividualImplementationAcademicPlanInFolder,
     WorkProgramInFolder,
 )
-from workprogramsapp.folders_ans_statistic.serializers import (
+from workprogramsapp.folders_and_statistics.serializers import (
     AcademicPlanInFolderSerializer,
     FolderCreateSerializer,
     FolderSerializer,

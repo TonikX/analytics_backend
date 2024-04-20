@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from dataprocessing.serializers import userProfileSerializer
-from workprogramsapp.folders_ans_statistic.models import (
+from workprogramsapp.folders_and_statistics.models import (
     AcademicPlanInFolder,
     DisciplineBlockModuleInFolder,
     Folder,

@@ -30,7 +30,7 @@ from workprogramsapp.disciplineblockmodules.serializers import (
     ImplementationAcademicPlanForModuleSerializer,
     ShortDisciplineBlockModuleForModuleListSerializer,
 )
-from workprogramsapp.folders_ans_statistic.models import DisciplineBlockModuleInFolder
+from workprogramsapp.folders_and_statistics.models import DisciplineBlockModuleInFolder
 from workprogramsapp.models import (
     AcademicPlan,
     DisciplineBlock,

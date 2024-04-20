@@ -10,7 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from workprogramsapp.folders_ans_statistic.models import (
+from workprogramsapp.folders_and_statistics.models import (
     IndividualImplementationAcademicPlanInFolder,
 )
 from workprogramsapp.individualization.models import (
