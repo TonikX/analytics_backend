@@ -43,6 +43,7 @@ dependencies = [
     "rest-social-auth==8.3.0",
     "sentry-sdk==1.45.0",
     "social-auth-core==4.5.3",
+    "whitenoise==6.6.0",
 ]
 description = "Удобный конструктор для быстрого создания образовательных программ, инструмент для сопровождения и планирования учебного процесса"
 keywords = ["education", "analytics", "work program", "academic plan"]

@@ -379,6 +379,8 @@ webencodings==0.5.1
     # via bleach
 wheel==0.43.0
     # via pip-tools
+whitenoise==6.6.0
+    # via analytics_backend (pyproject.toml)
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

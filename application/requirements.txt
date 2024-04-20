@@ -304,6 +304,8 @@ urllib3==2.2.1
     #   sentry-sdk
 webencodings==0.5.1
     # via bleach
+whitenoise==6.6.0
+    # via analytics_backend (pyproject.toml)
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

@@ -65,6 +65,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "rest_framework_swagger",
+    "whitenoise.runserver_nostatic",
 ]
 
 # Приложения только для среды разработки. Включаются при DEBUG=True.
@@ -74,12 +75,13 @@ DEV_APPS = [
     "django_extensions",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
