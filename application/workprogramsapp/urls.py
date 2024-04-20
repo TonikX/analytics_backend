@@ -7,7 +7,7 @@ from workprogramsapp.educational_program import views as ep_views
 from workprogramsapp.expertise import views as expertise_views
 from workprogramsapp.files_export import views as fe_views
 from workprogramsapp.folders_and_statistics import views as fas_views
-from workprogramsapp.op_slection.views import CreateProfessionByKeywords
+from workprogramsapp.op_selection.views import CreateProfessionByKeywords
 from workprogramsapp.profession import views as profession_views
 from workprogramsapp.workprogram_additions.views import CopyContentOfWorkProgram
 

@@ -41,7 +41,7 @@ from workprogramsapp.educational_program.views import (
     GeneralCharacteristicsUpdateView,
 )
 from workprogramsapp.educational_program.views import ProfessionalStandardSet
-from workprogramsapp.op_slection.views import (
+from workprogramsapp.op_selection.views import (
     EducationalProgramRankingByProfession,
     EducationalProgramRankingByProfessionScientific,
 )
@@ -101,7 +101,6 @@ urlpatterns = [
         "api/general_characteristic/get_unfilled_indicators/<int:gh_id>",
         get_all_unfilled_indicator,
     ),
-
     # --Образовательная программа
     path("api/EducationalProgram", EducationalProgramListAPIView.as_view()),
     path("api/EducationalProgram/create", EducationalProgramCreateAPIView.as_view()),
@@ -122,30 +121,36 @@ urlpatterns = [
         EducationalProgramRankingByProfessionScientific,
     ),
     path("api/academicplan_check/<int:ap_id>", academ_plan_check),
-
     # --Компетенции
     path("api/competence/upload_comptence_from_csv", UploadCompetences),
-    path("api/competence/get_all_ap_with_competences_and_indicators_to_wp/<int:wp_id>",
-         get_all_ap_with_competences_and_indicators_cte),
-    path("api/competence/get_all_competences_and_indicators_for_wp/<int:wp_id>",
-         get_all_competences_and_indicators_for_wp_cte),
+    path(
+        "api/competence/get_all_ap_with_competences_and_indicators_to_wp/<int:wp_id>",
+        get_all_ap_with_competences_and_indicators_cte,
+    ),
+    path(
+        "api/competence/get_all_competences_and_indicators_for_wp/<int:wp_id>",
+        get_all_competences_and_indicators_for_wp_cte,
+    ),
     path("api/competence/zun_many_remove", zun_many_remove),
     path("api/competence/zun_many_copy", zun_copy),
     path("api/competence/zun_copy_by_gh", zun_copy_by_wps),
     path("api/competence/comments/<int:pk>", CompetenceCommentsView.as_view()),
     path("api/competence/comments/create", CompetenceCommentCreateView.as_view()),
-
     # --Матрица компетенций
-    path("api/general_characteristic/competence_matrix/<int:gen_pk>", GetCompetenceMatrixCTE),
-    path("api/general_characteristic/competence_matrix_old/<int:gen_pk>", GetCompetenceMatrix),
-
+    path(
+        "api/general_characteristic/competence_matrix/<int:gen_pk>",
+        GetCompetenceMatrixCTE,
+    ),
+    path(
+        "api/general_characteristic/competence_matrix_old/<int:gen_pk>",
+        GetCompetenceMatrix,
+    ),
     # --Проф. Стандарты
     path("api/competence/upload_prof_standard_from_csv", UploadProfStandards.as_view()),
     path(
         "api/new_ordinal_numbers_for_modules_in_ap",
         new_ordinal_numbers_for_modules_in_ap,
     ),
-
     # --Дополнительно
     path(
         "api/wp_in_fs/get_by_wp_id/<int:wp_id>",
