@@ -3,6 +3,7 @@ from datetime import timedelta
 
 import environ
 import sentry_sdk
+from django.core.management.commands.runserver import Command as Runserver
 from pyproject_parser import PyProject
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -19,14 +20,15 @@ env = environ.Env(
 )
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
+PROJECT_HOST = env("PROJECT_HOST")
+PROJECT_PORT = env("PROJECT_PORT")
+
+Runserver.default_addr = PROJECT_HOST
+Runserver.default_port = PROJECT_PORT
+
 SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("DEBUG")
-
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
-
-ONLINECOURSE_CERT = env("ONLINECOURSE_CERT")
-ONLINECOURSE_KEY = env("ONLINECOURSE_KEY")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
@@ -67,7 +69,7 @@ THIRD_PARTY_APPS = [
 
 # Приложения только для среды разработки. Включаются при DEBUG=True.
 # Не использовать в продуктиве!
-DEV_APPS =[
+DEV_APPS = [
     "debug_toolbar",
     "django_extensions",
 ]
@@ -83,10 +85,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # "social_django.middleware.SocialAuthExceptionMiddleware",
-    # "django.middleware.common.BrokenLinkEmailsMiddleware",
-    # "django.middleware.common.CommonMiddleware",
-    # "dataprocessing.CorsMiddleware",
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -112,8 +110,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # "social_django.context_processors.backends",
-                # "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -137,6 +133,8 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
@@ -170,13 +168,11 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework_json_api.pagination.PageNumberPagination",
     "DEFAULT_PARSER_CLASSES": (
         "rest_framework.parsers.JSONParser",
-        # "rest_framework_json_api.parsers.JSONParser",
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
     ),
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
-        # "rest_framework_json_api.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
     "DEFAULT_METADATA_CLASS": "rest_framework_json_api.metadata.JSONAPIMetadata",
@@ -185,60 +181,21 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    # "AUTH_HEADER_TYPES": ("JWT",),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=480),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
-AUTHENTICATION_BACKENDS = [
-    # "social_core.backends.github.GithubOAuth2",
-    # "dataprocessing.social_auth_backend.FiwareAuth",
-    # "social_core.backends.facebook.FacebookOAuth2",
-    # "dataprocessing.itmo_backends.ItmoOAuth2",
-    "django.contrib.auth.backends.ModelBackend"
-]
-
-# SOCIAL_AUTH_ITMOOAUTH2_KEY = ""
-# SOCIAL_AUTH_ITMOOAUTH2_SECRET = ""
-
-# CLIENT = "nexoVnlgoNJnTuZ3CNBcbHgayXmhRjJUYfOb"
-# SECRET = "GV4SDAMfv5pgE3jzblcW7HUcND5pywqQL4be"
-
-# SOCIAL_AUTH_AUTH0_DOMAIN = env("SOCIAL_AUTH_AUTH0_DOMAIN")
-# SOCIAL_AUTH_AUTH0_KEY = env("SOCIAL_AUTH_AUTH0_KEY")
-# SOCIAL_AUTH_AUTH0_SECRET = env("SOCIAL_AUTH_AUTH0_SECRET")
-
-# FIWARE_APP_ID = ""
-# FIWARE_API_SECRET = ""
-# FIWARE_IDM_ENDPOINT = "https://login.itmo.ru/cas/oauth2.0/authorize"
-
-# FIWARE_IDM_API_VERSION = 2
-# FIWARE_KEYSTONE_ENDPOINT = "http://cloud.lab.fiware.org:4731"
-
-# SOCIAL_AUTH_ENABLED_BACKENDS = ("fiware",)
-# SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
 CORS_ORIGIN_ALLOW_ALL = True
-# #CORS_ALLOW_CREDENTIALS = True
-# SESSION_COOKIE_SAMESITE = False
-# CORS_ORIGIN_WHITELIST = [
-#     "http://localhost:8080",
-# ]
-# CORS_ORIGIN_REGEX_WHITELIST = [
-#     "http://localhost:8080",
-# ]
 
 DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
-    # "ACTIVATION_URL": "#/activate/{uid}/{token}",
-    # "SEND_ACTIVATION_EMAIL": True,
-    # "SERIALIZERS": {},
     "SET_USERNAME_RETYPE": True,
     "SERIALIZERS": {
         "user": "dataprocessing.serializers.UserBaseSerializer",
         "current_user": "dataprocessing.serializers.UserBaseSerializer",
-        # "user_create": "dataprocessing.serializers.UserSerializer",
     },
 }
 
@@ -248,6 +205,9 @@ SWAGGER_SETTINGS = {
     },
     "DEFAULT_AUTO_SCHEMA_CLASS": "analytics_project.yasg_tag_class.CustomAutoSchema",
 }
+
+ONLINECOURSE_CERT = env("ONLINECOURSE_CERT")
+ONLINECOURSE_KEY = env("ONLINECOURSE_KEY")
 
 ISU = {
     "ISU_CLIENT_ID": env("ISU_CLIENT_ID"),
@@ -285,7 +245,7 @@ sentry_sdk.init(
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     # We recommend adjusting this value in production.
-    traces_sample_rate=1.0,
+    traces_sample_rate=0.5,
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True,
@@ -294,7 +254,7 @@ sentry_sdk.init(
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": "cache:11211",
+        "LOCATION": env("MEMCACHE_LOCATION"),
     }
 }
 
