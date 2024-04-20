@@ -141,9 +141,8 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 100000
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
-LANGUAGE_CODE = "ru-ru"
-
-TIME_ZONE = "UTC"
+LANGUAGE_CODE = "ru-RU"
+TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
 USE_L10N = True
 
