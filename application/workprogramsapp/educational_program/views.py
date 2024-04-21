@@ -658,7 +658,7 @@ def gh_check(request, gh_id):
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def get_all_ap_with_competences_and_indicators(request, wp_id):
-    """В GET-параметры можно передать
+    """В GET-параметры можно передать.
 
     ap_id - id объекта AcademicPlan для фильтрации
     imp_id - id объекта ImplementationAcademicPlan для фильтрации
@@ -943,9 +943,10 @@ def zun_copy_by_wps(request):
 
 
 class CompetenceCommentsView(generics.ListAPIView):
-    """
-    View для получения комментариев к компетенции.
-    Комментарии можно получить или отправить, указав в адресе id компетенции.
+    """View для получения комментариев к компетенции.
+
+    Комментарии можно получить или отправить, указав в адресе id
+    компетенции.
     """
 
     queryset = CompetenceComments.objects.all()

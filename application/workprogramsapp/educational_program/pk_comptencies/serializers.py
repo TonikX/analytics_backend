@@ -28,7 +28,10 @@ class GeneralLaborFunctionsSerializerPk(serializers.ModelSerializer):
 
 
 class KindsOfActivitySerializer(serializers.ModelSerializer):
-    """Сериализатор сфер проф. деятельности."""
+    """Сериализатор сфер проф.
+
+    деятельности.
+    """
 
     class Meta:
         model = KindsOfActivity
@@ -133,8 +136,8 @@ class CreatePkCompetencesInGroupOfGeneralCharacteristicSerializer(
 class GroupOfPkCompetencesInGeneralCharacteristicSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор вывода группы профессиональных компетенций
-    в общей характеристике образовательной программы."""
+    """Сериализатор вывода группы профессиональных компетенций в общей
+    характеристике образовательной программы."""
 
     competence_in_group_of_pk_competences = (
         PkCompetencesInGroupOfGeneralCharacteristicSerializer(many=True)
@@ -153,8 +156,8 @@ class GroupOfPkCompetencesInGeneralCharacteristicSerializer(
 class CreateGroupOfPkCompetencesInGeneralCharacteristicSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор создания и редактирования группы профессиональных компетенций
-    в общей характеристике образовательной программы."""
+    """Сериализатор создания и редактирования группы профессиональных
+    компетенций в общей характеристике образовательной программы."""
 
     class Meta:
         model = GroupOfPkCompetencesInGeneralCharacteristic

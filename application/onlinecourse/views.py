@@ -19,7 +19,7 @@ from workprogramsapp.models import FieldOfStudy, CourseCredit, CourseFieldOfStud
 
 
 class InstitutionViewSet(viewsets.ModelViewSet):
-    """Контроллер для модели Правообладатель"""
+    """Контроллер для модели Правообладатель."""
 
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
@@ -28,7 +28,7 @@ class InstitutionViewSet(viewsets.ModelViewSet):
 
 
 class PlatformViewSet(viewsets.ModelViewSet):
-    """Контроллер для модели Платформа"""
+    """Контроллер для модели Платформа."""
 
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
@@ -37,7 +37,7 @@ class PlatformViewSet(viewsets.ModelViewSet):
 
 
 class OnlineCourseViewSet(viewsets.ModelViewSet):
-    """Контроллер для модели Онлайн курс"""
+    """Контроллер для модели Онлайн курс."""
 
     queryset = OnlineCourse.objects.all()
     serializer_class = OnlineCourseSerializer
@@ -72,23 +72,21 @@ class OnlineCourseViewSet(viewsets.ModelViewSet):
 
 
 class CourseCreditViewSet(viewsets.ModelViewSet):
-    """Контроллер для модели Перезачет"""
+    """Контроллер для модели Перезачет."""
 
     queryset = CourseCredit.objects.all()
     serializer_class = CourseCreditSerializer
 
 
 class CourseFieldOfStudyViewSet(viewsets.ModelViewSet):
-    """Контроллер для модели Требования для онлайн курса"""
+    """Контроллер для модели Требования для онлайн курса."""
 
     queryset = CourseFieldOfStudy.objects.all()
     serializer_class = CourseFieldOfStudySerializer
 
 
 class CourseDataAPIView(APIView):
-    """
-    Контроллер для загрузки данных из реестра онлайн курсов
-    """
+    """Контроллер для загрузки данных из реестра онлайн курсов."""
 
     @extend_schema(request=None, responses=None)
     def post(self, request):

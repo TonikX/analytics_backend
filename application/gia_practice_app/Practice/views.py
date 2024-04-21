@@ -231,9 +231,7 @@ class PracticeInFieldOfStudyForWorkProgramList(generics.ListAPIView):
             return PracticeInFieldOfStudy.objects.none()
 
     def list(self, request, **kwargs):
-        """
-        Вывод учебных планов для одной рабочей программы по id
-        """
+        """Вывод учебных планов для одной рабочей программы по id."""
         queryset = PracticeInFieldOfStudy.objects.filter(
             practice__id=self.kwargs["practice_id"],
         ).distinct()

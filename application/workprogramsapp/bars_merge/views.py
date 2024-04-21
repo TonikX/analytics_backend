@@ -133,10 +133,8 @@ def CreateCheckPoint(request):
         discipline_block_module__descipline_block__academic_plan__field_of_study=field_of_study,
     ).distinct()
     wp_in_change = wp_in_change[0]
-
-    """
-    Пока названия имен в Конструкторе РПД не совпадают с именами в БАРСе этот код не имеет смысла,
-    заменяется тем что ниже
+    """Пока названия имен в Конструкторе РПД не совпадают с именами в БАРСе
+    этот код не имеет смысла, заменяется тем что ниже.
 
     educational_bars_id = WorkProgramInFieldOfStudy.objects.filter(
         work_program_change_in_discipline_block_module=wp_in_change)[0].id_str_up
@@ -234,9 +232,8 @@ def CreateCheckPoint(request):
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def SendCheckpointsForAcceptedWP(request):
-    """
-    Отправка всех прошедших экспертизу РПД, в БАРС
-    Параметры:
+    """Отправка всех прошедших экспертизу РПД, в БАРС Параметры:
+
     year : Поле вида 'YYYY/YYYY', указывает учебный год в который надо отправить РПД [str]
     send_semester : 1 - семетр осенний, 0 - семестр весенний [int]
     one_wp: необязательное поле, указывается id одной РПД для отправки в БАРС
@@ -740,9 +737,8 @@ def SendCheckpointsForAcceptedWP(request):
 @api_view(["POST"])
 @permission_classes((IsExternalUser,))
 def postAcademicNTCheckpoints(request):
-    """
-    Отправка всех прошедших экспертизу РПД в ЦДО
-    Параметры:
+    """Отправка всех прошедших экспертизу РПД в ЦДО Параметры:
+
     year : Поле вида 'YYYY/YYYY', указывает учебный год в который надо отправить РПД [str]
     from_date: поле вида "DD.MM.YYYY", обознает отсчет с даты принятия на экспертизу РПД
     """
@@ -831,9 +827,7 @@ def SetBarsPointerTrueToWP(request):
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def GetWPForBARS(request, isu_wp_id):
-    """
-    Передача конкретной РПД по айдишнику в БАРС
-    """
+    """Передача конкретной РПД по айдишнику в БАРС."""
     try:
         wp = WorkProgram.objects.get(discipline_code=str(isu_wp_id))
     except WorkProgram.DoesNotExist:

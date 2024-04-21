@@ -229,7 +229,7 @@ class PracticePrimitiveSerializer(serializers.ModelSerializer):
 
 
 class ItemInPracticeCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор создания пререквизита обучения"""
+    """Сериализатор создания пререквизита обучения."""
 
     class Meta:
         model = PrerequisitesOfPractice
@@ -237,7 +237,7 @@ class ItemInPracticeCreateSerializer(serializers.ModelSerializer):
 
 
 class OutcomesInPracticeCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор создания пререквизита обучения"""
+    """Сериализатор создания пререквизита обучения."""
 
     class Meta:
         model = OutcomesOfPractice
@@ -245,7 +245,7 @@ class OutcomesInPracticeCreateSerializer(serializers.ModelSerializer):
 
 
 class PracticeInFieldOfStudyCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор создания пререквизита обучения"""
+    """Сериализатор создания пререквизита обучения."""
 
     class Meta:
         model = PracticeInFieldOfStudy
@@ -253,7 +253,7 @@ class PracticeInFieldOfStudyCreateSerializer(serializers.ModelSerializer):
 
 
 class ZunPracticeForManyCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор создания нескольких Зунов"""
+    """Сериализатор создания нескольких Зунов."""
 
     # def __init__(self, *args, **kwargs):
     #     many = kwargs.pop('many', True)
@@ -273,7 +273,7 @@ class ZunPracticeForManyCreateSerializer(serializers.ModelSerializer):
 
 
 class PracticeInFieldOfStudyForCompeteceListSerializer(serializers.ModelSerializer):
-    """Сериализатор Зунов"""
+    """Сериализатор Зунов."""
 
     work_program_change_in_discipline_block_module = (
         WorkProgramChangeInDisciplineBlockModuleForCompetencesSerializer()

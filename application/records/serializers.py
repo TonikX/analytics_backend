@@ -63,9 +63,7 @@ class WorkProgramDuplicatesSerializer(serializers.Serializer):
 
 
 class ShortAcademicPlan(serializers.ModelSerializer):
-    """
-    Cериализатор УП
-    """
+    """Cериализатор УП."""
 
     class Meta:
         model = AcademicPlan
@@ -73,9 +71,7 @@ class ShortAcademicPlan(serializers.ModelSerializer):
 
 
 class ShortStructuralUnitSerializerRecord(serializers.ModelSerializer):
-    """
-    Cериализатор подразделения разработчика РПД
-    """
+    """Cериализатор подразделения разработчика РПД."""
 
     class Meta:
         model = StructuralUnit

@@ -4,9 +4,7 @@ from dataprocessing.models import Items
 
 
 class Institution(models.Model):
-    """
-    Модель для правообладателей онлайн курсов
-    """
+    """Модель для правообладателей онлайн курсов."""
 
     title = models.CharField(
         max_length=1024, verbose_name="Название", blank=False, null=False
@@ -27,9 +25,7 @@ class Institution(models.Model):
 
 
 class Platform(models.Model):
-    """
-    Модель для платформ, на которых размещены онлайн курсы
-    """
+    """Модель для платформ, на которых размещены онлайн курсы."""
 
     title = models.CharField(
         max_length=1024, verbose_name="Название", blank=False, null=False
@@ -50,9 +46,7 @@ class Platform(models.Model):
 
 
 class OnlineCourse(models.Model):
-    """
-    Модель онлайн курса
-    """
+    """Модель онлайн курса."""
 
     title = models.CharField(
         max_length=1024, verbose_name="Название", blank=False, null=False

@@ -51,7 +51,10 @@ class EducationalStandardCreateView(generics.CreateAPIView):
 
 
 class TasksForEducationalStandardListView(generics.ListAPIView):
-    """Просмотр списка объектов проф.  задач образовательного стандарта."""
+    """Просмотр списка объектов проф.
+
+    задач образовательного стандарта.
+    """
 
     queryset = TasksForEducationalStandard.objects.all()
     serializer_class = TasksForEducationalStandardSerializer
@@ -59,7 +62,10 @@ class TasksForEducationalStandardListView(generics.ListAPIView):
 
 
 class TasksForEducationalStandardSingleObjectView(generics.RetrieveAPIView):
-    """Просмотр объекта проф. задач образовательного стандарта."""
+    """Просмотр объекта проф.
+
+    задач образовательного стандарта.
+    """
 
     queryset = TasksForEducationalStandard.objects.all()
     serializer_class = TasksForEducationalStandardSerializer
@@ -67,7 +73,10 @@ class TasksForEducationalStandardSingleObjectView(generics.RetrieveAPIView):
 
 
 class TasksForEducationalStandardDeleteView(generics.DestroyAPIView):
-    """Удаление объекта проф. задач образовательного стандарта."""
+    """Удаление объекта проф.
+
+    задач образовательного стандарта.
+    """
 
     queryset = TasksForEducationalStandard.objects.all()
     serializer_class = TasksForEducationalStandardSerializer
@@ -75,7 +84,10 @@ class TasksForEducationalStandardDeleteView(generics.DestroyAPIView):
 
 
 class TasksForEducationalStandardEditView(generics.UpdateAPIView):
-    """Изменение объекта проф. задач образовательного стандарта."""
+    """Изменение объекта проф.
+
+    задач образовательного стандарта.
+    """
 
     queryset = TasksForEducationalStandard.objects.all()
     serializer_class = TasksForEducationalStandardSerializer
@@ -83,7 +95,10 @@ class TasksForEducationalStandardEditView(generics.UpdateAPIView):
 
 
 class TasksForEducationalStandardCreateView(generics.CreateAPIView):
-    """Создание объекта проф. задач образовательного стандарта."""
+    """Создание объекта проф.
+
+    задач образовательного стандарта.
+    """
 
     queryset = TasksForEducationalStandard.objects.all()
     serializer_class = TasksForEducationalStandardSerializer

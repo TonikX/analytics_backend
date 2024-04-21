@@ -48,7 +48,8 @@ class WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
 class CreateWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор создания и редактирования группы профессиональных компетенций."""
+    """Сериализатор создания и редактирования группы профессиональных
+    компетенций."""
 
     class Meta:
         model = WorkProgramInWorkProgramChangeInDisciplineBlockModule
@@ -78,7 +79,8 @@ class ShortIndividualImplementationAcademicPlanSerializer(serializers.ModelSeria
 
 
 class CreateIndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
-    """Сериализатор создания и редактирования группы профессиональных компетенций."""
+    """Сериализатор создания и редактирования группы профессиональных
+    компетенций."""
 
     class Meta:
         model = IndividualImplementationAcademicPlan

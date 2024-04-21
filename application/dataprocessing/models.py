@@ -4,9 +4,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    '''
-    Модель для пользователей
-    '''
+    """Модель для пользователей."""
 
     patronymic = models.CharField(max_length=1024, blank=True, null=True)
     isu_number = models.CharField(max_length=1024, blank=True, null=True)
@@ -24,9 +22,7 @@ class User(AbstractUser):
 
 
 class Domain(models.Model):
-    '''
-        Модель для предметной области
-    '''
+    """Модель для предметной области."""
 
     name = models.CharField(max_length=200, blank=True, verbose_name='Название')
     user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='domain_user', verbose_name='Пользователи')
@@ -36,9 +32,7 @@ class Domain(models.Model):
 
 
 class Items(models.Model):
-    '''
-        Модель для сущностей
-    '''
+    """Модель для сущностей."""
 
     name = models.CharField(max_length=900, blank=True, verbose_name='Название')
     domain = models.ForeignKey(Domain, null=True, blank=True, help_text='Укажите область',
@@ -55,9 +49,7 @@ class Items(models.Model):
 
 
 class Relation(models.Model):
-    '''
-        Модель для связей
-    '''
+    """Модель для связей."""
 
     HIERARCHY = '1'
     NOT_DEFINED = '0'

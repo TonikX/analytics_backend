@@ -138,8 +138,8 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
 
 
 class DisciplineBlockModuleShortListView(generics.ListAPIView):
-    """
-    Получение списка модулей с краткой информацией.
+    """Получение списка модулей с краткой информацией.
+
     Можно осуществлять поиск по имени, имени блока, типу образования.
     """
 
@@ -250,7 +250,8 @@ class DisciplineBlockModuleShortListView(generics.ListAPIView):
 
 
 class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
-    """Детальный просмотр одного модуля с полями can_edit, can_add_plans и rating."""
+    """Детальный просмотр одного модуля с полями can_edit, can_add_plans и
+    rating."""
 
     queryset = DisciplineBlockModule.objects.all()
     serializer_class = DisciplineBlockModuleForModuleListDetailSerializer
@@ -315,8 +316,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
 @api_view(["POST"])
 @permission_classes([IsBlockModuleEditor])
 def InsertModule(request):
-    """
-    Апи для вставки модуля в другой блок.
+    """Апи для вставки модуля в другой блок.
 
     old_module_id - айди модуля блока дисциплины, который копируется для вставки в другой блок
     block_id - айди блока для вставки копии

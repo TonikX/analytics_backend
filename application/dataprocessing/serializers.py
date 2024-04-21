@@ -10,7 +10,7 @@ from .models import User, Items, Domain, Relation
 
 
 class userProfileSerializer(serializers.ModelSerializer):
-    """Сериализатор для работы с акканутами"""
+    """Сериализатор для работы с акканутами."""
 
     # user = serializers.StringRelatedField(read_only=True)
 
@@ -20,9 +20,7 @@ class userProfileSerializer(serializers.ModelSerializer):
 
 
 class ShortStructuralUnitSerializer(serializers.ModelSerializer):
-    """
-    Cериализатор подразделения разработчика РПД
-    """
+    """Cериализатор подразделения разработчика РПД."""
 
     class Meta:
         ref_name = "DataprocessingShortStructuralUnitSerializer"
@@ -31,7 +29,7 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
 
 
 class UserBaseSerializer(serializers.ModelSerializer):
-    """Сериализатор для работы с акканутами"""
+    """Сериализатор для работы с акканутами."""
 
     # user = serializers.StringRelatedField(read_only=True)
     email_confirm_status = serializers.SerializerMethodField("is_named_bar")
@@ -75,7 +73,7 @@ class UserBaseSerializer(serializers.ModelSerializer):
 
 
 class DomainDetailSerializer(serializers.ModelSerializer):
-    """Сериализатор для предметной области"""
+    """Сериализатор для предметной области."""
 
     user = serializers.PrimaryKeyRelatedField(
         required=False, many=True, queryset=User.objects.all()
@@ -95,7 +93,7 @@ class DomainDetailSerializer(serializers.ModelSerializer):
 
 
 class DomainSerializer(serializers.ModelSerializer):
-    """Сериализатор для предметной области"""
+    """Сериализатор для предметной области."""
 
     user = serializers.PrimaryKeyRelatedField(
         required=False, many=True, queryset=User.objects.all()
@@ -109,7 +107,7 @@ class DomainSerializer(serializers.ModelSerializer):
 
 
 class ItemCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор Ключевого слова"""
+    """Сериализатор Ключевого слова."""
 
     class Meta:
         model = Items
@@ -117,7 +115,7 @@ class ItemCreateSerializer(serializers.ModelSerializer):
 
 
 class ItemShortSerializer(serializers.ModelSerializer):
-    """Сериализатор Ключевого слова"""
+    """Сериализатор Ключевого слова."""
 
     class Meta:
         model = Items
@@ -131,7 +129,7 @@ class RecursiveField(serializers.Serializer):
 
 
 class DomainForItemSerializer(serializers.ModelSerializer):
-    """Сериализатор для предметной области"""
+    """Сериализатор для предметной области."""
 
     class Meta:
         model = Domain
@@ -139,7 +137,7 @@ class DomainForItemSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
-    """Сериализатор Ключевого слова"""
+    """Сериализатор Ключевого слова."""
 
     domain = DomainForItemSerializer()
 
@@ -155,7 +153,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class ItemWithRelationSerializer(serializers.ModelSerializer):
-    """Сериализатор Ключевого слова со связями"""
+    """Сериализатор Ключевого слова со связями."""
 
     # relation_with_item = RecursiveField(many=True)
     relation_with_item = serializers.SerializerMethodField()
@@ -172,13 +170,16 @@ class ItemWithRelationSerializer(serializers.ModelSerializer):
         depth = 1
 
     def get_relation_with_item(self, obj) -> List[dict]:
-        """ "obj is a Items instance. Returns list of dicts"""
+        """"obj is a Items instance.
+
+        Returns list of dicts
+        """
         qset = Relation.objects.filter(item1=obj)
         return [RelationInSerializer(i).data for i in qset]
 
 
 class RelationInSerializer(serializers.ModelSerializer):
-    """Сериализатор для отображения связей"""
+    """Сериализатор для отображения связей."""
 
     def to_representation(self, obj):
         rep = super(RelationInSerializer, self).to_representation(obj)
@@ -196,7 +197,7 @@ class RelationInSerializer(serializers.ModelSerializer):
 
 
 class RelationSerializer(serializers.ModelSerializer):
-    """Сериализатор для отображения связей"""
+    """Сериализатор для отображения связей."""
 
     item1 = ItemSerializer()
     item2 = ItemSerializer()
@@ -207,7 +208,7 @@ class RelationSerializer(serializers.ModelSerializer):
 
 
 class RelationCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор для создания связей"""
+    """Сериализатор для создания связей."""
 
     class Meta:
         model = Relation
@@ -220,7 +221,7 @@ class RelationCreateSerializer(serializers.ModelSerializer):
 
 
 class RelationUpdateSerializer(serializers.ModelSerializer):
-    """Сериализатор для обновления связей"""
+    """Сериализатор для обновления связей."""
 
     class Meta:
         model = Relation
@@ -228,13 +229,13 @@ class RelationUpdateSerializer(serializers.ModelSerializer):
 
 
 class FileUploadSerializer(serializers.Serializer):
-    """Сериализатор для добавления связей"""
+    """Сериализатор для добавления связей."""
 
     file = serializers.FileField(use_url=False)
 
 
 class WorkProgramShortSerializer(serializers.ModelSerializer):
-    """Сериализатор рабочих программ"""
+    """Сериализатор рабочих программ."""
 
     class Meta:
         model = WorkProgram
@@ -242,7 +243,7 @@ class WorkProgramShortSerializer(serializers.ModelSerializer):
 
 
 class ItemWithRelationForSearchDuplicatesSerializer(serializers.ModelSerializer):
-    """Сериализатор Ключевого слова со связями"""
+    """Сериализатор Ключевого слова со связями."""
 
     WorkProgramPrerequisites = WorkProgramShortSerializer(many=True)
     WorkProgramOutcomes = WorkProgramShortSerializer(many=True)

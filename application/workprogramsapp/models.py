@@ -26,9 +26,7 @@ def max_value_current_year(value):
 
 
 class WorkProgram(CloneMixin, models.Model):
-    """
-    Модель для рабочей программы
-    """
+    """Модель для рабочей программы."""
 
     PRIMARY_VOCATIONAL_EDUCATION = "primary_vocational_education"
     SECONADARY_VOCATIONAL_EDUCATION = "secondary_vocational_education"
@@ -289,9 +287,7 @@ class WorkProgram(CloneMixin, models.Model):
 
 
 class PrerequisitesOfWorkProgram(models.Model):
-    """
-    Модель для пререквизитов рабочей программы
-    """
+    """Модель для пререквизитов рабочей программы."""
 
     item = models.ForeignKey(
         Items, on_delete=models.CASCADE, verbose_name="Пререквизит"
@@ -312,9 +308,7 @@ class PrerequisitesOfWorkProgram(models.Model):
 
 
 class OutcomesOfWorkProgram(CloneMixin, models.Model):
-    """
-    Модель для результатов обучения по рабочей программе
-    """
+    """Модель для результатов обучения по рабочей программе."""
 
     # class Meta:
     #     auto_created = True
@@ -349,9 +343,7 @@ class OutcomesOfWorkProgram(CloneMixin, models.Model):
 
 
 class FieldOfStudy(models.Model):
-    """
-    Модель для направлений
-    """
+    """Модель для направлений."""
 
     PRIMARY_VOCATIONAL_EDUCATION = "primary_vocational_education"
     SECONADARY_VOCATIONAL_EDUCATION = "secondary_vocational_education"
@@ -402,9 +394,7 @@ class FieldOfStudy(models.Model):
 
 
 class CourseFieldOfStudy(models.Model):
-    """
-    Модель для связи онлайн курса и направления подготовки
-    """
+    """Модель для связи онлайн курса и направления подготовки."""
 
     course = models.ForeignKey(
         OnlineCourse,
@@ -424,9 +414,7 @@ class CourseFieldOfStudy(models.Model):
 
 
 class CourseCredit(models.Model):
-    """
-    Модель для связи онлайн курса, направления подготовки и  перезачета
-    """
+    """Модель для связи онлайн курса, направления подготовки и  перезачета."""
 
     course = models.ForeignKey(
         OnlineCourse,
@@ -453,9 +441,7 @@ class CourseCredit(models.Model):
 
 
 class AcademicPlan(models.Model):
-    """
-    Модель учебного плана
-    """
+    """Модель учебного плана."""
 
     PRIMARY_VOCATIONAL_EDUCATION = "primary_vocational_education"
     SECONADARY_VOCATIONAL_EDUCATION = "secondary_vocational_education"
@@ -578,9 +564,7 @@ class AcademicPlan(models.Model):
 
 
 class EducationalProgram(models.Model):
-    """
-    Модель описания образовтаельной программы
-    """
+    """Модель описания образовтаельной программы."""
 
     PRIMARY_VOCATIONAL_EDUCATION = "primary_vocational_education"
     SECONADARY_VOCATIONAL_EDUCATION = "secondary_vocational_education"
@@ -627,8 +611,9 @@ class EducationalProgram(models.Model):
 
 
 class KindsOfActivity(models.Model):
-    """
-    Сферы проф. деятельности
+    """Сферы проф.
+
+    деятельности
     """
 
     name = models.CharField(
@@ -647,8 +632,9 @@ class KindsOfActivity(models.Model):
 
 
 class ObjectsOfActivity(models.Model):
-    """
-    Объекты проф. деятельности
+    """Объекты проф.
+
+    деятельности
     """
 
     name = models.CharField(
@@ -688,9 +674,7 @@ class EmployerRepresentative(models.Model):
 
 
 class GeneralCharacteristics(models.Model):
-    """
-    Модель описания характеристики образовтаельной программы
-    """
+    """Модель описания характеристики образовтаельной программы."""
 
     languages_for_gc = (
         ("ru", "ru"),
@@ -878,9 +862,7 @@ class GeneralCharacteristics(models.Model):
 
 
 class Department(models.Model):
-    """
-    Факультет
-    """
+    """Факультет."""
 
     title = models.CharField(max_length=512, verbose_name="Название факультета")
     mini_titile = models.CharField(
@@ -964,9 +946,7 @@ class GeneralizedLaborFunctions(models.Model):
 
 
 class ProfessionalStandard(models.Model):
-    """
-    Профессиональный стандарт
-    """
+    """Профессиональный стандарт."""
 
     title = models.CharField(
         max_length=512,
@@ -1003,9 +983,7 @@ class ProfessionalStandard(models.Model):
 
 
 class ImplementationAcademicPlan(models.Model):
-    """
-    Модель приминения учебного плана в направлении
-    """
+    """Модель приминения учебного плана в направлении."""
 
     PRIMARY_VOCATIONAL_EDUCATION = "primary_vocational_education"
     SECONADARY_VOCATIONAL_EDUCATION = "secondary_vocational_education"
@@ -1155,9 +1133,7 @@ class ImplementationAcademicPlan(models.Model):
 
 
 class DisciplineBlock(CloneMixin, models.Model):
-    """
-    Модель блока дисциплин
-    """
+    """Модель блока дисциплин."""
 
     name = models.CharField(max_length=1024)
     academic_plan = models.ForeignKey(
@@ -1197,9 +1173,7 @@ class DisciplineBlock(CloneMixin, models.Model):
 
 
 class DisciplineBlockModule(CloneMixin, models.Model):
-    """
-    Модель модуля блока дисциплин
-    """
+    """Модель модуля блока дисциплин."""
 
     TYPES = [
         ("universal_module", "Универсальный модуль"),
@@ -1447,9 +1421,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
 
 
 class WorkProgramChangeInDisciplineBlockModule(CloneMixin, models.Model):
-    """
-    Модель хранения блоков выбора в модуле
-    """
+    """Модель хранения блоков выбора в модуле."""
 
     REQUIRED = "Required"
     OPTIONALLY = "Optionally"
@@ -1644,9 +1616,7 @@ class WorkProgramIdStrUpForIsu(CloneMixin, models.Model):
 
 
 class Zun(models.Model):
-    """
-    Модель для зунов
-    """
+    """Модель для зунов."""
 
     wp_in_fs = models.ForeignKey(
         "WorkProgramInFieldOfStudy",
@@ -1765,9 +1735,7 @@ class AcademicPlanUpdateLog(models.Model):
 
 
 class Competence(models.Model):
-    """
-    Модель для компетенций
-    """
+    """Модель для компетенций."""
 
     number = models.CharField(max_length=1024)
     name = models.CharField(max_length=1024)
@@ -1813,9 +1781,7 @@ class CompetenceComments(models.Model):
 
 
 class Indicator(models.Model):
-    """
-    Модель для индикаторов
-    """
+    """Модель для индикаторов."""
 
     number = models.CharField(max_length=1024)
     name = models.CharField(max_length=1024)
@@ -1829,9 +1795,7 @@ class Indicator(models.Model):
 
 
 class EvaluationTool(CloneMixin, models.Model):
-    """
-    Модель для оценочных средств
-    """
+    """Модель для оценочных средств."""
 
     type = models.CharField(max_length=1024, verbose_name="Тип оценочного средства")
     name = models.CharField(
@@ -1866,9 +1830,7 @@ class EvaluationTool(CloneMixin, models.Model):
 
 
 class CertificationEvaluationTool(CloneMixin, models.Model):
-    """
-    Модель для аттестационных оценочных средств
-    """
+    """Модель для аттестационных оценочных средств."""
 
     types = [
         ("1", "Exam"),
@@ -1933,9 +1895,7 @@ class CertificationEvaluationTool(CloneMixin, models.Model):
 
 
 class DisciplineSection(CloneMixin, models.Model):
-    """
-    Модель для разделов дисциплин
-    """
+    """Модель для разделов дисциплин."""
 
     ordinal_number = models.IntegerField(verbose_name="номер раздела")
     name = models.CharField(max_length=1024, verbose_name="Раздел")
@@ -2053,9 +2013,7 @@ class DisciplineSection(CloneMixin, models.Model):
 
 
 class BibliographicReference(models.Model):
-    """
-    Модель описания онлайн курса
-    """
+    """Модель описания онлайн курса."""
 
     accession_number = models.CharField(
         max_length=512, verbose_name="An/Номер статьи из eds", blank=True, null=True
@@ -2105,9 +2063,7 @@ class BibliographicReference(models.Model):
 
 
 class Topic(CloneMixin, models.Model):
-    """
-    Модель для темы
-    """
+    """Модель для темы."""
 
     discipline_section = models.ForeignKey(
         "DisciplineSection",
@@ -2179,9 +2135,7 @@ class Topic(CloneMixin, models.Model):
 
 
 class RouteComposition(models.Model):
-    """
-    Модель для состава маршрутов (связь маршрутов и рабочих программ)
-    """
+    """Модель для состава маршрутов (связь маршрутов и рабочих программ)"""
 
     route = models.ForeignKey("Route", on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -2194,9 +2148,7 @@ class RouteComposition(models.Model):
 
 
 class Route(models.Model):
-    """
-    Модель для маршрутов
-    """
+    """Модель для маршрутов."""
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     field_of_study = models.ForeignKey("FieldOfStudy", on_delete=models.CASCADE)
@@ -2204,9 +2156,7 @@ class Route(models.Model):
 
 
 class Certification(models.Model):
-    """
-    Модель для аттестации
-    """
+    """Модель для аттестации."""
 
     CERTIFICATION_TYPE_CHOICES = [
         ("EX", "Exam"),
@@ -2227,9 +2177,7 @@ class Certification(models.Model):
 
 
 class Profession(models.Model):
-    """
-    Модель для описания профессии
-    """
+    """Модель для описания профессии."""
 
     approval_date = models.DateTimeField(
         editable=True,
@@ -2254,9 +2202,7 @@ class Profession(models.Model):
 
 
 class Role(models.Model):
-    """
-    Модель для описания ролей
-    """
+    """Модель для описания ролей."""
 
     approval_date = models.DateTimeField(
         editable=True,
@@ -2281,9 +2227,7 @@ class Role(models.Model):
 
 
 class SkillsOfProfession(models.Model):
-    """
-    Модель для навыков профессии
-    """
+    """Модель для навыков профессии."""
 
     item = models.ForeignKey(
         Items,
@@ -2308,9 +2252,7 @@ class SkillsOfProfession(models.Model):
 
 
 class SkillsOfRole(models.Model):
-    """
-    Модель для навыков роли
-    """
+    """Модель для навыков роли."""
 
     item = models.ForeignKey(
         Items,
@@ -2398,9 +2340,7 @@ def get_upload_path_for_bugs_log(instance, filename):
 
 
 class BugsLog(models.Model):
-    """
-    Модель харения информации оь багах, присланных пользователями
-    """
+    """Модель харения информации оь багах, присланных пользователями."""
 
     title = models.CharField(verbose_name="Наименование бага", max_length=1024)
     description = models.CharField(verbose_name="Описание бага", max_length=16384)

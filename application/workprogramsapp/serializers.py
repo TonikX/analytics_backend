@@ -835,12 +835,14 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
     def get_childs(self, obj):
         return DisciplineBlockModuleWithoutFatherSerializer(
             obj.childs.all(), many=True).data
-        """.prefetch_related("childs", "change_blocks_of_work_programs_in_modules",
-                                              "change_blocks_of_work_programs_in_modules__work_program",
-                                              "change_blocks_of_work_programs_in_modules__work_program__zuns_for_wp",
-                                              "change_blocks_of_work_programs_in_modules__work_program__expertise_with_rpd",
-                                              "change_blocks_of_work_programs_in_modules__practice",
-                                              "change_blocks_of_work_programs_in_modules__gia", ), many=True).data"""
+        """.prefetch_related("childs",
+        "change_blocks_of_work_programs_in_modules",
+        "change_blocks_of_work_programs_in_modules__work_program",
+        "change_blocks_of_work_programs_in_modules__work_program__zuns_for_wp",
+        "change_blocks_of_work_programs_in_modules__work_program__expertise_wit
+        h_rpd", "change_blocks_of_work_programs_in_modules__practice",
+        "change_blocks_of_work_programs_in_modules__gia", ),
+        many=True).data."""
 
     def get_laboriousness(self, obj) -> int:
         unit_final_sum = recursion_module(obj)
@@ -884,12 +886,13 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
             obj.childs.all(),
             many=True
         ).data
-        """.prefetch_related("childs__childs", "childs", "change_blocks_of_work_programs_in_modules",
-                                              "change_blocks_of_work_programs_in_modules__work_program",
-                                              "change_blocks_of_work_programs_in_modules__work_program__zuns_for_wp",
-                                              "change_blocks_of_work_programs_in_modules__work_program__expertise_with_rpd",
-                                              "change_blocks_of_work_programs_in_modules__practice",
-                                              "change_blocks_of_work_programs_in_modules__gia"), many=True).data"""
+        """.prefetch_related("childs__childs", "childs",
+        "change_blocks_of_work_programs_in_modules",
+        "change_blocks_of_work_programs_in_modules__work_program",
+        "change_blocks_of_work_programs_in_modules__work_program__zuns_for_wp",
+        "change_blocks_of_work_programs_in_modules__work_program__expertise_wit
+        h_rpd", "change_blocks_of_work_programs_in_modules__practice",
+        "change_blocks_of_work_programs_in_modules__gia"), many=True).data."""
 
     class Meta:
         model = DisciplineBlockModule
@@ -922,10 +925,10 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
     def get_modules_in_discipline_block(self, obj) -> dict:
         dbms = DisciplineBlockModule.objects.filter(descipline_block=obj)
         """.prefetch_related("childs",
-                                                                                           "change_blocks_of_work_programs_in_modules",
-                                                                                           "change_blocks_of_work_programs_in_modules__work_program",
-                                                                                           "change_blocks_of_work_programs_in_modules__practice",
-                                                                                           "change_blocks_of_work_programs_in_modules__gia")"""
+        "change_blocks_of_work_programs_in_modules",
+        "change_blocks_of_work_programs_in_modules__work_program",
+        "change_blocks_of_work_programs_in_modules__practice",
+        "change_blocks_of_work_programs_in_modules__gia")"""
         if dbms.exists():
             try:
                 for module in dbms:

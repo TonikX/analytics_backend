@@ -27,9 +27,7 @@ from .serializers import (
 
 
 def handle_uploaded_file(file, filename):
-    """
-    Функция обработчик загружаемого файла
-    """
+    """Функция обработчик загружаемого файла."""
     if not os.path.exists("upload/"):
         os.mkdir("upload/")
     with open("upload/" + filename, "wb+") as destination:
@@ -117,9 +115,7 @@ def set_relation(item1, items_set, type_relation):
 
 
 def set_relation_hierarchy(items_query, type_relation):
-    """
-    Запись иерархических связей и пререквизитов
-    """
+    """Запись иерархических связей и пререквизитов."""
     try:
         for key, value in items_query.items():
             print(key)
@@ -134,9 +130,7 @@ def set_relation_hierarchy(items_query, type_relation):
 
 
 def set_relation_linear(items_query, type_relation):
-    """
-    Запись линейных связей
-    """
+    """Запись линейных связей."""
     try:
         for item in items_query:
             items_set = items_query.exclude(name=item)
@@ -152,9 +146,7 @@ def set_relation_linear(items_query, type_relation):
 
 
 class DomainListCreateAPIView(generics.ListCreateAPIView):
-    """
-    API endpoint that represents a list of Domains.
-    """
+    """API endpoint that represents a list of Domains."""
 
     queryset = Domain.objects.all()
     serializer_class = DomainSerializer
@@ -178,9 +170,7 @@ class DomainListCreateAPIView(generics.ListCreateAPIView):
 
 
 class DomainDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single Domain.
-    """
+    """API endpoint that represents a single Domain."""
 
     queryset = Domain.objects.all()
     serializer_class = DomainDetailSerializer
@@ -188,9 +178,7 @@ class DomainDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ItemsListCreateAPIView(generics.ListCreateAPIView):
-    """
-    API endpoint to create an Item
-    """
+    """API endpoint to create an Item."""
 
     queryset = Items.objects.all()
     serializer_class = ItemCreateSerializer
@@ -221,9 +209,7 @@ class ItemsListCreateAPIView(generics.ListCreateAPIView):
 
 
 class ItemsListAPIView(generics.ListAPIView):
-    """
-    API endpoint to retrieve list of the items
-    """
+    """API endpoint to retrieve list of the items."""
 
     queryset = Items.objects.all()
     serializer_class = ItemSerializer
@@ -238,9 +224,7 @@ class ItemsListAPIView(generics.ListAPIView):
 
 
 class ItemsWithRelationListAPIView(generics.ListAPIView):
-    """
-    API endpoint список всех сущностей со связями
-    """
+    """API endpoint список всех сущностей со связями."""
 
     queryset = Items.objects.all()
     serializer_class = ItemWithRelationSerializer
@@ -248,9 +232,7 @@ class ItemsWithRelationListAPIView(generics.ListAPIView):
 
 
 class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint that represents a single Item.
-    """
+    """API endpoint that represents a single Item."""
 
     queryset = Items.objects.all()
     serializer_class = ItemCreateSerializer
@@ -259,9 +241,7 @@ class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 # GET api/relation/ - Список связей (ответ JSON)
 class RelationListAPIView(generics.ListAPIView):
-    """
-    API endpoint that represents a list of Relations.
-    """
+    """API endpoint that represents a list of Relations."""
 
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
@@ -293,9 +273,7 @@ class RelationCreateAPIView(APIView):
 
 
 class RelationCreateAPIView(generics.ListCreateAPIView):
-    """
-    API endpoint to create relation
-    """
+    """API endpoint to create relation."""
 
     queryset = Relation.objects.all()
     serializer_class = RelationCreateSerializer
@@ -318,9 +296,7 @@ class RelationCreateAPIView(generics.ListCreateAPIView):
 
 # GET api/relation/{item1_id} - Список связей по ключевому слову (ответ JSON)
 class RelationListItemIdAPIView(generics.ListAPIView):
-    """
-    API endpoint that represents a list of Relations by Item1 id.
-    """
+    """API endpoint that represents a list of Relations by Item1 id."""
 
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
@@ -338,9 +314,7 @@ class RelationListItemIdAPIView(generics.ListAPIView):
 # GET api/relation/detail/{id} - Получить связь с определенным id (ответ JSON)
 # DELETE api/relation/detail/{id} - Удалить связь с конкретным id
 class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
-    """
-    API endpoint that represents/delete a single Relation.
-    """
+    """API endpoint that represents/delete a single Relation."""
 
     # добавить удаление сопутсвующих связей? ("является частью раздела" при удалении "включает в себя"")
     queryset = Relation.objects.all()
@@ -362,9 +336,7 @@ class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
 # PUT api/relation/update/{id} - Редактирование темы
 # body: json(*) с измененными параметрами
 class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
-    """
-    API endpoint for the relation update.
-    """
+    """API endpoint for the relation update."""
 
     queryset = Relation.objects.all()
     serializer_class = RelationUpdateSerializer
@@ -418,9 +390,7 @@ class UserListForSearchView(generics.ListAPIView):
 # POST api/upload/
 # body: { domain:str, relation:int }
 class FileUploadAPIView(APIView):
-    """
-    API endpoint to upload txt-file with keywords.
-    """
+    """API endpoint to upload txt-file with keywords."""
 
     @extend_schema(request=None, responses=None)
     def post(self, request):
@@ -478,7 +448,8 @@ class FileUploadAPIView(APIView):
 
 
 class HighValueOutcomesListAPIView(generics.ListAPIView):
-    """Возвращаем синонимы с наивысшим вэлью для результатов и пререквизитов"""
+    """Возвращаем синонимы с наивысшим вэлью для результатов и
+    пререквизитов."""
 
     serializer_class = ItemSerializer
 
@@ -515,7 +486,8 @@ class HighValueOutcomesListAPIView(generics.ListAPIView):
 
 
 class HighValuePrerequisitesListAPIView(generics.ListAPIView):
-    """Возвращаем синонимы с наивысшим вэлью для результатов и пререквизитов"""
+    """Возвращаем синонимы с наивысшим вэлью для результатов и
+    пререквизитов."""
 
     serializer_class = ItemSerializer
 
@@ -552,9 +524,7 @@ class HighValuePrerequisitesListAPIView(generics.ListAPIView):
 
 
 class ItemsDetailForDuplicateSearchAPIView(generics.RetrieveAPIView):
-    """
-    API endpoint to retrieve list of the items
-    """
+    """API endpoint to retrieve list of the items."""
 
     queryset = Items.objects.all()
     serializer_class = ItemWithRelationForSearchDuplicatesSerializer

@@ -8,9 +8,7 @@ ONLINE_EDU_LINK = "https://online.edu.ru/api/"
 
 
 def get_data():
-    """
-    Collecting platforms to DataFrame
-    """
+    """Collecting platforms to DataFrame."""
 
     platforms = requests.get(
         ONLINE_EDU_LINK + "partners/v0/platform",
@@ -27,10 +25,7 @@ def get_data():
     data_Platform = pd.DataFrame(
         list(zip(global_id, title)), columns=["platform_id", "title"]
     )
-
-    """
-    Collecting institutions to DataFrame
-    """
+    """Collecting institutions to DataFrame."""
 
     rightholders = requests.get(
         ONLINE_EDU_LINK + "partners/v0/rightholder",
@@ -48,10 +43,7 @@ def get_data():
     data_Rigthholder = pd.DataFrame(
         list(zip(global_id, short_title)), columns=["institution_id", "title"]
     )
-
-    """
-    Collecting onlinecourses to DataFrame
-    """
+    """Collecting onlinecourses to DataFrame."""
     # сбор ссылок на все страницы с онлайн курсами
     course_link = ONLINE_EDU_LINK + "courses/v0/course/"
     total_count_courses = requests.get(
@@ -253,10 +245,7 @@ def get_data():
         list(zip(course_id_transfer, institution_transfer, field_of_study_transfer)),
         columns=["course_id", "institution_id", "field_of_study"],
     )
-
-    """
-    Adding new id as FK to OnlineCourse
-    """
+    """Adding new id as FK to OnlineCourse."""
 
     data_Platform["id_platform"] = data_Platform.index
     data_Rigthholder["id_institution"] = data_Rigthholder.index
@@ -280,20 +269,14 @@ def get_data():
     data_OnlineCourse = data_online_course_platform_inst.copy()
     data_OnlineCourse = data_OnlineCourse.fillna("null")
     print("final shape", data_OnlineCourse.shape)
-
-    """
-    Adding new id as FK to CourseFieldOfStudy
-    """
+    """Adding new id as FK to CourseFieldOfStudy."""
     data_CourseFieldOfStudy = pd.merge(
         data_CourseFieldOfStudy,
         data_OnlineCourse[["id_course", "course_id"]],
         how="left",
         on="course_id",
     )
-
-    """
-    Adding new id as FK to CourseCredit
-    """
+    """Adding new id as FK to CourseCredit."""
     data_CourseCredit = pd.merge(
         data_CourseCredit,
         data_OnlineCourse[["id_course", "course_id"]],

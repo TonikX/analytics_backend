@@ -209,9 +209,7 @@ class AcademicPlanUpdateExcelCreatorView(APIView):
 
 class FileUploadAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    """
-    API-endpoint для загрузки файла sub_2019_2020_new
-    """
+    """API-endpoint для загрузки файла sub_2019_2020_new."""
 
     def get_serializer(self, *args, **kwargs):
         pass
@@ -731,9 +729,7 @@ class FileUploadAPIView(APIView):
 
 
 class FileUploadOldVersionAPIView(APIView):
-    """
-    API-endpoint для загрузки файла sub_2019_2020_new
-    """
+    """API-endpoint для загрузки файла sub_2019_2020_new."""
 
     def get_serializer(self, *args, **kwargs):
         pass
@@ -1152,11 +1148,7 @@ class UpdateAcademicPlansHeadersView(APIView):
 
 
 class SendAcademicPlansLinesToIsu(APIView):
-    """
-    {
-    "ap_id": INT
-    }
-    """
+    """{ "ap_id": INT }"""
 
     permission_classes = [IsExpertiseMasterStrict]
 
@@ -1194,11 +1186,7 @@ class IsuHistoryListView(ListAPIView):
 
 
 class SendWorkProgramToISU(APIView):
-    """
-    {
-    "wp_id": INT
-    }
-    """
+    """{ "wp_id": INT }"""
 
     permission_classes = [IsExpertiseMasterStrict]
 
@@ -1246,11 +1234,7 @@ class SendWorkProgramToISU(APIView):
 
 
 class SendPracticeToISU(APIView):
-    """
-    {
-    "practice_id": INT
-    }
-    """
+    """{ "practice_id": INT }"""
 
     permission_classes = [IsExpertiseMasterStrict]
 
@@ -1293,11 +1277,7 @@ class SendPracticeToISU(APIView):
 
 
 class SendGIAToISU(APIView):
-    """
-    {
-    "gia_id": INT
-    }
-    """
+    """{ "gia_id": INT }"""
 
     permission_classes = [IsExpertiseMasterStrict]
 

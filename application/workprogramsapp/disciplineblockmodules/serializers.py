@@ -114,10 +114,11 @@ class DisciplineBlockModuleDetailSerializer(serializers.ModelSerializer):
     educational_programs_to_access = ImplementationAcademicPlanSerializerForBlockModule(
         many=True, required=False
     )  # = serializers.SerializerMethodField()
+    """Def get_educational_programs_to_access(self, instance):
 
-    """def get_educational_programs_to_access(self, instance):
-        imps=ImplementationAcademicPlan.objects.filter(modules_to_access=instance)
-        for im"""
+    imps=ImplementationAcademicPlan.objects.filter(modules_to_access=instance)
+    for im
+    """
 
     def to_representation(self, value):
         self.fields["childs"] = DisciplineBlockModuleWithoutFatherSerializer(many=True)

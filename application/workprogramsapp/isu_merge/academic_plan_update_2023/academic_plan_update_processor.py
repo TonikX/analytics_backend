@@ -605,47 +605,48 @@ class AcademicPlanUpdateProcessor:
 
         old_work_program_change_in_discipline_block_module = None
         old_practice_in_field_of_study = None
+        """If (option == 'Optionally' and
+        WorkProgramChangeInDisciplineBlockModule.objects.filter(
+        discipline_block_module=discipline_block_module_object,
+        change_type=option, # subject_code=AcademicPlanUpdateUtils.num_to_int(
+        #     isu_academic_plan_discipline_json['plan_order'], #
+        isu_academic_plan_discipline_json['discipline_name']
 
-        """if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                discipline_block_module=discipline_block_module_object,
-                change_type=option,
-                # subject_code=AcademicPlanUpdateUtils.num_to_int(
-                #     isu_academic_plan_discipline_json['plan_order'],
-                #     isu_academic_plan_discipline_json['discipline_name']
-                # )
-         ).exists()):
-            old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
-                discipline_block_module=discipline_block_module_object,
-                change_type=option,
-                # subject_code=AcademicPlanUpdateUtils.num_to_int(
-                #     isu_academic_plan_discipline_json['plan_order'],
-                #     isu_academic_plan_discipline_json['discipline_name']
-                # )
-            )
-            list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
-            old_work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
-            old_work_program_change_in_discipline_block_module.save()
+               # )
+        ).exists()):
+           old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
+               discipline_block_module=discipline_block_module_object,
+               change_type=option,
+               # subject_code=AcademicPlanUpdateUtils.num_to_int(
+               #     isu_academic_plan_discipline_json['plan_order'],
+               #     isu_academic_plan_discipline_json['discipline_name']
+               # )
+           )
+           list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
+           old_work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
+           old_work_program_change_in_discipline_block_module.save()
 
-            work_program_change_in_discipline_block_module = copy.deepcopy(
-                old_work_program_change_in_discipline_block_module)
-            work_program_change_in_discipline_block_module.save()
+           work_program_change_in_discipline_block_module = copy.deepcopy(
+               old_work_program_change_in_discipline_block_module)
+           work_program_change_in_discipline_block_module.save()
 
-            if PracticeInFieldOfStudy.objects.filter(
-                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
-                    practice=practice_object
-            ).exists():
-                old_practice_in_field_of_study = PracticeInFieldOfStudy.objects.get(
-                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
-                    practice=practice_object
-                )
-                practice_in_field_of_study = copy.deepcopy(old_practice_in_field_of_study)
-                practice_in_field_of_study.save()
-            else:
-                practice_in_field_of_study = PracticeInFieldOfStudy(
-                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
-                    practice=practice_object
-                )
-                practice_in_field_of_study.save()"""
+           if PracticeInFieldOfStudy.objects.filter(
+                   work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                   practice=practice_object
+           ).exists():
+               old_practice_in_field_of_study = PracticeInFieldOfStudy.objects.get(
+                   work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                   practice=practice_object
+               )
+               practice_in_field_of_study = copy.deepcopy(old_practice_in_field_of_study)
+               practice_in_field_of_study.save()
+           else:
+               practice_in_field_of_study = PracticeInFieldOfStudy(
+                   work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                   practice=practice_object
+               )
+               practice_in_field_of_study.save()
+        """
         if WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 #change_type=option,
@@ -722,47 +723,48 @@ class AcademicPlanUpdateProcessor:
 
         old_work_program_change_in_discipline_block_module = None
         old_gia_in_field_of_study = None
+        """If (option == 'Optionally' and
+        WorkProgramChangeInDisciplineBlockModule.objects.filter(
+        discipline_block_module=discipline_block_module_object,
+        change_type=option, # subject_code=AcademicPlanUpdateUtils.num_to_int(
+        #     isu_academic_plan_discipline_json['plan_order'], #
+        isu_academic_plan_discipline_json['discipline_name']
 
-        """if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                discipline_block_module=discipline_block_module_object,
-                change_type=option,
-                # subject_code=AcademicPlanUpdateUtils.num_to_int(
-                #     isu_academic_plan_discipline_json['plan_order'],
-                #     isu_academic_plan_discipline_json['discipline_name']
-                # )
-         ).exists()):
-            old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
-                discipline_block_module=discipline_block_module_object,
-                change_type=option,
-                # subject_code=AcademicPlanUpdateUtils.num_to_int(
-                #     isu_academic_plan_discipline_json['plan_order'],
-                #     isu_academic_plan_discipline_json['discipline_name']
-                # )
-            )
-            list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
-            old_work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
-            old_work_program_change_in_discipline_block_module.save()
+               # )
+        ).exists()):
+           old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
+               discipline_block_module=discipline_block_module_object,
+               change_type=option,
+               # subject_code=AcademicPlanUpdateUtils.num_to_int(
+               #     isu_academic_plan_discipline_json['plan_order'],
+               #     isu_academic_plan_discipline_json['discipline_name']
+               # )
+           )
+           list_of_start_terms = [int(sem) for sem in isu_academic_plan_discipline_json["contents"]]
+           old_work_program_change_in_discipline_block_module.semester_start = list_of_start_terms
+           old_work_program_change_in_discipline_block_module.save()
 
-            work_program_change_in_discipline_block_module = copy.deepcopy(
-                old_work_program_change_in_discipline_block_module)
-            work_program_change_in_discipline_block_module.save()
+           work_program_change_in_discipline_block_module = copy.deepcopy(
+               old_work_program_change_in_discipline_block_module)
+           work_program_change_in_discipline_block_module.save()
 
-            if GiaInFieldOfStudy.objects.filter(
-                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
-                    gia=gia_object
-            ).exists():
-                old_gia_in_field_of_study = GiaInFieldOfStudy.objects.get(
-                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
-                    gia=gia_object
-                )
-                gia_in_field_of_study = copy.deepcopy(old_gia_in_field_of_study)
-                gia_in_field_of_study.save()
-            else:
-                gia_in_field_of_study = GiaInFieldOfStudy(
-                    work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
-                    gia=gia_object
-                )
-                gia_in_field_of_study.save()"""
+           if GiaInFieldOfStudy.objects.filter(
+                   work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                   gia=gia_object
+           ).exists():
+               old_gia_in_field_of_study = GiaInFieldOfStudy.objects.get(
+                   work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                   gia=gia_object
+               )
+               gia_in_field_of_study = copy.deepcopy(old_gia_in_field_of_study)
+               gia_in_field_of_study.save()
+           else:
+               gia_in_field_of_study = GiaInFieldOfStudy(
+                   work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
+                   gia=gia_object
+               )
+               gia_in_field_of_study.save()
+        """
         if WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 #change_type=option,
@@ -840,12 +842,13 @@ class AcademicPlanUpdateProcessor:
 
         old_work_program_change_in_discipline_block_module = None
         old_work_program_in_field_of_study = None
-        """if (option == 'Optionally' and WorkProgramChangeInDisciplineBlockModule.objects.filter(
-                discipline_block_module=discipline_block_module_object,
-                change_type=option,
-                # subject_code=AcademicPlanUpdateUtils.num_to_int(
-                #     isu_academic_plan_discipline_json['plan_order'],
-                #     isu_academic_plan_discipline_json['discipline_name']
+        """If (option == 'Optionally' and
+        WorkProgramChangeInDisciplineBlockModule.objects.filter(
+        discipline_block_module=discipline_block_module_object,
+        change_type=option, # subject_code=AcademicPlanUpdateUtils.num_to_int(
+        #     isu_academic_plan_discipline_json['plan_order'], #
+        isu_academic_plan_discipline_json['discipline_name']
+
                 # )
         ).exists()):
             old_work_program_change_in_discipline_block_module = WorkProgramChangeInDisciplineBlockModule.objects.get(
@@ -879,7 +882,8 @@ class AcademicPlanUpdateProcessor:
                     work_program_change_in_discipline_block_module=work_program_change_in_discipline_block_module,
                     work_program=work_program_object
                 )
-                work_program_in_field_of_study.save()"""
+                work_program_in_field_of_study.save()
+        """
         if WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object,
                 #change_type=option,
@@ -1140,9 +1144,8 @@ class AcademicPlanUpdateProcessor:
                 discipline_block_module_object.save()
             father_module = module
             for children_module_dict in module['children']:
-                """
-                Одна из Важнейших частей кода, тут происходит вызов обработчика вложенного модуля или РПД
-                """
+                """Одна из Важнейших частей кода, тут происходит вызов
+                обработчика вложенного модуля или РПД."""
                 module = children_module_dict
                 children_module, wpcbm = AcademicPlanUpdateProcessor.recursion_module_updater(module,
                                                                                        isu_academic_plan_json, None,
@@ -1408,13 +1411,12 @@ class AcademicPlanUpdateProcessor:
         practice_object.evaluation_tools_v_sem = str(cerf_list)
 
         practice_object.save()
+        """If wp_dict["format_id"] == 1:
 
-        """if wp_dict["format_id"] == 1:
-            realisation_format = "offline"
-        elif wp_dict["format_id"] == 2:
-            realisation_format = "mixed"
-        elif wp_dict["format_id"] == 3:
-            realisation_format = "online"""
+        realisation_format = "offline" elif wp_dict["format_id"] == 2:
+        realisation_format = "mixed" elif wp_dict["format_id"] == 3:
+        realisation_format = "online
+        """
 
 
         return practice_object
@@ -1481,12 +1483,11 @@ class AcademicPlanUpdateProcessor:
         gia_object.evaluation_tools_v_sem = str(cerf_list)
 
         gia_object.save()
+        """If wp_dict["format_id"] == 1:
 
-        """if wp_dict["format_id"] == 1:
-            realisation_format = "offline"
-        elif wp_dict["format_id"] == 2:
-            realisation_format = "mixed"
-        elif wp_dict["format_id"] == 3:
-            realisation_format = "online"""
+        realisation_format = "offline" elif wp_dict["format_id"] == 2:
+        realisation_format = "mixed" elif wp_dict["format_id"] == 3:
+        realisation_format = "online
+        """
 
         return gia_object

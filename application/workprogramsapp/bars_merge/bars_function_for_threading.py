@@ -191,9 +191,11 @@ def bars_optimizer(
         work_program.id,
         now_semester,
     )
-    """if request_status_code != 200:
-        #  если почему-то не отправилось продублируем респонс в терминал
-        print(request_text, request_response)"""
+    """If request_status_code != 200:
+
+    #  если почему-то не отправилось продублируем респонс в терминал
+    print(request_text, request_response)
+    """
     # Пишем логи
     HistoryOfSendingToBars.objects.create(
         work_program=work_program,

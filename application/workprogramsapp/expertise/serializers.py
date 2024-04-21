@@ -49,9 +49,7 @@ class UserExpertiseForExpertiseSerializer(serializers.ModelSerializer):
 
 
 class ExpertiseSerializer(serializers.ModelSerializer):
-    """
-    Автоматически добавляет пользователя-создателя как лидера экспертизы
-    """
+    """Автоматически добавляет пользователя-создателя как лидера экспертизы."""
 
     user_status_in_expertise = serializers.SerializerMethodField()
 
@@ -226,7 +224,7 @@ class OnlyUserExpertiseSerializer(serializers.ModelSerializer):
 
 
 class WorkProgramShortForExperiseSerializerWithStructUnit(serializers.ModelSerializer):
-    """Сериализатор рабочих программ"""
+    """Сериализатор рабочих программ."""
 
     structural_unit = ShortStructuralUnitSerializer(many=False)
 
@@ -246,7 +244,7 @@ class WorkProgramShortForExperiseSerializerWithStructUnit(serializers.ModelSeria
 class WorkProgramShortForExperiseSerializerWithStructUnitWithEditors(
     serializers.ModelSerializer
 ):
-    """Сериализатор рабочих программ"""
+    """Сериализатор рабочих программ."""
 
     structural_unit = ShortStructuralUnitSerializer(many=False)
     editors = userProfileSerializer(many=True)
@@ -268,7 +266,7 @@ class WorkProgramShortForExperiseSerializerWithStructUnitWithEditors(
 class PracticeShortForExpertiseSerializerWithStructUnitWithEditors(
     serializers.ModelSerializer
 ):
-    """Сериализатор практик"""
+    """Сериализатор практик."""
 
     structural_unit = ShortStructuralUnitSerializer(many=False)
     editors = userProfileSerializer(many=True)
@@ -281,7 +279,7 @@ class PracticeShortForExpertiseSerializerWithStructUnitWithEditors(
 class GIAShortForExpertiseSerializerWithStructUnitWithEditors(
     serializers.ModelSerializer
 ):
-    """Сериализатор практик"""
+    """Сериализатор практик."""
 
     structural_unit = ShortStructuralUnitSerializer(many=False)
     editors = userProfileSerializer(many=True)
@@ -298,9 +296,8 @@ class ShortExpertiseSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializerFull(serializers.ModelSerializer):
-    """
-    Сериализатор для notifications\serializers.py  ExpertiseCommentsNotificationSerializer
-    """
+    """Сериализатор для notifications\serializers.py
+    ExpertiseCommentsNotificationSerializer."""
 
     expertise = serializers.SerializerMethodField()
 

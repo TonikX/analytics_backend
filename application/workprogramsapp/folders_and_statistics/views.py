@@ -45,8 +45,9 @@ class FoldersListView(generics.ListAPIView):
 
 
 class WorkProgramInFolderView(generics.ListAPIView):
-    """
-    Выдает все РПД для запрашивающего пользователя с рейтингом в указанной папке.
+    """Выдает все РПД для запрашивающего пользователя с рейтингом в указанной
+    папке.
+
     В url нужно указать id папки.
     """
 
@@ -111,8 +112,9 @@ class RemoveFromFolderView(generics.DestroyAPIView):
 
 
 class AcademicPlanInFolderView(generics.ListAPIView):
-    """
-    Выдает все учебные планы для запрашивающего пользователя с рейтингом в указанной папке.
+    """Выдает все учебные планы для запрашивающего пользователя с рейтингом в
+    указанной папке.
+
     В url нужно указать id папки.
     """
 
@@ -150,8 +152,9 @@ class RemoveFromFolderAcademicPlanView(generics.DestroyAPIView):
 
 
 class ModuleInFolderView(generics.ListAPIView):
-    """
-    Выдает все модули для запрашивающего пользователя с рейтингом в указанной папке.
+    """Выдает все модули для запрашивающего пользователя с рейтингом в
+    указанной папке.
+
     В url нужно указать id папки.
     """
 
@@ -189,8 +192,9 @@ class RemoveFromFolderModuleView(generics.DestroyAPIView):
 
 
 class IndividualImplementationAcademicPlanInFolderView(generics.ListAPIView):
-    """
-    Выдает все модули для запрашивающего пользователя с рейтингом в указанной папке.
+    """Выдает все модули для запрашивающего пользователя с рейтингом в
+    указанной папке.
+
     В url нужно указать id папки.
     """
 

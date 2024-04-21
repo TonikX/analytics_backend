@@ -48,9 +48,7 @@ from workprogramsapp.workprogram_additions.models import StructuralUnit
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def StructuralUnits(request):
-    """
-    API-запрос на просмотр структурных подразделений
-    """
+    """API-запрос на просмотр структурных подразделений."""
     su = StructuralUnit.objects.all()
 
     results = []
@@ -64,9 +62,7 @@ def StructuralUnits(request):
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def AcademicPlans(request):
-    """
-    API-запрос на просмотр УП
-    """
+    """API-запрос на просмотр УП."""
 
     ap = AcademicPlan.objects.all()
 
@@ -78,10 +74,8 @@ def AcademicPlans(request):
 
 
 class OneAcademicPlanWithDescriptionWp(generics.RetrieveAPIView):
-    """
-    Получение конкретного учебного плана по его id со всеми описаниями РПД
-    #'+'
-    """
+    """Получение конкретного учебного плана по его id со всеми описаниями РПД
+    #'+'."""
 
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlansDescriptionWpSerializer
@@ -92,10 +86,7 @@ class OneAcademicPlanWithDescriptionWp(generics.RetrieveAPIView):
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def report_of_number_of_workprograms_by_qualification(request, qualification):
-    """
-    Отчет о количестве РПД по квалификации
-    '+'
-    """
+    """Отчет о количестве РПД по квалификации '+'."""
     queryset = WorkProgram.objects.all()
     if qualification != "all_q":
         queryset = queryset.filter(qualification=qualification)
@@ -103,9 +94,11 @@ def report_of_number_of_workprograms_by_qualification(request, qualification):
 
 
 class RecordOfWorkProgramQuality(APIView):
-    """
-    Сколько РПД имеют редакторов, в скольких РПД заполнены разделы, сколько РПД без пререквизитов.
-    Сколько РПД не привязаны к учебному плану, не указан язык реализации, структурное подразделение
+    """Сколько РПД имеют редакторов, в скольких РПД заполнены разделы, сколько
+    РПД без пререквизитов.
+
+    Сколько РПД не привязаны к учебному плану, не указан язык
+    реализации, структурное подразделение
     """
 
     permission_classes = [AllowAny]
@@ -145,10 +138,7 @@ class RecordOfWorkProgramQuality(APIView):
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def number_of_academplans_by_qualification_and_year(request, qualification, year):
-    """
-    Количество учебных планов по квалификации и году
-    '+'
-    """
+    """Количество учебных планов по квалификации и году '+'."""
     return Response(
         {
             "quantity": AcademicPlan.objects.filter(
@@ -163,9 +153,7 @@ def number_of_academplans_by_qualification_and_year(request, qualification, year
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def EmptyStringWp(request):
-    """
-    API-запрос на просмотр РПД, без id строки
-    """
+    """API-запрос на просмотр РПД, без id строки."""
     empty_wp = (
         WorkProgramInFieldOfStudy.objects.filter(
             work_program__editors__isnull=False, id_str_up__isnull=True
@@ -179,9 +167,7 @@ def EmptyStringWp(request):
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def WpWithoutAP(request):
-    """
-    API-запрос на просмотр РПД, которых нету в УП
-    """
+    """API-запрос на просмотр РПД, которых нету в УП."""
     empty_wp = (
         WorkProgram.objects.filter(zuns_for_wp=None, editors__isnull=False)
     ).distinct()
@@ -193,9 +179,7 @@ def WpWithoutAP(request):
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def WpWithSimilarCode(request):
-    """
-    API-запрос на просмотр РПД с одинаковым дисциплин кодом
-    """
+    """API-запрос на просмотр РПД с одинаковым дисциплин кодом."""
     wp_counter_code = (
         WorkProgram.objects.all()
         .values("discipline_code")
@@ -216,9 +200,7 @@ def WpWithSimilarCode(request):
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def WpWithSimilarCodeGrouped(request):
-    """
-    API-запрос на просмотр РПД с одинаковым дисциплин кодом
-    """
+    """API-запрос на просмотр РПД с одинаковым дисциплин кодом."""
     wp_counter_code = (
         WorkProgram.objects.all()
         .values("discipline_code")
@@ -242,10 +224,8 @@ def WpWithSimilarCodeGrouped(request):
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def SimpleStatistic(request):
-    """
-    API-запрос на просмотр различной статистики по РПД и пользователям
-    '+'
-    """
+    """API-запрос на просмотр различной статистики по РПД и пользователям
+    '+'."""
     registered_users = User.objects.count()
     rpd_users = (
         User.objects.filter(editors__isnull=False, editors__work_status="w")
@@ -280,10 +260,7 @@ def SimpleStatistic(request):
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def WpWithoutStructuralUnit(request):
-    """
-    API-запрос на на просмотр РПД без структурного подразделения
-    '+'
-    """
+    """API-запрос на на просмотр РПД без структурного подразделения '+'."""
     wp_without_unit = WorkProgram.objects.filter(structural_unit__isnull=True)
     serializer = WorkProgramSerializerForStatistic(wp_without_unit, many=True)
     return Response(serializer.data)
@@ -293,8 +270,9 @@ def WpWithoutStructuralUnit(request):
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def StructuralUnitWp(request):
-    """
-    API-запрос на просмотр РПД в структурныхх подразделениях; Можно фильтровать посредством параметров в адресной строке
+    """API-запрос на просмотр РПД в структурныхх подразделениях; Можно
+    фильтровать посредством параметров в адресной строке.
+
     Поле филтрации: status - статус РПД
     Параметры: EX - на экспертизе, AC - одобрена, WK - в работе
     Пример запроса:
@@ -364,10 +342,8 @@ class WorkProgramDetailsWithApAndSemesters1(generics.ListAPIView):
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def WorkProgramDetailsWithApAndSemesters_old(request):
-    """
-    Отчет о заполнении РПД по структурному подразделению, году, семестру
-    #'+'
-    """
+    """Отчет о заполнении РПД по структурному подразделению, году, семестру
+    #'+'."""
     status_filter = (
         request.query_params["status"] if "status" in request.query_params else ""
     )
@@ -510,9 +486,7 @@ def GetDuplicates(request):
 
 
 class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
-    """
-    Получение пререквизитов и результатов РПД по СТР_УП_ИД
-    """
+    """Получение пререквизитов и результатов РПД по СТР_УП_ИД."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramPrerequisitesAndOutcomesSerializer
@@ -537,12 +511,10 @@ class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
 @api_view(["GET"])
 @permission_classes((IsAdminUser,))
 def FieldOfStudyPlanToISU(request, pk):
-    """
-    Перевод наших данных в ISU-лайк данные
-    """
-    """code = request.data.get('field_of_study_code')
-    year = request.data.get('year')
-    academic_plan_id = request.data.get('academic_plan_id')"""
+    """Перевод наших данных в ISU-лайк данные."""
+    """Code = request.data.get('field_of_study_code') year =
+    request.data.get('year') academic_plan_id =
+    request.data.get('academic_plan_id')"""
     implementation_list = []
     all_imp = ImplementationAcademicPlan.objects.all()
     imp_len = all_imp.count()
@@ -699,9 +671,7 @@ def AllWpShort(request):
 
 
 class AllAcademicPlanWithDescriptionWp(generics.ListAPIView):
-    """
-    Получение всех учебных планов со всеми описаниями РПД
-    """
+    """Получение всех учебных планов со всеми описаниями РПД."""
 
     queryset = AcademicPlan.objects.all()
     serializer_class = AcademicPlansDescriptionWpSerializer
@@ -753,9 +723,7 @@ def EditorsByWPStatuses(request):
 
 
 class GetAllWPsByEditor(generics.ListAPIView):
-    """
-    По id редактора показывает все его РПД
-    """
+    """По id редактора показывает все его РПД."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramDescriptionOnlySerializer
@@ -774,9 +742,10 @@ class GetAllWPsByEditor(generics.ListAPIView):
 
 
 class GetAllWPsWithEmptyField(generics.ListAPIView):
-    """
-    Получить список всех РПД с опредленным пустым полем
-    чтобы указать по какому пустому полю производить фильтрацию надо задать параметр field в запрос
+    """Получить список всех РПД с опредленным пустым полем чтобы указать по
+    какому пустому полю производить фильтрацию надо задать параметр field в
+    запрос.
+
     На данный момент можно отфильтровать по следующим полям:
     ED - редакторы
     LANG - язык
@@ -865,10 +834,9 @@ class WorkProgramEvaluationToolsCounter(generics.ListAPIView):
 
 
 class WorkProgramRealisedInYear(generics.ListAPIView):
-    """
-    Получение всех РПД, реализующихся в опредленном учебном году
-    Для указания учебного года нужно передать get-параметр year вида "YYYY/YYYY"
-    """
+    """Получение всех РПД, реализующихся в опредленном учебном году Для
+    указания учебного года нужно передать get-параметр year вида
+    "YYYY/YYYY"."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = SuperShortWorkProgramSerializer

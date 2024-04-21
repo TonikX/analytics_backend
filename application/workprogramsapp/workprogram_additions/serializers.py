@@ -59,7 +59,7 @@ class CreateUserStructuralUnitSerializer(serializers.ModelSerializer):
 
 
 class StructuralUnitSerializer(serializers.ModelSerializer):
-    """Сериализатор подразделения разработчика РПД"""
+    """Сериализатор подразделения разработчика РПД."""
 
     user_in_structural_unit = UserStructuralUnitSerializer(many=True)
 
@@ -77,7 +77,7 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
 
 
 class ShortUniversityPartnerSerializer(serializers.ModelSerializer):
-    """Сериализатор университета-партнера"""
+    """Сериализатор университета-партнера."""
 
     class Meta:
         model = UniversityPartner
@@ -119,7 +119,8 @@ class IndicatorListSerializer(serializers.ModelSerializer):
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializerAdd(serializers.ModelSerializer):
-    """Сериализатор вывода результата обучения для вывода результата в рабочей программе."""
+    """Сериализатор вывода результата обучения для вывода результата в рабочей
+    программе."""
 
     # item_name  = serializers.ReadOnlyField(source='item.name')
     # item_id  = serializers.ReadOnlyField(source='item.id')

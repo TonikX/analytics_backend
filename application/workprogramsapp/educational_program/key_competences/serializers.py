@@ -97,8 +97,8 @@ class CreateKeyCompetencesInGroupOfGeneralCharacteristicSerializer(
 class GroupOfKeyCompetencesInGeneralCharacteristicSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор вывода группы ключевых компетенций
-    в общей характеристике образовательной программы."""
+    """Сериализатор вывода группы ключевых компетенций в общей характеристике
+    образовательной программы."""
 
     competence_in_group_of_key_competences = (
         KeyCompetencesInGroupOfGeneralCharacteristicSerializer(many=True)
@@ -112,8 +112,8 @@ class GroupOfKeyCompetencesInGeneralCharacteristicSerializer(
 class CreateGroupOfKeyCompetencesInGeneralCharacteristicSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор создания и редактирования группы ключевых компетенций
-    в общей характеристике образовательной программы."""
+    """Сериализатор создания и редактирования группы ключевых компетенций в
+    общей характеристике образовательной программы."""
 
     class Meta:
         model = GroupOfKeyCompetencesInEducationalStandard

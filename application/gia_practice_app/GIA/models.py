@@ -16,9 +16,7 @@ def max_value_current_year(value):
 
 
 class CriteriaVKR(models.Model):
-    """
-    Критерии оценивания ВКР
-    """
+    """Критерии оценивания ВКР."""
 
     great = models.TextField(max_length=4096, verbose_name="Отлично")
     good = models.TextField(max_length=4096, verbose_name="Хорошо")

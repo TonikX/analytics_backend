@@ -13,9 +13,7 @@ from workprogramsapp.models import (
 
 
 class FieldOfStudySerializer2(serializers.ModelSerializer):
-    """
-    Сериализатор образовательных программ (направлений)
-    """
+    """Сериализатор образовательных программ (направлений)"""
 
     class Meta:
         model = FieldOfStudy
@@ -23,7 +21,7 @@ class FieldOfStudySerializer2(serializers.ModelSerializer):
 
 
 class InstitutionSerializer(serializers.ModelSerializer):
-    """Сериализатор Правообладателей"""
+    """Сериализатор Правообладателей."""
 
     class Meta:
         model = Institution
@@ -31,7 +29,7 @@ class InstitutionSerializer(serializers.ModelSerializer):
 
 
 class PlatformSerializer(serializers.ModelSerializer):
-    """Сериализатор Платформ"""
+    """Сериализатор Платформ."""
 
     class Meta:
         model = Platform
@@ -39,7 +37,7 @@ class PlatformSerializer(serializers.ModelSerializer):
 
 
 class CourseCreditSerializer(serializers.ModelSerializer):
-    """Сериализатор Перезачетов"""
+    """Сериализатор Перезачетов."""
 
     course = serializers.SlugRelatedField(slug_field="title", read_only=True)
     institution = InstitutionSerializer()
@@ -51,7 +49,7 @@ class CourseCreditSerializer(serializers.ModelSerializer):
 
 
 class CourseFieldOfStudySerializer(serializers.ModelSerializer):
-    """Сериализатор Направлений и онлайн курсов"""
+    """Сериализатор Направлений и онлайн курсов."""
 
     course = serializers.SlugRelatedField(slug_field="title", read_only=True)
     field_of_study = FieldOfStudySerializer2(many=False)
@@ -62,7 +60,7 @@ class CourseFieldOfStudySerializer(serializers.ModelSerializer):
 
 
 class ItemsForOnlineCourseSerializer(serializers.ModelSerializer):
-    """Сериализатор результатов прохождения онлайн курсов"""
+    """Сериализатор результатов прохождения онлайн курсов."""
 
     class Meta:
         model = Items
@@ -70,8 +68,8 @@ class ItemsForOnlineCourseSerializer(serializers.ModelSerializer):
 
 
 class OnlineCourseInWorkProgram(serializers.ModelSerializer):
-    """Сериализатор для отображения рабочих программ, которые относятся к разделам дисциплин, к которым относятся темы,
-    к которым относится курс"""
+    """Сериализатор для отображения рабочих программ, которые относятся к
+    разделам дисциплин, к которым относятся темы, к которым относится курс."""
 
     class Meta:
         model = WorkProgram
@@ -79,7 +77,8 @@ class OnlineCourseInWorkProgram(serializers.ModelSerializer):
 
 
 class OnlineCourseInDisciplineSection(serializers.ModelSerializer):
-    """Сериализатор для отображения разделов дисциплин, к которым относятся темы, к которым относится курс"""
+    """Сериализатор для отображения разделов дисциплин, к которым относятся
+    темы, к которым относится курс."""
 
     work_program = OnlineCourseInWorkProgram(many=False)
 
@@ -89,7 +88,7 @@ class OnlineCourseInDisciplineSection(serializers.ModelSerializer):
 
 
 class OnlineCourseInTopics(serializers.ModelSerializer):
-    """Сериализатор для отображения тем, к которым относится курс"""
+    """Сериализатор для отображения тем, к которым относится курс."""
 
     discipline_section = OnlineCourseInDisciplineSection(many=False)
 
@@ -99,7 +98,7 @@ class OnlineCourseInTopics(serializers.ModelSerializer):
 
 
 class OnlineCourseSerializer(serializers.ModelSerializer):
-    """Сериализатор Онлайн курса"""
+    """Сериализатор Онлайн курса."""
 
     course_field_of_study = CourseFieldOfStudySerializer(many=True)
     course_credit = CourseCreditSerializer(many=True)

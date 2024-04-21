@@ -22,9 +22,9 @@ from workprogramsapp.models import BibliographicReference
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def SearchInEBSCO(request):
-    """
-    Эндпоинт для поиска источника в Электронно-Библиотечной Системе EBSCO
+    """Эндпоинт для поиска источника в Электронно-Библиотечной Системе EBSCO
     :param request:
+
     :return: {sources: []}
     """
 

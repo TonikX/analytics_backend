@@ -97,8 +97,8 @@ class CreateOverProfCompetencesInGroupOfGeneralCharacteristicSerializer(
 class GroupOfOverProfCompetencesInGeneralCharacteristicSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор вывода группы над-профессиональных компетенций
-    в общей характеристике образовательной программы."""
+    """Сериализатор вывода группы над-профессиональных компетенций в общей
+    характеристике образовательной программы."""
 
     competence_in_group_of_over_prof_competences = (
         OverProfCompetencesInGroupOfGeneralCharacteristicSerializer(many=True)
@@ -112,8 +112,8 @@ class GroupOfOverProfCompetencesInGeneralCharacteristicSerializer(
 class CreateGroupOfOverProfCompetencesInGeneralCharacteristicSerializer(
     serializers.ModelSerializer
 ):
-    """Сериализатор создания и редактирования группы над-профессиональных компетенций
-    в общей характеристике образовательной программы."""
+    """Сериализатор создания и редактирования группы над-профессиональных
+    компетенций в общей характеристике образовательной программы."""
 
     class Meta:
         model = GroupOfOverProfCompetencesInEducationalStandard

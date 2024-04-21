@@ -104,10 +104,11 @@ class UserStructuralUnitSet(viewsets.ModelViewSet):
 @api_view(["POST"])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def CopyContentOfWorkProgram(request):
-    """
-    API-запрос на компирование содержимого из одной РПД в другую, !!!при этом старая РПД удаляется!!!
-    Параметры: from_copy_id, to_copy_id
-    Возвращает: объект обновленной РПД (в которую были скопированы данные)
+    """API-запрос на компирование содержимого из одной РПД в другую, !!!при
+    этом старая РПД удаляется!!!
+
+    Параметры: from_copy_id, to_copy_id Возвращает: объект обновленной
+    РПД (в которую были скопированы данные)
     """
     try:
         from_copy = request.data.get("from_copy_id")

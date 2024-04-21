@@ -27,15 +27,11 @@ TOKEN = "xd"  # login fucntion here
 def recursion_ap_to_isu(
     modules, lines_of_plan, block, ap, father_id=None, required=True
 ):
-    """
-    from workprogramsapp.models import *
-    from workprogramsapp.isu_merge.post_to_isu.ap_to_isu import *
-    lines_of_plan=[]
+    """From workprogramsapp.models import * from
+    workprogramsapp.isu_merge.post_to_isu.ap_to_isu import * lines_of_plan=[]
     modules = DisciplineBlockModule.objects.filter(father_module__id=148574)
     block=DisciplineBlock.objects.get(id=29646)
-    len(recursion_ap_to_isu(modules, lines_of_plan, block))
-
-    """
+    len(recursion_ap_to_isu(modules, lines_of_plan, block))"""
     for module in modules:
         required = required and (module.selection_rule == "all")
         isu_module = DisciplineBlockModuleInIsu.objects.filter(
@@ -121,13 +117,9 @@ def recursion_ap_to_isu(
 
 
 def ap_isu_generate_dict(ap):
-    """
-
-    from workprogramsapp.models import *
-    from workprogramsapp.isu_merge.post_to_isu.ap_to_isu import *
-    ap=AcademicPlan.objects.get(id=7382)
-    ap_isu_generate_dict(ap)
-    """
+    """From workprogramsapp.models import * from
+    workprogramsapp.isu_merge.post_to_isu.ap_to_isu import *
+    ap=AcademicPlan.objects.get(id=7382) ap_isu_generate_dict(ap)"""
     global TOKEN
     isu_logger = IsuService(
         IsuUser(settings.ISU["ISU_CLIENT_ID"], settings.ISU["ISU_CLIENT_SECRET"])

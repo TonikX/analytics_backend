@@ -532,18 +532,10 @@ processed_data, db = generate_df_w_unique_code(df1)
 processed_data.to_excel("source_files/new_disciplines_test_bachelor_01.03.02.xlsx", index=False)
 db.to_excel("source_files/discipline_bank.xlsx", index=False)
 """
-"""
-discipline_rep = pd.read_excel("source_files/discipline_bank.xlsx")
-discipline_code, db = generate_single_unique_code("19.03.01",
-                                                  "Биотехнология",
-                                                  2020,
-                                                  "Академический бакалавр",
-                                                  32,
-                                                  "Аналитическая химия и физико-химические методы анализа",
-                                                  "Элективный модуль по группе направлений",
-                                                  [0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                  discipline_rep)
-print(discipline_code)
-db.to_excel("source_files/discipline_bank.xlsx", index=False)
-"""
+"""discipline_rep = pd.read_excel("source_files/discipline_bank.xlsx")
+discipline_code, db = generate_single_unique_code("19.03.01", "Биотехнология",
+2020, "Академический бакалавр", 32, "Аналитическая химия и физико-химические
+методы анализа", "Элективный модуль по группе направлений", [0, 0, 3, 0, 0, 0,
+0, 0, 0, 0, 0, 0], discipline_rep) print(discipline_code)
+db.to_excel("source_files/discipline_bank.xlsx", index=False)"""
 # print("--- %s seconds ---" % (time.time() - start_time))

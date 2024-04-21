@@ -235,18 +235,12 @@ def EducationalProgramRankingByProfessionScientific(request):
         ap_list.append(ap)
         # ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
     for ap in ap_list:
-        """if ap.coverage==min_coverage:
-            print("min_coverage")
-            print(ap.coverage)
-        if ap.coverage==max_coverage:
-            print("max_coverage")
-            print(ap.coverage)
-        if ap.focus==min_focus:
-            print("min_focus")
+        """If ap.coverage==min_coverage: print("min_coverage")
+        print(ap.coverage) if ap.coverage==max_coverage: print("max_coverage")
+        print(ap.coverage) if ap.focus==min_focus: print("min_focus")
 
-        if ap.focus==max_focus:
-            print("max_focus")
-            print(ap.focus)"""
+        if ap.focus==max_focus:     print("max_focus") print(ap.focus)
+        """
         ap.coverage = 0.01 + (ap.coverage - min_coverage) * (1 - 0.01) / (
             max_coverage - min_coverage
         )

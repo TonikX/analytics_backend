@@ -676,10 +676,8 @@ class PrerequisitesOfWorkProgramList(generics.ListAPIView):
 
 
 class WorkProgramsWithOutcomesToPrerequisitesForThisWPView(generics.ListAPIView):
-    """
-    Дисциплины у которых в качестве результатов заявлены ключевые слова
-    являющиеся пререквизитами для этой дисциплины.
-    """
+    """Дисциплины у которых в качестве результатов заявлены ключевые слова
+    являющиеся пререквизитами для этой дисциплины."""
 
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
@@ -700,10 +698,8 @@ class WorkProgramsWithOutcomesToPrerequisitesForThisWPView(generics.ListAPIView)
 
 
 class WorkProgramsWithPrerequisitesToOutocomesForThisWPView(generics.ListAPIView):
-    """
-    Дисциплины у которых в качестве пререквизитов указаны ключевые слова
-    являющиеся результатами по этой дисциплине.
-    """
+    """Дисциплины у которых в качестве пререквизитов указаны ключевые слова
+    являющиеся результатами по этой дисциплине."""
 
     serializer_class = WorkProgramSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
@@ -1195,7 +1191,7 @@ class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class EvaluationToolListAPI(generics.ListCreateAPIView):
-    """endpoint that represents a list of Evaluation Tools."""
+    """Endpoint that represents a list of Evaluation Tools."""
 
     queryset = EvaluationTool.objects.all()
     serializer_class = EvaluationToolListSerializer
@@ -1203,7 +1199,7 @@ class EvaluationToolListAPI(generics.ListCreateAPIView):
 
 
 class EvaluationToolDetailAPI(generics.RetrieveUpdateDestroyAPIView):
-    """endpoint that represents a single Evaluation Tool."""
+    """Endpoint that represents a single Evaluation Tool."""
 
     queryset = EvaluationTool.objects.all()
     serializer_class = EvaluationToolCreateSerializer
@@ -1346,7 +1342,8 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    """Удаление, редактирование, просмотр образовательной программы (направления) по id"""
+    """Удаление, редактирование, просмотр образовательной программы
+    (направления) по id."""
 
     queryset = FieldOfStudy.objects.all()
     serializer_class = FieldOfStudySerializer
@@ -1354,7 +1351,8 @@ class FieldOfStudyDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class FieldOfStudyListCreateView(generics.ListCreateAPIView):
-    """Отображение списка ОП(направлений), создание образовательной программы (напрвления)"""
+    """Отображение списка ОП(направлений), создание образовательной программы
+    (напрвления)"""
 
     queryset = FieldOfStudy.objects.all()
     serializer_class = FieldOfStudyListSerializer
@@ -2703,7 +2701,8 @@ class WorkProgramChangeInDisciplineBlockModuleUpdateView(generics.UpdateAPIView)
 
 
 class WorkProgramInFieldOfStudyListView(generics.ListAPIView):
-    """Отображение списка ОП(направлений), создание образовательной программы (направления)."""
+    """Отображение списка ОП(направлений), создание образовательной программы
+    (направления)."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramInFieldOfStudySerializer
@@ -2749,8 +2748,8 @@ class ZunUpdateView(generics.UpdateAPIView):
 @api_view(["POST"])
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def CloneWorkProgramm(request):
-    """
-    Апи для клонирования рабочей программы
+    """Апи для клонирования рабочей программы.
+
     Запрашивает id программы для клоинрования в поле program_id для тела запроса типа form-data
     В ответе передается число - айди созданной копии.
     """

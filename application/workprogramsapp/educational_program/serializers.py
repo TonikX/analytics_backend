@@ -118,7 +118,10 @@ class GeneralLaborFunctionsSerializer(serializers.ModelSerializer):
 
 
 class KindsOfActivitySerializerForEd(serializers.ModelSerializer):
-    """Сериализатор сфер проф. деятельности."""
+    """Сериализатор сфер проф.
+
+    деятельности.
+    """
 
     class Meta:
         model = KindsOfActivity
@@ -126,7 +129,10 @@ class KindsOfActivitySerializerForEd(serializers.ModelSerializer):
 
 
 class ObjectsOfActivitySerializer(serializers.ModelSerializer):
-    """Сериализатор Объектов проф. деятельности."""
+    """Сериализатор Объектов проф.
+
+    деятельности.
+    """
 
     class Meta:
         model = ObjectsOfActivity
@@ -134,7 +140,10 @@ class ObjectsOfActivitySerializer(serializers.ModelSerializer):
 
 
 class ProfessionalStandardSerializer(serializers.ModelSerializer):
-    """Сериализатор Проф. стандартов."""
+    """Сериализатор Проф.
+
+    стандартов.
+    """
 
     def to_representation(self, value):
         self.fields["generalized_labor_functions"] = GeneralLaborFunctionsSerializer(
@@ -406,7 +415,7 @@ class CompetenceCommentSerializer(serializers.ModelSerializer):
 
 
 class CompetenceSerializerForIndicator(serializers.ModelSerializer):
-    """Сериализатор Компетенций"""
+    """Сериализатор Компетенций."""
 
     class Meta:
         model = Competence

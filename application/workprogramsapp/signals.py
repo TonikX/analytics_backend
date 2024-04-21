@@ -71,7 +71,8 @@ def create_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Expertise)
 def expertise_notificator(sender, instance, created, **kwargs):
-    """Create a matching profile whenever a user object is created and updated."""
+    """Create a matching profile whenever a user object is created and
+    updated."""
     if instance.expertise_type == "WP" or not instance.expertise_type:
         name_of_object = "рабочей программы"
         wp_exp = WorkProgram.objects.get(expertise_with_rpd=instance)

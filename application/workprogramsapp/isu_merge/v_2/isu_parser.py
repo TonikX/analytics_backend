@@ -7,9 +7,7 @@ from workprogramsapp.isu_merge.academic_plan_update.academic_plan_update_process
 
 
 class FileUploadAPIView_v2(APIView):
-    """
-    API-endpoint для загрузки файла sub_2019_2020_new
-    """
+    """API-endpoint для загрузки файла sub_2019_2020_new."""
 
     def post(self, request):
         updater = AcademicPlanUpdateProcessor()

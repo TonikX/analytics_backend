@@ -184,9 +184,7 @@ class IndividualImplementationAcademicPlanForUser(generics.ListAPIView):
             return IndividualImplementationAcademicPlan.objects.none()
 
     def list(self, request, **kwargs):
-        """
-        Вывод всех результатов для одной рабочей программы по id
-        """
+        """Вывод всех результатов для одной рабочей программы по id."""
         queryset = IndividualImplementationAcademicPlan.objects.filter(
             user=self.request.user
         )

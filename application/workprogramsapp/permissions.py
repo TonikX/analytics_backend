@@ -14,9 +14,7 @@ from workprogramsapp.workprogram_additions.models import UserStructuralUnit
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of an object to edit it.
-    """
+    """Custom permission to only allow owners of an object to edit it."""
 
     def has_object_permission(self, request, view, obj):
 
@@ -33,9 +31,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
 
 class IsOwnerOrDodWorkerOrReadOnly(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of an object to edit it.
-    """
+    """Custom permission to only allow owners of an object to edit it."""
 
     def has_object_permission(self, request, view, obj):
 
@@ -54,9 +50,7 @@ class IsOwnerOrDodWorkerOrReadOnly(permissions.BasePermission):
 
 
 class IsRpdDeveloperOrReadOnly(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of an object to edit it.
-    """
+    """Custom permission to only allow owners of an object to edit it."""
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:

@@ -57,12 +57,9 @@ def generate_response(url, headers, body, obj_name, obj_id, ap_id=None):
 
 
 def post_gia_to_isu(token, gia, ap_id) -> int:
-    """
-    from gia_practice_app.GIA.models import *
-    gia = GIA.objects.get(id=134)
+    """From gia_practice_app.GIA.models import * gia = GIA.objects.get(id=134)
     from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import *
-    post_gia_to_isu("1", gia)
-    """
+    post_gia_to_isu("1", gia)"""
     certification_types = {1: 5, 2: 9, 3: 6, 4: 7, 5: 8}
     body = [
         {
@@ -118,12 +115,10 @@ def post_gia_to_isu(token, gia, ap_id) -> int:
 
 
 def post_practice_to_isu(token, practice, ap_id) -> int:
-    """
-    from gia_practice_app.Practice.models import *
-    prac = Practice.objects.get(id=422)
-    from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import *
-    post_practice_to_isu("1", prac)
-    """
+    """From gia_practice_app.Practice.models import * prac =
+    Practice.objects.get(id=422) from
+    workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import *
+    post_practice_to_isu("1", prac)"""
     certification_types = {1: 5, 2: 9, 3: 6, 4: 7, 5: 8}
     body = [
         {
@@ -175,13 +170,10 @@ def post_practice_to_isu(token, practice, ap_id) -> int:
 
 
 def post_wp_to_isu(token, wp, ap_id) -> tuple:
-    """
-
-    from workprogramsapp.models import *
-    wp=WorkProgram.objects.get(id=17525)
-    from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import *
-    post_wp_to_isu("1", wp)
-    """
+    """From workprogramsapp.models import *
+    wp=WorkProgram.objects.get(id=17525) from
+    workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import *
+    post_wp_to_isu("1", wp)"""
     # wp = WorkProgram.objects.get(id=wp_id)
     certification_types = {"1": 5, "2": 9, "3": 6, "4": 7, "5": 8}
     body = [
@@ -288,15 +280,12 @@ def post_wp_to_isu(token, wp, ap_id) -> tuple:
 
 
 def post_module_to_isu(token, module, parent_id, block, ap_id):
-    """
-    from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import *
-    from workprogramsapp.models import *
-    parent= DisciplineBlockModule.objects.get(id=147411)
-    module = DisciplineBlockModule.objects.get(id=147412)
-    token="xDDDDD ya ustal"
-    block=DisciplineBlock.objects.get(id=29646)
-    post_module_to_isu(token, module, parent, block)
-    """
+    """From workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import *
+    from workprogramsapp.models import * parent=
+    DisciplineBlockModule.objects.get(id=147411) module =
+    DisciplineBlockModule.objects.get(id=147412) token="xDDDDD ya ustal"
+    block=DisciplineBlock.objects.get(id=29646) post_module_to_isu(token,
+    module, parent, block)"""
     block_ids = {
         "Блок 1. Модули (дисциплины)": 1,
         "Блок 2. Практика": 4,

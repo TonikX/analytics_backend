@@ -262,9 +262,7 @@ class Practice(models.Model):
 
 
 class PrerequisitesOfPractice(models.Model):
-    """
-    Модель для пререквизитов практик
-    """
+    """Модель для пререквизитов практик."""
 
     item = models.ForeignKey(
         "dataprocessing.Items", on_delete=models.CASCADE, verbose_name="Пререквизит"
@@ -283,9 +281,7 @@ class PrerequisitesOfPractice(models.Model):
 
 
 class OutcomesOfPractice(models.Model):
-    """
-    Модель для результатов практик
-    """
+    """Модель для результатов практик."""
 
     item = models.ForeignKey(
         "dataprocessing.Items",
@@ -307,9 +303,7 @@ class OutcomesOfPractice(models.Model):
 
 
 class ZunPractice(models.Model):
-    """
-    Модель для зунов
-    """
+    """Модель для зунов."""
 
     practice_in_fs = models.ForeignKey(
         "workprogramsapp.PracticeInFieldOfStudy",
