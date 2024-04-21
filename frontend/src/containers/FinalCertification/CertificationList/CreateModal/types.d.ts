@@ -26,4 +26,3 @@ export type EditableRowProps = {
     semesterNum: number,
     updateRow: (section: HoursSection, semesterNum: number) => void;
 }
-

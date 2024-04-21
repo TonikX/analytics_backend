@@ -9,4 +9,3 @@
 **Content-Type** : `application/json`
 
 **Authorization** : `Token [token_number]`
-

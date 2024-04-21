@@ -193,4 +193,3 @@ const DetailHeader:React.FC<{classes:any, trajectoryRoute?:boolean, tab:any, onC
 }
 
 export default DetailHeader;
-

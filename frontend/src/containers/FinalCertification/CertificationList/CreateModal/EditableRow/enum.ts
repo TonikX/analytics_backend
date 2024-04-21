@@ -28,4 +28,3 @@ export const EVALUATION_TOOLS = [{
     value: 5,
     label: 'Курсовой проект'
 }];
-
