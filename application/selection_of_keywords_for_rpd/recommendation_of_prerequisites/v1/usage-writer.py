@@ -45,7 +45,7 @@ finally:
 
 unique_items = sorted(unique_items)
 
-with open('selection_of_keywords_for_rpd/recommendation_of_prerequisites/data/output.tsv', 'wt') as out_file:
+with open('selection_of_keywords_for_rpd/recommendation_of_prerequisites/data/output.tsv', 'w') as out_file:
     tsv_writer = csv.writer(out_file, delimiter='\t')
     # tsv_writer.writerow(['user', 'entity', 'count'])
     for user, elems in user_data.items():

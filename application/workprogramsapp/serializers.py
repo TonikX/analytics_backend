@@ -1,4 +1,4 @@
-from typing import OrderedDict
+from collections import OrderedDict
 
 from django.contrib.auth.models import Group
 from django.db.models import Q
@@ -188,7 +188,7 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 
 class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
-        updated_module = super(ImplementationAcademicPlanCreateSerializer, self).update(
+        updated_module = super().update(
             instance, validated_data
         )
         module_group = Group.objects.get(name="academic_plan_developer")
@@ -425,7 +425,7 @@ class WorkProgramCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data) -> WorkProgram:
 
         evaluation_tools = validated_data.pop("evaluation_tools", None)
-        wp = super(WorkProgramCreateSerializer, self).create(validated_data)
+        wp = super().create(validated_data)
         for i in range(len(evaluation_tools)):
             for tool in evaluation_tools[i]:
                 CertificationEvaluationTool.objects.create(
@@ -491,7 +491,7 @@ class BibliographicReferenceForWorkProgramSerializer(serializers.ModelSerializer
         fields = ["id"]
 
 
-class Geeks(object):
+class Geeks:
     def __init__(self, dictionary):
         self.dict = dictionary
 

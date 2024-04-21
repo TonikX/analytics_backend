@@ -159,13 +159,13 @@ def CustomConfirmEmailView(request, key):
         email_reset.status = True
         email_reset.save()
     except EmailReset.DoesNotExist:
-        return redirect("{}email-confirm-success".format(settings.URL_FRONT))
+        return redirect(f"{settings.URL_FRONT}email-confirm-success")
 
     if email_reset.timestamp < timezone.now() - timedelta(minutes=30):
-        return redirect("{}email-confirm-error".format(settings.URL_FRONT))
+        return redirect(f"{settings.URL_FRONT}email-confirm-error")
     else:
         user = email_reset.user
         user.email = email_reset.email
         user.save()
         # email_reset.delete()
-        return redirect("{}".format(settings.URL_FRONT))
+        return redirect(f"{settings.URL_FRONT}")

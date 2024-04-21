@@ -51,9 +51,7 @@ class AuthenticateByCodeISU(ListAPIView):
 
     @staticmethod
     def new_password_with_random(isu, given_name):
-        password_rule = (f"{isu}" f"{given_name}" f"{get_random_string}").encode(
-            "utf-8"
-        )
+        password_rule = (f"{isu}" f"{given_name}" f"{get_random_string}").encode()
 
         return hashlib.sha256(password_rule).hexdigest()
 
@@ -121,7 +119,7 @@ class AuthenticateByCodeISU(ListAPIView):
                 user = user[0]
                 password_rule = (
                     f'{isu_profile["isu"]}' f'{isu_profile["given_name"]}'
-                ).encode("utf-8")
+                ).encode()
                 password = hashlib.sha256(password_rule).hexdigest()
 
                 if user.check_password(password):

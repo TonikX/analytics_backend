@@ -59,7 +59,7 @@ class GIASerializer(serializers.ModelSerializer):
             gia.save()
         return gia
 
-    def get_permissions_info(self, instance) -> Dict[str, Optional[bool]]:
+    def get_permissions_info(self, instance) -> dict[str, bool | None]:
         request = self.context.get("request")
         try:
             exp = Expertise.objects.get(gia=instance)

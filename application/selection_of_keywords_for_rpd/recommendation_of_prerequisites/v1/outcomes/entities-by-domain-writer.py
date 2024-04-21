@@ -34,7 +34,7 @@ finally:
 
 unique_items = sorted(unique_items)
 
-with open('../../data/entities_with_domain.tsv', 'wt') as out_file:
+with open('../../data/entities_with_domain.tsv', 'w') as out_file:
     tsv_writer = csv.writer(out_file, delimiter='\t')
     tsv_writer.writerow(['id', 'entity_name', 'domain_id'])
     for item in result:

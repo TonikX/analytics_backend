@@ -1,5 +1,4 @@
 import datetime
-from typing import Dict
 
 from rest_framework import serializers
 
@@ -53,7 +52,7 @@ class ExpertiseSerializer(serializers.ModelSerializer):
 
     user_status_in_expertise = serializers.SerializerMethodField()
 
-    def get_user_status_in_expertise(self, instance) -> Dict[str, bool]:
+    def get_user_status_in_expertise(self, instance) -> dict[str, bool]:
         request = self.context.get("request")
         user_statuses = {
             "expertise_master": False,
@@ -296,7 +295,7 @@ class ShortExpertiseSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializerFull(serializers.ModelSerializer):
-    """Сериализатор для notifications\serializers.py
+    r"""Сериализатор для notifications\serializers.py
     ExpertiseCommentsNotificationSerializer."""
 
     expertise = serializers.SerializerMethodField()

@@ -200,7 +200,7 @@ class AcademicPlanUpdateExcelCreatorView(APIView):
         creator = AcademicPlanExcelCreator()
         filename, mime_type = creator.create_excel_file()
 
-        path = open(filename, "r")
+        path = open(filename)
         response = Response(path, content_type=mime_type)
         response["Content-Disposition"] = "attachment; filename=%s" % filename
 
@@ -234,7 +234,7 @@ class FileUploadAPIView(APIView):
         print(data["ИД_УП"])
         print("- Импортируем json с порядком модулей")
 
-        with open("workprogramsapp/modules-order.json", "r", encoding="utf-8") as fh:
+        with open("workprogramsapp/modules-order.json", encoding="utf-8") as fh:
             order = json.load(fh)
 
         self.initialize_educational_module_types()
@@ -570,7 +570,7 @@ class FileUploadAPIView(APIView):
 
     @classmethod
     def process_educational_modules(
-        cls, df: pandas.DataFrame, module_order_by_name: Dict[str, int]
+        cls, df: pandas.DataFrame, module_order_by_name: dict[str, int]
     ):
         df_block1 = df[df["НАИМЕНОВАНИЕ_БЛОКА"].str.contains("Блок 1")]
         df_block2 = df[df["НАИМЕНОВАНИЕ_БЛОКА"].str.contains("Блок 2")]
@@ -586,7 +586,7 @@ class FileUploadAPIView(APIView):
     def process_disciplines_block(
         cls,
         disciplines_block: pandas.DataFrame,
-        module_order_by_name: Dict[str, int],
+        module_order_by_name: dict[str, int],
         field_to_iterate_over="МОДУЛЬ",
     ):
         educational_modules = disciplines_block[field_to_iterate_over].unique()
@@ -748,7 +748,7 @@ class FileUploadOldVersionAPIView(APIView):
         data = pandas.read_excel(path)
         print(data["ИД_УП"])
         print("- Импортируем json с порядком модулей")
-        with open("workprogramsapp/modules-order.json", "r", encoding="utf-8") as fh:
+        with open("workprogramsapp/modules-order.json", encoding="utf-8") as fh:
             order = json.load(fh)
         print("- Создаем рпд и направления")
         # создаем рпд и направления

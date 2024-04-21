@@ -5,7 +5,7 @@ import re
 class ModuleOrderProvider:
     def __init__(self):
         with open(
-            "../application/workprogramsapp/modules-order.json", "r", encoding="utf-8"
+            "../application/workprogramsapp/modules-order.json", encoding="utf-8"
         ) as fh:
             self.order = json.load(fh)
 
@@ -19,7 +19,7 @@ class AcademicPlanUpdateUtils:
 
     @staticmethod
     def clean_text(text):
-        cleaned = re.sub("\s+", " ", text)
+        cleaned = re.sub(r"\s+", " ", text)
         return cleaned.strip()
 
     @staticmethod

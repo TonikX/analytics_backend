@@ -506,9 +506,9 @@ def SendCheckpointsForAcceptedWP(request):
             end_term = now_semester + max_sem if now_semester + max_sem < 12 else 12
             for i in range(12):
                 if now_semester <= i < end_term:
-                    cred_regex += "(([^0]\.[0-9])|([^0])),\s"
+                    cred_regex += r"(([^0]\.[0-9])|([^0])),\s"
                 else:
-                    cred_regex += "(([0-9]\.[0-9])|[0-9]),\s"
+                    cred_regex += r"(([0-9]\.[0-9])|[0-9]),\s"
             cred_regex = cred_regex[:-3]
 
             #######################################################
@@ -521,9 +521,9 @@ def SendCheckpointsForAcceptedWP(request):
                 many_term_regex = r""
                 for i in range(12):
                     if i == now_semester:
-                        many_term_regex += "(([^0]\.[0-9])|([^0])),\s"
+                        many_term_regex += r"(([^0]\.[0-9])|([^0])),\s"
                     else:
-                        many_term_regex += "(([0-9]\.[0-9])|[0-9]),\s"
+                        many_term_regex += r"(([0-9]\.[0-9])|[0-9]),\s"
                 many_term_regex = many_term_regex[:-3]
                 implementation_of_academic_plan_all = ImplementationAcademicPlan.objects.filter(
                     academic_plan__discipline_blocks_in_academic_plan__modules_in_discipline_block__change_blocks_of_work_programs_in_modules__work_program=work_program,
@@ -810,9 +810,9 @@ def SetBarsPointerTrueToWP(request):
         cred_regex = r""
         for i in range(12):
             if i == semester:
-                cred_regex += "[^0]\.[0-9],\s"
+                cred_regex += r"[^0]\.[0-9],\s"
             else:
-                cred_regex += "(([0-9]\.[0-9])|[0]),\s"
+                cred_regex += r"(([0-9]\.[0-9])|[0]),\s"
         cred_regex = cred_regex[:-3]
         wp = WorkProgram.objects.filter(
             zuns_for_wp__zuns_for_wp__ze_v_sem__iregex=cred_regex,

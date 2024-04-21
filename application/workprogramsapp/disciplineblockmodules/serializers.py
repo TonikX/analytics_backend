@@ -236,7 +236,7 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
                 reverse_universal(validated_data.get("childs"))
             else:
                 reverse_universal(instance.childs.all())
-        updated_module = super(DisciplineBlockModuleCreateSerializer, self).update(
+        updated_module = super().update(
             instance, validated_data
         )
         module_group = Group.objects.get(name="blockmodule_editor")

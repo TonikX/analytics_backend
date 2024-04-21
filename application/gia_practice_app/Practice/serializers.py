@@ -1,4 +1,5 @@
-from typing import Optional, OrderedDict, List, Dict
+from typing import Optional, List, Dict
+from collections import OrderedDict
 
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
@@ -101,7 +102,7 @@ class PracticeSerializer(serializers.ModelSerializer):
             practice.save()
         return practice
 
-    def get_permissions_info(self, instance) -> Dict[str, Optional[bool]]:
+    def get_permissions_info(self, instance) -> dict[str, bool | None]:
         request = self.context.get("request")
         try:
             exp = Expertise.objects.get(practice=instance)
@@ -159,7 +160,7 @@ class PracticeSerializer(serializers.ModelSerializer):
             )
         return data
 
-    def get_competences(self, instance) -> List[dict]:
+    def get_competences(self, instance) -> list[dict]:
         competences = Competence.objects.filter(
             indicator_in_competencse__zun_practice__practice_in_fs__practice__id=instance.id
         ).distinct()

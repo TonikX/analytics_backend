@@ -116,7 +116,6 @@ ognp_codes = {
 }
 
 
-# remove multiple spaces and punctuation
 def cleanText(text):
     cleaned = re.sub(r"[^\w\s]", " ", text)
     cleaned = re.sub(" +", " ", cleaned)
@@ -403,7 +402,7 @@ def generate_df_w_unique_code(in_df, sys_df=None):
             and (in_df["DIS_CODE"][i].split(".")[2] == "3")
         ):
             p234 = electiveModuleBachelor(
-                sys_df.loc[sys_df["DIS_CODE"].str.match("06\.[1-7]\.3\.")],
+                sys_df.loc[sys_df["DIS_CODE"].str.match(r"06\.[1-7]\.3\.")],
                 in_df.loc[i, "SEM_INFO"],
                 in_df["DIS_CODE"][i],
                 in_df["SUBJECT"][i],
@@ -482,7 +481,7 @@ def generate_single_unique_code(
         and (dis_code.split(".")[2] == "3")
     ):
         p234 = electiveModuleBachelor(
-            sys_df.loc[sys_df["DIS_CODE"].str.match("06\.[1-7]\.3\.")],
+            sys_df.loc[sys_df["DIS_CODE"].str.match(r"06\.[1-7]\.3\.")],
             sem,
             dis_code,
             subj,
@@ -518,24 +517,3 @@ def generate_single_unique_code(
     )
     sys_df = sys_df.drop_duplicates().reset_index(drop=True)
     return dis_code, sys_df
-
-
-# Example
-# start_time = time.time()
-
-# generate codes for an excel file
-"""
-df1 = pd.read_excel("source_files/01.03.02.xlsx")
-discipline_rep = pd.read_excel("source_files/discipline_bank.xlsx")
-#processed_data, db = generate_df_w_unique_code(df1, discipline_rep)
-processed_data, db = generate_df_w_unique_code(df1)
-processed_data.to_excel("source_files/new_disciplines_test_bachelor_01.03.02.xlsx", index=False)
-db.to_excel("source_files/discipline_bank.xlsx", index=False)
-"""
-"""discipline_rep = pd.read_excel("source_files/discipline_bank.xlsx")
-discipline_code, db = generate_single_unique_code("19.03.01", "Биотехнология",
-2020, "Академический бакалавр", 32, "Аналитическая химия и физико-химические
-методы анализа", "Элективный модуль по группе направлений", [0, 0, 3, 0, 0, 0,
-0, 0, 0, 0, 0, 0], discipline_rep) print(discipline_code)
-db.to_excel("source_files/discipline_bank.xlsx", index=False)"""
-# print("--- %s seconds ---" % (time.time() - start_time))

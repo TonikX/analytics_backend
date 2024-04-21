@@ -276,7 +276,7 @@ class AcademicPlanRealisedInYearSerializer(serializers.ModelSerializer):
     def get_title(self, instance) -> str:
         return ImplementationAcademicPlan.objects.get(academic_plan=instance).title
 
-    def get_work_programs(self, instance) -> List[dict]:
+    def get_work_programs(self, instance) -> list[dict]:
         request = self.context["request"]
         year_of_sending = int(request.query_params.get("year").split("/")[0])
         plan_year = ImplementationAcademicPlan.objects.get(academic_plan=instance).year

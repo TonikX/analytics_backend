@@ -366,9 +366,9 @@ def WorkProgramDetailsWithApAndSemesters_old(request):
     structural_unit_id = [int(x) for x in structural_unit_id]
     for i in range(12):
         if str(i + 1) in semester:
-            cred_regex += "[^0]\.[0-9],\s"
+            cred_regex += r"[^0]\.[0-9],\s"
         else:
-            cred_regex += "(([0-9]\.[0-9])|[0]),\s"
+            cred_regex += r"(([0-9]\.[0-9])|[0]),\s"
     cred_regex = cred_regex[:-3]
     if status_filter == "WK":
         needed_wp = (
@@ -439,10 +439,10 @@ class WorkProgramDetailsWithApAndSemesters(generics.ListAPIView):
                     cred_regex = r""
                     for j in range(1, 13, 2):
                         if j == i:
-                            cred_regex += "((([^0]\.[0-9])|([^0])),\s(([0-9]\.[0-9])|[0-9])|(([0-9]\.[0-9])|[0-9]),\s(([^0]\.[0-9])|([^0]))),\s"
+                            cred_regex += r"((([^0]\.[0-9])|([^0])),\s(([0-9]\.[0-9])|[0-9])|(([0-9]\.[0-9])|[0-9]),\s(([^0]\.[0-9])|([^0]))),\s"
                         else:
                             cred_regex += (
-                                "(([0-9]\.[0-9])|[0-9]),\s(([0-9]\.[0-9])|[0-9]),\s"
+                                r"(([0-9]\.[0-9])|[0-9]),\s(([0-9]\.[0-9])|[0-9]),\s"
                             )
                     cred_regex = cred_regex[:-3]
                     y -= 1
@@ -858,9 +858,9 @@ class WorkProgramRealisedInYear(generics.ListAPIView):
             many_term_regex = r""
             for i in range(12):
                 if i == now_semester:
-                    many_term_regex += "(([^0]\.[0-9])|([^0])),\s"
+                    many_term_regex += r"(([^0]\.[0-9])|([^0])),\s"
                 else:
-                    many_term_regex += "(([0-9]\.[0-9])|[0-9]),\s"
+                    many_term_regex += r"(([0-9]\.[0-9])|[0-9]),\s"
             many_term_regex = many_term_regex[:-3]
             wp_for_year = WorkProgram.objects.filter(
                 work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__year=int(

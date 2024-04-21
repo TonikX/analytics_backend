@@ -103,10 +103,10 @@ def give_recommendations_by_domain(array):
 def search_for_domain(words):
     domain_map = {}
     for word in words:
-        pattern = r'{}'.format(word)
+        pattern = fr'{word}'
         for domain in domain_entities_strings:
             current = domain_entities_strings[domain]
-            target = u'{}'.format(current)
+            target = f'{current}'
             score = len(re.findall(pattern, target))
             if score > 0:
                 if domain_map.get(domain) is not None:

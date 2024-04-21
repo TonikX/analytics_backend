@@ -1280,7 +1280,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     __old_selection_rule = -1
 
     def __init__(self, *args, **kwargs):
-        super(DisciplineBlockModule, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__old_selection_parametr = self.selection_parametr
         self.__old_selection_rule = self.selection_rule
 
@@ -1288,7 +1288,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None, *args, **kwargs):
         from workprogramsapp.ap_improvement.module_ze_counter import rewrite_ze_up
-        super(DisciplineBlockModule, self).save(force_insert, force_update, *args, **kwargs)
+        super().save(force_insert, force_update, *args, **kwargs)
         if self.__old_selection_parametr != self.selection_parametr or self.__old_selection_rule != self.selection_rule:
             self.__old_selection_parametr = self.selection_parametr
             self.__old_selection_rule = self.selection_rule
@@ -2336,7 +2336,7 @@ class IsuModulesHashes(models.Model):
 
 
 def get_upload_path_for_bugs_log(instance, filename):
-    return "bugs_log/user_{id}/{file}".format(id=instance.user.id, file=filename)
+    return f"bugs_log/user_{instance.user.id}/{filename}"
 
 
 class BugsLog(models.Model):

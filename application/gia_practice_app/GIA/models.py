@@ -102,7 +102,7 @@ class GIABaseTemplate(models.Model):
         self.professional_problems_marks, created = CriteriaVKR.objects.get_or_create(
             great="да", good="да", satisfactorily="да", unsatisfactory="нет"
         )
-        super(GIABaseTemplate, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Шаблон ГИА {self.template_year} года"
@@ -396,4 +396,4 @@ class GIA(models.Model):
             unsatisfactory=ANSW_UNSATISF,
         )
 
-        super(GIA, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)

@@ -208,7 +208,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
             many=True,
         ).data
 
-    def get_group_of_general_prof_competences(self, instance) -> Union[dict, None]:
+    def get_group_of_general_prof_competences(self, instance) -> dict | None:
         try:
             return GroupOfGeneralProfCompetencesInGeneralCharacteristicSerializer(
                 instance=GroupOfGeneralProfCompetencesInEducationalStandard.objects.filter(
@@ -219,7 +219,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         except GroupOfGeneralProfCompetencesInEducationalStandard.DoesNotExist:
             return None
 
-    def get_group_of_key_competences(self, instance) -> Union[dict, None]:
+    def get_group_of_key_competences(self, instance) -> dict | None:
         try:
             return GroupOfKeyCompetencesInGeneralCharacteristicSerializer(
                 instance=GroupOfKeyCompetencesInEducationalStandard.objects.filter(
@@ -230,7 +230,7 @@ class GeneralCharacteristicsSerializer(serializers.ModelSerializer):
         except GroupOfGeneralProfCompetencesInEducationalStandard.DoesNotExist:
             return None
 
-    def get_group_of_over_prof_competences(self, instance) -> Union[dict, None]:
+    def get_group_of_over_prof_competences(self, instance) -> dict | None:
         try:
             return GroupOfOverProfCompetencesInGeneralCharacteristicSerializer(
                 instance=GroupOfOverProfCompetencesInEducationalStandard.objects.filter(

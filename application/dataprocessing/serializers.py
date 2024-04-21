@@ -1,5 +1,3 @@
-from typing import List
-
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
@@ -40,7 +38,7 @@ class UserBaseSerializer(serializers.ModelSerializer):
         return super().to_representation(value)
 
     def update(self, instance, validated_data):
-        user = super(UserBaseSerializer, self).update(instance, validated_data)
+        user = super().update(instance, validated_data)
         units = self._kwargs["context"]["request"].data.get("structural_unit")
         if units:
             user.structural_unit.clear()
@@ -169,7 +167,7 @@ class ItemWithRelationSerializer(serializers.ModelSerializer):
         )
         depth = 1
 
-    def get_relation_with_item(self, obj) -> List[dict]:
+    def get_relation_with_item(self, obj) -> list[dict]:
         """"obj is a Items instance.
 
         Returns list of dicts
@@ -182,7 +180,7 @@ class RelationInSerializer(serializers.ModelSerializer):
     """Сериализатор для отображения связей."""
 
     def to_representation(self, obj):
-        rep = super(RelationInSerializer, self).to_representation(obj)
+        rep = super().to_representation(obj)
         rep["items"] = [
             ItemCreateSerializer(relation.item2).data
             for relation in Relation.objects.filter(

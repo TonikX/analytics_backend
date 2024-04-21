@@ -211,10 +211,10 @@ def EducationalProgramRankingByProfessionScientific(request):
             wp_count + ap_specialization_wp_count
         )
         key_coverage = len(
-            set([val for item in set_of_wp for val in item.skills_key])
+            {val for item in set_of_wp for val in item.skills_key}
         ) / len(skills_key)
         add_coverage = len(
-            set([val for item in set_of_wp for val in item.skills_add])
+            {val for item in set_of_wp for val in item.skills_add}
         ) / len(skills_additional)
         coof = 0.8
         ap.coverage = coof * (key_coverage) + (1 - coof) * (add_coverage)

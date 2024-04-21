@@ -2013,9 +2013,7 @@ def handle_uploaded_csv(file, filename):
     print("IPv4_code generating")
     processed_data, db = IPv4_code_ver2.generate_df_w_unique_code(in_df, sys_df)
     now = datetime.now().isoformat("-").split(".")[0].replace(":", "-")
-    db.to_excel(
-        "discipline_code/discipline_bank_updated_{}.xlsx".format(now), index=False
-    )
+    db.to_excel(f"discipline_code/discipline_bank_updated_{now}.xlsx", index=False)
     print(processed_data.head())
     return processed_data
 
@@ -2036,7 +2034,6 @@ class FileUploadAPIView(APIView):
         # импортируем json с порядком модулей
         with open(
             "workprogramsapp/modules-order.json",
-            "r",
             encoding="utf-8",
         ) as fh:  # открываем файл на чтение
             order = json.load(fh)
@@ -2808,7 +2805,6 @@ def TimeoutTest(request):
 
     timer = 0
     while True:
-        print("It took {} sec".format(timer))
         time.sleep(30)
         if timer < 7200:
             timer += 30

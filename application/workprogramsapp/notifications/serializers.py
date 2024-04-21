@@ -19,7 +19,7 @@ class NotificationSerializer(serializers.ModelSerializer):
     expertise_comment = serializers.SerializerMethodField()
     basic = serializers.SerializerMethodField()
 
-    def get_expertise(self, instance) -> Union[dict, None]:
+    def get_expertise(self, instance) -> dict | None:
         try:
             exp = ExpertiseNotificationSerializer(
                 instance=ExpertiseNotification.objects.get(
@@ -30,7 +30,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         except ExpertiseNotification.DoesNotExist:
             return None
 
-    def get_expertise_comment(self, instance) -> Union[dict, None]:
+    def get_expertise_comment(self, instance) -> dict | None:
         try:
             exp = ExpertiseCommentsNotificationSerializer(
                 instance=NotificationComments.objects.get(
@@ -41,7 +41,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         except NotificationComments.DoesNotExist:
             return None
 
-    def get_academic_plan(self, instance) -> Union[dict, None]:
+    def get_academic_plan(self, instance) -> dict | None:
         try:
             ap = AcademicPlanUpdateNotificationSerializer(
                 instance=AcademicPlanUpdateNotification.objects.get(
@@ -52,7 +52,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         except AcademicPlanUpdateNotification.DoesNotExist:
             return None
 
-    def get_basic(self, instance) -> Union[dict, None]:
+    def get_basic(self, instance) -> dict | None:
         return NotificationCreateSerializer(
             instance=UserNotification.objects.get(id=instance.id)
         ).data

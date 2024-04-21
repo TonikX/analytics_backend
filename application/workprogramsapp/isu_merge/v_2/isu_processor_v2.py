@@ -235,7 +235,7 @@ def invoke():
 
     # Чистим названия дисциплин от лишних пробелов
     def clean_text(text):
-        cleaned = re.sub("\s+", " ", text)
+        cleaned = re.sub(r"\s+", " ", text)
         return cleaned.strip()
 
     up["ДИСЦИПЛИНА"] = up["ДИСЦИПЛИНА"].apply(clean_text)
@@ -478,7 +478,7 @@ def csv_handler(self, file):
     data = pd.read_excel(path)
     print(data["ИД_УП"])
     print("- Импортируем json с порядком модулей")
-    with open("workprogramsapp/modules-order.json", "r", encoding="utf-8") as fh:
+    with open("workprogramsapp/modules-order.json", encoding="utf-8") as fh:
         order = json.load(fh)
     print("- Создаем рпд и направления")
     # создаем рпд и направления
