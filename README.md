@@ -101,8 +101,8 @@
 
    ```bash
    # В папке application
-   pip-compile --rebuild --output-file=requirements.txt pyproject.toml
-   pip-compile --rebuild --extra=dev --output-file=requirements-dev.txt pyproject.toml
+   pip-compile --rebuild --strip-extras --output-file=requirements.txt pyproject.toml
+   pip-compile --rebuild --extra=dev --strip-extras --output-file=requirements-dev.txt pyproject.toml
    ```
    Устанавливайте зависимости только через команду pip-sync
    ```bash
