@@ -36,7 +36,9 @@ def get_top_n(predictions, n=10):
 
 
 # path to dataset file
-file_path = os.path.expanduser("selection_of_keywords_for_rpd/recommendation_of_prerequisites/data/output.tsv")
+file_path = os.path.expanduser(
+    "selection_of_keywords_for_rpd/recommendation_of_prerequisites/data/output.tsv"
+)
 
 df = pd.read_csv(file_path)
 df.to_csv(file_path, index=False)
@@ -66,7 +68,9 @@ for uid, user_ratings in top_n.items():
     user = User.objects.get(id=uid)
     print(uid, [iid for (iid, _) in user_ratings])
     for iid in [iid for (iid, _) in user_ratings]:
-        RecommendationOfPrerequisitesFoUser.objects.create(user=user, item=Items.objects.get(id=iid))
+        RecommendationOfPrerequisitesFoUser.objects.create(
+            user=user, item=Items.objects.get(id=iid)
+        )
 
 # We can now use this dataset as we please, e.g. calling cross_validate
 # cross_validate(algo, data, measures=["RMSE", "MAE"], cv=5, verbose=True)

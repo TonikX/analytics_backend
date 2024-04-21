@@ -9,4 +9,4 @@ class RecommendationOfPrerequisitesFoUserSerializer(serializers.ModelSerializer)
 
     class Meta:
         model = RecommendationOfPrerequisitesFoUser
-        fields = ['id', 'item']
+        fields = ["id", "item"]

@@ -2,7 +2,9 @@ import csv
 import numpy as np
 import psycopg2
 
-from selection_of_keywords_for_rpd.recommendation_of_prerequisites.v1.connection_to_postgre import connection_to_postgre
+from selection_of_keywords_for_rpd.recommendation_of_prerequisites.v1.connection_to_postgre import (
+    connection_to_postgre,
+)
 
 
 # only editors
@@ -45,8 +47,10 @@ finally:
 
 unique_items = sorted(unique_items)
 
-with open('selection_of_keywords_for_rpd/recommendation_of_prerequisites/data/output.tsv', 'w') as out_file:
-    tsv_writer = csv.writer(out_file, delimiter='\t')
+with open(
+    "selection_of_keywords_for_rpd/recommendation_of_prerequisites/data/output.tsv", "w"
+) as out_file:
+    tsv_writer = csv.writer(out_file, delimiter="\t")
     # tsv_writer.writerow(['user', 'entity', 'count'])
     for user, elems in user_data.items():
         res = []

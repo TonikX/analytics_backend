@@ -188,9 +188,7 @@ class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
 
 class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
-        updated_module = super().update(
-            instance, validated_data
-        )
+        updated_module = super().update(instance, validated_data)
         module_group = Group.objects.get(name="academic_plan_developer")
         for user in updated_module.editors.all():
             if module_group not in user.groups.all():
@@ -730,20 +728,27 @@ class WorkProgramForDisciplineBlockSerializer(serializers.ModelSerializer):
 
     def clarify_zuns_for_wp(self, obj, *args, **kwargs) -> dict:
         zuns_for_wp_objects = obj.zuns_for_wp.all().filter(
-            work_program_change_in_discipline_block_module=self.context.get("parent_cb_id"),
-            work_program=obj.id
+            work_program_change_in_discipline_block_module=self.context.get(
+                "parent_cb_id"
+            ),
+            work_program=obj.id,
         )
         serializers = WorkProgramInFieldOfStudySerializerForCb(
-            zuns_for_wp_objects,
-            many=True
+            zuns_for_wp_objects, many=True
         )
         return serializers.data
 
     def wp_in_fs_id_get(self, obj, *args, **kwargs) -> int:
-        return obj.zuns_for_wp.all().filter(
-            work_program_change_in_discipline_block_module=self.context.get("parent_cb_id"),
-            work_program=obj.id
-        )[0].id
+        return (
+            obj.zuns_for_wp.all()
+            .filter(
+                work_program_change_in_discipline_block_module=self.context.get(
+                    "parent_cb_id"
+                ),
+                work_program=obj.id,
+            )[0]
+            .id
+        )
 
 
 class WorkProgramChangeInDisciplineBlockModuleForCRUDResponseSerializer(
@@ -815,9 +820,7 @@ class WorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerial
     def get_id_of_wpcb(self, obj) -> dict:
         work_program = obj.work_program
         serializers = WorkProgramForDisciplineBlockSerializer(
-            work_program,
-            many=True,
-            context={'parent_cb_id': obj.id}
+            work_program, many=True, context={"parent_cb_id": obj.id}
         )
         return serializers.data
 
@@ -834,7 +837,8 @@ class DisciplineBlockModuleWithoutFatherSerializer(serializers.ModelSerializer):
 
     def get_childs(self, obj):
         return DisciplineBlockModuleWithoutFatherSerializer(
-            obj.childs.all(), many=True).data
+            obj.childs.all(), many=True
+        ).data
         """.prefetch_related("childs",
         "change_blocks_of_work_programs_in_modules",
         "change_blocks_of_work_programs_in_modules__work_program",
@@ -883,8 +887,7 @@ class DisciplineBlockModuleSerializer(serializers.ModelSerializer):
 
     def get_childs(self, obj) -> dict:
         return DisciplineBlockModuleWithoutFatherSerializer(
-            obj.childs.all(),
-            many=True
+            obj.childs.all(), many=True
         ).data
         """.prefetch_related("childs__childs", "childs",
         "change_blocks_of_work_programs_in_modules",

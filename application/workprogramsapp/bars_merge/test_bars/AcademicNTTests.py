@@ -13,10 +13,13 @@ def bars_send_lenght(username):
     user = User.objects.get(username=username)
     view = postAcademicNTCheckpoints
     start_time = time.time()
-    request = factory.post(f'api/bars_tools/academicntcheckpoints',
-                           {"year": "2021/2022", "from_date": "20.09.2021"}, format='json')
+    request = factory.post(
+        f"api/bars_tools/academicntcheckpoints",
+        {"year": "2021/2022", "from_date": "20.09.2021"},
+        format="json",
+    )
     force_authenticate(request, user=user)
     response = view(request)
     response.render()
-    pprint(len(response.data['rpd']))
+    pprint(len(response.data["rpd"]))
     print(time.time() - start_time)

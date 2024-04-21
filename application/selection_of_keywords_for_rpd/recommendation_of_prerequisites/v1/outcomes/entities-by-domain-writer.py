@@ -1,9 +1,11 @@
 import csv
 import psycopg2
 
-from selection_of_keywords_for_rpd.recommendation_of_prerequisites.v1.connection_to_postgre import connection_to_postgre
+from selection_of_keywords_for_rpd.recommendation_of_prerequisites.v1.connection_to_postgre import (
+    connection_to_postgre,
+)
 
-select_query = "select id, name, domain_id from dataprocessing_items where domain_id is not null order by id asc;";
+select_query = "select id, name, domain_id from dataprocessing_items where domain_id is not null order by id asc;"
 
 unique_items = set()
 
@@ -34,11 +36,11 @@ finally:
 
 unique_items = sorted(unique_items)
 
-with open('../../data/entities_with_domain.tsv', 'w') as out_file:
-    tsv_writer = csv.writer(out_file, delimiter='\t')
-    tsv_writer.writerow(['id', 'entity_name', 'domain_id'])
+with open("../../data/entities_with_domain.tsv", "w") as out_file:
+    tsv_writer = csv.writer(out_file, delimiter="\t")
+    tsv_writer.writerow(["id", "entity_name", "domain_id"])
     for item in result:
         print(item)
         tsv_writer.writerow(item)
 
-print('end')
+print("end")

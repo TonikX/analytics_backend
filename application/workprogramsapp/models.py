@@ -1214,10 +1214,19 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     cte_objects = CTEManager()
     objects = models.Manager()
 
-    type = models.CharField(choices=TYPES, max_length=100, default='faculty_module', verbose_name='Тип модуля')
-    name = models.CharField(max_length=1024, verbose_name='Название модуля')
-    descipline_block = models.ManyToManyField('DisciplineBlock', verbose_name='Модуль в блоке',
-                                              related_name='modules_in_discipline_block', blank=True)
+    type = models.CharField(
+        choices=TYPES,
+        max_length=100,
+        default="faculty_module",
+        verbose_name="Тип модуля",
+    )
+    name = models.CharField(max_length=1024, verbose_name="Название модуля")
+    descipline_block = models.ManyToManyField(
+        "DisciplineBlock",
+        verbose_name="Модуль в блоке",
+        related_name="modules_in_discipline_block",
+        blank=True,
+    )
     order = models.IntegerField(blank=True, null=True, verbose_name="Порядок модулей")
     selection_rule = models.CharField(
         choices=CHANGE_TYPES,
@@ -1273,8 +1282,12 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         blank=True, null=True, verbose_name="id модуля в ису по отцам"
     )
 
-    clone_info_json = models.JSONField(blank=True, null=True, verbose_name="JSON информация о клонировании")
-    laboriousness = models.IntegerField(blank=True, null=True, verbose_name="Трудоемкость модуля")
+    clone_info_json = models.JSONField(
+        blank=True, null=True, verbose_name="JSON информация о клонировании"
+    )
+    laboriousness = models.IntegerField(
+        blank=True, null=True, verbose_name="Трудоемкость модуля"
+    )
 
     __old_selection_parametr = -1
     __old_selection_rule = -1
@@ -1284,17 +1297,26 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         self.__old_selection_parametr = self.selection_parametr
         self.__old_selection_rule = self.selection_rule
 
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None, *args, **kwargs):
+    def save(
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
+        *args,
+        **kwargs,
+    ):
         from workprogramsapp.ap_improvement.module_ze_counter import rewrite_ze_up
+
         super().save(force_insert, force_update, *args, **kwargs)
-        if self.__old_selection_parametr != self.selection_parametr or self.__old_selection_rule != self.selection_rule:
+        if (
+            self.__old_selection_parametr != self.selection_parametr
+            or self.__old_selection_rule != self.selection_rule
+        ):
             self.__old_selection_parametr = self.selection_parametr
             self.__old_selection_rule = self.selection_rule
             rewrite_ze_up(self)
             print("d4 bad")
-
 
     class Meta:
         ordering = ["order"]

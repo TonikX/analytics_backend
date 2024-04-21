@@ -236,9 +236,7 @@ class DisciplineBlockModuleCreateSerializer(serializers.ModelSerializer):
                 reverse_universal(validated_data.get("childs"))
             else:
                 reverse_universal(instance.childs.all())
-        updated_module = super().update(
-            instance, validated_data
-        )
+        updated_module = super().update(instance, validated_data)
         module_group = Group.objects.get(name="blockmodule_editor")
         for user in updated_module.editors.all():
             if module_group not in user.groups.all():
@@ -275,7 +273,15 @@ class ShortDisciplineBlockModuleForModuleListSerializer(serializers.ModelSeriali
     class Meta:
         model = DisciplineBlockModule
 
-        fields = ["id", "module_isu_id", "name", "type", "editors", "status", "description"]
+        fields = [
+            "id",
+            "module_isu_id",
+            "name",
+            "type",
+            "editors",
+            "status",
+            "description",
+        ]
 
 
 class DisciplineBlockModuleUpdateForBlockRelationSerializer(
