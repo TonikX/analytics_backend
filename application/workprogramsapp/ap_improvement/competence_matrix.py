@@ -1,4 +1,5 @@
 from django_cte import With
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -90,12 +91,12 @@ def get_competences_practice(practice_in_fs):
     return {"competences": list(competences_dict.values())}
 
 
+@extend_schema(methods=["GET"], request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def GetCompetenceMatrixCTE(request, gen_pk):
     unique_wp = []  # Уникальные РПД в нескольких УП
     unique_practice = []  # Уникальные Практики в нескольких УП
-    unique_gia = []  # Уникальные ГИА в нескольких УП
     gen_characteristic = GeneralCharacteristics.objects.get(pk=gen_pk)
     academic_plans = (
         gen_characteristic.educational_program.all()

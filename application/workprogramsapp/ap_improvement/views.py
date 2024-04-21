@@ -1,4 +1,5 @@
 from django_cte import With
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -15,6 +16,7 @@ from workprogramsapp.models import (
 from workprogramsapp.serializers import IndicatorSerializer
 
 
+@extend_schema(methods=["GET"], request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 # Проще генерировать словари с зунами индикаторами и компетенциями
@@ -59,8 +61,6 @@ def get_all_competences_and_indicators_for_wp_cte(request, wp_id):
 
         outcomes = zun.items.all()
         items_array = [{"id": out.item.id, "name": out.item.name} for out in outcomes]
-        modules_ids = []
-        # queryset_imps = ImplementationAcademicPlan.objects.none()
         serialized_imps = []
         for module in modules:
             if zun.id in module["zuns_ids"]:
@@ -90,15 +90,14 @@ def get_all_competences_and_indicators_for_wp_cte(request, wp_id):
     return Response({"competences": list(competences_dict.values())})
 
 
+@extend_schema(methods=["GET"], request=None, responses=None)
 @api_view(["GET"])
 @permission_classes((IsAuthenticated,))
 def get_all_ap_with_competences_and_indicators_cte(request, wp_id):
-    """
+    """В GET-параметры можно передать.
 
-    В GET-параметры можно передать
     ap_id - id объекта AcademicPlan для фильтрации
     imp_id - id объекта ImplementationAcademicPlan для фильтрации
-    year - фильтр по годам УП
     """
     ap_id = request.GET.get("ap_id")
     imp_id = request.GET.get("imp_id")

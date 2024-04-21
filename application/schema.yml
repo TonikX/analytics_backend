@@ -782,7 +782,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AcademicPlan'
+                $ref: '#/components/schemas/AcademicPlanForAP'
           description: ''
   /api/academicplan/implemention:
     post:
@@ -1550,10 +1550,8 @@ paths:
       operationId: api_competence_get_all_ap_with_competences_and_indicators_to_wp_retrieve
       description: |-
         В GET-параметры можно передать
-
         ap_id - id объекта AcademicPlan для фильтрации
         imp_id - id объекта ImplementationAcademicPlan для фильтрации
-        year - фильтр по годам УП
       parameters:
       - in: path
         name: wp_id
@@ -3854,7 +3852,7 @@ paths:
   /api/export/academic_plan/{id}:
     get:
       operationId: api_export_academic_plan_list
-      description: Возвращает РПД в формате docx в браузере
+      description: Возвращает учебный план после рендера в формате docx.
       parameters:
       - in: path
         name: id
@@ -3885,7 +3883,7 @@ paths:
   /api/export/competence_matrix/{id}:
     get:
       operationId: api_export_competence_matrix_list
-      description: Возвращает матрицу компетенций в формате excel в браузере
+      description: Возвращает матрицу компетенций после рендера в формате excel.
       parameters:
       - in: path
         name: id
@@ -3916,7 +3914,8 @@ paths:
   /api/export/docx:
     get:
       operationId: api_export_docx_list
-      description: Возвращает РПД в формате docx в браузере
+      description: Возвращает рабочую программу дисциплины после рендера в формате
+        docx.
       parameters:
       - name: page
         required: false
@@ -3942,7 +3941,8 @@ paths:
   /api/export/docx/{id}/{fs_id}/{ap_id}/{year}:
     get:
       operationId: api_export_docx_list_2
-      description: Возвращает РПД в формате docx в браузере
+      description: Возвращает рабочую программу дисциплины после рендера в формате
+        docx.
       parameters:
       - in: path
         name: ap_id
@@ -3988,7 +3988,7 @@ paths:
   /api/export/general_characteristic/{id}:
     get:
       operationId: api_export_general_characteristic_list
-      description: Возвращает ОХ в формате docx в браузере
+      description: Возвращает общие характеристики после рендера в формате docx.
       parameters:
       - in: path
         name: id
@@ -4019,7 +4019,7 @@ paths:
   /api/export/syllabus/{id}/{fs_id}/{ap_id}/{year}:
     get:
       operationId: api_export_syllabus_list
-      description: Возвращает РПД в формате docx в браузере
+      description: Возвращает учебную программу после рендера в формате docx.
       parameters:
       - in: path
         name: ap_id
@@ -7288,6 +7288,25 @@ paths:
   /api/general_characteristic/competence_matrix/{gen_pk}:
     get:
       operationId: api_general_characteristic_competence_matrix_retrieve
+      parameters:
+      - in: path
+        name: gen_pk
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - tokenAuth: []
+      - basicAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/general_characteristic/competence_matrix_old/{gen_pk}:
+    get:
+      operationId: api_general_characteristic_competence_matrix_old_retrieve
       parameters:
       - in: path
         name: gen_pk
@@ -15099,7 +15118,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WorkProgram'
+                $ref: '#/components/schemas/WorkProgramSerializerCTE'
           description: ''
   /api/workprogram/fieldofstudies/{workprogram_id}:
     get:
@@ -16398,22 +16417,6 @@ paths:
         schema:
           type: string
       - in: query
-        name: work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__number
-        schema:
-          type: string
-      - in: query
-        name: work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__field_of_study__title
-        schema:
-          type: string
-      - in: query
-        name: work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__academic_plan_in_field_of_study__title
-        schema:
-          type: string
-      - in: query
-        name: work_program_in_change_block__discipline_block_module__descipline_block__academic_plan__educational_profile
-        schema:
-          type: string
-      - in: query
         name: work_status
         schema:
           type: string
@@ -16436,7 +16439,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedWorkProgramList'
+                $ref: '#/components/schemas/PaginatedWorkProgramSerializerForListList'
           description: ''
   /api/workprogramsinfieldofstudy:
     get:
@@ -17735,6 +17738,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         discipline_blocks_in_academic_plan:
           type: array
           items:
@@ -17815,6 +17819,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         year:
           type: string
           nullable: true
@@ -17844,6 +17849,78 @@ components:
       - approval_date
       - fos_pk
       - id
+    AcademicPlanForAP:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        educational_profile:
+          type: string
+          nullable: true
+          title: '- Профиль ОП'
+          maxLength: 1024
+        number:
+          type: string
+          nullable: true
+          title: '- Номер учебного плана'
+          maxLength: 1024
+        approval_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        discipline_blocks_in_academic_plan:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisciplineBlockForAP'
+        year:
+          type: string
+          nullable: true
+          maxLength: 1024
+        education_form:
+          nullable: true
+          title: Форма обучения
+          oneOf:
+          - $ref: '#/components/schemas/EducationFormEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        qualification:
+          nullable: true
+          title: '- Квалификация'
+          oneOf:
+          - $ref: '#/components/schemas/QualificationF6bEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        author:
+          type: integer
+          nullable: true
+          title: Автор учебного плана
+        can_edit:
+          type: boolean
+          readOnly: true
+        academic_plan_in_field_of_study:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImplementationAcademicPlanShortForAP'
+        ap_isu_id:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          title: ID учебного плана в ИСУ
+        on_check:
+          allOf:
+          - $ref: '#/components/schemas/OnCheckEnum'
+          title: Статус проверки
+        excel_generation_errors:
+          nullable: true
+          title: Список ошибок в УП
+      required:
+      - academic_plan_in_field_of_study
+      - approval_date
+      - can_edit
+      - id
     AcademicPlanForWPinFS:
       type: object
       properties:
@@ -17864,6 +17941,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         academic_plan_in_field_of_study:
           type: array
           items:
@@ -17921,6 +17999,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
       required:
       - approval_date
       - id
@@ -17985,6 +18064,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         year:
           type: string
           nullable: true
@@ -18026,6 +18106,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         year:
           type: string
           nullable: true
@@ -19221,6 +19302,31 @@ components:
       - id
       - satisfactorily
       - unsatisfactory
+    DataprocessingShortStructuralUnit:
+      type: object
+      description: Cериализатор подразделения разработчика РПД
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          title: Описание
+          maxLength: 300
+        isu_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: ID структурного подразделения в ИСУ
+        short_name:
+          type: string
+          nullable: true
+          title: Аббревиатура
+          maxLength: 300
+      required:
+      - id
+      - title
     Department:
       type: object
       description: Сериализатор образовательной программы.
@@ -19307,6 +19413,23 @@ components:
       required:
       - academic_plan
       - id
+      - name
+    DisciplineBlockForAP:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 1024
+        modules_in_discipline_block:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - id
+      - modules_in_discipline_block
       - name
     DisciplineBlockModule:
       type: object
@@ -19483,7 +19606,13 @@ components:
           title: Id модуля в ису по отцам
         clone_info_json:
           nullable: true
-          title: JSON  информацией о клонировании
+          title: JSON информация о клонировании
+        laboriousness:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: Трудоемкость модуля
         childs:
           type: array
           items:
@@ -19863,6 +19992,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         users:
           type: array
           items:
@@ -20216,10 +20346,12 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         date_of_last_change:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         expertise_counter:
           type: integer
           maximum: 2147483647
@@ -20330,6 +20462,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
       required:
       - date
       - id
@@ -21984,6 +22117,19 @@ components:
       required:
       - item
       - practice
+    ItemSerializerApImprovment:
+      type: object
+      description: Сериализатор Ключевого слова.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название
+          maxLength: 900
+      required:
+      - id
     ItemWithProfessions:
       type: object
       description: Сериализатор Ключевого слова.
@@ -22320,7 +22466,13 @@ components:
           title: Id модуля в ису по отцам
         clone_info_json:
           nullable: true
-          title: JSON  информацией о клонировании
+          title: JSON информация о клонировании
+        laboriousness:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: Трудоемкость модуля
         descipline_block:
           type: array
           items:
@@ -22417,6 +22569,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         user:
           type: integer
           nullable: true
@@ -22735,6 +22888,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         discipline_code:
           type: string
           nullable: true
@@ -23048,6 +23202,28 @@ components:
       - evaluation_tool
       - id
       - item
+    OutcomesOfWorkProgramInWorkProgramCTE:
+      type: object
+      description: Сериализатор вывода результата обучения для вывода результата в
+        рабочей программе
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        item:
+          $ref: '#/components/schemas/ItemSerializerApImprovment'
+        masterylevel:
+          allOf:
+          - $ref: '#/components/schemas/MasterylevelEnum'
+          title: Уровень
+        evaluation_tool:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvaluationToolForOutcoms'
+      required:
+      - evaluation_tool
+      - id
+      - item
     OutcomesOfWorkProgramInWorkProgramSerializerAdd:
       type: object
       description: Сериализатор вывода результата обучения для вывода результата в
@@ -23080,6 +23256,9 @@ components:
       - indicator_of_competence_in_group_of_over_prof_competences
     PaginatedAcademicPlanInFolderList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23100,6 +23279,9 @@ components:
             $ref: '#/components/schemas/AcademicPlanInFolder'
     PaginatedAcademicPlanSerializerForListList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23120,6 +23302,9 @@ components:
             $ref: '#/components/schemas/AcademicPlanSerializerForList'
     PaginatedAcademicPlanShortList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23140,6 +23325,9 @@ components:
             $ref: '#/components/schemas/AcademicPlanShort'
     PaginatedAcademicPlanUpdateConfigurationList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23160,6 +23348,9 @@ components:
             $ref: '#/components/schemas/AcademicPlanUpdateConfiguration'
     PaginatedAcademicPlanUpdateLogList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23180,6 +23371,9 @@ components:
             $ref: '#/components/schemas/AcademicPlanUpdateLog'
     PaginatedAcademicPlansDescriptionWpList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23200,6 +23394,9 @@ components:
             $ref: '#/components/schemas/AcademicPlansDescriptionWp'
     PaginatedAdditionalMaterialList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23220,6 +23417,9 @@ components:
             $ref: '#/components/schemas/AdditionalMaterial'
     PaginatedBibliographicReferenceList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23240,6 +23440,9 @@ components:
             $ref: '#/components/schemas/BibliographicReference'
     PaginatedBibliographicReferenceListList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23260,6 +23463,9 @@ components:
             $ref: '#/components/schemas/BibliographicReferenceList'
     PaginatedCertificationEvaluationToolCreateList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23280,6 +23486,9 @@ components:
             $ref: '#/components/schemas/CertificationEvaluationToolCreate'
     PaginatedCommentList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23300,6 +23509,9 @@ components:
             $ref: '#/components/schemas/Comment'
     PaginatedCompetenceCommentList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23320,6 +23532,9 @@ components:
             $ref: '#/components/schemas/CompetenceComment'
     PaginatedCompetenceList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23340,6 +23555,9 @@ components:
             $ref: '#/components/schemas/Competence'
     PaginatedCompetenceWithStandardList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23360,6 +23578,9 @@ components:
             $ref: '#/components/schemas/CompetenceWithStandard'
     PaginatedCourseCreditList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23380,6 +23601,9 @@ components:
             $ref: '#/components/schemas/CourseCredit'
     PaginatedCourseFieldOfStudyList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23400,6 +23624,9 @@ components:
             $ref: '#/components/schemas/CourseFieldOfStudy'
     PaginatedCriteriaVKRList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23420,6 +23647,9 @@ components:
             $ref: '#/components/schemas/CriteriaVKR'
     PaginatedDepartmentList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23440,6 +23670,9 @@ components:
             $ref: '#/components/schemas/Department'
     PaginatedDisciplineBlockModuleInDisciplineBlockList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23460,6 +23693,9 @@ components:
             $ref: '#/components/schemas/DisciplineBlockModuleInDisciplineBlock'
     PaginatedDomainList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23480,6 +23716,9 @@ components:
             $ref: '#/components/schemas/Domain'
     PaginatedEducationalProgramList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23500,6 +23739,9 @@ components:
             $ref: '#/components/schemas/EducationalProgram'
     PaginatedEducationalStandardListList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23520,6 +23762,9 @@ components:
             $ref: '#/components/schemas/EducationalStandardList'
     PaginatedElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23540,6 +23785,9 @@ components:
             $ref: '#/components/schemas/ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule'
     PaginatedEmailList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23560,6 +23808,9 @@ components:
             $ref: '#/components/schemas/Email'
     PaginatedEvaluationToolForWorkProgramList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23580,6 +23831,9 @@ components:
             $ref: '#/components/schemas/EvaluationToolForWorkProgram'
     PaginatedEvaluationToolListList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23600,6 +23854,9 @@ components:
             $ref: '#/components/schemas/EvaluationToolList'
     PaginatedExpertiseChangeLogList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23620,6 +23877,9 @@ components:
             $ref: '#/components/schemas/ExpertiseChangeLog'
     PaginatedExpertiseList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23640,6 +23900,9 @@ components:
             $ref: '#/components/schemas/Expertise'
     PaginatedFeedbackRecordList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23660,6 +23923,9 @@ components:
             $ref: '#/components/schemas/FeedbackRecord'
     PaginatedFieldOfStudyListList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23680,6 +23946,9 @@ components:
             $ref: '#/components/schemas/FieldOfStudyList'
     PaginatedFolderList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23700,6 +23969,9 @@ components:
             $ref: '#/components/schemas/Folder'
     PaginatedGIABaseTemplateList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23720,6 +23992,9 @@ components:
             $ref: '#/components/schemas/GIABaseTemplate'
     PaginatedGIAPrimitiveList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23740,6 +24015,9 @@ components:
             $ref: '#/components/schemas/GIAPrimitive'
     PaginatedGeneralCharacteristicsList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23760,6 +24038,9 @@ components:
             $ref: '#/components/schemas/GeneralCharacteristics'
     PaginatedGeneralLaborFunctionsList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23780,6 +24061,9 @@ components:
             $ref: '#/components/schemas/GeneralLaborFunctions'
     PaginatedGeneralProfCompetencesInGroupOfGeneralCharacteristicList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23800,6 +24084,9 @@ components:
             $ref: '#/components/schemas/GeneralProfCompetencesInGroupOfGeneralCharacteristic'
     PaginatedGroupOfGeneralProfCompetencesInGeneralCharacteristicList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23820,6 +24107,9 @@ components:
             $ref: '#/components/schemas/GroupOfGeneralProfCompetencesInGeneralCharacteristic'
     PaginatedGroupOfKeyCompetencesInGeneralCharacteristicList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23840,6 +24130,9 @@ components:
             $ref: '#/components/schemas/GroupOfKeyCompetencesInGeneralCharacteristic'
     PaginatedGroupOfOverProfCompetencesInGeneralCharacteristicList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23860,6 +24153,9 @@ components:
             $ref: '#/components/schemas/GroupOfOverProfCompetencesInGeneralCharacteristic'
     PaginatedGroupOfPkCompetencesInGeneralCharacteristicList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23880,6 +24176,9 @@ components:
             $ref: '#/components/schemas/GroupOfPkCompetencesInGeneralCharacteristic'
     PaginatedHistoryOfSendingBarsList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23900,6 +24199,9 @@ components:
             $ref: '#/components/schemas/HistoryOfSendingBars'
     PaginatedImplementationAcademicPlanList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23920,6 +24222,9 @@ components:
             $ref: '#/components/schemas/ImplementationAcademicPlan'
     PaginatedImplementationAcademicPlanWpStatisticList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23940,6 +24245,9 @@ components:
             $ref: '#/components/schemas/ImplementationAcademicPlanWpStatistic'
     PaginatedIndicatorListList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23960,6 +24268,9 @@ components:
             $ref: '#/components/schemas/IndicatorList'
     PaginatedIndividualImplementationAcademicPlanInFolderList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -23980,6 +24291,9 @@ components:
             $ref: '#/components/schemas/IndividualImplementationAcademicPlanInFolder'
     PaginatedInstitutionList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24000,6 +24314,9 @@ components:
             $ref: '#/components/schemas/Institution'
     PaginatedIsuHistoryListViewList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24020,6 +24337,9 @@ components:
             $ref: '#/components/schemas/IsuHistoryListView'
     PaginatedItemCreateList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24040,6 +24360,9 @@ components:
             $ref: '#/components/schemas/ItemCreate'
     PaginatedItemList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24060,6 +24383,9 @@ components:
             $ref: '#/components/schemas/Item'
     PaginatedItemWithProfessionsList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24080,6 +24406,9 @@ components:
             $ref: '#/components/schemas/ItemWithProfessions'
     PaginatedItemWithRelationList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24100,6 +24429,9 @@ components:
             $ref: '#/components/schemas/ItemWithRelation'
     PaginatedItemWithRolesList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24120,6 +24452,9 @@ components:
             $ref: '#/components/schemas/ItemWithRoles'
     PaginatedKeyCompetencesInGroupOfGeneralCharacteristicList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24140,6 +24475,9 @@ components:
             $ref: '#/components/schemas/KeyCompetencesInGroupOfGeneralCharacteristic'
     PaginatedKindsOfActivitySerializerForEdList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24160,6 +24498,9 @@ components:
             $ref: '#/components/schemas/KindsOfActivitySerializerForEd'
     PaginatedModuleInFolderList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24180,6 +24521,9 @@ components:
             $ref: '#/components/schemas/ModuleInFolder'
     PaginatedModulesWithoutRulesList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24200,6 +24544,9 @@ components:
             $ref: '#/components/schemas/ModulesWithoutRules'
     PaginatedNotificationList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24220,6 +24567,9 @@ components:
             $ref: '#/components/schemas/Notification'
     PaginatedObjectsOfActivityList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24240,6 +24590,9 @@ components:
             $ref: '#/components/schemas/ObjectsOfActivity'
     PaginatedOnlineCourseList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24260,6 +24613,9 @@ components:
             $ref: '#/components/schemas/OnlineCourse'
     PaginatedOutcomesOfWorkProgramList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24280,6 +24636,9 @@ components:
             $ref: '#/components/schemas/OutcomesOfWorkProgram'
     PaginatedOverProfCompetencesInGroupOfGeneralCharacteristicList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24300,6 +24659,9 @@ components:
             $ref: '#/components/schemas/OverProfCompetencesInGroupOfGeneralCharacteristic'
     PaginatedPkCompetencesInGroupOfGeneralCharacteristicList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24320,6 +24682,9 @@ components:
             $ref: '#/components/schemas/PkCompetencesInGroupOfGeneralCharacteristic'
     PaginatedPlatformList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24340,6 +24705,9 @@ components:
             $ref: '#/components/schemas/Platform'
     PaginatedPracticeInFieldOfStudyCreateList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24360,6 +24728,9 @@ components:
             $ref: '#/components/schemas/PracticeInFieldOfStudyCreate'
     PaginatedPracticeInFieldOfStudyForCompeteceListList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24380,6 +24751,9 @@ components:
             $ref: '#/components/schemas/PracticeInFieldOfStudyForCompeteceList'
     PaginatedPracticePrimitiveList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24400,6 +24774,9 @@ components:
             $ref: '#/components/schemas/PracticePrimitive'
     PaginatedPracticeTemplateList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24420,6 +24797,9 @@ components:
             $ref: '#/components/schemas/PracticeTemplate'
     PaginatedPrerequisitesOfWorkProgramList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24440,6 +24820,9 @@ components:
             $ref: '#/components/schemas/PrerequisitesOfWorkProgram'
     PaginatedProfessionList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24460,6 +24843,9 @@ components:
             $ref: '#/components/schemas/Profession'
     PaginatedProfessionalStandardList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24480,6 +24866,9 @@ components:
             $ref: '#/components/schemas/ProfessionalStandard'
     PaginatedRecommendationOfPrerequisitesFoUserList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24500,6 +24889,9 @@ components:
             $ref: '#/components/schemas/RecommendationOfPrerequisitesFoUser'
     PaginatedRelationCreateList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24520,6 +24912,9 @@ components:
             $ref: '#/components/schemas/RelationCreate'
     PaginatedRelationList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24540,6 +24935,9 @@ components:
             $ref: '#/components/schemas/Relation'
     PaginatedRoleList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24560,6 +24958,9 @@ components:
             $ref: '#/components/schemas/Role'
     PaginatedSectionList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24580,6 +24981,9 @@ components:
             $ref: '#/components/schemas/Section'
     PaginatedShortDisciplineBlockModuleForModuleListList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24600,6 +25004,9 @@ components:
             $ref: '#/components/schemas/ShortDisciplineBlockModuleForModuleList'
     PaginatedShortIndividualImplementationAcademicPlanList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24620,6 +25027,9 @@ components:
             $ref: '#/components/schemas/ShortIndividualImplementationAcademicPlan'
     PaginatedShortStructuralUnitList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24640,6 +25050,9 @@ components:
             $ref: '#/components/schemas/ShortStructuralUnit'
     PaginatedSkillsOfProfessionInProfessionList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24660,6 +25073,9 @@ components:
             $ref: '#/components/schemas/SkillsOfProfessionInProfession'
     PaginatedSkillsOfRoleInRoleList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24680,6 +25096,9 @@ components:
             $ref: '#/components/schemas/SkillsOfRoleInRole'
     PaginatedSuperShortWorkProgramList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24700,6 +25119,9 @@ components:
             $ref: '#/components/schemas/SuperShortWorkProgram'
     PaginatedTasksForEducationalStandardList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24720,6 +25142,9 @@ components:
             $ref: '#/components/schemas/TasksForEducationalStandard'
     PaginatedTopicList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24740,6 +25165,9 @@ components:
             $ref: '#/components/schemas/Topic'
     PaginatedUserBaseList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24760,6 +25188,9 @@ components:
             $ref: '#/components/schemas/UserBase'
     PaginatedUserExpertiseList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24780,6 +25211,9 @@ components:
             $ref: '#/components/schemas/UserExpertise'
     PaginatedUserStructuralUnitList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24800,6 +25234,9 @@ components:
             $ref: '#/components/schemas/UserStructuralUnit'
     PaginatedWorkProgramChangeInDisciplineBlockModuleList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24820,6 +25257,9 @@ components:
             $ref: '#/components/schemas/WorkProgramChangeInDisciplineBlockModule'
     PaginatedWorkProgramDescriptionOnlyList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24840,6 +25280,9 @@ components:
             $ref: '#/components/schemas/WorkProgramDescriptionOnly'
     PaginatedWorkProgramEvaluationToolsStatList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24860,6 +25303,9 @@ components:
             $ref: '#/components/schemas/WorkProgramEvaluationToolsStat'
     PaginatedWorkProgramForIndividualRoutesList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24880,6 +25326,9 @@ components:
             $ref: '#/components/schemas/WorkProgramForIndividualRoutes'
     PaginatedWorkProgramInFieldOfStudyCreateList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24900,6 +25349,9 @@ components:
             $ref: '#/components/schemas/WorkProgramInFieldOfStudyCreate'
     PaginatedWorkProgramInFieldOfStudyForCompeteceListList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24920,6 +25372,9 @@ components:
             $ref: '#/components/schemas/WorkProgramInFieldOfStudyForCompeteceList'
     PaginatedWorkProgramInFieldOfStudyList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24940,6 +25395,9 @@ components:
             $ref: '#/components/schemas/WorkProgramInFieldOfStudy'
     PaginatedWorkProgramInFieldOfStudyWithAPList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24960,6 +25418,9 @@ components:
             $ref: '#/components/schemas/WorkProgramInFieldOfStudyWithAP'
     PaginatedWorkProgramInFolderList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -24980,6 +25441,9 @@ components:
             $ref: '#/components/schemas/WorkProgramInFolder'
     PaginatedWorkProgramInWorkProgramChangeInDisciplineBlockModuleList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -25000,6 +25464,9 @@ components:
             $ref: '#/components/schemas/WorkProgramInWorkProgramChangeInDisciplineBlockModule'
     PaginatedWorkProgramList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -25018,8 +25485,34 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WorkProgram'
+    PaginatedWorkProgramSerializerForListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkProgramSerializerForList'
     PaginatedWorkProgramSerializerForStatisticExtendedList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -25040,6 +25533,9 @@ components:
             $ref: '#/components/schemas/WorkProgramSerializerForStatisticExtended'
     PaginatedZunCreateList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -25060,6 +25556,9 @@ components:
             $ref: '#/components/schemas/ZunCreate'
     PaginateduserProfileList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -25111,6 +25610,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         discipline_blocks_in_academic_plan:
           type: array
           items:
@@ -25918,6 +26418,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         users:
           type: array
           items:
@@ -26030,10 +26531,12 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         date_of_last_change:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         expertise_counter:
           type: integer
           maximum: 2147483647
@@ -26078,6 +26581,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
     PatchedFieldOfStudy:
       type: object
       properties:
@@ -27020,6 +27524,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
           title: Профессия
         title:
           type: string
@@ -27093,6 +27598,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
           title: Профессия
         title:
           type: string
@@ -28179,6 +28685,23 @@ components:
       required:
       - id
       - item
+    PrerequisitesOfWorkProgramInWorkProgramCTE:
+      type: object
+      description: Сериализатор вывода пререквизита обучения для вывода пререквизита
+        в рабочей программе
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        item:
+          $ref: '#/components/schemas/ItemSerializerApImprovment'
+        masterylevel:
+          allOf:
+          - $ref: '#/components/schemas/MasterylevelEnum'
+          title: Уровень
+      required:
+      - id
+      - item
     PrerequisitesOfWorkProgramSerializerAdd:
       type: object
       description: Сериализатор создания пререквизита обучения.
@@ -28206,6 +28729,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
           title: Профессия
         title:
           type: string
@@ -28439,6 +28963,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
           title: Профессия
         title:
           type: string
@@ -28628,12 +29153,71 @@ components:
         status:
           type: string
           readOnly: true
+        description:
+          type: string
+          nullable: true
+          title: Описания блока модуля дисциплин
+          maxLength: 10240
       required:
       - editors
       - id
       - name
       - status
     ShortExpertise:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        expertise_type:
+          nullable: true
+          title: Тип экспертизы
+          oneOf:
+          - $ref: '#/components/schemas/ExpertiseTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        expertise_status:
+          allOf:
+          - $ref: '#/components/schemas/ExpertiseStatusEnum'
+          title: Статус экспертизы
+        approval_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        date_of_last_change:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        expertise_counter:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: Счетчик отправки на экспертизу
+        work_program:
+          type: integer
+          nullable: true
+        gia:
+          type: integer
+          nullable: true
+        practice:
+          type: integer
+          nullable: true
+        experts:
+          type: array
+          items:
+            type: integer
+            title: Эксперты
+          readOnly: true
+          title: Эксперты
+      required:
+      - approval_date
+      - date_of_last_change
+      - experts
+      - id
+    ShortExpertiseSerializerCommon:
       type: object
       description: Короткий вывод информации об экспертизе.
       properties:
@@ -28661,6 +29245,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
       required:
       - approval_date
       - id
@@ -29332,6 +29917,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         authors:
           type: string
           nullable: true
@@ -29398,7 +29984,7 @@ components:
         expertise_with_rpd:
           type: array
           items:
-            $ref: '#/components/schemas/ShortExpertise'
+            $ref: '#/components/schemas/ShortExpertiseSerializerCommon'
           readOnly: true
         work_status:
           allOf:
@@ -30021,6 +30607,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         authors:
           type: string
           nullable: true
@@ -30139,6 +30726,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         authors:
           type: string
           nullable: true
@@ -30282,6 +30870,270 @@ components:
         * `3` - 3
         * `4` - 4
         * `5` - 5
+    WorkProgramSerializerCTE:
+      type: object
+      description: Сериализатор рабочих программ
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        approval_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        authors:
+          type: string
+          nullable: true
+          maxLength: 1024
+        discipline_code:
+          type: string
+          nullable: true
+          maxLength: 1024
+        qualification:
+          nullable: true
+          title: Квалификация
+          oneOf:
+          - $ref: '#/components/schemas/QualificationBf2Enum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        prerequisites:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrerequisitesOfWorkProgramInWorkProgramCTE'
+        outcomes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutcomesOfWorkProgramInWorkProgramCTE'
+        title:
+          type: string
+          title: Название
+          maxLength: 1024
+        hoursFirstSemester:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: Количество часов в 1 семестре
+        hoursSecondSemester:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: Количество часов в 2 семестре
+        discipline_sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisciplineSection'
+        discipline_certification:
+          type: array
+          items:
+            type: integer
+        bibliographic_reference:
+          type: array
+          items:
+            $ref: '#/components/schemas/BibliographicReference'
+        description:
+          type: string
+          nullable: true
+          maxLength: 5000
+        video:
+          type: string
+          nullable: true
+          maxLength: 1024
+        expertise_with_rpd:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShortExpertise'
+          readOnly: true
+        work_status:
+          allOf:
+          - $ref: '#/components/schemas/WorkStatusEnum'
+          title: Архив
+        certification_evaluation_tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/CertificationEvaluationToolForWorkProgram'
+        hours:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: Сумма часов по разделам
+        extra_points:
+          nullable: true
+          title: Квалификация
+          oneOf:
+          - $ref: '#/components/schemas/ExtraPointsEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        editors:
+          type: array
+          items:
+            $ref: '#/components/schemas/userProfile'
+        language:
+          nullable: true
+          title: Языки
+          oneOf:
+          - $ref: '#/components/schemas/LanguageE32Enum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        structural_unit:
+          $ref: '#/components/schemas/DataprocessingShortStructuralUnit'
+        have_course_project:
+          type: boolean
+          nullable: true
+          title: Имеет ли РПД курсовой проект
+        have_diff_pass:
+          type: boolean
+          nullable: true
+          title: Имеет ли РПД дифф. зачет
+        have_pass:
+          type: boolean
+          nullable: true
+          title: Имеет ли РПД зачет
+        have_exam:
+          type: boolean
+          nullable: true
+          title: Имеет ли РПД экзамен
+        lecture_hours:
+          type: string
+          nullable: true
+          title: Часы лекций
+          maxLength: 1024
+        practice_hours:
+          type: string
+          nullable: true
+          title: Часы Практик
+          maxLength: 1024
+        lab_hours:
+          type: string
+          nullable: true
+          title: Часы лабораторных работ
+          maxLength: 1024
+        srs_hours:
+          type: string
+          nullable: true
+          title: Часы СРС
+          maxLength: 1024
+        bars:
+          type: boolean
+          title: Нужно отослать дисциплину в БАРС
+        lecture_hours_v2:
+          type: string
+          nullable: true
+          title: Часы лекций
+          maxLength: 1024
+        practice_hours_v2:
+          type: string
+          nullable: true
+          title: Часы Практик
+          maxLength: 1024
+        lab_hours_v2:
+          type: string
+          nullable: true
+          title: Часы лабораторных работ
+          maxLength: 1024
+        srs_hours_v2:
+          type: string
+          nullable: true
+          title: Часы СРС
+          maxLength: 1024
+        contact_hours_v2:
+          type: string
+          nullable: true
+          title: Часы Контактной работы
+          maxLength: 1024
+        number_of_semesters:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: Количество семестров в дисциплине
+        read_notifications:
+          type: string
+          title: Прочитанность уведомлений
+          maxLength: 256
+        implementation_format:
+          nullable: true
+          title: Формат реализации
+          oneOf:
+          - $ref: '#/components/schemas/ImplementationFormatEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        ze_v_sem:
+          type: string
+          nullable: true
+          title: Количество зачетных единиц у РПД
+          maxLength: 1024
+        consultation_v2:
+          type: string
+          nullable: true
+          title: Консультации
+          maxLength: 1024
+        moodle_link:
+          type: string
+          format: uri
+          nullable: true
+          title: Ссылка на мудл
+          maxLength: 1024
+      required:
+      - approval_date
+      - certification_evaluation_tools
+      - discipline_certification
+      - discipline_sections
+      - editors
+      - expertise_with_rpd
+      - id
+      - outcomes
+      - prerequisites
+      - structural_unit
+      - title
+    WorkProgramSerializerForList:
+      type: object
+      description: Сериализатор рабочих программ.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        approval_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        authors:
+          type: string
+          nullable: true
+          maxLength: 1024
+        discipline_code:
+          type: string
+          nullable: true
+          maxLength: 1024
+        qualification:
+          nullable: true
+          title: Квалификация
+          oneOf:
+          - $ref: '#/components/schemas/QualificationBf2Enum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        title:
+          type: string
+          title: Название
+          maxLength: 1024
+        expertise_with_rpd:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShortExpertise'
+          readOnly: true
+        work_status:
+          allOf:
+          - $ref: '#/components/schemas/WorkStatusEnum'
+          title: Архив
+      required:
+      - approval_date
+      - expertise_with_rpd
+      - id
+      - title
     WorkProgramSerializerForStatisticExtended:
       type: object
       properties:
