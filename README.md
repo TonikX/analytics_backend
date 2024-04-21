@@ -95,16 +95,38 @@
 
 ## Соглашения о качестве кода
 
-1) Обновляйте зависимости только в файле pyproject.toml.
-   Не добавляйте в него субзависимости, которые не используются в проекте напрямую.
-   После обновлений в pyproject.toml запустите эти команды, чтобы обновить файлы requirements.
+### 1. Используйте pre-commit-hooks для проверки ваших коммитов
+
+После запуска venv и установки **requirements-dev.txt**, запустите команду:
+
+   ```bash
+   pre-commit install
+   ```
+
+Теперь все ваши коммиты будут проверяться в соответствии с конфигурацией .pre-commit-config.yaml
+
+(Опционально) Вы можете запустить проверки для всех файлов командой:
+
+   ```bash
+   pre-commit run --all-files
+   ```
+
+Больше информации тут: https://pre-commit.com/
+   
+### 2. Управляйте зависимостями только через pip-tools
+
+Напрямую редактируйте только файл pyproject.toml.
+Не добавляйте в него субзависимости, которые не используются в проекте напрямую.
+После обновлений в pyproject.toml запустите эти команды, чтобы обновить файлы requirements:
 
    ```bash
    # В папке application
    pip-compile --rebuild --strip-extras --output-file=requirements.txt pyproject.toml
    pip-compile --rebuild --extra=dev --strip-extras --output-file=requirements-dev.txt pyproject.toml
    ```
-   Устанавливайте зависимости только через команду pip-sync
+
+Для установки зависимостей используйте команду pip-sync
+
    ```bash
    pip-sync requirements.txt
    # или

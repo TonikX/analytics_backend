@@ -57,7 +57,9 @@ dev = [
     "flake8",
     "mypy",
     "pip-tools",
+    "pre-commit",
     "pytest",
+    "ruff",
     "tox",
 ]
 
