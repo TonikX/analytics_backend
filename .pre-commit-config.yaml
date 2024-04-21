@@ -2,16 +2,19 @@ fail_fast: false
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-toml
       - id: check-yaml
+      - id: check-ast
       - id: debug-statements
       - id: check-added-large-files
+        args: [ "--maxkb=1024" ]
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: detect-private-key
 
   - repo: https://github.com/ambv/black
     rev: 24.4.0
@@ -40,4 +43,4 @@ repos:
     rev: v3.15.2
     hooks:
       - id: pyupgrade
-        args: [ --py311-plus ]
+        args: [ "--py311-plus" ]
