@@ -1,8 +1,8 @@
 import openpyxl
+from django.conf import settings
 from openpyxl.styles import Alignment, PatternFill, Side, Border, Font
 
 from gia_practice_app.GIA.models import GIA
-from gia_practice_app.GIA.serializers import GIASmallSerializer
 from gia_practice_app.Practice.models import Practice
 from workprogramsapp.educational_program.general_prof_competencies.models import (
     GeneralProfCompetencesInGroupOfGeneralCharacteristic,
@@ -161,7 +161,6 @@ def process_changeblock(ws, level, block_module, unique_dict, competence_dict):
             if (gia.id not in unique_dict["unique_gia"]) or (
                 unique_dict["is_first_iter_ap"]
             ):
-                serializer = GIASmallSerializer(gia)
                 unique_dict["unique_gia"].append(gia.id)
                 fill_row(ws, level, "FFFFFF")
                 insert_cell_data(
@@ -195,10 +194,7 @@ def recursion_module_matrix(ws, level, modules, unique_dict, competence_dict, de
 
 
 def process_excel_competence_matrix(gen_characteristic):
-    # wb_obj = openpyxl.load_workbook("C:\\Users\\s4\\Desktop\\analytics_backend\\application\\static-backend\\export_template\\competence_matrix_template_2023.xlsx")
-    wb_obj = openpyxl.load_workbook(
-        "/application/static-backend/export_template/competence_matrix_template_2023.xlsx"
-    )
+    wb_obj = openpyxl.load_workbook(settings.DOCX_TEMPLATE_CM_ABSPATH)
 
     unique_dict = {
         "is_first_iter_ap": True,
@@ -286,9 +282,10 @@ def fill_competences(
 
 def competence_header(ws, gen_characteristic):
     # gen_characteristic = GeneralCharacteristics.objects.get(pk=gen_pk)
-    """pk_competences = PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
-    group_of_pk__general_characteristic=gen_characteristic, competence__isnull=False).distinct()
-    """
+    """pk_competences =
+    PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
+    group_of_pk__general_characteristic=gen_characteristic,
+    competence__isnull=False).distinct()"""
     pk_competences = (
         PkCompetencesInGroupOfGeneralCharacteristic.objects.filter(
             group_of_pk__general_characteristic=gen_characteristic,

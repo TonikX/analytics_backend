@@ -149,6 +149,26 @@ USE_L10N = True
 STATIC_URL = "/static-backend/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static-backend")
 
+# Шаблон учебного плана (Academic Plan)
+XLSX_TEMPLATE_AP = env.str("XLSX_TEMPLATE_AP")
+XLSX_TEMPLATE_AP_ABSPATH = STATIC_ROOT + "/export_template/" + XLSX_TEMPLATE_AP
+
+# Шаблон рабочей программы дисциплины (РПД)
+DOCX_TEMPLATE_RPD = env.str("DOCX_TEMPLATE_RPD")
+DOCX_TEMPLATE_RPD_ABSPATH = STATIC_ROOT + "/export_template/" + DOCX_TEMPLATE_RPD
+
+# Шаблон учебной программы (Syllabus)
+DOCX_TEMPLATE_SB = env.str("DOCX_TEMPLATE_SB")
+DOCX_TEMPLATE_SB_ABSPATH = STATIC_ROOT + "/export_template/" + DOCX_TEMPLATE_SB
+
+# Шаблон общих характеристик (General Characteristics)
+DOCX_TEMPLATE_GC = env.str("DOCX_TEMPLATE_GC")
+DOCX_TEMPLATE_GC_ABSPATH = STATIC_ROOT + "/export_template/" + DOCX_TEMPLATE_GC
+
+# Шаблон матрицы компетенций (Competence Matrix)
+DOCX_TEMPLATE_CM = env.str("DOCX_TEMPLATE_CM")
+DOCX_TEMPLATE_CM_ABSPATH = STATIC_ROOT + "/export_template/" + DOCX_TEMPLATE_CM
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
@@ -235,7 +255,6 @@ SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 URL_FRONT = env.str("URL_FRONT")
-AP_FILE_ROUTE = env.str("AP_FILE_ROUTE")
 ISU_URL_UPDATERS = env.str("ISU_URL_UPDATERS")
 LAN_TOKEN = env.str("LAN_TOKEN")
 

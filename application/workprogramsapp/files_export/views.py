@@ -4,6 +4,7 @@ from collections import OrderedDict
 from tempfile import NamedTemporaryFile
 
 import html2text
+from django.conf import settings
 from django.http import HttpResponse
 from docx import Document
 from docxtpl import DocxTemplate, RichText
@@ -35,8 +36,8 @@ from workprogramsapp.serializers import WorkProgramSerializer
 
 
 def save_virtual_workbook(workbook: Workbook) -> bytes:
-    """
-    Возвращает in-memory workbook, подходящий для ответа Django.
+    """Возвращает in-memory workbook, подходящий для ответа Django.
+
     Замена deprecated-функции из openpyxl.
     """
     with NamedTemporaryFile() as tmp:
@@ -64,7 +65,7 @@ def hours_v2_generator(lec_v2, prac_v2, sro_v2, lab_v2):
 
 
 def render_context(context, **kwargs):
-    """Функция, которая возвращает context с параметрами для шаблона"""
+    """Функция, которая возвращает context с параметрами для шаблона."""
     fs_obj = FieldOfStudy.objects.get(pk=kwargs["field_of_study_id"])
     ap_obj = AcademicPlan.objects.get(pk=kwargs["academic_plan_id"])
     semester = []
@@ -79,7 +80,7 @@ def render_context(context, **kwargs):
                         break
                 if is_included:
                     wpcb_pk = wpcb["id"]
-                    if wpcb["credit_units"] != None:
+                    if wpcb["credit_units"] is None:
                         wpcb["credit_units"] = (
                             wpcb["credit_units"].replace(" ", "").replace(".0", "")
                         )
@@ -114,7 +115,7 @@ def render_context(context, **kwargs):
                                         }
                                     )
                                 credit_units_list[credit_units_list.index(cu)] = 0
-                            except:
+                            except Exception:
                                 pass
                     else:
                         term_to_append = wpcb["semester_start"][0]
@@ -148,7 +149,7 @@ def render_context(context, **kwargs):
                                 )
                             credit_units_list[credit_units_list.index(cu)] = 0
 
-            except:
+            except Exception:
                 pass
 
     try:
@@ -323,7 +324,7 @@ def render_context(context, **kwargs):
     template_context["sections_replaced_onl"] = ""
     online_list_number_list = ""
     for i in range(1, online_list_number + 1):
-        online_list_number_list = online_list_number_list + "{}".format(str(i))
+        online_list_number_list = online_list_number_list + f"{str(i)}"
         if int(i) != int(online_list_number):
             online_list_number_list = online_list_number_list + ", "
     template_context["online_list_number_list"] = online_list_number_list
@@ -351,7 +352,7 @@ def render_context(context, **kwargs):
         + datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S")
         + ".docx"
     )
-    # filename = "РПД «" + context["title"] + "» " + context["discipline_code"]
+
     """Данные для таблицы планирования результатов обучения по дисциплине (БаРС)"""
     outcomes_evaluation_tool = []
     current_evaluation_tool = []
@@ -367,13 +368,12 @@ def render_context(context, **kwargs):
     items_min_semester_3 = []
     items_max_semester_4 = []
     items_min_semester_4 = []
-    k = 0
+
     for i in template_context["evaluation_tools"]:
         i["description"] = ""
         i["url"] = "https://op.itmo.ru/work-program/{}/evaluation-tools/{}".format(
             context["id"], i["id"]
         )
-        tpl
         rt = RichText()
         rt.add(
             "Ссылка на описание оценочного средства",
@@ -464,31 +464,27 @@ def render_context(context, **kwargs):
                 if item["min"] is not None:
                     items_min_semester_1.append(item["min"])
                 certification_evaluation_tools_semestr_1.append(item)
-                # semester[0]['t'] = item['type']
             if item["semester"] == 2:
                 if item["max"] is not None:
                     items_max_semester_2.append(item["max"])
                 if item["min"] is not None:
                     items_min_semester_2.append(item["min"])
                 certification_evaluation_tools_semestr_2.append(item)
-                # semester[1]['t'] = item['type']
             if item["semester"] == 3:
                 if item["max"] is not None:
                     items_max_semester_3.append(item["max"])
                 if item["min"] is not None:
                     items_min_semester_3.append(item["min"])
                 certification_evaluation_tools_semestr_3.append(item)
-                # semester[2]['t'] = item['type']
             if item["semester"] == 4:
                 if item["max"] is not None:
                     items_max_semester_4.append(item["max"])
                 if item["min"] is not None:
                     items_min_semester_4.append(item["min"])
                 certification_evaluation_tools_semestr_4.append(item)
-                # semester[3]['t'] = item['type']
             else:
                 pass
-        except Exception as e:
+        except Exception:
             pass
     template_context["certification_evaluation_tools_semestr_1"] = (
         certification_evaluation_tools_semestr_1
@@ -515,7 +511,7 @@ def render_context(context, **kwargs):
         template_context["outcomes_max_all_semester_4"] = sum(
             items_max_semester_4
         ) + int(context["extra_points"] or 0)
-    except:
+    except Exception:
         pass
     template_context["outcomes_min_all_semester_1"] = sum(items_min_semester_1)
     template_context["outcomes_min_all_semester_2"] = sum(items_min_semester_2)
@@ -525,16 +521,13 @@ def render_context(context, **kwargs):
     template_context["discipline_section"] = context["discipline_sections"]
     template_context["bars"] = context["bars"]
     return template_context, filename
-    # , evaluation_tools_pdf_docs
 
 
 """Контроллер для выгрузки docx-файла РПД"""
 
 
 class DocxFileExportView(generics.ListAPIView):
-    """
-    Возвращает РПД в формате docx в браузере
-    """
+    """Возвращает рабочую программу дисциплины после рендера в формате docx."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
@@ -551,7 +544,6 @@ class DocxFileExportView(generics.ListAPIView):
         for index, file in enumerate(new_files_array):
             sub_doc = Document(file)
 
-            # Don't add a page break if you've reached the last file.
             if index < len(files) - 1:
                 sub_doc.add_page_break()
 
@@ -562,9 +554,7 @@ class DocxFileExportView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         global tpl
-        tpl = DocxTemplate(
-            "/application/static-backend/export_template/RPD_shablon_2020_new.docx"
-        )
+        tpl = DocxTemplate(settings.DOCX_TEMPLATE_RPD_ABSPATH)
         queryset = WorkProgram.objects.get(pk=kwargs["pk"])
         serializer = WorkProgramSerializer(queryset)
         data = dict(serializer.data)
@@ -575,9 +565,7 @@ class DocxFileExportView(generics.ListAPIView):
             year=kwargs["year"],
         )
         tpl.render(context)
-        tpl.save(
-            "upload/" + str(filename)
-        )  # -- сохранение в папку локально (нужно указать актуальный путь!)
+        tpl.save("upload/" + str(filename))
         response = HttpResponse(
             content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         )
@@ -588,7 +576,7 @@ class DocxFileExportView(generics.ListAPIView):
 
 
 def render_context_syllabus(context, **kwargs):
-    """Функция, которая возвращает context с параметрами для шаблона"""
+    """Функция, которая возвращает context с параметрами для шаблона."""
     fs_obj = FieldOfStudy.objects.get(pk=kwargs["field_of_study_id"])
     ap_obj = AcademicPlan.objects.get(pk=kwargs["academic_plan_id"])
     try:
@@ -605,7 +593,7 @@ def render_context_syllabus(context, **kwargs):
                     if wpcb["credit_units"]
                     if wpcb["credit_units"][i] != 0
                 ]
-    except:
+    except Exception:
         semester = [("-", "-", " ")]
 
     template_context = OrderedDict()
@@ -617,7 +605,6 @@ def render_context_syllabus(context, **kwargs):
         template_context["Qualification"] = "Специалитет"
 
     template_context["Name"] = context["title"]
-    # template_context['status'] = context['work_program_in_change_block']['change_type']
     template_context["fs_code"] = str(fs_obj.number) + " " + str(fs_obj.title)
     template_context["academic_plan"] = ap_obj.educational_profile
     template_context["semester"] = semester[0][0]
@@ -632,14 +619,12 @@ def render_context_syllabus(context, **kwargs):
     )
     template_context["concurent"] = "-"
     template_context["discipline_section"] = context["discipline_sections"]
-    evaluation_tools, temp = [], []
+    evaluation_tools = []
     for i in context["discipline_sections"]:
         for tool in i["evaluation_tools"]:
             if tool["type"] not in evaluation_tools:
                 evaluation_tools.append(tool["type"])
-        i["topics_list"] = ". ".join(
-            map(str, set([j["description"] for j in i["topics"]]))
-        )
+        i["topics_list"] = ". ".join(map(str, {j["description"] for j in i["topics"]}))
 
     template_context["evaluation_tools"] = evaluation_tools
 
@@ -652,7 +637,7 @@ def render_context_syllabus(context, **kwargs):
 
 
 class SyllabusExportView(generics.ListAPIView):
-    """Возвращает РПД в формате docx в браузере"""
+    """Возвращает учебную программу после рендера в формате docx."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
@@ -661,9 +646,7 @@ class SyllabusExportView(generics.ListAPIView):
     ]
 
     def get(self, request, *args, **kwargs):
-        tpl = DocxTemplate(
-            "/application/static-backend/export_template/Syllabus_shablon_2020_new.docx"
-        )
+        tpl = DocxTemplate(settings.DOCX_TEMPLATE_SB_ABSPATH)
         queryset = WorkProgram.objects.get(pk=kwargs["pk"])
         serializer = WorkProgramSerializer(queryset)
         data = dict(serializer.data)
@@ -675,7 +658,6 @@ class SyllabusExportView(generics.ListAPIView):
             year=kwargs["year"],
         )
         tpl.render(context)
-        # tpl.save('/application/upload/'+filename) #-- сохранение в папку локально (нужно указать актуальный путь!)
 
         response = HttpResponse(
             content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -687,13 +669,11 @@ class SyllabusExportView(generics.ListAPIView):
         return response
 
 
-# http://127.0.0.1:8000/api/export/academic_plan/7767
 class AcademicPlanGenerateXlsx(generics.ListAPIView):
-    """Возвращает РПД в формате docx в браузере"""
+    """Возвращает учебный план после рендера в формате docx."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
-    # permission_classes = [IsAuthenticated, ]
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
@@ -711,25 +691,19 @@ class AcademicPlanGenerateXlsx(generics.ListAPIView):
         response["Content-Disposition"] = 'inline; filename="%s"' % str(filename)
         academic_plan.excel_generation_errors = errors
         academic_plan.save()
-
-        # wb_obj.save(response)
         return response
 
 
 class GeneralCharacteristicGenerateDocx(generics.ListAPIView):
-    """Возвращает ОХ в формате docx в браузере"""
+    """Возвращает общие характеристики после рендера в формате docx."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
-    # permission_classes = [IsAuthenticated, ]
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         gh = GeneralCharacteristics.objects.get(id=kwargs["pk"])
-        # tpl = DocxTemplate( "C:\\Users\\s4\\Desktop\\analytics_backend\\application\\static-backend\\export_template\\oh_template_2023.docx")
-        tpl = DocxTemplate(
-            "/application/static-backend/export_template/oh_template_2023.docx"
-        )
+        tpl = DocxTemplate(settings.DOCX_TEMPLATE_GC_ABSPATH)
         context = generate_context(gh)
         tpl.render(context)
         filename = f"ОХ_{context['year']}_{context['op_name']}.docx"
@@ -744,11 +718,10 @@ class GeneralCharacteristicGenerateDocx(generics.ListAPIView):
 
 
 class CompetenceMatrixGenerateExcel(generics.ListAPIView):
-    """Возвращает матрицу компетенций в формате excel в браузере"""
+    """Возвращает матрицу компетенций после рендера в формате excel."""
 
     queryset = WorkProgram.objects.all()
     serializer_class = WorkProgramSerializer
-    # permission_classes = [IsAuthenticated, ]
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
@@ -765,16 +738,13 @@ class CompetenceMatrixGenerateExcel(generics.ListAPIView):
         )
         response["Content-Disposition"] = 'inline; filename="%s"' % str(filename)
 
-        # wb_obj.save(response)
         return response
 
 
 @api_view(["POST"])
 @permission_classes((IsAdminUser,))
 def UploadPlans(request):
-    """
-    Метод принимает xlsx-файл с планами 2023 года
-    """
+    """Метод принимает xlsx-файл с планами 2023 года."""
     file = request.FILES["plans"]
     return Response(plans_processor(file))
 

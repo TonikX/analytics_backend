@@ -1,8 +1,8 @@
 import openpyxl
+from django.conf import settings
 from openpyxl.styles import Alignment, PatternFill, Side, Border, Font
 from sentry_sdk import capture_exception
 
-from analytics_project.settings import AP_FILE_ROUTE
 from workprogramsapp.disciplineblockmodules.ze_module_logic import (
     generate_full_ze_list,
     recursion_module,
@@ -319,13 +319,12 @@ def process_changeblock(changeblocks, level, ws):
                 process_evaluation_tools(
                     ws, level, wp, None, changeblock.semester_start[0] - 1
                 )
-            except IndexError as e:
+            except IndexError:
                 ERR_DICT["wp_err"].append(
                     f'В РПД {wp.id} "{wp.title}" не указан семестр начала изучения дисциплины'
                 )
 
             try:
-                extend_list = [0 for _ in range(10)]
                 lecture_list = [float(hour) for hour in wp.lecture_hours_v2.split(", ")]
                 practice_list = [
                     float(hour) for hour in wp.practice_hours_v2.split(", ")
@@ -340,12 +339,11 @@ def process_changeblock(changeblocks, level, ws):
                         column_name="consultations",
                         data=sum(cons_list),
                     )
-                except Exception as e:
+                except Exception:
                     cons_list = [0]
-                    """
-                    ERR_DICT["wp_err"].append(f"В РПД {wp.id} часы консультаций отсутсвуют"
-                                              f" или указаны в неверном формате")
-                    """
+                    """ERR_DICT["wp_err"].append(f"В РПД {wp.id} часы
+                    консультаций отсутсвуют" f" или указаны в неверном
+                    формате")"""
 
                 contact_hours = round(
                     (
@@ -520,14 +518,12 @@ def module_inside_recursion(modules, level, ws, depth=0):
 
         process_evaluation_tools(ws, level, module=module)
 
-        # insert_cell_data_range(ws, level + 1, "ze_by_term", min_ze)
         process_hours_by_terms(ws, level, max_hours_lec, offset=0)
         process_hours_by_terms(ws, level, max_hours_lab, offset=1)
         process_hours_by_terms(ws, level, max_hours_practice, offset=2)
 
         level += 1
         if module.childs.all().exists():
-            # depth += 1
             level = module_inside_recursion(module.childs.all(), level, ws, depth + 1)
         else:
             level = process_changeblock(
@@ -541,7 +537,6 @@ def module_inside_recursion(modules, level, ws, depth=0):
             sum_data["level"] = level
             sum_data["ze"] += ze_module
             sum_data["ze_by_term"] = sum_lists(sum_data["ze_by_term"], max_ze)
-            # sum_data["contact_work"] += ze_module
             sum_data["lecture_by_sem"] = sum_lists(
                 sum_data["lecture_by_sem"], max_hours_lec
             )
@@ -549,7 +544,6 @@ def module_inside_recursion(modules, level, ws, depth=0):
             sum_data["practice_by_sem"] = sum_lists(
                 sum_data["practice_by_sem"], max_hours_practice
             )
-            # sum_data["cons_by_sem"] = sum_lists(sum_data["cons_by_sem"], max_hours_cons)
     if depth == 0:
         return sum_data
     else:
@@ -558,8 +552,7 @@ def module_inside_recursion(modules, level, ws, depth=0):
 
 def process_excel(academic_plan):
     ERR_DICT["wp_err"] = []
-    # wb_obj = openpyxl.load_workbook("C:\\Users\\123\\Desktop\\analitycs\\analytics_backend\\application\\workprogramsapp\\files_export\\plan.xlsx")
-    wb_obj = openpyxl.load_workbook(AP_FILE_ROUTE)
+    wb_obj = openpyxl.load_workbook(settings.XLSX_TEMPLATE_AP_ABSPATH)
     ws = wb_obj["УП"]
     start_list = 7
     final_ze_by_term = [0 for _ in range(10)]
@@ -585,7 +578,6 @@ def process_excel(academic_plan):
         process_hours_by_terms(ws, start_list, sum_data["lecture_by_sem"], offset=0)
         process_hours_by_terms(ws, start_list, sum_data["lab_by_sem"], offset=1)
         process_hours_by_terms(ws, start_list, sum_data["practice_by_sem"], offset=2)
-        # process_hours_by_terms(ws, start_list, sum_data["cons_by_sem"], offset=3)
 
         insert_cell_data(
             ws=ws,
@@ -607,7 +599,6 @@ def process_excel(academic_plan):
             final_ze += sum_data["ze"]
             final_ze_by_term = sum_lists(final_ze_by_term, sum_data["ze_by_term"])
 
-    # imp = ImplementationAcademicPlan.objects.get(academic_plan=academic_plan)
     insert_cell_data(
         ws=ws, level=start_list, column_name="name", data="Объем ОП", horizontal="left"
     )
