@@ -50,7 +50,7 @@ const Filters: React.FC = () => {
   return (
     <div className={classes.root}>
       <div className={classes.fieldsWrapper}>
-        <SearchSelector 
+        <SearchSelector
           label='Язык рабочей программы'
           changeSearchText={() => {}}
           list={lists.langs}
@@ -74,9 +74,9 @@ const Filters: React.FC = () => {
                                  onChange={(value: number) => handleFilter(filterFields.STRUCTURAL_UNIT, value)}
                                  isReset={isReset}
         />
-        <EducationPlanInDirectionSelectorByName 
-          noMargin handleChange={(value: string) => handleFilter(filterFields.EDU_PROGRAM, value)} 
-          className={classes.field} 
+        <EducationPlanInDirectionSelectorByName
+          noMargin handleChange={(value: string) => handleFilter(filterFields.EDU_PROGRAM, value)}
+          className={classes.field}
           isReset={isReset}
           value={filters[filterFields.EDU_PROGRAM]}
         />
@@ -116,7 +116,7 @@ const Filters: React.FC = () => {
       <div className={classes.btnsWrapper}>
         <Button
           color="primary"
-          variant="outlined" 
+          variant="outlined"
           className={cn(classes.btn, classes.resetBtn)}
           onClick={resetFilters}
         >
@@ -124,7 +124,7 @@ const Filters: React.FC = () => {
         </Button>
         <Button
           color="primary"
-          variant="contained" 
+          variant="contained"
           className={cn(classes.btn, classes.filterBtn)}
           onClick={() => dispatch(actions.getWorkProgramList())}
         >

@@ -30,7 +30,7 @@ export default () => {
   const educationalStandard = useSelector((state: any) => getEducationalStandard(state))
 
   const [activeStep, setActiveStep] = useState(0)
-  
+
   useEffect(() => {
     dispatch(actions.getEducationalStandard(id))
   }, [])

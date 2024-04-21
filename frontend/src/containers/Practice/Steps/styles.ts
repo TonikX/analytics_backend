@@ -12,7 +12,7 @@ export default (theme: Theme) => createStyles({
     },
     contentScroll: {
         maxHeight: '100%',
-        
+
     },
     selectorWrap: {
         width: '100%',

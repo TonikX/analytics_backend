@@ -217,7 +217,7 @@ class Folders extends React.PureComponent<FoldersProps> {
 
                         </TabPanel>
                     )}
- 
+
                 </div>
 
                 <ConfirmDialog onConfirm={this.handleConfirmDeleteDialog}

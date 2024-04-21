@@ -23,5 +23,5 @@ export default (theme: Theme) => createStyles({
     search: {
         padding: '15px 24px 20px'
     }
-    
+
 });

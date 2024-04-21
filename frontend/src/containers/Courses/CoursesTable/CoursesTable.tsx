@@ -69,18 +69,18 @@ export const CoursesTable: React.FC<CoursesTableProps> = ({ courses, sortingFiel
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography 
-                  component='div' 
+                <Typography
+                  component='div'
                   style={{whiteSpace: 'normal', display: 'flex', alignItems: 'center', width: '185px'}}
                 >
                   Дата ближайшего запуска
                   <SortingButton changeMode={changeSorting(CourseFields.STARTED_AT)}
                                   mode={sortingField === CourseFields.STARTED_AT ? sortingMode : ''}
                   />
-                </Typography> 
+                </Typography>
               </TableCell>
               <TableCell>
-                <Typography 
+                <Typography
                   component='div'
                   style={{whiteSpace: 'normal', display: 'flex', alignItems: 'center', width: '100px'}}
                 >

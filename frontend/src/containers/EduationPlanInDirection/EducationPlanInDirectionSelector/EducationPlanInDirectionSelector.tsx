@@ -55,7 +55,7 @@ class EducationPlanInDirectionSelectorByName extends React.PureComponent<Educati
                             changeItem={this.saveEducationalPlanField}
                             value={value}
                             valueLabel={label}
-                            className={classNames({[classes.marginBottom30]: !noMargin, 
+                            className={classNames({[classes.marginBottom30]: !noMargin,
                                 [className]: className})}
                             isReset={isReset}
                             disabled={disabled}

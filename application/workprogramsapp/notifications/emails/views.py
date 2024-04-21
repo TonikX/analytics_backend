@@ -104,7 +104,7 @@ def email_reset_request(request):
         message = """
 Здравствуйте, уважаемый пользователь!
 Для подтверждения e-mail перейдите по ссылке: https://op.itmo.ru/api/email/confirm/{}
-        
+
 С уважением,
 команда Конструктора ОП
         """.format(

@@ -23,7 +23,7 @@ export default class OreshinService extends BaseService {
         ...object,
         token: this.getToken()
     })
-    
+
     getAxios(): AxiosInstance {
         let _axios: AxiosInstance;
 

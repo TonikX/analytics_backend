@@ -82,7 +82,7 @@ class AddCompetenceModal extends React.PureComponent<AddCompetenceModalProps, an
 
   selectCompetence = (label:string) => (event: any) => {
     this.setState({
-      competence: {value: Number(event.currentTarget.value), label: label} 
+      competence: {value: Number(event.currentTarget.value), label: label}
     })
   }
 

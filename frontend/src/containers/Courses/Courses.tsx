@@ -21,7 +21,7 @@ import styles from './Courses.styles';
 import Pagination from "@mui/lab/Pagination";
 
 class OnlineCourses extends React.Component<CoursesProps> {
-  componentDidMount() {      
+  componentDidMount() {
       this.props.actions.getPlatforms()
       this.props.actions.getInstitutions()
       this.props.actions.getFieldOfStudyNumbers()
@@ -84,10 +84,10 @@ class OnlineCourses extends React.Component<CoursesProps> {
 
         <CustomizeExpansionPanel label="Фильтрация" details={<Filters />}/>
 
-        <CoursesTable 
-          courses={courses} 
-          sortingField={sortingField} 
-          sortingMode={sortingMode} 
+        <CoursesTable
+          courses={courses}
+          sortingField={sortingField}
+          sortingMode={sortingMode}
         />
 
         <div className={classes.footer}>
@@ -97,7 +97,7 @@ class OnlineCourses extends React.Component<CoursesProps> {
                       color="primary"
           />
 
-          {/* <Fab 
+          {/* <Fab
             color="secondary"
             classes={{
               root: classes.addIcon
@@ -107,7 +107,7 @@ class OnlineCourses extends React.Component<CoursesProps> {
             <AddIcon/>
           </Fab> */}
         </div>
-        {/* 
+        {/*
         <CourseCreateModal />
         /> */}
       </Paper>

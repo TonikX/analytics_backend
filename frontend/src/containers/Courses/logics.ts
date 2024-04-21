@@ -26,8 +26,8 @@ const getCourses = createLogic({
         dispatch(actions.fetchingTrue({destination: fetchingTypes.GET_COURSES}));
 
         service.getCourses(currentPage, searchQuery, sortingField, sortingMode,
-            filters[filterFields.FILTERING_PLATFORM], filters[filterFields.FILTERING_INSTITUTION], 
-            filters[filterFields.FILTERING_LANGUAGE], filters[filterFields.FILTERING_FIELD_OF_STUDY_TITLE], 
+            filters[filterFields.FILTERING_PLATFORM], filters[filterFields.FILTERING_INSTITUTION],
+            filters[filterFields.FILTERING_LANGUAGE], filters[filterFields.FILTERING_FIELD_OF_STUDY_TITLE],
             filters[filterFields.FILTERING_FIELD_OF_STUDY_NUMBER])
             .then((res) => {
                 const courses = get(res, 'data.results', []);

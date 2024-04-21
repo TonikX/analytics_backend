@@ -101,7 +101,7 @@ class EvaluationTools extends React.PureComponent<Props> {
                         Семестр
                     </Typography>
                 </div>
-                
+
                     <div className={classes.list}>
                         {evaluationToolsList.map((intermediateCertificationTool) => (
                           <div className={classes.item}>

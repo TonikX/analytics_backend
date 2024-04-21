@@ -41,7 +41,7 @@ const SelectEducationalProgram: React.FC = () => {
       <Typography className={classes.title}>
         Подбор образовательных программ по профессиям
       </Typography>
-      {(professions.length > 0 || selectedProfessions.length) ? 
+      {(professions.length > 0 || selectedProfessions.length) ?
         (
           <>
             <Typography className={classes.subtitle}>

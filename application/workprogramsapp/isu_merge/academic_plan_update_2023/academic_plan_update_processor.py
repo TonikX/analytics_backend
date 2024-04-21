@@ -825,7 +825,7 @@ class AcademicPlanUpdateProcessor:
                old_gia_in_field_of_study, \
                work_program_change_in_discipline_block_module, \
                gia_in_field_of_study
-    
+
 
     @staticmethod
     @AcademicPlanUpdateAspect.linked_data_changes_aspect
@@ -1101,7 +1101,7 @@ class AcademicPlanUpdateProcessor:
         gia_not_for_del = []
         if module['type'] == "module":
             """
-            ToDo: предполагается доработать функционал поиска модуля на нашей стороне и создания нового в случае необходимости в 
+            ToDo: предполагается доработать функционал поиска модуля на нашей стороне и создания нового в случае необходимости в
             AcademicPlanUpdateProcessor.__process_block_module__ и в его дектораторе  @AcademicPlanUpdateAspect.discipline_block_module_changes_aspect
             __process_block_module__ - создает или изменяет существующий объект
             discipline_block_module_changes_aspect - ищет существующий объект

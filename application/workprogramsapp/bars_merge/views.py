@@ -135,9 +135,9 @@ def CreateCheckPoint(request):
     wp_in_change = wp_in_change[0]
 
     """
-    Пока названия имен в Конструкторе РПД не совпадают с именами в БАРСе этот код не имеет смысла, 
+    Пока названия имен в Конструкторе РПД не совпадают с именами в БАРСе этот код не имеет смысла,
     заменяется тем что ниже
-    
+
     educational_bars_id = WorkProgramInFieldOfStudy.objects.filter(
         work_program_change_in_discipline_block_module=wp_in_change)[0].id_str_up
     """

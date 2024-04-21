@@ -176,7 +176,7 @@ def numUnitsCredits(units_credits):
 
 """
 def hours_info(df, lec, prac, lab, exam, pf, diff, cp):
-    
+
     return ",".join(map(str, [len(units), sum(int_creds)]))
 """
 
