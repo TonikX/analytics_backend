@@ -81,7 +81,6 @@ django==4.2.11
     #   django-debug-toolbar
     #   django-extensions
     #   django-filter
-    #   django-social-auth
     #   django-summernote
     #   django-super-deduper
     #   django-tables2
@@ -91,7 +90,6 @@ django==4.2.11
     #   djoser
     #   drf-spectacular
     #   drf-spectacular-sidecar
-    #   rest-social-auth
     #   social-auth-app-django
 django-cachalot==2.6.2
     # via analytics_backend (pyproject.toml)
@@ -113,8 +111,6 @@ django-filter==24.2
     # via analytics_backend (pyproject.toml)
 django-rest-swagger==2.2.0
     # via analytics_backend (pyproject.toml)
-django-social-auth==0.7.28
-    # via analytics_backend (pyproject.toml)
 django-summernote==0.8.20.0
     # via analytics_backend (pyproject.toml)
 django-super-deduper==0.1.4
@@ -132,7 +128,6 @@ djangorestframework==3.15.1
     #   djangorestframework-jsonapi
     #   djangorestframework-simplejwt
     #   drf-spectacular
-    #   rest-social-auth
 djangorestframework-jsonapi==6.1.0
     # via analytics_backend (pyproject.toml)
 djangorestframework-simplejwt==5.3.1
@@ -223,9 +218,7 @@ numpy==1.26.4
     #   analytics_backend (pyproject.toml)
     #   pandas
 oauth2==1.9.0.post1
-    # via
-    #   analytics_backend (pyproject.toml)
-    #   django-social-auth
+    # via analytics_backend (pyproject.toml)
 oauthlib==3.2.2
     # via
     #   requests-oauthlib
@@ -299,8 +292,6 @@ python-docx==1.1.0
     #   analytics_backend (pyproject.toml)
     #   docxcompose
     #   docxtpl
-python-openid==2.2.5
-    # via django-social-auth
 python3-openid==3.2.0
     # via social-auth-core
 pytz==2024.1
@@ -322,8 +313,6 @@ requests==2.31.0
     #   social-auth-core
 requests-oauthlib==2.0.0
     # via social-auth-core
-rest-social-auth==8.3.0
-    # via analytics_backend (pyproject.toml)
 rpds-py==0.18.0
     # via
     #   jsonschema
@@ -343,14 +332,9 @@ six==1.16.0
     #   docxtpl
     #   python-dateutil
 social-auth-app-django==5.4.0
-    # via
-    #   djoser
-    #   rest-social-auth
+    # via djoser
 social-auth-core==4.5.3
-    # via
-    #   analytics_backend (pyproject.toml)
-    #   rest-social-auth
-    #   social-auth-app-django
+    # via social-auth-app-django
 sqlparse==0.5.0
     # via
     #   django
