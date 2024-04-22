@@ -149,26 +149,27 @@ USE_L10N = True
 
 STATIC_URL = "/static-backend/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static-backend")
+STATIC_EXPORT_ROOT = os.path.join(STATIC_ROOT, "export_template")
 
 # Шаблон учебного плана (Academic Plan)
 XLSX_TEMPLATE_AP = env.str("XLSX_TEMPLATE_AP")
-XLSX_TEMPLATE_AP_ABSPATH = STATIC_ROOT + "/export_template/" + XLSX_TEMPLATE_AP
+XLSX_TEMPLATE_AP_ABSPATH = os.path.join(STATIC_EXPORT_ROOT, XLSX_TEMPLATE_AP)
 
 # Шаблон рабочей программы дисциплины (РПД)
 DOCX_TEMPLATE_RPD = env.str("DOCX_TEMPLATE_RPD")
-DOCX_TEMPLATE_RPD_ABSPATH = STATIC_ROOT + "/export_template/" + DOCX_TEMPLATE_RPD
+DOCX_TEMPLATE_RPD_ABSPATH = os.path.join(STATIC_EXPORT_ROOT, DOCX_TEMPLATE_RPD)
 
 # Шаблон учебной программы (Syllabus)
 DOCX_TEMPLATE_SB = env.str("DOCX_TEMPLATE_SB")
-DOCX_TEMPLATE_SB_ABSPATH = STATIC_ROOT + "/export_template/" + DOCX_TEMPLATE_SB
+DOCX_TEMPLATE_SB_ABSPATH = os.path.join(STATIC_EXPORT_ROOT, DOCX_TEMPLATE_SB)
 
 # Шаблон общих характеристик (General Characteristics)
 DOCX_TEMPLATE_GC = env.str("DOCX_TEMPLATE_GC")
-DOCX_TEMPLATE_GC_ABSPATH = STATIC_ROOT + "/export_template/" + DOCX_TEMPLATE_GC
+DOCX_TEMPLATE_GC_ABSPATH = os.path.join(STATIC_EXPORT_ROOT, DOCX_TEMPLATE_GC)
 
 # Шаблон матрицы компетенций (Competence Matrix)
 DOCX_TEMPLATE_CM = env.str("DOCX_TEMPLATE_CM")
-DOCX_TEMPLATE_CM_ABSPATH = STATIC_ROOT + "/export_template/" + DOCX_TEMPLATE_CM
+DOCX_TEMPLATE_CM_ABSPATH = os.path.join(STATIC_EXPORT_ROOT, DOCX_TEMPLATE_CM)
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
