@@ -68,3 +68,9 @@ Homepage = "https://op.itmo.ru/"
 Documentation = "https://tonikx.github.io/analytics_backend/"
 Repository = "https://github.com/TonikX/analytics_backend.git"
 "Bug Tracker" = "https://github.com/TonikX/analytics_backend/issues"
+
+[tool.pip-tools.compile]
+rebuild = true
+strip-extras = true
+upgrade = true
+verbose = true
