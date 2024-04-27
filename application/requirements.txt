@@ -202,7 +202,7 @@ packaging==24.0
     #   shippinglabel
 pandas==2.2.2
     # via analytics_backend (pyproject.toml)
-platformdirs==4.2.0
+platformdirs==4.2.1
     # via
     #   apeye
     #   shippinglabel
@@ -235,7 +235,7 @@ pytz==2024.1
     #   pandas
 pyyaml==6.0.1
     # via drf-spectacular
-referencing==0.34.0
+referencing==0.35.0
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -252,7 +252,7 @@ rpds-py==0.18.0
     # via
     #   jsonschema
     #   referencing
-sentry-sdk==1.45.0
+sentry-sdk==2.0.1
     # via analytics_backend (pyproject.toml)
 shippinglabel==1.7.1
     # via pyproject-parser
@@ -266,9 +266,9 @@ six==1.16.0
     #   docxcompose
     #   docxtpl
     #   python-dateutil
-social-auth-app-django==5.4.0
+social-auth-app-django==5.4.1
     # via djoser
-social-auth-core==4.5.3
+social-auth-core==4.5.4
     # via social-auth-app-django
 sqlparse==0.5.0
     # via django

@@ -23,7 +23,7 @@ attrs==23.2.0
     #   referencing
 babel==2.14.0
     # via docxcompose
-black==24.4.0
+black==24.4.2
     # via analytics_backend (pyproject.toml)
 bleach==6.1.0
     # via django-summernote
@@ -207,7 +207,7 @@ markupsafe==2.1.5
     # via jinja2
 mccabe==0.7.0
     # via flake8
-mypy==1.9.0
+mypy==1.10.0
     # via analytics_backend (pyproject.toml)
 mypy-extensions==1.0.0
     # via
@@ -254,14 +254,14 @@ pathspec==0.12.1
     # via black
 pip-tools==7.4.1
     # via analytics_backend (pyproject.toml)
-platformdirs==4.2.0
+platformdirs==4.2.1
     # via
     #   apeye
     #   black
     #   shippinglabel
     #   tox
     #   virtualenv
-pluggy==1.4.0
+pluggy==1.5.0
     # via
     #   pytest
     #   tox
@@ -291,7 +291,7 @@ pyproject-hooks==1.0.0
     #   pip-tools
 pyproject-parser==0.11.0
     # via analytics_backend (pyproject.toml)
-pytest==8.1.1
+pytest==8.1.2
     # via analytics_backend (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via pandas
@@ -310,7 +310,7 @@ pyyaml==6.0.1
     # via
     #   drf-spectacular
     #   pre-commit
-referencing==0.34.0
+referencing==0.35.0
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -329,7 +329,7 @@ rpds-py==0.18.0
     #   referencing
 ruff==0.4.2
     # via analytics_backend (pyproject.toml)
-sentry-sdk==1.45.0
+sentry-sdk==2.0.1
     # via analytics_backend (pyproject.toml)
 shippinglabel==1.7.1
     # via pyproject-parser
@@ -343,9 +343,9 @@ six==1.16.0
     #   docxcompose
     #   docxtpl
     #   python-dateutil
-social-auth-app-django==5.4.0
+social-auth-app-django==5.4.1
     # via djoser
-social-auth-core==4.5.3
+social-auth-core==4.5.4
     # via social-auth-app-django
 sqlparse==0.5.0
     # via
@@ -353,7 +353,7 @@ sqlparse==0.5.0
     #   django-debug-toolbar
 tomli==2.0.1
     # via dom-toml
-tox==4.14.2
+tox==4.15.0
     # via analytics_backend (pyproject.toml)
 typing-extensions==4.11.0
     # via
@@ -376,7 +376,7 @@ urllib3==2.2.1
     #   sentry-sdk
 uvicorn==0.29.0
     # via analytics_backend (pyproject.toml)
-virtualenv==20.25.1
+virtualenv==20.26.0
     # via
     #   pre-commit
     #   tox
