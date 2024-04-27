@@ -22,4 +22,5 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN python -m pip install -U pip
 RUN python -m pip install -U setuptools wheel
-RUN pip install -r requirements.txt
+RUN python -m pip install -U pip-tools
+RUN pip-sync requirements.txt
