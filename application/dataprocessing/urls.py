@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
-from .itmo_backends import AuthenticateByCodeISU, GetAuthenticationCodeISU
+
+from dataprocessing import views
+from dataprocessing.itmo_backends import AuthenticateByCodeISU, GetAuthenticationCodeISU
 
 urlpatterns = [
     path(

@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Domain, Items, Relation
-from .models import User
+from dataprocessing.models import Domain, Items, Relation
+from dataprocessing.models import User
 
 UserAdmin.fieldsets += (
     (
@@ -20,9 +20,6 @@ UserAdmin.fieldsets += (
     ),
 )
 admin.site.register(User, UserAdmin)
-
-
-# admin.site.register(Membership)
 
 
 class ItemAdmin(admin.ModelAdmin):

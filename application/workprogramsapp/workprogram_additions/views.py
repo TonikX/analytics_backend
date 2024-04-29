@@ -127,7 +127,6 @@ def CopyContentOfWorkProgram(request):
                     new_item.item == item.item
                     and new_item.masterylevel == item.masterylevel
                 ):
-                    print(item_exists)
                     item_exists = True
             if not item_exists:
                 PrerequisitesOfWorkProgram.objects.create(

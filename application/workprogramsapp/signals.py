@@ -253,7 +253,6 @@ def zun_saver(sender, instance, using, **kwargs):
             zuns_for_wp=wp_in_fs_id_str
         ):
             for zun in Zun.objects.filter(wp_in_fs=wp_in_fs):
-                print(wp_in_fs_id_str.id_str_up)
                 zun.wp_in_fs_saved_fk_id_str_up = wp_in_fs_id_str.id_str_up
                 zun.save()
 
@@ -305,9 +304,7 @@ def check_previous_mode(sender, instance, *args, **kwargs):
 def count_module_ze_if_changed(
     sender, instance: DisciplineBlockModule, *args, **kwargs
 ):
-    print("m2m called")
     rewrite_ze_up(instance)
-    print("d4 bad")
 
 
 @receiver(post_delete, sender=DisciplineBlockModule)
@@ -315,10 +312,8 @@ def count_module_ze_deleted_if_changed(
     sender, instance: DisciplineBlockModule, *args, **kwargs
 ):
     rewrite_ze_up(instance)
-    print("d4 bad")
 
 
-# Перерасчет трудоемкости при изменении wpcb
 @receiver(
     m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.work_program.through
 )
@@ -327,7 +322,6 @@ def count_wpcb_ze_if_changed(
 ):
     if instance.work_program.all().exists():
         rewrite_ze_up(instance.discipline_block_module)
-        print("d4 bad")
 
 
 @receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.gia.through)
@@ -336,7 +330,6 @@ def count_wpcb_gia_ze_if_changed(
 ):
     if instance.gia.all().exists():
         rewrite_ze_up(instance.discipline_block_module)
-        print("d4 bad")
 
 
 @receiver(m2m_changed, sender=WorkProgramChangeInDisciplineBlockModule.practice.through)
@@ -345,7 +338,6 @@ def count_wpcb_ze_practice_if_changed(
 ):
     if instance.practice.all().exists():
         rewrite_ze_up(instance.discipline_block_module)
-        print("d4 bad")
 
 
 @receiver(post_delete, sender=WorkProgramChangeInDisciplineBlockModule)
@@ -353,4 +345,3 @@ def count_wpcb_ze_practice_if_deleted(
     sender, instance: WorkProgramChangeInDisciplineBlockModule, *args, **kwargs
 ):
     rewrite_ze_up(instance.discipline_block_module)
-    print("d4 bad")

@@ -22,7 +22,7 @@ class Command(BaseCommand):
                 break
             else:
                 for bibl in bibliogpraphic_data["data"]:
-                    bib_obj = BibliographicReference.objects.create(
+                    BibliographicReference.objects.create(
                         bib_reference=bibl["bibliographicRecord"],
                         pages=bibl["pages"],
                         title=bibl["name"],
@@ -31,6 +31,4 @@ class Command(BaseCommand):
                         description=bibl["description"],
                         year=bibl["year"],
                     )
-                    print(bib_obj)
                 counter += 100
-        print("done")

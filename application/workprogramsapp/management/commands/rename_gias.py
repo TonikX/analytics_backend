@@ -12,4 +12,3 @@ class Command(BaseCommand):
         GIA.objects.filter(title="preparation-en").update(
             title="Подготовка к защите и защита ВКР / Preparation for Thesis Defense and Thesis Defense"
         )
-        print("done")

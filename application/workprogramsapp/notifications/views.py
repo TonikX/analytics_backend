@@ -17,7 +17,6 @@ class NotificationListView(generics.ListAPIView):
     def list(self, request, **kwargs):
         queryset = UserNotification.objects.filter(user=request.user)
         queryset.update(status="read")
-        print(queryset)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

@@ -28,9 +28,7 @@ class Command(BaseCommand):
                 ],
             ).distinct()
             restored_counter += 1
-            print(wp_in_fss)
             if wp_in_fss.count() == 0:
-                print(wp_in_fss)
                 zero_fos += 1
                 continue
 
@@ -57,7 +55,6 @@ class Command(BaseCommand):
             if wp_in_fs.id == restored_data["wp_in_fs_id"] and set(zuns_fs_list) == set(
                 restored_data["zuns"]
             ):
-                # print("skipped")
                 skipped_counter += 1
                 continue
             else:
@@ -66,18 +63,12 @@ class Command(BaseCommand):
                         try:
                             zun_to_connect = Zun.objects.get(id=zun_id)
                         except Zun.DoesNotExist:
-                            # print(zun_id)
                             dropped_zuns.append(zun_id)
                             not_exisisted_zuns += 1
                             continue
                         zun_to_connect.wp_in_fs = wp_in_fs
                         zun_to_connect.save()
                         recreated_counter += 1
-                        # print(zun_to_connect, wp_in_fs)
-        print(
-            f"recreated relations: {recreated_counter}, skipped: {skipped_counter}, more than one wp in fs {more_than_one_fs_count}"
-            f", not_existed_zuns: {not_exisisted_zuns}, finded_fos: {restored_counter}, not founded fos: {zero_fos}"
-        )
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, "files/DROPPED_ZUNS.json")
         with open(filename, "w") as file:

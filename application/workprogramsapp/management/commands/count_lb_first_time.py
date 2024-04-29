@@ -15,8 +15,7 @@ class Command(BaseCommand):
         def recursion_module(obj: DisciplineBlockModule):
             childs = obj.childs.all()
             unit_final_sum = 0
-            """if obj.laboriousness:
-                return obj.laboriousness"""
+
             try:
                 if obj.selection_rule == "choose_n_from_m":
                     if childs.exists():
@@ -119,8 +118,5 @@ class Command(BaseCommand):
         ).distinct()
 
         for module in modules_for_count:
-            print(module.name, module.id)
             module.laboriousness = recursion_module(module)
-            print(module.laboriousness)
             module.save()
-        print("done")

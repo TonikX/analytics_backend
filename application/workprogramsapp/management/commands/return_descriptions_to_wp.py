@@ -20,4 +20,3 @@ class Command(BaseCommand):
                 wp.save()
             except Exception:
                 pass
-        print("done", counter_done)

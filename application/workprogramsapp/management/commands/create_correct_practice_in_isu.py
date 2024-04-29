@@ -30,7 +30,6 @@ class Command(BaseCommand):
         TOKEN = isu_logger.token
 
         for el in data:
-            # print(el)
             try:
                 practice = Practice.objects.get(discipline_code=el["DISC_ID"])
                 new_id = post_practice_to_isu(TOKEN, practice, 0)
@@ -39,7 +38,6 @@ class Command(BaseCommand):
                     new_lines.append(el)
                     practice.discipline_code = new_id
                     practice.save()
-                    print(el, ", ")
             except Practice.DoesNotExist:
                 pass
             try:
@@ -50,7 +48,6 @@ class Command(BaseCommand):
                     new_lines.append(el)
                     wp.discipline_code = str(new_id)
                     wp.save()
-                    print(el, ", ")
             except WorkProgram.DoesNotExist:
                 pass
         filename = os.path.join(dirname, "files/NEW_ISU_IDS.json")

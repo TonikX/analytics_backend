@@ -8,22 +8,22 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from workprogramsapp.models import OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
-from .models import User, Domain, Items, Relation
-from .serializers import (
+from dataprocessing.models import User, Domain, Items, Relation
+from dataprocessing.serializers import (
+    DomainDetailSerializer,
     DomainSerializer,
-    ItemSerializer,
-    ItemWithRelationSerializer,
+    FileUploadSerializer,
     ItemCreateSerializer,
+    ItemSerializer,
+    ItemWithRelationForSearchDuplicatesSerializer,
+    ItemWithRelationSerializer,
+    RelationCreateSerializer,
     RelationSerializer,
     RelationUpdateSerializer,
-    FileUploadSerializer,
-    RelationCreateSerializer,
     userProfileSerializer,
-    ItemWithRelationForSearchDuplicatesSerializer,
-    DomainDetailSerializer,
 )
+from workprogramsapp.models import OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly
 
 
 def handle_uploaded_file(file, filename):
@@ -40,20 +40,15 @@ def handle_uploaded_file(file, filename):
 
 def set_relation(item1, items_set, type_relation):
     try:
-        print("Создаю связи")
         list_of_items = []
         saved = len(items_set)
 
         for item2 in items_set:
-            print(item2)
             flag = 0
 
             if Relation.objects.filter(
                 item1=item1, relation=type_relation, item2=item2
             ).exists():
-                # Если связь с i уже существует, то увеличиваем count
-                # Подсчет веса ребра
-                print("Связь существует")
                 relation = Relation.objects.get(
                     item1=item1, relation=type_relation, item2=item2
                 )
@@ -66,51 +61,38 @@ def set_relation(item1, items_set, type_relation):
             elif Relation.objects.filter(
                 item1=item1, relation="0", item2=item2
             ).exists():
-                print("Проверка на существование неопределенной связи")
-                # or Relation.objects.filter(item1 = item1, relation = '7', item2=item2).exists()
                 relation = Relation.objects.get(item1=item1, relation="0", item2=item2)
                 relation.relation = type_relation
                 relation.save()
                 list_of_items.append(relation.item2)
 
             else:
-                # Если нет, то добавляем новую запись
-                print("Создание новой связи")
                 relation = Relation(item1=item1, relation=type_relation, item2=item2)
                 relation.save()
                 list_of_items.append(relation.item2)
 
-        # Подсчет значения вершины графа
         item = Items.objects.get(name=item1)
         value = item.value
         item.value = int(value) + saved
         item.save()
 
         if type_relation == "1":
-            print('Создаю связь для типа "включает в себя')
-            print(flag)
             if (
                 flag == 0
                 and Relation.objects.filter(item1=item1, relation="1").exists()
             ):
-                print("ok-1")
                 items = [
                     rel.item2
                     for rel in Relation.objects.filter(item1=item1, relation="1")
                 ]
                 list_of_items.extend(items)
-                print(list_of_items)
 
             if len(list_of_items) > 1:
-                print("pk-2")
                 query = Items.objects.filter(name__in=list(set(list_of_items)))
-                print(query)
                 set_relation_linear(query, "2")
-                print("finish")
 
-        print("Связи созданы")
     except Exception:
-        msg = "Что-то пошло не так:("
+        msg = "Что-то пошло не так :("
         return Response(msg, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -118,7 +100,6 @@ def set_relation_hierarchy(items_query, type_relation):
     """Запись иерархических связей и пререквизитов."""
     try:
         for key, value in items_query.items():
-            print(key)
             names = value.split(", ")
             names = [i.strip() for i in names]
             items_set = Items.objects.filter(name__in=names)
@@ -142,9 +123,6 @@ def set_relation_linear(items_query, type_relation):
         return Response(status=400)
 
 
-# Api endpoints
-
-
 class DomainListCreateAPIView(generics.ListCreateAPIView):
     """API endpoint that represents a list of Domains."""
 
@@ -164,8 +142,6 @@ class DomainListCreateAPIView(generics.ListCreateAPIView):
     #    return Domain.objects.filter(user=user)
 
     def perform_create(self, serializer):
-        # print (Topic.objects.filter(discipline_section = serializer.validated_data['discipline_section']).count()+1)
-        print(self.request.user)
         serializer.save(user=[self.request.user])
 
 
@@ -202,7 +178,6 @@ class ItemsListCreateAPIView(generics.ListCreateAPIView):
 
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                print("Сохранение прошло")
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -250,28 +225,6 @@ class RelationListAPIView(generics.ListAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
 
-'''
-#POST api/relation/new - Создание новой связи
-class RelationCreateAPIView(APIView):
-    """
-    API endpoint to create relation
-    """
-    def post(self, request):
-        try:
-            item1 = request.data.get("item1")
-            relation = request.data.get("relation")
-            item2 = request.data.get("item2")
-            print(item1, item2, relation)
-            item1 = Items.objects.get(pk = item1)
-            item2 = [Items.objects.get(pk = item2),]
-            set_relation(item1, item2, relation)
-            return Response(status=200)
-        except:
-            return Response(status=400)
-'''
-# POST api/relation/create - Создание новой связи
-
-
 class RelationCreateAPIView(generics.ListCreateAPIView):
     """API endpoint to create relation."""
 
@@ -316,7 +269,6 @@ class RelationListItemIdAPIView(generics.ListAPIView):
 class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
     """API endpoint that represents/delete a single Relation."""
 
-    # добавить удаление сопутсвующих связей? ("является частью раздела" при удалении "включает в себя"")
     queryset = Relation.objects.all()
     serializer_class = RelationSerializer
     permission_classes = [IsRpdDeveloperOrReadOnly]
@@ -355,7 +307,6 @@ class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
             old_relation = Relation.objects.get(id=kwargs["pk"])
 
             if old_relation.item1.pk != request.data.get("item1"):
-                print("Замена item1")
                 item_pk = request.data.get("item1")
                 item = Items.objects.get(pk=item_pk)
                 value = item.value
@@ -427,7 +378,6 @@ class FileUploadAPIView(APIView):
             file.remove(file[0])
 
             if type_relation in ["1", "4"]:
-                print("create")
                 data = dict(zip(file[::2], file[1::2]))
                 data.update({course: ", ".join(file[::2])})
                 set_relation_hierarchy(data, type_relation)
@@ -437,7 +387,7 @@ class FileUploadAPIView(APIView):
                 items_query = [Items.objects.get(name=i.strip()) for i in items_list]
                 items_query = Items.objects.filter(name__in=items_query)
                 items_query = items_query.exclude(name=course)
-                # Создаем связь верхнего уровня для дисциплины и связанных с ней эелементов
+                # Создаем связь верхнего уровня для дисциплины и связанных с ней элементов
                 set_relation_hierarchy(data, "1")
                 # Создаем линейные связи между элементами
                 set_relation_linear(items_query, type_relation)
@@ -463,20 +413,17 @@ class HighValueOutcomesListAPIView(generics.ListAPIView):
         )
         items = [q.item for q in out_items]
         result = []
-        # получаем синонимы, если они существуют
         for obj in items:
 
             if Relation.objects.filter(item1=obj, relation=5).exists():
                 qset = Relation.objects.filter(item1=obj, relation=5)
                 item = {q.item2: q.item2.value for q in qset}
-                print(item)
                 max_key = max(item, key=lambda k: item[k])
                 result.append(max_key)
 
             elif Relation.objects.filter(relation=5, item2=obj).exists():
                 qset = Relation.objects.filter(relation=5, item2=obj)
                 item = {q.item1: q.item1.value for q in qset}
-                print(item)
                 max_key = max(item, key=lambda k: item[k])
                 result.append(max_key)
             else:
@@ -501,20 +448,17 @@ class HighValuePrerequisitesListAPIView(generics.ListAPIView):
         )
         items = [q.item for q in pre_items]
         result = []
-        # получаем синонимы, если они существуют
         for obj in items:
 
             if Relation.objects.filter(item1=obj, relation=5).exists():
                 qset = Relation.objects.filter(item1=obj, relation=5)
                 item = {q.item2: q.item2.value for q in qset}
-                print(item)
                 max_key = max(item, key=lambda k: item[k])
                 result.append(max_key)
 
             elif Relation.objects.filter(relation=5, item2=obj).exists():
                 qset = Relation.objects.filter(relation=5, item2=obj)
                 item = {q.item1: q.item1.value for q in qset}
-                print(item)
                 max_key = max(item, key=lambda k: item[k])
                 result.append(max_key)
             else:

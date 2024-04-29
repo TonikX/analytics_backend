@@ -167,18 +167,6 @@ def recursion_module(obj):
                     [int(unit) for unit in changeblock.credit_units.split(", ")]
                 )
 
-    # except AttributeError as e:
-    #     print("a", e)
-    #     capture_event(e)
-    # except IndexError as e:
-    #     print("i", e)
-    #     capture_event(e)
-    # except ValueError as e:
-    #     print("v", e)
-    #     capture_event(e)
-    # except TypeError as e:
-    #     print("t", e)
-    #     capture_event(e)
     except Exception:
         pass
     return unit_final_sum
@@ -329,8 +317,6 @@ def recursion_module_per_ze(obj):
                     max_term, max_lab, max_lec, max_prac, max_cons = (
                         recursion_module_per_ze(child)
                     )
-                    if obj.name == "Универсальная (надпрофессиональная) подготовка":
-                        print(max_term)
                     max_ze_total = sum_lists(max_ze_total, max_term)
                     max_hours_lab = sum_lists(max_hours_lab, max_lab)
                     max_hours_lec = sum_lists(max_hours_lec, max_lec)
@@ -375,23 +361,18 @@ def recursion_module_per_ze(obj):
             for i in range(len(max_ze_total)):
                 if max_ze_total[i] > int(obj.selection_parametr):
                     max_ze_total[i] = int(obj.selection_parametr)
-        # print("name ", obj.name, " ----", max_ze_total)
 
         if sum(max_ze_total) == 0:
             _, max_res = find_min_max_ze_by_term(obj)
             max_ze_total = sum_lists(max_ze_total, max_res)
 
     except AttributeError as e:
-        print("a", e)
         capture_exception(e)
     except IndexError as e:
-        print("i", e)
         capture_exception(e)
     except ValueError as e:
-        print("v", e)
         capture_exception(e)
     except TypeError as e:
-        print("t", e)
         capture_exception(e)
 
     return (

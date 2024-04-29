@@ -15,6 +15,4 @@ class Command(BaseCommand):
         competences_to_delete = Competence.objects.filter(
             key_filter & over_filter & general_filter
         ).exclude(number__icontains="ПК")
-        print(competences_to_delete)
         competences_to_delete.delete()
-        print("done")

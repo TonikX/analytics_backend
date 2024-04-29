@@ -1,16 +1,14 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
+from dataprocessing.models import User, Items, Domain, Relation
 from workprogramsapp.models import WorkProgram
 from workprogramsapp.notifications.models import EmailReset
 from workprogramsapp.workprogram_additions.models import StructuralUnit
-from .models import User, Items, Domain, Relation
 
 
 class userProfileSerializer(serializers.ModelSerializer):
     """Сериализатор для работы с акканутами."""
-
-    # user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = User
@@ -29,7 +27,6 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
 class UserBaseSerializer(serializers.ModelSerializer):
     """Сериализатор для работы с акканутами."""
 
-    # user = serializers.StringRelatedField(read_only=True)
     email_confirm_status = serializers.SerializerMethodField("is_named_bar")
 
     def to_representation(self, value):
@@ -87,7 +84,6 @@ class DomainDetailSerializer(serializers.ModelSerializer):
         model = Domain
         fields = ("id", "name", "items", "user")
         extra_kwargs = {"user": {"required": False}}
-        # read_only_fields = ('user',)
 
 
 class DomainSerializer(serializers.ModelSerializer):
@@ -101,7 +97,6 @@ class DomainSerializer(serializers.ModelSerializer):
         model = Domain
         fields = ("id", "name", "user")
         extra_kwargs = {"user": {"required": False}}
-        # read_only_fields = ('user',)
 
 
 class ItemCreateSerializer(serializers.ModelSerializer):
@@ -147,13 +142,11 @@ class ItemSerializer(serializers.ModelSerializer):
             "domain",
             "value",
         )
-        # depth = 1
 
 
 class ItemWithRelationSerializer(serializers.ModelSerializer):
     """Сериализатор Ключевого слова со связями."""
 
-    # relation_with_item = RecursiveField(many=True)
     relation_with_item = serializers.SerializerMethodField()
 
     class Meta:

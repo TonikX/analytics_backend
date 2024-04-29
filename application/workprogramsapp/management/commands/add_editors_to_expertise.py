@@ -317,4 +317,3 @@ class Command(BaseCommand):
                     UserExpertise.objects.create(expertise=expertise, expert=user)
             except Expertise.DoesNotExist:
                 continue
-        print("done")

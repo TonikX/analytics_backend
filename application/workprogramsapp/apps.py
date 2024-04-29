@@ -6,6 +6,6 @@ class WorkprogramsappConfig(AppConfig):
     name = "workprogramsapp"
 
     def ready(self):
-        from .signals import populate_models
+        from workprogramsapp.signals import populate_models
 
         post_migrate.connect(populate_models, sender=self)

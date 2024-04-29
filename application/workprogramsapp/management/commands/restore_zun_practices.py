@@ -28,7 +28,6 @@ class Command(BaseCommand):
             ).distinct()
             restored_counter += 1
             if prac_in_fss.count() == 0:
-                print(prac_in_fss)
                 continue
 
             if prac_in_fss.count() > 1:
@@ -54,7 +53,6 @@ class Command(BaseCommand):
             if prac_in_fs.id == restored_data["prac_in_fs_id"] and set(
                 zuns_fs_list
             ) == set(restored_data["zuns"]):
-                # print("skipped")
                 skipped_counter += 1
                 continue
             else:
@@ -63,14 +61,8 @@ class Command(BaseCommand):
                         try:
                             zun_to_connect = ZunPractice.objects.get(id=zun_id)
                         except Zun.DoesNotExist:
-                            # print(zun_id)
                             not_exisisted_zuns += 1
                             continue
                         zun_to_connect.wp_in_fs = prac_in_fs
                         zun_to_connect.save()
                         recreated_counter += 1
-                        # print(zun_to_connect, wp_in_fs)
-        print(
-            f"records: {recreated_counter}, skipped: {skipped_counter}, more than one wp in fs {more_than_one_fs_count}"
-            f", not_existed_zuns: {not_exisisted_zuns}, finded_fos: {restored_counter}"
-        )

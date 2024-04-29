@@ -115,11 +115,6 @@ class Command(BaseCommand):
                         if lab_hours
                         else "0.0, 0, 0, 0"
                     )
-                    cons = (
-                        ", ".join([str(hour) for hour in cons_hours])
-                        if cons_hours
-                        else "0.0, 0, 0, 0"
-                    )
                     srs = ", ".join([str(hour) for hour in srs_hours])
                     ze = ", ".join([str(ze_in_list) for ze_in_list in ze_v_sem])
                     contact = ", ".join([str(hour) for hour in contact_hours])
@@ -141,16 +136,3 @@ class Command(BaseCommand):
                     for cerf_to_connect in cerf_list:
                         cerf_to_connect.work_program = created_wp
                         cerf_to_connect.save()
-                    print(
-                        str(wp_dict["id"]),
-                        practice,
-                        lecture,
-                        lab,
-                        cons,
-                        srs,
-                        wp_dict["disc_lang_code"].lower(),
-                        realisation_format,
-                        department,
-                        counter,
-                    )
-        print("done")

@@ -65,4 +65,3 @@ class Command(BaseCommand):
                                 Zun.objects.create(indicator_in_zun=ind, wp_in_fs=fs)
                     else:
                         ...
-        print("done")

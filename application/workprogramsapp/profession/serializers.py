@@ -87,7 +87,6 @@ class ItemWithProfessionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Items
         fields = ("id", "name", "domain", "value", "profession_skils")
-        # depth = 1
 
 
 class ItemWithRolesSerializer(serializers.ModelSerializer):
@@ -98,4 +97,3 @@ class ItemWithRolesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Items
         fields = ("id", "name", "domain", "value", "role_skils")
-        # depth = 1

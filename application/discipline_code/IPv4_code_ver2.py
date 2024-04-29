@@ -227,7 +227,6 @@ def getPos4(
                                     if count != rows:
                                         continue
                                     else:
-                                        print(5, end=" ")
                                         return str(getMax4(rep) + 1)
                                 else:
                                     return str(rep5["DIS_CODE"][p].split(".")[3])
@@ -254,24 +253,20 @@ def softwareEngineering(
     p3 = dis_code.split(".")[2]
     fin_rep = rep.loc[rep["DIS_CODE"].str.match(p12 + p3)]
     if subj not in rep["SUBJECT"].to_list():
-        # print(1, end=" ")
         return p3 + "." + str(getMax4(fin_rep) + 1)
     else:
         rep11 = rep.loc[rep["SUBJECT"] == subj]
         if lang not in rep11["LANGUAGE"].tolist():
-            # print(3, end=" ")
             return p3 + "." + str(getMax4(fin_rep) + 1)
         else:
             rep1 = rep11.loc[rep11["LANGUAGE"] == lang]
             if imp_id not in rep11["IMPLEMENTOR_ID"].tolist():
-                # print(3, end=" ")
                 return p3 + "." + str(getMax4(fin_rep) + 1)
             else:
                 rep2 = rep1.loc[rep1["IMPLEMENTOR_ID"] == imp_id].reset_index(drop=True)
                 new_sem_info = rep2["SEM_INFO"].apply(numUnitsCredits).to_list()
                 rep3 = rep2.assign(UNITS_CREDITS=new_sem_info)
                 if numUnitsCredits(sem_xlsx) not in new_sem_info:
-                    # print(2, end=" ")
                     return p3 + "." + str(getMax4(fin_rep) + 1)
                 else:
                     rep4 = rep3.loc[
@@ -300,7 +295,6 @@ def softwareEngineering(
                             ):
                                 var += 1
                         if var == 0:
-                            # print(4, end=" ")
                             return p3 + "." + str(getMax4(fin_rep) + 1)
                         else:
                             rep5 = rep4.loc[
@@ -339,24 +333,20 @@ def electiveModuleBachelor(
     p23 = ".".join(dis_code.split(".")[1:])
     fin_rep = rep.loc[rep["DIS_CODE"].str.match(dis_code)]
     if subj not in rep["SUBJECT"].to_list():
-        # print(1, end=" ")
         return p23 + str(getMax4(fin_rep) + 1)
     else:
         rep11 = rep.loc[rep["SUBJECT"] == subj]
         if lang not in rep11["LANGUAGE"].tolist():
-            # print(3, end=" ")
             return p23 + str(getMax4(fin_rep) + 1)
         else:
             rep1 = rep11.loc[rep11["LANGUAGE"] == lang]
             if imp_id not in rep1["IMPLEMENTOR_ID"].tolist():
-                # print(3, end=" ")
                 return p23 + str(getMax4(fin_rep) + 1)
             else:
                 rep2 = rep1.loc[rep1["IMPLEMENTOR_ID"] == imp_id].reset_index(drop=True)
                 new_sem_info = rep2["SEM_INFO"].apply(numUnitsCredits).to_list()
                 rep3 = rep2.assign(UNITS_CREDITS=new_sem_info)
                 if numUnitsCredits(sem_xlsx) not in new_sem_info:
-                    # print(2, end=" ")
                     return p23 + str(getMax4(fin_rep) + 1)
                 else:
                     rep4 = rep3.loc[
@@ -385,7 +375,6 @@ def electiveModuleBachelor(
                             ):
                                 var += 1
                         if var == 0:
-                            # print(4, end=" ")
                             return p23 + str(getMax4(fin_rep) + 1)
                         else:
                             rep5 = rep4.loc[
@@ -556,7 +545,6 @@ def generate_df_w_unique_code(in_df, sys_df=None):
             in_df["CYCLE"][i],
             in_df["YEAR"][i],
         )
-        print(in_df["COMPONENT"][i])
         in_df.loc[i, "DIS_CODE"] = getPos123(
             in_df["DEGREE"][i],
             in_df["COMPONENT"][i],
@@ -667,7 +655,6 @@ def generate_df_w_unique_code(in_df, sys_df=None):
             .drop_duplicates()
             .reset_index(drop=True)
         )
-        print(f"\rГотово на .. {round(i / len(in_df) * 100, 2)} %", end="")
     sys_df = getPos5(sys_df, new_sys_df).drop_duplicates().reset_index(drop=True)
     to_merge = sys_df[["DIS_CODE", "VERSION"]].copy()
     in_df_ver = (

@@ -59,7 +59,5 @@ def validate_file_extension(value):
     if ext.lower() in valid_extensions:
         raise ValidationError("Unsupported file extension.")
     MAX_FILE_SIZE = 10485760
-    print(value.name)
     if value.size > MAX_FILE_SIZE:
-        print(value.size)
         raise ValidationError("File size too big!")

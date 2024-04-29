@@ -12,7 +12,6 @@ class Command(BaseCommand):
                 academic_plan=plan
             ).order_by("-id")
             if len(imps) > 1:
-                print(imps)
                 for i in range(len(imps)):
                     if i != 0:
                         imps[i].delete()

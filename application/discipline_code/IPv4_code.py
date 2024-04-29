@@ -175,7 +175,6 @@ def getPos123(xlsx_degree, xlsx_sf_code, xlsx_sf_name, xlsx_comp, line=""):
         ]
         ognp_num = [p for p in ognp_num if str(p) != "nan"]
         if not ognp_num:
-            print(xlsx_degree, xlsx_sf_code, xlsx_sf_name)
             sys.exit("Неизвестный шифр направления подготовки в %sзаписи." % line)
         else:
             return p1 + "." + ognp_num[0] + "." + module[0] + "."

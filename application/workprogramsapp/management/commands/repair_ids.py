@@ -13,5 +13,3 @@ class Command(BaseCommand):
             d_code = eval(wp.discipline_code)[0]
             wp.discipline_code = d_code
             wp.save()
-            print(d_code)
-        print("done")

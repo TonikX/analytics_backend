@@ -14,7 +14,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         year = options["year"][0]
-        print(year)
         for iap in ImplementationAcademicPlan.objects.filter(year=year):
             if GeneralCharacteristics.objects.filter(
                 educational_program__title=iap.title, educational_program__year=iap.year
@@ -38,4 +37,3 @@ class Command(BaseCommand):
                         standard_date=2022,
                     )[0]
             gh.save()
-        print("done")

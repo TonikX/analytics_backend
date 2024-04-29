@@ -31,7 +31,6 @@ class Command(BaseCommand):
             }
             for zun in zuns:
                 zun_dict["zuns"].append(zun.id)
-            print(zun_dict)
             zun_to_restore_list.append(zun_dict)
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, "files/RESTORED_ZUNS_PRACTICE.json")

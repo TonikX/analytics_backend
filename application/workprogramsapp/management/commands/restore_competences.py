@@ -24,4 +24,3 @@ class Command(BaseCommand):
                 for zun in zuns:
                     zun.wp_in_fs = wp_in_fs
                     zun.save()
-                print(wp_in_fs.work_program.id, field.work_program.id)

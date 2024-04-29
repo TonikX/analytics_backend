@@ -222,41 +222,26 @@ def EducationalProgramRankingByProfessionScientific(request):
         ap.module = module_select
         if ap.coverage > max_coverage:
             max_coverage = ap.coverage
-            print(max_coverage)
         if ap.coverage < min_coverage:
             min_coverage = ap.coverage
-            print(min_coverage)
         if ap.focus > max_focus:
             max_focus = ap.focus
-            print(max_focus)
         if ap.focus < min_focus:
             min_focus = ap.focus
-            print(min_focus)
         ap_list.append(ap)
         # ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
     for ap in ap_list:
-        """If ap.coverage==min_coverage: print("min_coverage")
-        print(ap.coverage) if ap.coverage==max_coverage: print("max_coverage")
-        print(ap.coverage) if ap.focus==min_focus: print("min_focus")
-
-        if ap.focus==max_focus:     print("max_focus") print(ap.focus)
-        """
         ap.coverage = 0.01 + (ap.coverage - min_coverage) * (1 - 0.01) / (
             max_coverage - min_coverage
         )
-        print(ap.coverage)
         ap.focus = 0.01 + (ap.focus - min_focus) * (1 - 0.01) / (max_focus - min_focus)
-        print(ap.focus)
         ap.metrics = 2 * (ap.coverage * ap.focus) / (ap.coverage + ap.focus)
 
-    # Cортировка--
     sorted_academic_plan = sorted(
         ap_list, key=lambda ac_pl: ac_pl.metrics, reverse=True
     )
-    # for i in sorted_academic_plan: print(i, i.metrics)
     list_of_educational_program = []
     for s in sorted_academic_plan:
-        # print(str({"name": str(s), "coverage": s.coverage, "focus": s.focus, "route": s.routes}) + ",")
         for implementation in ImplementationAcademicPlan.objects.filter(
             academic_plan=s
         ):
