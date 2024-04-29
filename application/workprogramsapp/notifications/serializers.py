@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 
 from dataprocessing.models import User
