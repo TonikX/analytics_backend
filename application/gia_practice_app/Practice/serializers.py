@@ -1,4 +1,3 @@
-from typing import Optional, List, Dict
 from collections import OrderedDict
 
 from rest_framework import serializers

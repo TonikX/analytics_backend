@@ -110,7 +110,7 @@ def set_relation(item1, items_set, type_relation):
 
         print("Связи созданы")
     except:
-        msg = f"Что-то пошло не так:("
+        msg = "Что-то пошло не так:("
         return Response(msg, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -349,7 +349,7 @@ class RelationUpdateAPIView(generics.RetrieveUpdateAPIView):
             relation=request.data.get("relation"),
             item2=request.data.get("item2"),
         ).exists():
-            msg = f"Уже существует!"
+            msg = "Уже существует!"
             return Response(msg, status=status.HTTP_302_FOUND)
         else:
             old_relation = Relation.objects.get(id=kwargs["pk"])

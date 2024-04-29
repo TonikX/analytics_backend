@@ -85,17 +85,14 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
         if blocks:
             blocks_current = [block.id for block in instance.descipline_block.all()]
             for block in blocks:
-                if not (block in blocks_current):
+                if block not in blocks_current:
                     imp = ImplementationAcademicPlan.objects.get(
                         academic_plan__discipline_blocks_in_academic_plan__id=block
                     )
-                    if not (
-                        imp.id
-                        in [
+                    if imp.id not in [
                             accept_imp.id
                             for accept_imp in instance.educational_programs_to_access.all()
-                        ]
-                    ):
+                        ]:
                         return Response(
                             data={
                                 "error": "Данный учебный план не разрешен для добавления"
@@ -108,7 +105,7 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
             if instance.only_for_struct_units:
                 instance_structural_set = instance.get_structural_units()
             for child in childs:
-                if not (child in childs_current):
+                if child not in childs_current:
                     # if not instance.is_included_in_plan():
                     #     return Response(
                     #         data={"error": "Данный модуль/его родители не включен(-ы) ни в один учебный план"},
@@ -126,7 +123,7 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
                                 status=HTTP_400_BAD_REQUEST,
                             )
                         for new_child in new_child_struct:
-                            if not (new_child in instance_structural_set):
+                            if new_child not in instance_structural_set:
                                 return Response(
                                     data={
                                         "error": "Данный модуль не входит в разрешенные структурные подразделения"

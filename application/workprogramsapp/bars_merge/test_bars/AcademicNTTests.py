@@ -14,7 +14,7 @@ def bars_send_lenght(username):
     view = postAcademicNTCheckpoints
     start_time = time.time()
     request = factory.post(
-        f"api/bars_tools/academicntcheckpoints",
+        "api/bars_tools/academicntcheckpoints",
         {"year": "2021/2022", "from_date": "20.09.2021"},
         format="json",
     )

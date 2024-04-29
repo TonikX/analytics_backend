@@ -1,6 +1,5 @@
 import json
 import os
-from typing import Dict
 
 import pandas
 from django.conf import settings
@@ -1116,7 +1115,7 @@ class FileUploadOldVersionAPIView(APIView):
                     zun.wp_in_fs = wpinfs
                     zun.save()
                 print("Рабочая программа дисциплины записана в модуль: done")
-            except Exception as e:
+            except Exception:
                 print(
                     "Строка ",
                     i,

@@ -225,7 +225,7 @@ def post_wp_to_isu(token, wp, ap_id) -> tuple:
     ze = [int(unit) for unit in wp.ze_v_sem.split(", ")]
     try:
         cons_list = [float(hour) for hour in wp.consultation_v2.split(", ")]
-    except Exception as e:
+    except Exception:
         cons_list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for order, _ in enumerate(lecture_list):
         order_dict = {"order": order + 1, "work_types": []}

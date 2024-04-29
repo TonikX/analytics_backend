@@ -261,7 +261,7 @@ def calculate_ze_term(
                 # У нас в рпд есть строчки с пустыми консультациями, они вот так и обрабатываются
                 try:
                     max_cons_by_term[i] += matrix_cons[max_index, i]
-                except Exception as e:
+                except Exception:
                     pass
             if param_counter == select_param:
                 break

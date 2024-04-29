@@ -1,8 +1,7 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from dataprocessing.models import User
 from workprogramsapp.expertise.models import Expertise, UserExpertise
-from workprogramsapp.models import DisciplineBlockModule
 
 
 class Command(BaseCommand):

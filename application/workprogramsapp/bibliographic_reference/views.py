@@ -32,7 +32,7 @@ def SearchInEBSCO(request):
     def get_auth_token(user_id, password):
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
         data = {"UserId": user_id, "Password": password, "interfaceid": "edsapi"}
-        url = f"https://eds-api.ebscohost.com/authservice/rest/uidauth"
+        url = "https://eds-api.ebscohost.com/authservice/rest/uidauth"
 
         request = rq.post(url, headers=headers, data=json.dumps(data))
         return request.text
@@ -135,7 +135,7 @@ def SearchInEBSCO(request):
             year = record["RecordInfo"]["BibRecord"]["BibRelationships"][
                 "IsPartOfRelationships"
             ][0]["BibEntity"]["Dates"][0]["Y"]
-        except Exception as e:
+        except Exception:
             return year
         return year
 

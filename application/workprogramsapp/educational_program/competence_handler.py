@@ -38,7 +38,7 @@ def names_with_id_handler(pk_name):
         for index, char_pk in enumerate(pk_name[offset:]):
             if char_pk in russian_higher + russian_lower:
                 pk_num = pk_name[: offset + index].replace(" ", "")
-                while not pk_num[-1] in all_nums:
+                while pk_num[-1] not in all_nums:
                     pk_num = pk_num[:-1]
                 pk_title = pk_name[4 + index :]
                 pk_title = re.sub(" +", " ", pk_title[0].upper() + pk_title[1:])

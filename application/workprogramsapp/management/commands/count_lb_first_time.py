@@ -1,13 +1,9 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.db import models
-from django.db.models.functions import Concat
-from django_cte import With
+from django.core.management.base import BaseCommand
 
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from workprogramsapp.models import (
     DisciplineBlockModule,
-    DisciplineBlockModuleInIsu,
     WorkProgram,
 )
 

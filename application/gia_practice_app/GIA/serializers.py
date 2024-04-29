@@ -1,5 +1,3 @@
-from typing import Optional, Dict
-
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 

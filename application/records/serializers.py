@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import List, DefaultDict
+from typing import DefaultDict
 
 from rest_framework import serializers
 

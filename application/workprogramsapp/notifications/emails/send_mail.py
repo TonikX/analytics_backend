@@ -1,4 +1,3 @@
-from typing import Union
 
 from django.core.mail import send_mail
 from django.db.models import QuerySet
