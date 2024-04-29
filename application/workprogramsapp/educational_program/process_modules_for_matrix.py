@@ -32,7 +32,7 @@ def get_competences_practice(practice_in_fs):
                     competence=competence.id, zun_practice__id=zun.id
                 )
                 indicator = IndicatorSerializer(indicator).data
-            except:
+            except Exception:
                 indicator = None
             # indicators_array = []
             # for indicator in indicators:
@@ -82,12 +82,8 @@ def get_competences_wp(wp_in_fs):
                     competence=competence.id, zun__id=zun.id
                 )
                 indicator = IndicatorSerializer(indicator).data
-            except:
+            except Exception:
                 indicator = None
-            # indicators_array = []
-            # for indicator in indicators:
-            #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
-            # serializer = WorkProgramInFieldOfStudySerializerForCb(WorkProgramInFieldOfStudy.objects.get(zun_in_wp = zun.id))
 
             zuns_array.append(
                 {

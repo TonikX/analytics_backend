@@ -50,7 +50,7 @@ class UserBaseSerializer(serializers.ModelSerializer):
         try:
             EmailReset.objects.get(user=object, email=object.email, status=True)
             return True
-        except:
+        except Exception:
             return False
 
     class Meta:
@@ -168,7 +168,7 @@ class ItemWithRelationSerializer(serializers.ModelSerializer):
         depth = 1
 
     def get_relation_with_item(self, obj) -> list[dict]:
-        """ "obj is a Items instance.
+        """"obj is a Items instance.
 
         Returns list of dicts
         """

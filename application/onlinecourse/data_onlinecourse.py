@@ -140,21 +140,21 @@ def get_data():
                 requirements.append(current_course.json()["requirements"][0])
             else:
                 requirements.append("null")
-        except:
+        except Exception:
             continue
         try:
             if len(current_course.json()["learning_outcomes"]) != 0:
                 learning_outcomes.append(current_course.json()["learning_outcomes"][0])
             else:
                 learning_outcomes.append("null")
-        except:
+        except Exception:
             continue
         try:
             if len(current_course.json()["competences"]) != 0:
                 competences.append(current_course.json()["competences"])
             else:
                 competences.append("null")
-        except:
+        except Exception:
             competences.append("")
 
         """

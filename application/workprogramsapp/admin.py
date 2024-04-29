@@ -56,18 +56,6 @@ class AcademicPlanAdmin(admin.ModelAdmin):
     save_as = True
 
 
-@admin.register(wpa_models.WorkProgramChangeInDisciplineBlockModule)
-class AcademicPlanAdmin(admin.ModelAdmin):
-
-    inlines = [
-        WorkProgramInFieldOfStudyInLine,
-        GiaInFieldOfStudyInLine,
-        PracticeInFieldOfStudyInLine,
-    ]
-    save_on_top = True
-    save_as = True
-
-
 @admin.register(wpa_models.DisciplineBlockModuleInIsu)
 class ModuleIsuAdmin(admin.ModelAdmin):
     list_display = ("id", "isu_id", "isu_father_id", "academic_plan", "module")

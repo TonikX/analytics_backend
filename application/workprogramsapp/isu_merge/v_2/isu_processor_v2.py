@@ -416,7 +416,7 @@ def invoke():
                         ap
                     ),
                 )
-    except:
+    except Exception:
         pass
     csv_handler(file)
     return Response(status=200)
@@ -469,7 +469,7 @@ def csv_handler(self, file):
                 wp = WorkProgram.objects.get(id=int(data["ИД_НАШ"][i]))
                 wp_obj = wp
                 print("--- РПД найдена")
-            except:
+            except Exception:
                 print("--- РПД не найдена")
                 wp_obj = WorkProgram(
                     title=data["ДИСЦИПЛИНА"][i].strip(),
@@ -628,7 +628,7 @@ def csv_handler(self, file):
 
             try:
                 o = order[(data["МОДУЛЬ"][i].strip())]
-            except:
+            except Exception:
                 order.update({(data["МОДУЛЬ"][i].strip()): len(order)})
                 o = order[(data["МОДУЛЬ"][i].strip())]
             if DisciplineBlockModule.objects.filter(
@@ -756,7 +756,7 @@ def csv_handler(self, file):
                 ].strip("()")
                 wpinfs_id_str_up.kp_v_sem = data["КП_ПО_СЕМЕСТРАМ"][i].strip("()")
                 wpinfs_id_str_up.save()
-            except:
+            except Exception:
                 print("---- Ошибка с количеством WorkProgramIdStrUpForIsu.id_str_up")
             for zun in Zun.objects.filter(
                 wp_in_fs_saved_fk_id_str_up=int(data["ИД_СТР_УП"][i])

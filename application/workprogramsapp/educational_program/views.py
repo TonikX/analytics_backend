@@ -566,7 +566,7 @@ def new_ordinal_numbers_for_modules_in_ap(request):
             int(request.data.get("new_ordinal_number")),
         )
         return Response(status=200)
-    except:
+    except Exception:
         return Response(status=400)
 
 
@@ -682,7 +682,7 @@ def get_all_ap_with_competences_and_indicators(request, wp_id):
                     competence=competence.id, zun__id=zun.id
                 )
                 indicator = IndicatorSerializer(indicator).data
-            except:
+            except Exception:
                 indicator = None
 
             items_array = []
@@ -790,11 +790,8 @@ def get_all_competences_and_indicators_for_wp(request, wp_id):
                     competence=competence.id, zun__id=zun.id
                 )
                 indicator = IndicatorSerializer(indicator).data
-            except:
+            except Exception:
                 indicator = None
-            # indicators_array = []
-            # for indicator in indicators:
-            #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
             items_array = []
             items = Items.objects.filter(
                 item_in_outcomes__item_in_wp__id=zun.id,

@@ -277,7 +277,7 @@ class FileUploadAPIView(APIView):
                     wp = WorkProgram.objects.get(id=int(data["ИД_НАШ"][i]))
                     wp_obj = wp
                     print("--- РПД найдена")
-                except:
+                except Exception:
                     print("--- РПД не найдена")
 
                     wp_obj = WorkProgram(
@@ -544,7 +544,7 @@ class FileUploadAPIView(APIView):
                     ].strip("()")
                     wpinfs_id_str_up.kp_v_sem = data["КП_ПО_СЕМЕСТРАМ"][i].strip("()")
                     wpinfs_id_str_up.save()
-                except:
+                except Exception:
                     print(
                         "---- Ошибка с количеством WorkProgramIdStrUpForIsu.id_str_up"
                     )
@@ -783,13 +783,13 @@ class FileUploadOldVersionAPIView(APIView):
                     try:
                         wp = WorkProgram.objects.get(id=int(data["ИД_НАШ"][i]))
                         wp_obj = wp
-                    except:
+                    except Exception:
                         wp = WorkProgram.objects.get(
                             discipline_code=int(data["DISC_DISC_ID"][i])
                         )
                         wp_obj = wp
                     print("--- РПД найдена")
-                except:
+                except Exception:
                     print("--- РПД не найдена")
                     wp_obj = WorkProgram(
                         title=data["ДИСЦИПЛИНА"][i].strip(),
@@ -983,7 +983,7 @@ class FileUploadOldVersionAPIView(APIView):
 
                 try:
                     o = order[(data["МОДУЛЬ"][i].strip())]
-                except:
+                except Exception:
                     order.update({(data["МОДУЛЬ"][i].strip()): len(order)})
                     o = order[(data["МОДУЛЬ"][i].strip())]
                 if DisciplineBlockModule.objects.filter(
@@ -1105,7 +1105,7 @@ class FileUploadOldVersionAPIView(APIView):
                     ].strip("()")
                     wpinfs_id_str_up.kp_v_sem = data["КП_ПО_СЕМЕСТРАМ"][i].strip("()")
                     wpinfs_id_str_up.save()
-                except:
+                except Exception:
                     print(
                         "---- Ошибка с количеством WorkProgramIdStrUpForIsu.id_str_up"
                     )

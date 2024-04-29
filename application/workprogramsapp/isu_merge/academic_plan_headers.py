@@ -82,7 +82,7 @@ def process_headers(headers: list):
         imp.language = language
         try:
             imp.military_department = bool(ap_header["military_department"])
-        except:
+        except Exception:
             imp.military_department = False
         imp.title = ap_header["edu_program_name"]
         imp.total_intensity = int(total_intensity)

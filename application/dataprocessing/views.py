@@ -109,7 +109,7 @@ def set_relation(item1, items_set, type_relation):
                 print("finish")
 
         print("Связи созданы")
-    except:
+    except Exception:
         msg = "Что-то пошло не так:("
         return Response(msg, status=status.HTTP_400_BAD_REQUEST)
 
@@ -125,7 +125,7 @@ def set_relation_hierarchy(items_query, type_relation):
             item1 = Items.objects.get(name=key.strip())
             set_relation(item1, items_set, type_relation)
         return Response(status=200)
-    except:
+    except Exception:
         return Response(status=400)
 
 
@@ -138,7 +138,7 @@ def set_relation_linear(items_query, type_relation):
             set_relation(item1, items_set, type_relation)
 
         return Response(status=200)
-    except:
+    except Exception:
         return Response(status=400)
 
 
@@ -290,7 +290,7 @@ class RelationCreateAPIView(generics.ListCreateAPIView):
             ]
             set_relation(item1, item2, relation)
             return Response(status=200)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -329,7 +329,7 @@ class RelationRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
             item.value = int(value) - 1
             item.save()
             return self.destroy(request, *args, **kwargs)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -443,7 +443,7 @@ class FileUploadAPIView(APIView):
                 set_relation_linear(items_query, type_relation)
 
             return Response(status=200)
-        except:
+        except Exception:
             return Response(status=400)
 
 

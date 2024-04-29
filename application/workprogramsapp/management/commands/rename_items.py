@@ -15,5 +15,5 @@ class Command(BaseCommand):
                 item = Items.objects.get(id=normal_items["id"][i])
                 item.domain = Domain.objects.get(id=normal_items["domain_id"][i])
                 item.save()
-            except:
+            except Exception:
                 pass

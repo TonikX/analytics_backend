@@ -82,7 +82,7 @@ class CreateIndicatorInPkCompetenceInGeneralCharacteristicSerializer(
                     ),
                     indicator=Indicator.objects.get(pk=ind),
                 )
-            except:
+            except Exception:
                 raise serializers.ValidationError({"error": "indicator not found"})
         return Response(status=status.HTTP_201_CREATED)
 

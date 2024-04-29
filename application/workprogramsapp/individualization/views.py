@@ -88,7 +88,7 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                                 ):
                                     delete.append(i)
 
-                            except:
+                            except Exception:
                                 pass
                             i += 1
                         a = 0
@@ -112,7 +112,7 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                             ):
                                 # delete.append(i)
                                 change_block.update({"changed": True})
-                        except:
+                        except Exception:
                             change_block.update({"changed": False})
 
                 if module["type"] == "specialization_module":
@@ -127,21 +127,13 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                                 discipline_block=discipline_block["id"],
                             ).discipline_block_module.id
                         ):
-                            # change_block['work_program'].pop(i)
-                            # del change_block['work_program'][i]
                             delete_module.append(k)
-                            print("dd", k)
-                            # del change_block[work_program]
-
-                            # change_block.remove(work_program['id'])
-
-                    except:
+                    except Exception:
                         pass
                 k += 1
             a = 0
 
             for i in delete_module:
-                print("dddddd", k)
                 del discipline_block["modules_in_discipline_block"][i]
                 a += 1
         # TODO: Посмотреть как можно поменять костыль
@@ -168,7 +160,7 @@ class IndividualImplementationAcademicPlansSet(viewsets.ModelViewSet):
                     ).id
                 }
             )
-        except:
+        except Exception:
             newdata.update({"rating": False})
         return Response(OrderedDict(newdata), status=status.HTTP_200_OK)
 

@@ -179,7 +179,7 @@ def recursion_module(obj):
     # except TypeError as e:
     #     print("t", e)
     #     capture_event(e)
-    except:
+    except Exception:
         pass
     return unit_final_sum
 

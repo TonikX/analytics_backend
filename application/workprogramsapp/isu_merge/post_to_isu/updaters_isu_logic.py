@@ -31,7 +31,7 @@ def generate_response(url, headers, body, obj_name, obj_id, ap_id=None):
             returned_data=response.json(),
             ap_id=ap_id,
         )
-    except:
+    except Exception:
         IsuObjectsSendLogger.objects.create(
             obj_id=obj_id,
             obj_type=obj_name,
@@ -49,7 +49,7 @@ def generate_response(url, headers, body, obj_name, obj_id, ap_id=None):
                 response.json()["error_code"],
                 response.json(),
             )
-        except:
+        except Exception:
             return None, response.json()["error_code"], response.json()
     else:
         raise ValueError

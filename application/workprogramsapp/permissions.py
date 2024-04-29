@@ -24,7 +24,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
         try:
             return request.user in obj.editors.all()
-        except:
+        except Exception:
             pass
 
         return obj.owner == request.user
@@ -43,7 +43,7 @@ class IsOwnerOrDodWorkerOrReadOnly(permissions.BasePermission):
             return True
         try:
             return request.user in obj.editors.all()
-        except:
+        except Exception:
             pass
 
         return obj.owner == request.user

@@ -168,7 +168,7 @@ class CourseDataAPIView(APIView):
                         data_OnlineCourse.experts_rating[i]
                     )
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.visitors_number[i] != "null":
                 try:
@@ -176,7 +176,7 @@ class CourseDataAPIView(APIView):
                         data_OnlineCourse.visitors_number[i]
                     )
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.total_visitors_number[i] != "null":
                 try:
@@ -184,19 +184,19 @@ class CourseDataAPIView(APIView):
                         data_OnlineCourse.total_visitors_number[i]
                     )
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.duration[i] != "null":
                 try:
                     onlinecourse.duration = int(data_OnlineCourse.duration[i])
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.volume[i] != "null":
                 try:
                     onlinecourse.volume = int(data_OnlineCourse.volume[i])
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.intensity_per_week[i] != "null":
                 try:
@@ -204,13 +204,13 @@ class CourseDataAPIView(APIView):
                         data_OnlineCourse.intensity_per_week[i]
                     )
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.content[i] != "null":
                 try:
                     onlinecourse.content = str(data_OnlineCourse.content[i])
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.lectures_number[i] != "null":
                 try:
@@ -218,13 +218,13 @@ class CourseDataAPIView(APIView):
                         data_OnlineCourse.lectures_number[i]
                     )
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.external_url[i] != "null":
                 try:
                     onlinecourse.external_url = str(data_OnlineCourse.external_url[i])
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.has_certificate[i] != "null":
                 try:
@@ -232,25 +232,25 @@ class CourseDataAPIView(APIView):
                         data_OnlineCourse.has_certificate[i]
                     )
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.credits[i] != "null":
                 try:
                     onlinecourse.credits = float(data_OnlineCourse.credits[i])
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.requirements[i] != "null":
                 try:
                     onlinecourse.requirements = data_OnlineCourse.requirements[i]
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.competences[i] != "null":
                 try:
                     onlinecourse.competences = data_OnlineCourse.competences[i]
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
             if data_OnlineCourse.learning_outcomes[i] != "null":
                 try:
@@ -258,7 +258,7 @@ class CourseDataAPIView(APIView):
                         data_OnlineCourse.learning_outcomes[i]
                     )
                     onlinecourse.save()
-                except:
+                except Exception:
                     continue
         """
         Adding data to CourseFieldOfStudy

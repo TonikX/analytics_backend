@@ -161,7 +161,7 @@ class PracticeSerializer(serializers.ModelSerializer):
                         competence=competence.id, zun_practice__id=zun.id
                     )
                     indicator = IndicatorSerializer(indicator).data
-                except:
+                except Exception:
                     indicator = None
                 items_array = []
                 items = Items.objects.filter(
@@ -293,11 +293,8 @@ class PracticeCompetenceSerializer(serializers.ModelSerializer):
                         competence=competence.id, zun_practice__id=zun.id
                     )
                     indicator = IndicatorSerializer(indicator).data
-                except:
+                except Exception:
                     indicator = None
-                # indicators_array = []
-                # for indicator in indicators:
-                #     indicators_array.append({"id": indicator.id, "name": indicator.name, "number": indicator.number})
                 items_array = []
                 items = Items.objects.filter(
                     practice_item_in_outcomes__item_in_practice__id=zun.id,

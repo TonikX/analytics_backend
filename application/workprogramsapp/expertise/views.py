@@ -273,7 +273,7 @@ def UpdateCommentStatus(request):
         )
         wp.save()
         return Response(status=201)
-    except:
+    except Exception:
         return Response(status=400)
 
 
@@ -320,7 +320,7 @@ def ChangeStatusesOfExpertiseWP(request):
         wk_status.update(expertise_status="RE")
         return Response("Господи, пусть оно ничего не сломает", status=200)
 
-    except:
+    except Exception:
         return Response(status=400)
 
 

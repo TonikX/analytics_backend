@@ -22,7 +22,7 @@ class AcademicPlanUpdateScheduler:
         )
         try:
             self.scheduler.start()
-        except:
+        except Exception:
             pass
 
     @staticmethod

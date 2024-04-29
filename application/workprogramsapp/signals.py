@@ -172,7 +172,7 @@ def expertise_notificator(sender, instance, created, **kwargs):
                     wp_id=wp_exp.id,
                 )
             )
-    except:
+    except Exception:
         pass
 
 

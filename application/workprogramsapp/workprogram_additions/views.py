@@ -177,7 +177,7 @@ def CopyContentOfWorkProgram(request):
         new_wp.extra_points = old_wp.extra_points
         new_wp.save()
         return Response(data={"copied"}, status=200)
-    except:
+    except Exception:
         return Response(status=400)
 
 
@@ -190,7 +190,7 @@ def ReconnectWorkProgram(request):
         new_wp = WorkProgram.objects.get(pk=to_copy)
         serializer = WorkProgramSerializer(new_wp, many=False)
         return Response(serializer.data)
-    except:
+    except Exception:
         return Response(status=400)
 
 

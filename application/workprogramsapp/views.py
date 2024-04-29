@@ -503,7 +503,7 @@ class CompetenceUpdateView(APIView):
         try:
             competence.delete()
             return Response(status=200)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -542,7 +542,7 @@ class DeleteIndicatorFromCompetenceView(APIView):
             indicator = Indicator.objects.get(pk=indicator_pk, competence=competence_pk)
             indicator.delete()
             return Response(status=200)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -568,7 +568,7 @@ class AddIndicatorToCompetenceView(APIView):
             )
             indicator.save()
             return Response(status=200)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -629,7 +629,7 @@ class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
             item.save()
 
             return self.destroy(request, *args, **kwargs)
-        except:
+        except Exception:
             return self.destroy(request, *args, **kwargs)
 
 
@@ -779,7 +779,7 @@ class PrerequisitesOfWorkProgramDestroyView(generics.DestroyAPIView):
             item.save()
 
             return self.destroy(request, *args, **kwargs)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -852,7 +852,7 @@ class WorkProgramUpdateView(generics.UpdateAPIView):
                     section.practical_lessons = section.consultations / 3
                     section.consultations = 0
                     section.save()
-        except:
+        except Exception:
             pass
         response_serializer = WorkProgramSerializer(
             WorkProgram.objects.get(id=serializer.data["id"]),
@@ -1019,7 +1019,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
                 newdata.update({"can_approve": True})
             if expertise.expertise_status == "WK" or expertise.expertise_status == "AC":
                 newdata.update({"can_approve": False})
-        except:
+        except Exception:
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
         if (
@@ -1112,7 +1112,7 @@ class WorkProgramDetailsWithDisciplineCodeView(generics.ListAPIView):
             serializer = WorkProgramForIndividualRoutesSerializer(queryset, many=True)
             print(serializer.data)
             return Response(serializer.data)
-        except:
+        except Exception:
             return Response(
                 {"error": "work program with such a code was not found"},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -1140,7 +1140,7 @@ class WorkProgramFullDetailsWithDisciplineCodeView(generics.ListAPIView):
             serializer = WorkProgramSerializer(queryset, many=True)
             print(serializer.data)
             return Response(serializer.data)
-        except:
+        except Exception:
             return Response(
                 {"error": "work program with such a code was not found"},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -1186,7 +1186,7 @@ class TopicDetailAPI(generics.RetrieveUpdateDestroyAPIView):
         try:
             Topic.new_ordinal_number(topic_section, -1)
             return self.destroy(request, *args, **kwargs)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -1337,7 +1337,7 @@ class DisciplineSectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
         try:
             DisciplineSection.new_ordinal_number(descipline_section, -1)
             return self.destroy(request, *args, **kwargs)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -1386,7 +1386,7 @@ def NewOrdinalNumbersForDesciplineSectionAPI(request):
     try:
         DisciplineSection.new_ordinal_number(descipline_section, new_ordinal_number)
         return Response(status=200)
-    except:
+    except Exception:
         return Response(status=400)
 
 
@@ -1411,7 +1411,7 @@ def NewOrdinalNumbersForTopicAPI(request):
     try:
         Topic.new_ordinal_number(topic, new_ordinal_number)
         return Response(status=200)
-    except:
+    except Exception:
         return Response(status=400)
 
 
@@ -1439,7 +1439,7 @@ def NewRealtionsForWorkProgramsInFieldOfStudyAPI(request):
     try:
         WorkProgram.new_relations(old_descipline_code, new_descipline_code)
         return Response(status=200)
-    except:
+    except Exception:
         return Response(status=400)
 
 
@@ -1545,7 +1545,7 @@ def ChangeItemsView(request):
         item = Items.objects.filter(id=request.data.get("old_item_id"))[0]
         other_item = Items.objects.filter(name=item.name).exclude(id=item.id)
         merge(item, other_item)
-    except:
+    except Exception:
         return Response(status=400)
     return Response(status=200)
 
@@ -1618,7 +1618,7 @@ class FileUploadWorkProgramOutcomesAPIView(APIView):
                 {"Message": "All data processed"}, status=status.HTTP_201_CREATED
             )
 
-        except:
+        except Exception:
             return Response(
                 {"Message": "Data not loaded"}, status=status.HTTP_400_BAD_REQUEST
             )
@@ -1692,7 +1692,7 @@ class EvaluationToolInWorkProgramList(generics.ListAPIView):
             ).distinct()
             serializer = EvaluationToolForWorkProgramSerializer(queryset, many=True)
             return Response(serializer.data)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -1715,7 +1715,7 @@ class FieldOfStudiesForWorkProgramList(generics.ListAPIView):
             ).distinct()
             serializer = FieldOfStudySerializer(queryset, many=True)
             return Response(serializer.data)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -1955,7 +1955,7 @@ class FileUploadWorkProgramAPIView(APIView):
                                 item=item, workprogram=wp_obj
                             )
                             out_obj.save()
-            except:
+            except Exception:
                 print(i)
                 continue
         return Response(status=200)
@@ -2072,7 +2072,7 @@ class FileUploadAPIView(APIView):
                                 units["CREDITS"][u]
                             )
                     print("credit_units", credit_units)
-                except:
+                except Exception:
                     print("mistake with units")
                     pass
                 # проверяем если ОП уже существует в БД
@@ -2134,8 +2134,7 @@ class FileUploadAPIView(APIView):
                                 discipline_code=data["DIS_CODE"][i],
                                 title=data["SUBJECT"][i].strip(),
                             )[0]
-                        except:
-                            print("Я СКЛОНИРОВАЛ!!!")
+                        except Exception:
                             clone = True
                             wp_obj = WorkProgram.clone_programm(wp_obj.id)
                             wp_obj.discipline_code = data["DIS_CODE"][i]
@@ -2280,7 +2279,7 @@ class FileUploadAPIView(APIView):
                         title=data["IMPLEMENTOR"][i].strip(),
                         isu_id=data["IMPLEMENTOR_ID"][i],
                     )
-                except:
+                except Exception:
                     struct_unit = StructuralUnit.objects.create(
                         title=data["IMPLEMENTOR"][i].strip(),
                         isu_id=data["IMPLEMENTOR_ID"][i],
@@ -2357,7 +2356,7 @@ class FileUploadAPIView(APIView):
 
                 try:
                     o = order[data["COMPONENT"][i].strip()]
-                except:
+                except Exception:
                     order.update({data["COMPONENT"][i].strip(): len(order)})
                     o = order[data["COMPONENT"][i].strip()]
 
@@ -2453,7 +2452,7 @@ class FileUploadAPIView(APIView):
                             print("УДАЛЯЕТСЯ СКЛОНИРОВАННАЯ рпд")
                             wp_obj.delete()
                             wpchangemdb.delete()
-                except:
+                except Exception:
                     pass
 
                 print("Рабочая программа дисциплины записана в модуль: done")
@@ -2606,7 +2605,7 @@ class AcademicPlanDetailsView(generics.RetrieveAPIView):
                     ).id
                 }
             )
-        except:
+        except Exception:
             newdata.update({"rating": False})
         newdata = OrderedDict(newdata)
         return Response(newdata, status=status.HTTP_200_OK)
@@ -2794,7 +2793,7 @@ def DisciplinesByNumber(request):
             )
         return Response(wp_array)
 
-    except:
+    except Exception:
         return Response(status=400)
 
 

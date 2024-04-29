@@ -938,7 +938,7 @@ class DisciplineBlockSerializer(serializers.ModelSerializer):
                         raise
                 dbms = dbms.order_by("orderings_for_ups__0__number")
 
-            except:
+            except Exception:
                 for index, module in enumerate(dbms):
                     module_for_save = DisciplineBlockModule.objects.get(id=module.id)
                     if module_for_save.orderings_for_ups is not None:

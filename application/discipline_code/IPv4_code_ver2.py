@@ -136,7 +136,7 @@ def totalUnitInfo(data, sf_name, subj, comp, subj_code, cycle, year):
                 credit_units[11] = int(units["CREDITS"][u])
             else:
                 credit_units[int(units["SEMESTER"][u]) - 1] = int(units["CREDITS"][u])
-    except:
+    except Exception:
         pass
     return ",".join(map(str, credit_units))
 

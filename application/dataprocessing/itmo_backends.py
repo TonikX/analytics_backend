@@ -106,7 +106,7 @@ class AuthenticateByCodeISU(ListAPIView):
 
                 try:
                     user.patronymic = isu_profile["patronymic"]
-                except:
+                except Exception:
                     pass
 
                 user.save()

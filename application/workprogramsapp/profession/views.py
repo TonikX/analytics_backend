@@ -113,7 +113,7 @@ class SkillsOfProfessionInProfessionDestroyView(generics.DestroyAPIView):
             item.save()
 
             return self.destroy(request, *args, **kwargs)
-        except:
+        except Exception:
             return Response(status=400)
 
 
@@ -288,7 +288,7 @@ class SkillsOfRoleInRoleDestroyView(generics.DestroyAPIView):
             item.save()
 
             return self.destroy(request, *args, **kwargs)
-        except:
+        except Exception:
             return Response(status=400)
 
 

@@ -1,4 +1,3 @@
-
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 from rest_framework.fields import BooleanField, SerializerMethodField
@@ -347,7 +346,7 @@ class WorkProgramCompetenceIndicatorSerializer(serializers.ModelSerializer):
                         competence=competence.id, zun__id=zun.id
                     )
                     indicator = IndicatorSerializer(indicator).data
-                except:
+                except Exception:
                     indicator = None
 
                 zuns_array.append(

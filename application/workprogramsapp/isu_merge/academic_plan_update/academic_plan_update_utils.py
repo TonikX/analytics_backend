@@ -259,7 +259,7 @@ class AcademicPlanUpdateUtils:
         order = self.module_order_provide.get_module_order()
         try:
             module_order = order[isu_academic_plan_block_module_json["module_name"]]
-        except:
+        except Exception:
             order.update(
                 {
                     (isu_academic_plan_block_module_json["module_name"].strip()): len(

@@ -280,7 +280,7 @@ class DisciplineBlockModuleDetailView(generics.RetrieveAPIView):
                     ).id
                 }
             )
-        except:
+        except Exception:
             newdata.update({"rating": False})
 
         imps = ImplementationAcademicPlan.get_all_imp_by_modules(queryset)

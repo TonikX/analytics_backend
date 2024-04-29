@@ -18,6 +18,6 @@ class Command(BaseCommand):
                 wp.description = wp_descriptions["description"][i]
                 counter_done += 1
                 wp.save()
-            except:
+            except Exception:
                 pass
         print("done", counter_done)
