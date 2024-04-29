@@ -221,7 +221,7 @@ def academicNTCheckpointGenerator(
     min_sem = 12
     max_sem = 1
     for eva in evaluation_tools:
-        if eva.semester == None:
+        if eva.semester is None:
             break
         if eva.semester < min_sem:
             min_sem = eva.semester

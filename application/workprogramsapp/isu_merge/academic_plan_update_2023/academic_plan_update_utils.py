@@ -230,9 +230,9 @@ class AcademicPlanUpdateUtils:
             tool = str(tool)
             term_list = []
             if int(years) == 2:
-                possible_terms, last_term = ("1", "2", "3", "4"), "4"
+                possible_terms = ("1", "2", "3", "4")
             elif int(years) == 4:
-                possible_terms, last_term = (
+                possible_terms = (
                     "1",
                     "2",
                     "3",
@@ -241,9 +241,9 @@ class AcademicPlanUpdateUtils:
                     "6",
                     "7",
                     "8",
-                ), "8"
+                )
             else:
-                possible_terms, last_term = (
+                possible_terms = (
                     "11",
                     "10",
                     "9",
@@ -255,7 +255,7 @@ class AcademicPlanUpdateUtils:
                     "3",
                     "2",
                     "1",
-                ), "11"
+                )
             for term in possible_terms:
                 if term in tool:
                     term_list.append(term)

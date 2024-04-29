@@ -53,7 +53,7 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     def __del_disciplines_ids_by_academic_plan__(academic_plan_id, new_disciplines_ids):
-        wcbms = (
+        (
             WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id
             )
@@ -584,7 +584,7 @@ class AcademicPlanUpdateProcessor:
         block_modules_to_del_ids, isu_academic_plan_json, discipline_block_object
     ):
 
-        bm = (
+        (
             DisciplineBlockModule.objects.filter(
                 descipline_block=discipline_block_object,
                 descipline_block__academic_plan__ap_isu_id=isu_academic_plan_json["id"],
@@ -605,15 +605,11 @@ class AcademicPlanUpdateProcessor:
             father_module=discipline_block_module_object
         ).exclude(id__in=block_modules_not_for_del_ids)
         for bm in bms:
-            father_module_id = (
-                father_module_json.get("id") if father_module_json else None
-            )
             DisciplineBlockModuleInIsu.objects.filter(
                 module=bm,
                 academic_plan=AcademicPlan.objects.filter(
                     ap_isu_id=isu_academic_plan_json["id"]
                 )[0],
-                # order=AcademicPlanUpdateUtils().get_module_order(isu_academic_plan_block_module_json)
             ).delete()
             bm.father_module.remove(discipline_block_module_object)
 
@@ -642,7 +638,7 @@ class AcademicPlanUpdateProcessor:
     @staticmethod
     def __del_block__(block_to_del_ids, isu_academic_plan_json):
 
-        b = (
+        (
             DisciplineBlock.objects.filter(
                 academic_plan__ap_isu_id=isu_academic_plan_json["id"]
             )
@@ -1308,10 +1304,10 @@ class AcademicPlanUpdateProcessor:
         discipline_block_module_object,
         work_program_change_in_discipline_block_modules_not_for_del,
     ):
-        wcbms = WorkProgramChangeInDisciplineBlockModule.objects.filter(
+        WorkProgramChangeInDisciplineBlockModule.objects.filter(
             discipline_block_module=discipline_block_module_object, work_program=None
         ).delete()
-        wcbms = (
+        (
             WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object
             )
@@ -1429,7 +1425,7 @@ class AcademicPlanUpdateProcessor:
                     else:
                         discipline_not_for_del.append(children_module.id)
 
-                if children_module == None:
+                if children_module is None:
                     continue
 
             AcademicPlanUpdateProcessor.__del_block_modules__by__father__module__(
@@ -1471,7 +1467,7 @@ class AcademicPlanUpdateProcessor:
             return discipline_block_module_object, None
 
         elif module["type"] == "discipline":
-            if father_module == None:
+            if father_module is None:
                 return None
             isu_academic_plan_discipline_json = module
             # for isu_academic_plan_discipline_json in module['contents']:
@@ -1615,8 +1611,7 @@ class AcademicPlanUpdateProcessor:
                             )
                             father_module_not_for_del.append(father_module.id)
 
-                            if father_module == None:
-                                print("!!!!!!!!!!!!!!!!!!!")
+                            if father_module is None:
                                 continue
                         AcademicPlanUpdateProcessor.__del_father_block_modules__(
                             father_module_not_for_del,

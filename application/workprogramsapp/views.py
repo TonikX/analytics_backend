@@ -282,7 +282,8 @@ class ZunManyViewSet(viewsets.ModelViewSet):
         ).distinct()
         for wp_in_fs in wp_in_fss:
             zun_obj = request.data["zun"]
-            if type(zun_obj) is list:
+
+            if isinstance(zun_obj, list):
                 for zun in zun_obj:
                     serializer = self.get_serializer(data=zun)
                     serializer.is_valid(raise_exception=True)
@@ -331,8 +332,7 @@ class ZunManyForAllGhViewSet(viewsets.ModelViewSet):
         ).distinct()
         for wp_in_fs in wp_in_fss:
             zun_obj = request.data["zun"]
-            print(type(zun_obj))
-            if type(zun_obj) is list:
+            if isinstance(zun_obj, list):
                 for zun in zun_obj:
                     serializer = self.get_serializer(data=zun)
                     serializer.is_valid(raise_exception=True)
@@ -1023,7 +1023,7 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             newdata.update({"can_comment": False})
             newdata.update({"can_approve": False})
         if (
-            request.user.is_expertise_master == True or request.user in wp.editors.all()
+            request.user.is_expertise_master or request.user in wp.editors.all()
         ) and wp.work_status == "w":
             newdata.update({"can_archive": True})
         else:

@@ -58,8 +58,7 @@ class AcademicPlanAdmin(admin.ModelAdmin):
 
 @admin.register(wpa_models.WorkProgramChangeInDisciplineBlockModule)
 class AcademicPlanAdmin(admin.ModelAdmin):
-    # list_display = ("__str__", 'id', 'ap_isu_id', 'year')
-    # search_fields = ['id', 'ap_isu_id', 'year']
+
     inlines = [
         WorkProgramInFieldOfStudyInLine,
         GiaInFieldOfStudyInLine,

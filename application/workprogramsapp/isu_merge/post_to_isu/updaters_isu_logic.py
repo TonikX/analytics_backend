@@ -60,7 +60,6 @@ def post_gia_to_isu(token, gia, ap_id) -> int:
     """From gia_practice_app.GIA.models import * gia = GIA.objects.get(id=134)
     from workprogramsapp.isu_merge.post_to_isu.updaters_isu_logic import *
     post_gia_to_isu("1", gia)"""
-    certification_types = {1: 5, 2: 9, 3: 6, 4: 7, 5: 8}
     body = [
         {
             "name_ru": "",

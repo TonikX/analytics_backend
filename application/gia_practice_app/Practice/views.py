@@ -198,10 +198,10 @@ class ZunPracticeManyViewSet(
                 work_program_change_in_discipline_block_module__discipline_block_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__father_module__descipline_block__academic_plan__in=aps,
             )
         ).distinct()
-        print(wp_in_fss)
+
         for wp_in_fs in wp_in_fss:
             zun_obj = request.data["zun"]
-            if type(zun_obj) is list:
+            if isinstance(zun_obj, list):
                 for zun in zun_obj:
                     serializer = self.get_serializer(data=zun)
                     serializer.is_valid(raise_exception=True)

@@ -220,7 +220,7 @@ def count_ze_module(obj: DisciplineBlockModule):
 
 # Передавать айди модуля в цте, возвращать объект модуля, делать запрос моудля внутри ифа. Напистаь менеджмент функцию, переинчавиющую трудоемкости всех модулей
 def rewrite_ze_up(module):
-    parent_id = None
+
     try:
         module.laboriousness = count_ze_module(module)
     except IndexError:

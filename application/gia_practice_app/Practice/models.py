@@ -3,8 +3,8 @@ import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+import gia_practice_app.Practice.consts_for_models as const
 from analytics_project import settings
-from gia_practice_app.Practice.consts_for_models import *
 
 
 def current_year():
@@ -17,19 +17,21 @@ def max_value_current_year(value):
 
 class PracticeTemplate(models.Model):
     general_provisions = models.TextField(
-        max_length=16384, default=GENERAL, verbose_name="Общие положения"
+        max_length=16384, default=const.GENERAL, verbose_name="Общие положения"
     )
     structure_and_content = models.TextField(
         max_length=16384,
-        default=STRUCTURE,
+        default=const.STRUCTURE,
         verbose_name="CОДЕРЖАНИЕ И СТРУКТУРА ПРАКТИКИ",
     )
 
     reporting_materials = models.TextField(
-        max_length=16384, default=REPORTS, verbose_name="ОТЧЕТНЫЕ МАТЕРИАЛЫ ПО ПРАКТИКЕ"
+        max_length=16384,
+        default=const.REPORTS,
+        verbose_name="ОТЧЕТНЫЕ МАТЕРИАЛЫ ПО ПРАКТИКЕ",
     )
     ovz = models.TextField(
-        max_length=8192, default=OVZ, verbose_name="Проведение ГИА для лиц с ОВЗ"
+        max_length=8192, default=const.OVZ, verbose_name="Проведение ГИА для лиц с ОВЗ"
     )
 
 
@@ -202,17 +204,17 @@ class Practice(models.Model):
         max_length=4096, verbose_name="Форма  промежуточной аттестации"
     )
     passed_great_mark = models.TextField(
-        max_length=4096, default=GREAT, verbose_name="Зачтено (отлично)"
+        max_length=4096, default=const.GREAT, verbose_name="Зачтено (отлично)"
     )
     passed_good_mark = models.TextField(
-        max_length=4096, default=GOOD, verbose_name="Зачтено (хорошо)"
+        max_length=4096, default=const.GOOD, verbose_name="Зачтено (хорошо)"
     )
     passed_satisfactorily_mark = models.TextField(
-        max_length=4096, default=SATIS, verbose_name="Зачтено (удовлетворительно)"
+        max_length=4096, default=const.SATIS, verbose_name="Зачтено (удовлетворительно)"
     )
     not_passed_mark = models.TextField(
         max_length=4096,
-        default=UNSATISF,
+        default=const.UNSATISF,
         verbose_name="Не зачтено (неудовлетворительно)",
     )
     bibliographic_reference = models.ManyToManyField(
@@ -237,7 +239,7 @@ class Practice(models.Model):
 
     evaluation_tools_current_control = models.TextField(
         max_length=8192,
-        default=EVALUATION,
+        default=const.EVALUATION,
         verbose_name="ОЦЕНОЧНЫЕ СРЕДСТВА ДЛЯ ПРОВЕДЕНИЯ ТЕКУЩЕГО КОНТРОЛЯ И  ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ ПО ПРАКТИКЕ.Текущий контроль",
     )
     term_hours_info_table = models.JSONField(default=dict)

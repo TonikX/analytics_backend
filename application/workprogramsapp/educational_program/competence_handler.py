@@ -55,8 +55,6 @@ def competence_dict_generator(file_path):
     competence_list = []
     for i, row in competences.iterrows():
         main_dict_find_bool = False
-        competence_find_bool = False
-        indicator_find_bool = False
         main_dict = None
         id_op = list(map(int, str(row["ИД ОП"]).split(",")))
         try:
@@ -100,7 +98,6 @@ def competence_dict_generator(file_path):
             for el in main_dict["competence_list"]:
                 if el["competence_name"] == competence_name:
                     competence = el
-                    competence_find_bool = True
                     break
         if not competence:
             competence = generate_competence_dict(

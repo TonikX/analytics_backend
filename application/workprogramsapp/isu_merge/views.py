@@ -1329,7 +1329,7 @@ class UpdateModulesRelationships(APIView):
             IsuUser(settings.ISU["ISU_CLIENT_ID"], settings.ISU["ISU_CLIENT_SECRET"])
         )
         modules = isu_service.get_modules()
-        modules_updated = process_modules(modules)
+        process_modules(modules)
 
         return Response(data={"plans_created"}, status=200)
 

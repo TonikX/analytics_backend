@@ -512,15 +512,10 @@ class GetPrerequisitesAndOutcomesOfWpByStrUP(generics.RetrieveAPIView):
 @permission_classes((IsAdminUser,))
 def FieldOfStudyPlanToISU(request, pk):
     """Перевод наших данных в ISU-лайк данные."""
-    """Code = request.data.get('field_of_study_code') year =
-    request.data.get('year') academic_plan_id =
-    request.data.get('academic_plan_id')"""
+
     implementation_list = []
     all_imp = ImplementationAcademicPlan.objects.all()
-    imp_len = all_imp.count()
-    from_len = pk * 20
-    end_len = from_len + 20 if from_len + 20 < imp_len else imp_len
-    # all_imp = all_imp[from_len:end_len]
+
     for implementation in all_imp:
         academic_plan = AcademicPlan.objects.get(pk=implementation.academic_plan.id)
         field_of_study = FieldOfStudy.objects.get(pk=implementation.field_of_study.id)
@@ -540,8 +535,6 @@ def FieldOfStudyPlanToISU(request, pk):
                                 )
                             except AttributeError:
                                 struct_unit = None
-                                isu_id = None
-                                struct_title = None
                             if wp.language == "ru":
                                 language = "Русский"
                             elif wp.language == "en":

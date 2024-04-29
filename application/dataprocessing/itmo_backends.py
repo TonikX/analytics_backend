@@ -148,6 +148,6 @@ def isu_client_credentials_request(url):
     )
     obtain_isu = obtain_isu_url.json()
     if "access_token" in obtain_isu:
-        req = requests.post(
+        requests.post(
             url, headers={"Authorization": "Bearer " + obtain_isu["access_token"]}
         )

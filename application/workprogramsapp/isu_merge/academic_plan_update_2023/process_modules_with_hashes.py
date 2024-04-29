@@ -39,7 +39,7 @@ def get_ap_jsons():
         for block in isu_academic_plan_json["structure"]:
             process_json_recursion(block["children"], old_academic_plan)
 
-    id_diff_hashes = get_id_with_diff_hashes()
+    get_id_with_diff_hashes()
 
     for hash_obj in IsuModulesHashes.objects.filter(new_id__isnull=False):
         old_academic_plan = ImplementationAcademicPlan.objects.get(
@@ -69,9 +69,6 @@ def process_json_recursion(modules_json, ap):
             list_of_start_sem = sorted(list(object_module["contents"].keys()))
             list_for_hashing.append(str(id_obj) + str(list_of_start_sem))
     return zlib.crc32(bytes(str(sorted(list_for_hashing)).encode()))
-
-
-# IsuModulesHashes.objects.values('isu_id').annotate(Count('id')).order_by().filter(id__count__gt=1)
 
 
 def process_editing_json(
@@ -126,5 +123,4 @@ def get_id_with_diff_hashes():
                 hash_obj.new_id = new_id
                 hash_obj.save()
 
-    print(unique_hashes)
     return [query_obj["isu_id"] for query_obj in ids]

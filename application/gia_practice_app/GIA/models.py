@@ -3,8 +3,8 @@ import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+import gia_practice_app.GIA.consts_for_models as const
 from analytics_project import settings
-from gia_practice_app.GIA.consts_for_models import *
 
 
 def current_year():
@@ -33,7 +33,7 @@ class GIABaseTemplate(models.Model):
         verbose_name="Составляющие государственной итоговой аттестации",
     )
     general_provisions = models.TextField(
-        max_length=8192, default=GENERAL_PROVISION, verbose_name="Общие положения"
+        max_length=8192, default=const.GENERAL_PROVISION, verbose_name="Общие положения"
     )
 
     vkr_theme_choice_time = models.CharField(
@@ -74,7 +74,7 @@ class GIABaseTemplate(models.Model):
 
     structure_elements = models.TextField(
         max_length=4096,
-        default=STRUCTURE_ELEMENTS,
+        default=const.STRUCTURE_ELEMENTS,
         verbose_name="Структурные элементы ВКР",
     )
     professional_problems_marks = models.ForeignKey(
@@ -86,10 +86,14 @@ class GIABaseTemplate(models.Model):
         null=True,
     )
     vkr_mark = models.CharField(
-        max_length=4096, default=VKR_MARK, verbose_name="Оценка ВКР на заседании ГЭК"
+        max_length=4096,
+        default=const.VKR_MARK,
+        verbose_name="Оценка ВКР на заседании ГЭК",
     )
     gia_ovz = models.TextField(
-        max_length=8192, default=GIA_OVZ, verbose_name="Проведение ГИА для лиц с ОВЗ"
+        max_length=8192,
+        default=const.GIA_OVZ,
+        verbose_name="Проведение ГИА для лиц с ОВЗ",
     )
     template_year = models.PositiveIntegerField(
         default=current_year(),
@@ -203,7 +207,7 @@ class GIA(models.Model):
     )
     structure_elements_optional = models.TextField(
         max_length=4096,
-        default=ADDITIONAL_STRUCTURE_ELEMENTS,
+        default=const.ADDITIONAL_STRUCTURE_ELEMENTS,
         verbose_name="структурные элементы ВКР, дополнительные",
         blank=True,
         null=True,
@@ -330,70 +334,70 @@ class GIA(models.Model):
 
     def save(self, *args, **kwargs):
         self.content_correspondence_marks = CriteriaVKR.objects.create(
-            great=CONTENT_GREAT,
-            good=CONTENT_GOOD,
-            satisfactorily=CONTENT_SATIS,
-            unsatisfactory=CONTENT_UNSATISF,
+            great=const.CONTENT_GREAT,
+            good=const.CONTENT_GOOD,
+            satisfactorily=const.CONTENT_SATIS,
+            unsatisfactory=const.CONTENT_UNSATISF,
         )
         self.relevance_marks = CriteriaVKR.objects.create(
-            great=RELEV_GREAT,
-            good=RELEV_GOOD,
-            satisfactorily=RELEV_SATIS,
-            unsatisfactory=RELEV_UNSATISF,
+            great=const.RELEV_GREAT,
+            good=const.RELEV_GOOD,
+            satisfactorily=const.RELEV_SATIS,
+            unsatisfactory=const.RELEV_UNSATISF,
         )
         self.specialization_correspondence_marks = CriteriaVKR.objects.create(
-            great=SPEC_GREAT,
-            good=SPEC_GOOD,
-            satisfactorily=SPEC_SATIS,
-            unsatisfactory=SPEC_UNSATISF,
+            great=const.SPEC_GREAT,
+            good=const.SPEC_GOOD,
+            satisfactorily=const.SPEC_SATIS,
+            unsatisfactory=const.SPEC_UNSATISF,
         )
         self.correctness_of_methods_marks = CriteriaVKR.objects.create(
-            great=CORRECT_GREAT,
-            good=CORRECT_GOOD,
-            satisfactorily=CORRECT_SATIS,
-            unsatisfactory=CORRECT_UNSATISF,
+            great=const.CORRECT_GREAT,
+            good=const.CORRECT_GOOD,
+            satisfactorily=const.CORRECT_SATIS,
+            unsatisfactory=const.CORRECT_UNSATISF,
         )
         self.quality_and_logic_marks = CriteriaVKR.objects.create(
-            great=QUALITY_GREAT,
-            good=QUALITY_GOOD,
-            satisfactorily=QUALITY_SATIS,
-            unsatisfactory=QUALITY_UNSATISF,
+            great=const.QUALITY_GREAT,
+            good=const.QUALITY_GOOD,
+            satisfactorily=const.QUALITY_SATIS,
+            unsatisfactory=const.QUALITY_UNSATISF,
         )
         self.validity_marks = CriteriaVKR.objects.create(
-            great=VALIDITY_GREAT,
-            good=VALIDITY_GOOD,
-            satisfactorily=VALIDITY_SATIS,
-            unsatisfactory=VALIDITY_UNSATISF,
+            great=const.VALIDITY_GREAT,
+            good=const.VALIDITY_GOOD,
+            satisfactorily=const.VALIDITY_SATIS,
+            unsatisfactory=const.VALIDITY_UNSATISF,
         )
         self.significance_marks = CriteriaVKR.objects.create(
-            great=SIGN_GREAT,
-            good=SIGN_GOOD,
-            satisfactorily=SIGN_SATIS,
-            unsatisfactory=SIGN_UNSATISF,
+            great=const.SIGN_GREAT,
+            good=const.SIGN_GOOD,
+            satisfactorily=const.SIGN_SATIS,
+            unsatisfactory=const.SIGN_UNSATISF,
         )
         self.implementation_marks = CriteriaVKR.objects.create(
-            great=IMP_GREAT,
-            good=IMP_GOOD,
-            satisfactorily=IMP_SATIS,
-            unsatisfactory=IMP_UNSATISF,
+            great=const.IMP_GREAT,
+            good=const.IMP_GOOD,
+            satisfactorily=const.IMP_SATIS,
+            unsatisfactory=const.IMP_UNSATISF,
         )
         self.report_quality_marks = CriteriaVKR.objects.create(
-            great=REPORT_GREAT,
-            good=REPORT_GOOD,
-            satisfactorily=REPORT_SATIS,
-            unsatisfactory=REPORT_UNSATISF,
+            great=const.REPORT_GREAT,
+            good=const.REPORT_GOOD,
+            satisfactorily=const.REPORT_SATIS,
+            unsatisfactory=const.REPORT_UNSATISF,
         )
         self.presentation_quality_marks = CriteriaVKR.objects.create(
-            great=PRES_GREAT,
-            good=PRES_GOOD,
-            satisfactorily=PRES_SATIS,
-            unsatisfactory=PRES_UNSATISF,
+            great=const.PRES_GREAT,
+            good=const.PRES_GOOD,
+            satisfactorily=const.PRES_SATIS,
+            unsatisfactory=const.PRES_UNSATISF,
         )
         self.answers_quality_marks = CriteriaVKR.objects.create(
-            great=ANSW_GREAT,
-            good=ANSW_GOOD,
-            satisfactorily=ANSW_SATIS,
-            unsatisfactory=ANSW_UNSATISF,
+            great=const.ANSW_GREAT,
+            good=const.ANSW_GOOD,
+            satisfactorily=const.ANSW_SATIS,
+            unsatisfactory=const.ANSW_UNSATISF,
         )
 
         super().save(*args, **kwargs)

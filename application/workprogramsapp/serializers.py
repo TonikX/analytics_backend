@@ -177,15 +177,6 @@ class AcademicPlanInImplementationSerializer(serializers.ModelSerializer):
         fields = ["id", "educational_profile", "number", "approval_date"]
 
 
-class ImplementationAcademicPlanSerializer(serializers.ModelSerializer):
-    academic_plan = AcademicPlanInImplementationSerializer()
-    field_of_study = FieldOfStudyImplementationSerializer(many=True)
-
-    class Meta:
-        model = ImplementationAcademicPlan
-        fields = ["id", "academic_plan", "field_of_study", "year"]
-
-
 class ImplementationAcademicPlanCreateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         updated_module = super().update(instance, validated_data)
@@ -1438,7 +1429,7 @@ class WorkProgramSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance) -> OrderedDict:
         data = super().to_representation(instance)
-        if instance.discipline_code == None and self.context.get("request"):
+        if instance.discipline_code is None and self.context.get("request"):
             data["can_send_to_isu"] = bool(
                 self.context["request"].user.groups.filter(name="expertise_master")
             )

@@ -47,21 +47,6 @@ class PracticeTemplateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ItemInPracticeCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор создания пререквизита обучения."""
-
-    class Meta:
-        model = PrerequisitesOfPractice
-        fields = ["item", "practice", "masterylevel"]
-
-
-class OutcomesInPracticeCreateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = OutcomesOfPractice
-        fields = ["item", "practice", "masterylevel"]
-
-
 class PrerequisitesOfPracticeSerializer(serializers.ModelSerializer):
 
     item = ItemSerializer()
@@ -153,7 +138,7 @@ class PracticeSerializer(serializers.ModelSerializer):
             many=True,
         )
         data = super().to_representation(value)
-        if value.discipline_code == None:
+        if value.discipline_code is None:
             data["can_send_to_isu"] = bool(
                 self.context["request"].user.groups.filter(name="expertise_master")
             )

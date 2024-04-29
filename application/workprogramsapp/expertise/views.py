@@ -82,7 +82,7 @@ class ExpertiseCommentsView(generics.ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         if "pk" in dict(self.kwargs):
-            if self.request.query_params.get("block") != None:
+            if self.request.query_params.get("block") is not None:
                 return ExpertiseComments.objects.filter(
                     user_expertise__expertise=self.kwargs["pk"],
                     comment_block=self.request.query_params.get("block"),
@@ -290,7 +290,6 @@ def ExpertiseHistory(request, pk=None):
     )
     history_response = []
     previous_date = (None,)
-    previous_message = None
     for history_el in queryset:
         print(history_el.notification_date, history_el.message)
         date_formatted_str = str(

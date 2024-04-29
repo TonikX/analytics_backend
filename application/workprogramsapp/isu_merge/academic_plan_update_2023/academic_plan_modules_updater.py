@@ -52,7 +52,7 @@ def process_modules(modules: list):
         else:
 
             new_module = DisciplineBlockModule.objects.create(name=isu_module["name"])
-            isu_module_in_db = DisciplineBlockModuleInIsu.objects.create(
+            DisciplineBlockModuleInIsu.objects.create(
                 isu_id=isu_module["id"],
                 isu_father_id=isu_module["parent_id"],
                 module=new_module,

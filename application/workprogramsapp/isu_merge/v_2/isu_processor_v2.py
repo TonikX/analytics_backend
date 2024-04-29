@@ -101,13 +101,8 @@ def invoke():
 
         # берём старые json (должны быть названия по шаблону)
         orig = ImplementationAcademicPlan.objects.get(ap_isu_id=up_id).old_json
-        print(orig)
 
-        jsonpath = orig
         old_res = orig
-        print("1111", old_res)
-        # old_res = pd.DataFrame(old_res['disciplines_blocks'])
-        # print(old_res)
         old_res_ids = []
         if old_res is not None:
             for blocks in old_res["disciplines_blocks"]:
@@ -120,7 +115,6 @@ def invoke():
         to_del = set(old_res_ids) - set(res_ids)
         to_add = list(set(res_ids) - set(old_res_ids))
         to_del_dict[up_id] = list(to_del)
-        # print (to_add)
 
         line = [
             res["id"],
@@ -138,7 +132,6 @@ def invoke():
             float(res["training_period"])
         )  # внезапно training_period стал приходить как строка, до этого был числом
         line.append(training_period)
-        # print (type(res['training_period']))
         if training_period == 4:
             line.append("Академический бакалавр")
         elif training_period == 2:
@@ -157,7 +150,7 @@ def invoke():
             for modules in row[2]:
                 linemodule = lineup.copy()
                 linemodule.append(modules["module_id "])
-                linemodule.append(modules["module_name"])  # дальше буду  менять
+                linemodule.append(modules["module_name"])
                 for disc in modules["disciplines"]:
                     linedisc = linemodule.copy()
                     linedisc.append(disc["str_up_id"])
@@ -165,26 +158,25 @@ def invoke():
                         linedisc.append(1)
                     else:
                         linedisc.append(0)
-                    # linedisc.append(disc['is_optional'])
 
-                    linedisc.append(disc["plan_order"])  # надо менять
+                    linedisc.append(disc["plan_order"])
                     linedisc.append(disc["disc_id"])
                     linedisc.append(disc["dis_id"])
                     linedisc.append(disc["discipline_name"])
                     linedisc.append(disc["discipline_doer_id"])
                     linedisc.append(disc["discipline_doer"])
                     linedisc.append(disc["discipline_lang"])
-                    linedisc.append(disc["exam"])  # надо добавить список
-                    linedisc.append(disc["diff_credit"])  # надо добавить список
-                    linedisc.append(disc["credit"])  # надо добавить список
-                    linedisc.append(disc["course_project"])  # надо добавить список
+                    linedisc.append(disc["exam"])
+                    linedisc.append(disc["diff_credit"])
+                    linedisc.append(disc["credit"])
+                    linedisc.append(disc["course_project"])
                     # todo course_work
                     # todo format_name format_id
                     # todo university_partner -> some discipline -> discipline_doer
 
                     ze = []
                     for sem in disc["ze"]:
-                        if sem["points"] == None:
+                        if sem["points"] is None:
                             ze.append(0)
                         else:
                             ze.append(sem["points"])
@@ -207,27 +199,14 @@ def invoke():
                     linedisc.append(tuple(practice))
 
                     for s in disc["class_points"]:
-                        if s["lab"] == None:
+                        if s["lab"] is None:
                             lab.append(0)
                         else:
                             lab.append(s["lab"])
                     linedisc.append(tuple(lab))
 
-                    # up.loc[disc['str_up_id']] = linedisc
-
-                    ### начало вставки
-                    # добавил условие
                     if disc["disc_id"] in to_add:
                         up.loc[disc["str_up_id"]] = linedisc
-
-        # скачиваем и сохраняем json заменяем старые
-
-        # jsonfile = 'data/' + up_id + '_old.json'
-        # with open(jsonfile, 'w', encoding='utf-8') as f:
-        #    json.dump(res, f, ensure_ascii=False)
-        # f.close
-
-        ### конец вставки
 
     for i in ids:
         get_up(i)
@@ -385,15 +364,7 @@ def invoke():
         axis=1,
     )
 
-    # удаляем лишние столбцы
     up = up.drop(["НОМЕР_ПО_ПЛАНУ", "СРОК_ОБУЧЕНИЯ"], axis=1)
-
-    # up.to_excel('input1.xlsx')
-
-    # ввыод словаря со строками на удаление
-    print(to_del_dict)
-
-    # сохранение датафрейма на добавление
 
     date_time = time.strftime("%Y%m%d-%H%M%S")
     up.to_excel("upload/isu_merge/input_add" + date_time + ".xlsx")
@@ -437,33 +408,17 @@ def invoke():
     #
     try:
         for ap in to_del_dict:
-            print(ap)
+
             for wp in to_del_dict[ap]:
-                print(wp)
                 WorkProgramChangeInDisciplineBlockModule.objects.filter(
                     work_program=WorkProgram.objects.get(discipline_code=int(wp)),
                     discipline_block_module__descipline_block__academic_plan__ap_isu_id=int(
                         ap
                     ),
                 )
-                # WorkProgramChangeInDisciplineBlockModule.delete()
-                print(WorkProgramChangeInDisciplineBlockModule)
     except:
         pass
-    # WorkProgramChangeInDisciplineBlockModule.
-    #
-    # for i in list(data.index.values):
-    #     if WorkProgramIdStrUpForIsu.objects.filter(id_str_up = int(data['ДИС_ИД'][i])):
-    #         print('сработало')
-    #         data['ДИС_ИД'][i] = WorkProgram.objects.get(zuns_for_wp__work_program =
-    #                                                     WorkProgramIdStrUpForIsu.objects.filter(id_str_up = int(data['ДИС_ИД'][i]).id)).id
     csv_handler(file)
-
-    # change_2 = change
-    # change = orig
-    # orig = change_2
-
-    print("Успех!")
     return Response(status=200)
 
 

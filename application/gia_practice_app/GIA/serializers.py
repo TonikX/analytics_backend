@@ -114,7 +114,7 @@ class GIASerializer(serializers.ModelSerializer):
             many=True,
         )
         data = super().to_representation(value)
-        if value.discipline_code == None:
+        if value.discipline_code is None:
             data["can_send_to_isu"] = bool(
                 self.context["request"].user.groups.filter(name="expertise_master")
             )

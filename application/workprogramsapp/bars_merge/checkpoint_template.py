@@ -28,7 +28,7 @@ def generate_checkpoint_plan(
 
 
 def generate_checkpoint(name, min, max, week, key, type_id=-1, test_id=-1):
-    if type(min) is not int:
+    if not isinstance(min, int):
         min = 0
     temp = {
         "name": name,

@@ -273,7 +273,7 @@ def EducationalProgramRankingByProfessionScientific(request):
                 individual_implementation_of_academic_plan=individual,
             )
             for wp_dict in s.routes:
-                el = WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.create(
+                WorkProgramInWorkProgramChangeInDisciplineBlockModule.objects.create(
                     work_program_change_in_discipline_block_module=wp_dict[
                         "change_block"
                     ],

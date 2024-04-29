@@ -188,7 +188,6 @@ class IndividualImplementationAcademicPlanForUser(generics.ListAPIView):
         queryset = IndividualImplementationAcademicPlan.objects.filter(
             user=self.request.user
         )
-        page = self.paginate_queryset(queryset)
         serializer = ShortIndividualImplementationAcademicPlanSerializer(
             queryset, many=True
         )

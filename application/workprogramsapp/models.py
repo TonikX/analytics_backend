@@ -529,9 +529,7 @@ class AcademicPlan(models.Model):
             )
             print(Block.modules_in_discipline_block.all())
             for Module in Block.modules_in_discipline_block.all():
-                module_clone = Module.make_clone(
-                    attrs={"descipline_block_id": block_clone.id}
-                )
+                Module.make_clone(attrs={"descipline_block_id": block_clone.id})
 
     def new_descipline_blocks(iap, siap):
         blocks = ["Блок 1", "Блок 2", "Блок 3"]
@@ -1338,7 +1336,7 @@ class DisciplineBlockModule(CloneMixin, models.Model):
                 work_program_change_in_discipline_block_module=change
             )
             for wp in wp_in_fos:
-                clone_wp_in_fos = wp.make_clone(
+                wp.make_clone(
                     attrs={
                         "work_program_change_in_discipline_block_module": clone_change
                     }

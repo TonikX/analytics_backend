@@ -90,9 +90,9 @@ class DisciplineBlockModuleUpdateView(generics.UpdateAPIView):
                         academic_plan__discipline_blocks_in_academic_plan__id=block
                     )
                     if imp.id not in [
-                            accept_imp.id
-                            for accept_imp in instance.educational_programs_to_access.all()
-                        ]:
+                        accept_imp.id
+                        for accept_imp in instance.educational_programs_to_access.all()
+                    ]:
                         return Response(
                             data={
                                 "error": "Данный учебный план не разрешен для добавления"
@@ -495,7 +495,6 @@ class CopyModulesToAnotherAPView(APIView):
     @transaction.atomic
     def post(self, request):
         request_data = request.data
-        counter = 0
         for block_to in DisciplineBlock.objects.filter(
             academic_plan__id=request_data["ap_to"]
         ):

@@ -136,14 +136,6 @@ class AcademicPlanUpdateAspect:
             updated_discipline_block_object = func(
                 copy.deepcopy(old_discipline_block_object), *args, **kwargs
             )
-
-            # AcademicPlanUpdateLogger.log_changes(
-            #     isu_academic_plan_json["id"],
-            #     AcademicPlanUpdateLogger.LoggedObjectType.DISCIPLINE_BLOCK,
-            #     old_discipline_block_object,
-            #     updated_discipline_block_object
-            # )
-
             return updated_discipline_block_object
 
         return wrapper
@@ -207,13 +199,6 @@ class AcademicPlanUpdateAspect:
             updated_discipline_block_module_object = func(
                 copy.deepcopy(old_discipline_block_module_object), *args, **kwargs
             )
-
-            # AcademicPlanUpdateLogger.log_changes(
-            #     isu_academic_plan_json["id"],
-            #     AcademicPlanUpdateLogger.LoggedObjectType.DISCIPLINE_BLOCK_MODULE,
-            #     old_discipline_block_module_object,
-            #     updated_discipline_block_module_object
-            # )
             return updated_discipline_block_module_object
 
         return wrapper
@@ -222,7 +207,6 @@ class AcademicPlanUpdateAspect:
     def discipline_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_discipline_json = args[1]
-            isu_academic_plan_json = args[0]
 
             # todo get() returned more than one WorkProgram -- it returned 11!
             if WorkProgram.objects.filter(
@@ -235,14 +219,6 @@ class AcademicPlanUpdateAspect:
                 old_work_program_object = None
 
             updated_work_program_object = func(old_work_program_object, *args, **kwargs)
-
-            # AcademicPlanUpdateLogger.log_changes(
-            #     isu_academic_plan_json["id"],
-            #     AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM,
-            #     old_work_program_object,
-            #     updated_work_program_object
-            # )
-
             return updated_work_program_object
 
         return wrapper
@@ -250,27 +226,12 @@ class AcademicPlanUpdateAspect:
     @staticmethod
     def linked_data_changes_aspect(func):
         def wrapper(*args, **kwargs):
-            isu_academic_plan_json = args[3]
             (
                 old_work_program_change_in_discipline_block_module_object,
                 old_work_program_in_field_of_study_object,
                 updated_work_program_change_in_discipline_block_module_object,
                 updated_work_program_in_field_of_study_object,
             ) = func(*args, **kwargs)
-
-            # AcademicPlanUpdateLogger.log_changes(
-            #     isu_academic_plan_json["id"],
-            #     AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM_CHANGE_IN_DISCIPLINE_BLOCK_MODULE,
-            #     old_work_program_change_in_discipline_block_module_object,
-            #     updated_work_program_change_in_discipline_block_module_object
-            # )
-            #
-            # AcademicPlanUpdateLogger.log_changes(
-            #     isu_academic_plan_json["id"],
-            #     AcademicPlanUpdateLogger.LoggedObjectType.WORK_PROGRAM_IN_FIELD_OF_STUDY,
-            #     old_work_program_in_field_of_study_object,
-            #     updated_work_program_in_field_of_study_object
-            # )
 
             return (
                 updated_work_program_in_field_of_study_object,
@@ -322,29 +283,18 @@ class AcademicPlanUpdateAspect:
     def practice_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_practice_json = args[1]
-            isu_academic_plan_json = args[0]
 
             # todo get() returned more than one Practice -- it returned 11!
             if Practice.objects.filter(
-                # prac_isu_id=str(isu_academic_plan_practice_json['id']),
                 discipline_code=str(isu_academic_plan_practice_json["id"])
             ).exists():
                 old_practice_object = Practice.objects.filter(
-                    # prac_isu_id=str(isu_academic_plan_practice_json['id']),
                     discipline_code=str(isu_academic_plan_practice_json["id"])
                 )[0]
             else:
                 old_practice_object = None
 
             updated_practice_object = func(old_practice_object, *args, **kwargs)
-
-            # AcademicPlanUpdateLogger.log_changes(
-            #     isu_academic_plan_json["id"],
-            #     AcademicPlanUpdateLogger.LoggedObjectType.practice,
-            #     old_practice_object,
-            #     updated_practice_object
-            # )
-
             return updated_practice_object
 
         return wrapper
@@ -353,29 +303,18 @@ class AcademicPlanUpdateAspect:
     def gia_changes_aspect(func):
         def wrapper(*args, **kwargs):
             isu_academic_plan_gia_json = args[1]
-            isu_academic_plan_json = args[0]
 
             # todo get() returned more than one GIA -- it returned 11!
             if GIA.objects.filter(
-                # prac_isu_id=str(isu_academic_plan_gia_json['id']),
                 discipline_code=str(isu_academic_plan_gia_json["id"])
             ).exists():
                 old_gia_object = GIA.objects.filter(
-                    # prac_isu_id=str(isu_academic_plan_gia_json['id']),
                     discipline_code=str(isu_academic_plan_gia_json["id"])
                 )[0]
             else:
                 old_gia_object = None
 
             updated_gia_object = func(old_gia_object, *args, **kwargs)
-
-            # AcademicPlanUpdateLogger.log_changes(
-            #     isu_academic_plan_json["id"],
-            #     AcademicPlanUpdateLogger.LoggedObjectType.gia,
-            #     old_gia_object,
-            #     updated_gia_object
-            # )
-
             return updated_gia_object
 
         return wrapper

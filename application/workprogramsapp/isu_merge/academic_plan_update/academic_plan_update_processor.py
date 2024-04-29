@@ -43,7 +43,7 @@ class AcademicPlanUpdateProcessor:
 
     @staticmethod
     def __del_disciplines_ids_by_academic_plan__(academic_plan_id, new_disciplines_ids):
-        wcbms = (
+        (
             WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module__descipline_block__academic_plan__ap_isu_id=academic_plan_id
             )
@@ -315,7 +315,7 @@ class AcademicPlanUpdateProcessor:
         block_modules_to_del_ids, isu_academic_plan_json, discipline_block_object
     ):
 
-        bm = (
+        (
             DisciplineBlockModule.objects.filter(
                 descipline_block=discipline_block_object,
                 descipline_block__academic_plan__ap_isu_id=isu_academic_plan_json["id"],
@@ -327,7 +327,7 @@ class AcademicPlanUpdateProcessor:
     @staticmethod
     def __del_block__(block_to_del_ids, isu_academic_plan_json):
 
-        b = (
+        (
             DisciplineBlock.objects.filter(
                 academic_plan__ap_isu_id=isu_academic_plan_json["id"]
             )
@@ -589,7 +589,7 @@ class AcademicPlanUpdateProcessor:
     def __del_work_program_in_field_of_study__(
         discipline_block_module, new_disciplines_ids
     ):
-        wcbms = (
+        (
             WorkProgramInFieldOfStudy.objects.filter(
                 work_program_change_in_discipline_block_module__discipline_block_module=discipline_block_module
             )
@@ -602,10 +602,10 @@ class AcademicPlanUpdateProcessor:
         discipline_block_module_object,
         work_program_change_in_discipline_block_modules_not_for_del,
     ):
-        wcbms = WorkProgramChangeInDisciplineBlockModule.objects.filter(
+        WorkProgramChangeInDisciplineBlockModule.objects.filter(
             discipline_block_module=discipline_block_module_object, work_program=None
         ).delete()
-        wcbms = (
+        (
             WorkProgramChangeInDisciplineBlockModule.objects.filter(
                 discipline_block_module=discipline_block_module_object
             )

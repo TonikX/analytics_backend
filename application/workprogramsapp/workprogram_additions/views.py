@@ -119,7 +119,6 @@ def CopyContentOfWorkProgram(request):
         new_wp.authors = old_wp.authors
 
         new_items = PrerequisitesOfWorkProgram.objects.filter(workprogram=to_copy)
-        new_out = OutcomesOfWorkProgram.objects.filter(workprogram=to_copy)
 
         for item in PrerequisitesOfWorkProgram.objects.filter(workprogram=from_copy):
             item_exists = False
@@ -168,28 +167,15 @@ def CopyContentOfWorkProgram(request):
                         clone_outcomes.evaluation_tool.add(
                             EvaluationTool.objects.get(pk=elem["clone_id"])
                         )
-        """for cerf in CertificationEvaluationTool.objects.filter(work_program=old_wp):
-            cerf.make_clone(attrs={'work_program': new_wp})
-        for cerf in CertificationEvaluationTool.objects.filter(work_program=new_wp):
-            if cerf.name == "No name":
-                cerf.delete()"""
+
         new_wp.editors.add(*old_wp.editors.all())
         new_wp.bibliographic_reference.add(*old_wp.bibliographic_reference.all())
 
-        # new_wp.hoursFirstSemester = old_wp.hoursFirstSemester
-        # new_wp.hoursSecondSemester = old_wp.hoursSecondSemester
         new_wp.description = old_wp.description
         new_wp.video = old_wp.video
-        # new_wp.credit_units = old_wp.credit_units
-        # new_wp.semester_hour = old_wp.semester_hour
         new_wp.owner = old_wp.owner
-        # new_wp.work_status = old_wp.work_status
-        # new_wp.hours = old_wp.hours
         new_wp.extra_points = old_wp.extra_points
-
-        # old_wp.delete()
         new_wp.save()
-        # serializer = WorkProgramSerializer(new_wp, many=False)
         return Response(data={"copied"}, status=200)
     except:
         return Response(status=400)
@@ -200,9 +186,7 @@ def CopyContentOfWorkProgram(request):
 @permission_classes((IsRpdDeveloperOrReadOnly,))
 def ReconnectWorkProgram(request):
     try:
-        from_copy = request.data.get("from_copy_id")
         to_copy = request.data.get("to_copy_id")
-        old_wp = WorkProgram.objects.get(pk=from_copy)
         new_wp = WorkProgram.objects.get(pk=to_copy)
         serializer = WorkProgramSerializer(new_wp, many=False)
         return Response(serializer.data)
@@ -247,22 +231,22 @@ def ChangeSemesterInEvaluationsCorrect(request):
         )
         min_sem = 12
         for eva in evaluation_tools:
-            if eva.semester == None:
+            if eva.semester is None:
                 break
             if eva.semester < min_sem:
                 min_sem = eva.semester
-        if min_sem != 1 and eva.semester != None:
+        if min_sem != 1 and eva.semester is None:
             for eva in evaluation_tools:
                 eva.semester = eva.semester - min_sem + 1
                 eva.save()
         final_tool = CertificationEvaluationTool.objects.filter(work_program=wp)
         min_sem = 12
         for eva in final_tool:
-            if eva.semester == None:
+            if eva.semester is None:
                 break
             if eva.semester < min_sem:
                 min_sem = eva.semester
-        if min_sem != 1 and eva.semester != None:
+        if min_sem != 1 and eva.semester is not None:
             for eva in final_tool:
                 eva.semester = eva.semester - min_sem + 1
                 eva.save()

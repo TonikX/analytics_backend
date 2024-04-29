@@ -286,7 +286,7 @@ def SendCheckpointsForAcceptedWP(request):
         max_sem = 1
 
         for eva in evaluation_tools:
-            if eva.semester == None:
+            if eva.semester is None:
                 break
             if eva.semester < min_sem:
                 min_sem = eva.semester
@@ -641,16 +641,11 @@ def SendCheckpointsForAcceptedWP(request):
                         wp_isu_id=isu_wp_id,
                         types_checkpoints=types_checkpoints,
                     )
-                    isu_wp = None
-                    isu_wp_id = None
-                    # Получаем вернувшуюся информацию
-                    # print(request_text)
                     request_response, request_status_code = post_checkpoint_plan(
                         request_text, setup_bars
                     )
                     if request_status_code != 200:
-                        #  если почему-то не отправилось продублируем респонс в терминал
-                        print(request_text, request_response)
+                        pass
                     else:
                         # Если РПД отправилась со статусом 200, то записываем ее в отправленные
                         AcceptedBarsInWp.objects.get_or_create(

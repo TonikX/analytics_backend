@@ -164,7 +164,7 @@ def expertise_notificator(sender, instance, created, **kwargs):
     # isu_client_credentials_request('https://dev.disc.itmo.su/api/v1/disciplines/:disc_id?status={status}&url=https://op.itmo.ru/work-program/{wp_id}'.format(status=instance.expertise_status, wp_id=wp_exp.id))
 
     try:
-        if settings.DEBUG == False:
+        if not settings.DEBUG:
             isu_client_credentials_request(
                 "https://disc.itmo.su/api/v1/disciplines/{disc_id}?status={status}&url=https://op.itmo.ru/work-program/{wp_id}".format(
                     disc_id=wp_exp.discipline_code,
