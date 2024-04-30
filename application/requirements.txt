@@ -57,7 +57,7 @@ deprecation-alias==0.3.2
     # via shippinglabel
 dist-meta==0.8.0
     # via shippinglabel
-django==4.2.11
+django==5.0.4
     # via
     #   analytics_backend (pyproject.toml)
     #   django-cachalot

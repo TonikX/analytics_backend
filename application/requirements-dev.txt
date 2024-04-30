@@ -74,7 +74,7 @@ dist-meta==0.8.0
     # via shippinglabel
 distlib==0.3.8
     # via virtualenv
-django==4.2.11
+django==5.0.4
     # via
     #   analytics_backend (pyproject.toml)
     #   django-cachalot
@@ -160,7 +160,7 @@ drf-spectacular-sidecar==2024.4.1
     # via drf-spectacular
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.13.4
+filelock==3.14.0
     # via
     #   tox
     #   virtualenv
@@ -285,13 +285,13 @@ pyparsing==3.1.2
     # via httplib2
 pyproject-api==1.6.1
     # via tox
-pyproject-hooks==1.0.0
+pyproject-hooks==1.1.0
     # via
     #   build
     #   pip-tools
 pyproject-parser==0.11.0
     # via analytics_backend (pyproject.toml)
-pytest==8.1.2
+pytest==8.2.0
     # via analytics_backend (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via pandas
@@ -376,7 +376,7 @@ urllib3==2.2.1
     #   sentry-sdk
 uvicorn==0.29.0
     # via analytics_backend (pyproject.toml)
-virtualenv==20.26.0
+virtualenv==20.26.1
     # via
     #   pre-commit
     #   tox
