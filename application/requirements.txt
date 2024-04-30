@@ -165,7 +165,7 @@ jsonschema==4.21.1
     # via drf-spectacular
 jsonschema-specifications==2023.12.1
     # via jsonschema
-lxml==5.2.1
+lxml==4.9.2
     # via
     #   docxcompose
     #   docxtpl
@@ -222,7 +222,7 @@ pyproject-parser==0.11.0
     # via analytics_backend (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via pandas
-python-docx==1.1.0
+python-docx==1.1.1
     # via
     #   analytics_backend (pyproject.toml)
     #   docxcompose
