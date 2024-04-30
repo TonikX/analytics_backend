@@ -9,40 +9,42 @@ from dataprocessing.serializers import ItemSerializer, userProfileSerializer
 from gia_practice_app.GIA.models import GIA
 from gia_practice_app.Practice.models import Practice
 from onlinecourse.serializers import OnlineCourseSerializer
-from .disciplineblockmodules.ze_module_logic import (
+from workprogramsapp.disciplineblockmodules.ze_module_logic import (
     recursion_module,
 )
-from .educational_program.educational_standart.models import EducationalStandard
-from .expertise.common_serializers import ShortExpertiseSerializer
-from .models import (
-    WorkProgram,
-    Indicator,
-    Competence,
-    OutcomesOfWorkProgram,
-    DisciplineSection,
-    Topic,
-    EvaluationTool,
-    PrerequisitesOfWorkProgram,
-    Certification,
-    BibliographicReference,
-    FieldOfStudy,
-    ImplementationAcademicPlan,
+from workprogramsapp.educational_program.educational_standart.models import (
+    EducationalStandard,
+)
+from workprogramsapp.expertise.common_serializers import ShortExpertiseSerializer
+from workprogramsapp.models import (
     AcademicPlan,
-    DisciplineBlock,
-    DisciplineBlockModule,
-    WorkProgramChangeInDisciplineBlockModule,
-    Zun,
-    WorkProgramInFieldOfStudy,
-    CertificationEvaluationTool,
+    AcademicPlanUpdateConfiguration,
     AcademicPlanUpdateLog,
     AcademicPlanUpdateSchedulerConfiguration,
-    AcademicPlanUpdateConfiguration,
-    IsuObjectsSendLogger,
+    BibliographicReference,
     BugsLog,
+    Certification,
+    CertificationEvaluationTool,
+    Competence,
+    DisciplineBlock,
+    DisciplineBlockModule,
+    DisciplineSection,
+    EvaluationTool,
+    FieldOfStudy,
+    ImplementationAcademicPlan,
+    Indicator,
+    IsuObjectsSendLogger,
+    OutcomesOfWorkProgram,
+    PrerequisitesOfWorkProgram,
+    Topic,
+    WorkProgram,
+    WorkProgramChangeInDisciplineBlockModule,
+    WorkProgramInFieldOfStudy,
+    Zun,
 )
-from .permissions import IsUniversalModule
-from .validators import validate_file_extension
-from .workprogram_additions.serializers import (
+from workprogramsapp.permissions import IsUniversalModule
+from workprogramsapp.validators import validate_file_extension
+from workprogramsapp.workprogram_additions.serializers import (
     AdditionalMaterialSerializer,
     ShortStructuralUnitSerializer,
     ShortUniversityPartnerSerializer,

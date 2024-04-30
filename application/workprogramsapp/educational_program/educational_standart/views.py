@@ -1,13 +1,16 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from workprogramsapp.permissions import IsExpertiseMasterStrict
-from .models import EducationalStandard, TasksForEducationalStandard
-from .serializers import (
+from workprogramsapp.educational_program.educational_standart.models import (
+    EducationalStandard,
+    TasksForEducationalStandard,
+)
+from workprogramsapp.educational_program.educational_standart.serializers import (
     EducationalStandardListSerializer,
     EducationalStandardSingleObjectSerializer,
     TasksForEducationalStandardSerializer,
 )
+from workprogramsapp.permissions import IsExpertiseMasterStrict
 
 
 class EducationalStandardListView(generics.ListAPIView):

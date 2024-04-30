@@ -2,8 +2,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import viewsets
 
-from .models import FeedbackRecord
-from .serializers import FeedbackRecordSerializer
+from workprogramsapp.feedback.models import FeedbackRecord
+from workprogramsapp.feedback.serializers import FeedbackRecordSerializer
 
 
 class FeedbackRecordSet(viewsets.ModelViewSet):

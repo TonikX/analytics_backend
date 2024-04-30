@@ -3,11 +3,10 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
 )
 from rest_framework.permissions import IsAuthenticated
-from dataprocessing.models import User
-from analytics_project.permissions import IsOwnerProfileOrReadOnly
-from dataprocessing.serializers import userProfileSerializer
 
-# Create your views here.
+from analytics_project.permissions import IsOwnerProfileOrReadOnly
+from dataprocessing.models import User
+from dataprocessing.serializers import userProfileSerializer
 
 
 class UserProfileListCreateView(ListCreateAPIView):
