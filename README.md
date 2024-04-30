@@ -76,6 +76,44 @@
    python manage.py runserver 127.0.0.1:8000
    ```
 
+### Ссылки
+
+#### Swagger
+
+```
+http://localhost:8000/docs/
+```
+
+В Swagger доступны все методы авторизации, прописанные в DEFAULT_AUTHENTICATION_CLASSES в файле settings.py
+
+Проверить, авторизовались ли вы, можно ручкой:
+
+```
+http://localhost:8000/auth/users/me/
+```
+
+#### Redoc
+
+```
+http://localhost:8000/redoc/
+```
+
+#### Авторизация
+
+```
+http://localhost:8000/auth/token/login
+```
+
+**Для авторизации в запросах используется хедер Authorization**
+
+В поле передается слово "Token" и через пробел сам токен, полученный по ссылке выше:
+
+```Authorization: Token [ваш_токен]```
+
+**Также необходим хедер Content-Type**
+
+```Content-Type: application/json```
+
 ## Развертывание frontend
 
 1) Установите node.js (проверено на версии 18)
