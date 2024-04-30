@@ -137,7 +137,7 @@ drf-spectacular-sidecar==2024.4.1
     # via drf-spectacular
 et-xmlfile==1.1.0
     # via openpyxl
-gunicorn==21.2.0
+gunicorn==22.0.0
     # via analytics_backend (pyproject.toml)
 h11==0.14.0
     # via uvicorn

@@ -28,7 +28,7 @@ dependencies = [
     "djoser==2.2.2",
     "docxtpl==0.16.8",
     "drf-spectacular[sidecar]==0.27.2",
-    "gunicorn==21.2.0",
+    "gunicorn==22.0.0",
     "html2text==2024.2.26",
     "numpy==1.26.4",
     "oauth2==1.9.0.post1",

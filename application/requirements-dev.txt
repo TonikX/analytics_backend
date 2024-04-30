@@ -166,7 +166,7 @@ filelock==3.14.0
     #   virtualenv
 flake8==7.0.0
     # via analytics_backend (pyproject.toml)
-gunicorn==21.2.0
+gunicorn==22.0.0
     # via analytics_backend (pyproject.toml)
 h11==0.14.0
     # via uvicorn
