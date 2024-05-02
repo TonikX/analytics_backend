@@ -22,7 +22,7 @@
     cd ./analytics_backend/application
     ```
 
-4) Создайте в папке application файл .env, скопировав его из примера .env.example
+4) Создайте в папке application файл **.env** по примеру **.env.example**
    ```bash
    cp ./.env.example ./.env
    ```
@@ -73,7 +73,11 @@
 
 6) Запустите проект
    ```bash
-   python manage.py runserver 127.0.0.1:8000
+   python manage.py runserver
+
+   # Также проект можно запустить с помощью gunicorn+uvicorn
+   # Это может быть полезно, если вы хотите убедиться, что ваши изменения будут работать в продуктиве
+   python server.py
    ```
 
 ### Ссылки
@@ -118,7 +122,7 @@ http://localhost:8000/auth/token/login
 
 1) Установите node.js (проверено на версии 18)
 2) Перейдите в папку frontend
-3) Создайте файл .env по примеру .env.example
+3) Создайте файл **.env** по примеру **.env.example**
    ```bash
    cp ./.env.example ./.env
    ```
@@ -129,6 +133,51 @@ http://localhost:8000/auth/token/login
 5) Запустите проект
    ```bash
    npm start
+   ```
+
+## Развертывание через Docker
+
+**С помощью докера можно удобно развернуть БД, Memcached, backend и frontend**
+
+1) Склонируйте репозиторий и перейдите в папку analytics_backend
+
+   ```bash
+   git clone git@github.com:TonikX/analytics_backend.git
+   cd ./analytics_backend
+   ```
+
+2) Создайте в папке application файл **.env** по примеру **.env.example.** Заполните его.
+   ```bash
+   cp ./application/.env.example ./application/.env
+   ```
+
+3) Создайте в папке frontend файл **.env** по примеру **.env.example.** Заполните его.
+   ```bash
+   cp ./frontend/.env.example ./frontend/.env
+   ```
+
+4) Соберите и поднимите проект
+   ```bash
+   # Для среды разработки
+   docker compose build
+   docker compose up -d
+   ```
+   ```bash
+   # Для продуктива (не забудьте указать DEBUG=False и другие настройки в .env файле)
+   docker compose -f docker-compose-prod.yml build
+   docker compose -f docker-compose-prod.yml up -d
+
+   # P.S. также можно использовать ssl или ssl-ya-cloud файлы
+   ```
+5) Накатите дамп на БД
+   ```bash
+   psql -h localhost -p 5435 -d analytics_db -U postgres -W -f ./analytics_db-dump.sql
+   ```
+
+6) Перейдите в bash-консоль контейнера backend. Фейканите миграции.
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate --fake
    ```
 
 ## Соглашения о качестве кода
@@ -144,11 +193,13 @@ http://localhost:8000/auth/token/login
 **Шаблон для оформления сообщения коммита:**
 
 ```
+
 <тип>(<необязательный контекст>): <описание>
 
 [необязательное тело]
 
 [необязательная(ые) сноска(и)]
+
 ```
 
 **В качестве типов коммитов используйте следующие:**
