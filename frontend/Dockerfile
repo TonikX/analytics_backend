@@ -1,19 +1,8 @@
-# pull official base image
-FROM node:16.10.0-alpine
+FROM node:18.20.2-alpine
 
-# set working directory
-WORKDIR /app
+WORKDIR /frontend
+COPY . /frontend
 
-# install app dependencies
-COPY package.json .
-#RUN npm cache clean --force
-RUN npm install
+RUN npm install --legacy-peer-deps
 
-# add `/app/node_modules/.bin` to $PATH
-#ENV PATH /app/node_modules/.bin:$PATH
-
-# add app
-COPY . .
-
-# start app
 CMD ["npm", "start"]

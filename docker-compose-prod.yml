@@ -1,30 +1,27 @@
-version: '3'
-
 services:
   db:
+    env_file:
+      - ./application/.env
     container_name: analytics_db_prod
     image: postgres
     ports:
       - "6435:5432"
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - ./dbs/postgres-data-prod:/var/lib/postgresql
+
   backend:
+    env_file:
+      - ./application/.env
     container_name: analytics_backend_prod
     build:
       context: ./application
       dockerfile: Dockerfile-prod
-    command: bash -c "sleep 3 && python server.py";
     volumes:
       - ./application:/application
-    expose:
-      - 8000
     restart: always
     links:
       - db
+
   nginx:
     image: nginx:latest
     container_name: analytics_nginx_prod
@@ -37,5 +34,6 @@ services:
       - ./nginx:/etc/nginx/conf.d
     depends_on:
       - backend
+
 volumes:
   postgres_data:

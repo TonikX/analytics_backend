@@ -46,7 +46,7 @@ def run():
     options = {
         "bind": env.str("PROJECT_HOST") + ":" + env.str("PROJECT_PORT"),
         "workers": (multiprocessing.cpu_count() * 2) + 1,
-        "worker_class": "application.server.DjangoUvicornWorker",
+        "worker_class": "server.DjangoUvicornWorker",
     }
     StandaloneApplication(
         app_uri="analytics_project.asgi:application", options=options

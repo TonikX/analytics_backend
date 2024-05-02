@@ -121,7 +121,23 @@ TEMPLATES = [
 ASGI_APPLICATION = "analytics_project.asgi.application"
 WSGI_APPLICATION = "analytics_project.wsgi.application"
 
-DATABASES = {"default": env.db_url("DATABASE_URL")}
+DB_NAME = env.str("POSTGRES_DB")
+DB_USER = env.str("POSTGRES_USER")
+DB_PASS = env.str("POSTGRES_PASSWORD")
+DB_HOST = env.str("POSTGRES_HOST")
+DB_PORT = env.str("POSTGRES_PORT")
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": DB_NAME,
+        "USER": DB_USER,
+        "PASSWORD": DB_PASS,
+        "HOST": DB_HOST,
+        "PORT": DB_PORT,
+    }
+}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
