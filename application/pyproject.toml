@@ -22,7 +22,7 @@ dependencies = [
     "django-super-deduper==0.1.4",
     "django-tables2==2.7.0",
     "django-templated-mail==1.1.1",
-    "djangorestframework-jsonapi==6.1.0",
+    "djangorestframework-jsonapi==7.0.0",
     "djangorestframework-simplejwt==5.3.1",
     "djangorestframework==3.15.1",
     "djoser==2.2.2",
