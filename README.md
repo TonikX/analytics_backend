@@ -6,28 +6,31 @@
 
 Бэкенд проекта содержится в папке application
 
-На данный момент используется версия Python 3.11
+На данный момент используется версия **Python 3.11**
 
 ### Подготовка проекта
 
-1) Поднимите PostgreSQL локально или используя Docker. Создайте базу (например, analytics_db).
+1) Поднимите [PostgreSQL](https://hub.docker.com/_/postgres) локально или используя Docker. Создайте базу (например, analytics_db).
 
-2) Запросите у @TonikX актуальный дамп или DDL-схему и накатите на БД используя psql
+2) Поднимите образ [Memcached](https://hub.docker.com/_/memcached)
+3) Запросите у @TonikX актуальный дамп или DDL-схему и накатите на БД используя psql
    ```bash
    psql -h localhost -p 5432 -d analytics_db -U postgres -W -f ./analytics_db-dump.sql
    ```
-3) Склонируйте репозиторий и перейдите в папку application
+4) Склонируйте репозиторий и перейдите в папку application
     ```bash
     git clone https://github.com/TonikX/analytics_backend
     cd ./analytics_backend/application
     ```
 
-4) Создайте в папке application файл **.env** по примеру **.env.example**
+5) Создайте в папке application файл **.env** по примеру **.env.example**
    ```bash
    cp ./.env.example ./.env
    ```
 
-5) Заполните скопированный .env файл. Обязательной для запуска проекта является переменная DATABASE_URL.
+6) Заполните скопированный **.env** файл
+
+   Минимально необходимыми являются переменные БД и адрес Memcached
 
 ### Локальное развертывание
 
@@ -54,7 +57,7 @@
     python -m pip install pip-tools
     ```
 
-4) Перейдите в папку application и установите зависимости (см. документацию pip-tools)
+4) Перейдите в папку application и установите зависимости (см. документацию [pip-tools](https://pip-tools.readthedocs.io/en/latest/))
     ```bash
    cd ./application
 
@@ -65,7 +68,7 @@
    pip-sync requirements.txt
    ```
 5) Фейканите миграции (так как БД уже заполнена данными). Если будут появляться ошибки о взаимных импортах, закомментируйте зависимости в миграциях.
-   (да, такой подход - это bad practice, но на данный момент миграции в проекте не распространяются)
+   (да, такой подход - это плохая практика, но на данный момент миграции в проекте не распространяются)
    ```bash
    python manage.py makemigrations
    python manage.py migrate --fake
@@ -80,7 +83,7 @@
    python server.py
    ```
 
-### Ссылки
+### Полезные ссылки на проекте
 
 #### Swagger
 
@@ -88,7 +91,7 @@
 http://localhost:8000/docs/
 ```
 
-В Swagger доступны все методы авторизации, прописанные в DEFAULT_AUTHENTICATION_CLASSES в файле settings.py
+В Swagger доступны все методы авторизации, прописанные в **DEFAULT_AUTHENTICATION_CLASSES** в файле **settings.py**
 
 Проверить, авторизовались ли вы, можно ручкой:
 
