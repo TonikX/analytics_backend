@@ -14,6 +14,7 @@ pyproject = PyProject.load(filename=BASE_DIR + "/pyproject.toml").to_dict()
 env = environ.Env(
     DEBUG=(bool, False),
     LOGGING_DEBUG=(bool, False),
+    ENABLE_MEMCACHE=(bool, True),
     EMAIL_ENABLE=(bool, True),
     EMAIL_USE_TLS=(bool, True),
     EMAIL_USE_SSL=(bool, False),
@@ -23,14 +24,19 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 PROJECT_HOST = env.str("PROJECT_HOST")
 PROJECT_PORT = env.str("PROJECT_PORT")
 
+# Определяют хост и порт сервера при запуске через python manage.py runserver
 Runserver.default_addr = PROJECT_HOST
 Runserver.default_port = PROJECT_PORT
 
 SECRET_KEY = env.str("SECRET_KEY")
 
 DEBUG = env.bool("DEBUG")
+LOGGING_DEBUG = env.bool("LOGGING_DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+
+ENABLE_MEMCACHE = env.bool("ENABLE_MEMCACHE")
+MEMCACHE_LOCATION = env.str("MEMCACHE_LOCATION")
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -68,14 +74,16 @@ THIRD_PARTY_APPS = [
     "whitenoise.runserver_nostatic",
 ]
 
-# Приложения только для среды разработки. Включаются при DEBUG=True.
-# Не использовать в продуктиве!
+# Приложения только для среды разработки
 DEV_APPS = [
     "debug_toolbar",
     "django_extensions",
 ]
 
 INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS
+
+if DEBUG:
+    INSTALLED_APPS += DEV_APPS
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -290,17 +298,16 @@ sentry_sdk.init(
     send_default_pii=True,
 )
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": env.str("MEMCACHE_LOCATION"),
+if ENABLE_MEMCACHE:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+            "LOCATION": MEMCACHE_LOCATION,
+        }
     }
-}
 
 # Секция только для целей разработки. Не выставлять DEBUG=True в продуктиве!
 if DEBUG:
-
-    INSTALLED_APPS += DEV_APPS
 
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
@@ -324,7 +331,7 @@ if DEBUG:
         "SHOW_TOOLBAR_CALLBACK": lambda request: True,
     }
 
-if env.bool("LOGGING_DEBUG", default=False):
+if LOGGING_DEBUG:
     LOGGING = {
         "version": 1,
         "formatters": {
