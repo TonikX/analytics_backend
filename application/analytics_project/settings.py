@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     'model_clone',
     'selection_of_keywords_for_rpd',
     'streams_app',
-    'cachalot',
+    # 'cachalot',
     # 'django_extensions',
     # 'ckeditor',
     # 'ckeditor_uploader',
