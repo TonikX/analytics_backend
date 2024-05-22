@@ -5,11 +5,13 @@ from django.contrib.postgres.fields import JSONField, ArrayField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
+from django_cte import CTEManager
 from model_clone import CloneMixin
 from rest_framework.exceptions import ValidationError
 
 from dataprocessing.models import Items
 from onlinecourse.models import OnlineCourse, Institution
+
 from workprogramsapp.educational_program.educational_standart.models import EducationalStandard, \
     TasksForEducationalStandard
 from workprogramsapp.workprogram_additions.models import StructuralUnit
@@ -780,6 +782,9 @@ class DisciplineBlockModule(CloneMixin, models.Model):
         ('no_more_than_n_credits', 'no_more_than_n_credits'),
     ]
 
+    cte_objects = CTEManager()
+    objects = models.Manager()
+
     type = models.CharField(choices=TYPES, max_length=100, default='faculty_module', verbose_name='Тип модуля')
     name = models.CharField(max_length=1024, verbose_name='Название модуля')
     descipline_block = models.ManyToManyField('DisciplineBlock', verbose_name='Модуль в блоке',
@@ -809,6 +814,28 @@ class DisciplineBlockModule(CloneMixin, models.Model):
     isu_ids_by_fathers = JSONField(blank=True, null=True, verbose_name="id модуля в ису по отцам")
 
     clone_info_json = JSONField(blank=True, null=True, verbose_name="JSON  информацией о клонировании")
+    laboriousness = models.IntegerField(blank=True, null=True, verbose_name="Трудоемкость модуля")
+
+    __old_selection_parametr = -1
+    __old_selection_rule = -1
+
+    def __init__(self, *args, **kwargs):
+        super(DisciplineBlockModule, self).__init__(*args, **kwargs)
+        self.__old_selection_parametr = self.selection_parametr
+        self.__old_selection_rule = self.selection_rule
+
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None, *args, **kwargs):
+        from workprogramsapp.ap_improvment.module_ze_counter import rewrite_ze_up
+        super(DisciplineBlockModule, self).save(force_insert, force_update, *args, **kwargs)
+        if self.__old_selection_parametr != self.selection_parametr or self.__old_selection_rule != self.selection_rule:
+            self.__old_selection_parametr = self.selection_parametr
+            self.__old_selection_rule = self.selection_rule
+            rewrite_ze_up(self)
+            print("d4 bad")
+
+
 
     class Meta:
         ordering = ['order']
