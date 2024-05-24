@@ -21,6 +21,7 @@ from rest_framework.views import APIView
 
 from dataprocessing.serializers import FileUploadSerializer
 from .academic_plan_export import process_excel
+from .calendar_export import process_excel_calendar
 from .competence_matrix_export import process_excel_competence_matrix
 from .general_characteristic_export import generate_context
 from .plan_logic import plans_processor
@@ -560,6 +561,28 @@ class CompetenceMatrixGenerateExcel(generics.ListAPIView):
         # wb_obj.save(response)
         return response
 
+
+class CalendarGenerateExcel(generics.ListAPIView):
+    """Возвращает КУГ в формате excel в браузере
+    Принимает в адерссной строке id ОХ"""
+    queryset = WorkProgram.objects.all()
+    serializer = WorkProgramSerializer
+    #permission_classes = [IsAuthenticated, ]
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        gen_characteristic = GeneralCharacteristics.objects.get(pk=kwargs['pk'])
+        filename = gen_characteristic.educational_program.all()[0].title + " " + str(
+            gen_characteristic.educational_program.all()[0].year)
+        ap = AcademicPlan.objects.filter(academic_plan_in_field_of_study__general_characteristics_in_educational_program=gen_characteristic).first()
+        wb_obj = process_excel_calendar(ap)
+        response = HttpResponse(content=save_virtual_workbook(wb_obj),
+                                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response['Content-Disposition'] = 'inline; filename="%s"' % str(filename)
+
+
+        # wb_obj.save(response)
+        return response
 
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
