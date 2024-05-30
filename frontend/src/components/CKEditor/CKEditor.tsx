@@ -15,6 +15,42 @@ export const CKEditorComponent: React.FC<CKEditorProps> =
         editorInstance = await editor
           .create(editorRef.current, {
             initialData: value,
+            toolbar: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              '|',
+              'mediaEmbed',
+              'link',
+              '|',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'insertTable',
+              'blockQuote',
+              'math',
+              '|',
+              'undo',
+              'redo'
+            ],
+            mediaEmbed: {
+              extraProviders: [
+                {
+                  name: 'image',
+                  url: /.*/, // Регулярное выражение для совпадения любого URL
+                  html: (match: any) => {
+                    const url = match[ 0 ];
+
+                    return (
+                      '<div class="media">' +
+                      `<img src="${ url }" alt="Embedded media">` +
+                      '</div>'
+                    );
+                  }
+                }
+              ]
+            }
           })
 
         if (!readOnly) {
