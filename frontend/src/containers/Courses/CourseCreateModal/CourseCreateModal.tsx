@@ -41,7 +41,7 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
     handleSave = () => {
         const { step } = this.state
         // this.props.actions.createNewCourse(course);
-        
+
         if (step === 1) {
             this.setState({ step: 2 })
         }
@@ -88,7 +88,7 @@ class CourseCreateModal extends React.PureComponent<CourseCreateModalProps> {
                             saveField={this.saveField}
                         />
                     )}
-                    
+
                 <DialogActions className={classes.actions}>
                     {step ===2  && <Button onClick={() => this.setState({step: 1})}
                             variant="text">

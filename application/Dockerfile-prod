@@ -1,9 +1,31 @@
-#FROM nikolaik/python-nodejs:python3.8-nodejs12
-FROM python:3.8
+FROM python:3.11
 
-#ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
-RUN mkdir /application
+
 WORKDIR /application
 COPY . /application
-RUN pip install -r requirements.txt
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y locales
+
+RUN sed -i -e \
+  's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
+   && locale-gen
+
+ENV LANG ru_RU.UTF-8
+ENV LANGUAGE ru_RU:ru
+ENV LC_LANG ru_RU.UTF-8
+ENV LC_ALL ru_RU.UTF-8
+
+ENV TZ Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN python -m pip install -U pip
+RUN python -m pip install -U setuptools wheel
+RUN python -m pip install -U pip-tools
+RUN pip-sync requirements.txt
+
+EXPOSE 8000
+
+CMD ["python", "server.py"]

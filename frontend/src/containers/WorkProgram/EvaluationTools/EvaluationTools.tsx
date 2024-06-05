@@ -162,7 +162,7 @@ class EvaluationTools extends React.PureComponent<SixthStepProps> {
                         Семестр
                     </Typography>
                 </div>
-                
+
                     <div className={classes.list}>
                         {evaluationToolsList.map((evaluationTool) => (
                             <div className={classes.item}>

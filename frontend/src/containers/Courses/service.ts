@@ -3,7 +3,7 @@ import {SortingType, Types} from "../../components/SortingButton/types";
 
 class CoursesServices extends AnalyticsService{
     getCourses(currentPage: number, searchQuery: string, sortingField: string,
-        sortingMode: SortingType, platform: string, institution: string, language: string, 
+        sortingMode: SortingType, platform: string, institution: string, language: string,
         fieldsOfStudyTitle: string, fieldsOfStudyNumber: string){
 
         const sortingSymbol = sortingMode === Types.ASC ? '-' : sortingMode === Types.DESC ? '+' : '';

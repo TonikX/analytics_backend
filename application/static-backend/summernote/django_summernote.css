@@ -1,12 +1,8 @@
-.note-editor {
-  margin-bottom: 0;
+.summernote-div {
+  display: inline-block;
+  position: relative;
 }
 
-/* for Bootstrap and crispy-form */
-.summernotewidget.form-control,
-.summernoteinplacewidget.form-control
-{
-  height: auto;
-  border: 0;
-  padding: 0;
+form .summernote-div .dropdown-menu {
+  margin-left: 0;
 }

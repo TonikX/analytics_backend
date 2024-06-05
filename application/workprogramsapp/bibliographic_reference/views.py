@@ -4,22 +4,27 @@ from html import unescape
 
 import requests as rq
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, filters, status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from workprogramsapp.bibliographic_reference.serializers import BibliographicReferenceDetailSerializer, \
-    BibliographicReferenceListSerializer, BibliographicReferenceCreateWithWpSerializer
+from workprogramsapp.bibliographic_reference.serializers import (
+    BibliographicReferenceDetailSerializer,
+    BibliographicReferenceListSerializer,
+    BibliographicReferenceCreateWithWpSerializer,
+)
 from workprogramsapp.models import BibliographicReference
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated,])
+@extend_schema(request=None, responses=None)
+@api_view(["GET"])
+@permission_classes((IsAuthenticated,))
 def SearchInEBSCO(request):
-    """
-    Эндпоинт для поиска источника в Электронно-Библиотечной Системе EBSCO
+    """Эндпоинт для поиска источника в Электронно-Библиотечной Системе EBSCO
     :param request:
+
     :return: {sources: []}
     """
 
@@ -27,15 +32,18 @@ def SearchInEBSCO(request):
     def get_auth_token(user_id, password):
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
         data = {"UserId": user_id, "Password": password, "interfaceid": "edsapi"}
-        url = f"https://eds-api.ebscohost.com/authservice/rest/uidauth"
+        url = "https://eds-api.ebscohost.com/authservice/rest/uidauth"
 
         request = rq.post(url, headers=headers, data=json.dumps(data))
         return request.text
 
     # Получение токена сессии
     def get_session_token(profile_id, auth_token):
-        headers = {"Content-Type": "application/json", "Accept": "application/json",
-                   "x-authenticationToken": json.loads(auth_token)["AuthToken"]}
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-authenticationToken": json.loads(auth_token)["AuthToken"],
+        }
         url = f"https://eds-api.ebscohost.com/edsapi/rest/createsession?profile={profile_id}"
 
         request = rq.get(url, headers=headers)
@@ -43,9 +51,12 @@ def SearchInEBSCO(request):
 
     # Поиск ресурса по базе EBSCO
     def search(term, auth_token, session_token):
-        headers = {"Content-Type": "application/json", "Accept": "application/json",
-                   "x-authenticationToken": json.loads(auth_token)["AuthToken"],
-                   "x-sessionToken": json.loads(session_token)["SessionToken"]}
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-authenticationToken": json.loads(auth_token)["AuthToken"],
+            "x-sessionToken": json.loads(session_token)["SessionToken"],
+        }
         url = f"https://eds-api.ebscohost.com/edsapi/rest/search?query={term}&view=detailed&highlight=n"
 
         request = rq.get(url, headers=headers)
@@ -74,7 +85,7 @@ def SearchInEBSCO(request):
 
     # Удаление тегов
     def delete_html(text):
-        return re.sub(r'<.*?>', '', text)
+        return re.sub(r"<.*?>", "", text)
 
     # Поиск автора
     def search_author(record):
@@ -91,7 +102,7 @@ def SearchInEBSCO(request):
     def extract_main_author(authors):
         # если запятая разделяет авторов, то взять первого автора
         try:
-            return authors[:authors.index(',')]
+            return authors[: authors.index(",")]
         except Exception:
             return authors
 
@@ -102,7 +113,7 @@ def SearchInEBSCO(request):
             if item["Label"] == "Title":
                 item_list.append(item["Data"])
 
-        items = ''
+        items = ""
 
         for item in item_list:
             items += item
@@ -121,11 +132,10 @@ def SearchInEBSCO(request):
     def search_year(record):
         year = None
         try:
-            year = \
-                record["RecordInfo"]["BibRecord"]["BibRelationships"]["IsPartOfRelationships"][0]["BibEntity"]["Dates"][
-                    0][
-                    "Y"]
-        except Exception as e:
+            year = record["RecordInfo"]["BibRecord"]["BibRelationships"][
+                "IsPartOfRelationships"
+            ][0]["BibEntity"]["Dates"][0]["Y"]
+        except Exception:
             return year
         return year
 
@@ -157,8 +167,10 @@ def SearchInEBSCO(request):
             source[key] = clean_text(val)
         source["main_author"] = extract_main_author(source["authors"])
         # source["bib_reference"] = make_bib_reference(source)
-        source["bib_reference"], extra_data = get_bib_reference(record, auth_token, session_token)
-        s = [int(s) for s in re.findall(r'-?\d+\.?\d*', extra_data["pages"])]
+        source["bib_reference"], extra_data = get_bib_reference(
+            record, auth_token, session_token
+        )
+        s = [int(s) for s in re.findall(r"-?\d+\.?\d*", extra_data["pages"])]
         try:
             source["pages"] = s[0]
         except IndexError:
@@ -167,13 +179,15 @@ def SearchInEBSCO(request):
         return source
 
     def get_extra_data(items):
-        source = {"authors": [],
-                  "title": "",
-                  "pub_info": "",
-                  "url": "",
-                  "pages": "",
-                  "source": "",
-                  "access": "– Текст : непосредственный "}
+        source = {
+            "authors": [],
+            "title": "",
+            "pub_info": "",
+            "url": "",
+            "pages": "",
+            "source": "",
+            "access": "– Текст : непосредственный ",
+        }
         for item in items:
             if item["Label"] == "Authors":
                 source["authors"].append(item["Data"])
@@ -203,18 +217,25 @@ def SearchInEBSCO(request):
             source["authors"] += " "
         if source["url"]:
             source["access"] = "– Текст : электронный "
-        bib_ref = f"{source['main_author']}{source['title']} / {source['authors']} {source['pub_info']}" \
-                  f"{source['pages']}{source['access']}{source['source']}{source['url']}"
+        bib_ref = (
+            f"{source['main_author']}{source['title']} / {source['authors']} {source['pub_info']}"
+            f"{source['pages']}{source['access']}{source['source']}{source['url']}"
+        )
         return bib_ref, source
 
     def get_bib_reference(record, auth_token, session_token):
-        headers = {"Content-Type": "application/json", "Accept": "application/json",
-                   "x-authenticationToken": json.loads(auth_token)["AuthToken"],
-                   "x-sessionToken": json.loads(session_token)["SessionToken"]}
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-authenticationToken": json.loads(auth_token)["AuthToken"],
+            "x-sessionToken": json.loads(session_token)["SessionToken"],
+        }
 
         db_id = record["Header"]["DbId"]
         an = record["Header"]["An"]
-        url2 = f"https://eds-api.ebscohost.com/edsapi/rest/retrieve?dbid={db_id}&an={an}"
+        url2 = (
+            f"https://eds-api.ebscohost.com/edsapi/rest/retrieve?dbid={db_id}&an={an}"
+        )
         request2 = rq.get(url2, headers=headers)
         s = json.loads(request2.text)
         response = []
@@ -225,7 +246,7 @@ def SearchInEBSCO(request):
                 splited = [link for link in splited if "http" in link]
 
                 data["Label"] = "Online Access"
-                data["Data"] = splited[-1][:splited[-1].find("&quot")]
+                data["Data"] = splited[-1][: splited[-1].find("&quot")]
 
             else:
                 for key, val in item.items():
@@ -234,7 +255,7 @@ def SearchInEBSCO(request):
         return generate_bib_ref(response)
 
     def make_bib_reference(source):
-        if source['format'] == "Электронные ресурсы":
+        if source["format"] == "Электронные ресурсы":
             text_format = "электронный"
         else:
             text_format = "непосредственный"
@@ -244,8 +265,10 @@ def SearchInEBSCO(request):
         else:
             year = f" : {source['year']}"
 
-        return f"{source['main_author']}, {source['title']} / {source['authors']}" \
-               f"{year}. — Текст : {text_format}."
+        return (
+            f"{source['main_author']}, {source['title']} / {source['authors']}"
+            f"{year}. — Текст : {text_format}."
+        )
 
     query = request.query_params["query"]
 
@@ -274,29 +297,37 @@ def SearchInEBSCO(request):
 class BibliographicReferenceViewSet(viewsets.ModelViewSet):
     queryset = BibliographicReference.objects.all()
     serializer_class = BibliographicReferenceDetailSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend)
+    filter_backends = (
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    )
     filterset_fields = ["authors", "title", "year"]
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         try:
-            reference = BibliographicReference.objects.get(accession_number=request.data["accession_number"])
+            reference = BibliographicReference.objects.get(
+                accession_number=request.data["accession_number"]
+            )
             serializer = self.get_serializer(reference, many=False)
         except BibliographicReference.DoesNotExist:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == "list":
             return BibliographicReferenceListSerializer
-        if self.action == 'create':
+        if self.action == "create":
             return BibliographicReferenceDetailSerializer
-        if self.action == 'update':
+        if self.action == "update":
             return BibliographicReferenceDetailSerializer
-        if self.action == 'retrieve':
+        if self.action == "retrieve":
             return BibliographicReferenceDetailSerializer
         return BibliographicReferenceDetailSerializer
 
@@ -338,13 +369,18 @@ class BibliographicReferenceCreateWithWpView(generics.CreateAPIView):
         }
     ]
     """
+
     queryset = BibliographicReference.objects.all()
     serializer_class = BibliographicReferenceCreateWithWpSerializer
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
+        serializer = self.get_serializer(
+            data=request.data, many=isinstance(request.data, list)
+        )
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )

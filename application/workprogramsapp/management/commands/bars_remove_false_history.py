@@ -7,4 +7,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         AcceptedBarsInWp.objects.filter(
-            year_of_study="2022/2023", semester_of_sending=0).delete()
+            year_of_study="2022/2023", semester_of_sending=0
+        ).delete()

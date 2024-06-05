@@ -16,8 +16,8 @@ export const ProfessionItem: React.FC<ProfessionItemProps> = ({ style, professio
   const classes = useStyles()
   const addProfession = (profession: ProfessionType) => selectProfession(profession)
   const removeProfession = (profession: ProfessionType) => unselectProfession(profession)
-  const onHandle = () => mode === selectListModes.SELECT 
-    ? addProfession(profession) 
+  const onHandle = () => mode === selectListModes.SELECT
+    ? addProfession(profession)
     : removeProfession(profession)
 
   if (profession) {

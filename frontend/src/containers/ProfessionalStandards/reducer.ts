@@ -92,4 +92,3 @@ export const reducer = createReducer(initialState, {
     [actions.setProfessionalStandard.type]: setProfessionalStandard,
     [actions.setLaborFunctions.type]: setLaborFunctions,
 });
-

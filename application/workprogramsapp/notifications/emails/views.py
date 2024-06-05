@@ -2,9 +2,9 @@ import random
 from datetime import timedelta
 
 from django.conf import settings
-# from allauth.account.views import ConfirmEmailView
 from django.shortcuts import redirect
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
@@ -13,12 +13,20 @@ from rest_framework.response import Response
 from dataprocessing.models import User
 from workprogramsapp.notifications.emails.models import SentMail
 from workprogramsapp.notifications.emails.send_mail import mail_sender
-from workprogramsapp.notifications.emails.serializers import BaseEmailSerializer, EmailSerializer
+from workprogramsapp.notifications.emails.serializers import (
+    BaseEmailSerializer,
+    EmailSerializer,
+)
 from workprogramsapp.notifications.models import EmailReset
 
 
-@api_view(['POST'])
-@permission_classes([IsAdminUser, ])
+@extend_schema(request=None, responses=None)
+@api_view(["POST"])
+@permission_classes(
+    [
+        IsAdminUser,
+    ]
+)
 def CreateMail(request):
     """
     {
@@ -36,14 +44,24 @@ def CreateMail(request):
             users_all = User.objects.all()
         else:
             users_all = (
-                    User.objects.filter(groups__name__in=serializer.validated_data["groups"]) | User.objects.filter(
-                user_for_structural_unit__structural_unit__in=serializer.validated_data[
-                    "faculties"]) | User.objects.filter(
-                id__in=serializer.validated_data["users"])).distinct()
+                User.objects.filter(
+                    groups__name__in=serializer.validated_data["groups"]
+                )
+                | User.objects.filter(
+                    user_for_structural_unit__structural_unit__in=serializer.validated_data[
+                        "faculties"
+                    ]
+                )
+                | User.objects.filter(id__in=serializer.validated_data["users"])
+            ).distinct()
         users_all = users_all.filter(do_email_notifications=True)
         emails = [user.email for user in users_all]
-        mail = mail_sender(topic=serializer.validated_data["topic"], text=serializer.validated_data["text"],
-                           emails=emails, users=users_all)
+        mail = mail_sender(
+            topic=serializer.validated_data["topic"],
+            text=serializer.validated_data["text"],
+            emails=emails,
+            users=users_all,
+        )
         return Response(EmailSerializer(mail).data, status=200)
     return Response(serializer.errors, status=500)
 
@@ -55,6 +73,7 @@ class EmailSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def email_reset_request(request):
@@ -66,10 +85,14 @@ def email_reset_request(request):
         email_reset = EmailReset(
             user=user,
             key="".join(
-                [random.choice("!@$_-qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890") for i in
-                 range(99)]
+                [
+                    random.choice(
+                        "!@$_-qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890"
+                    )
+                    for i in range(99)
+                ]
             ),
-            email=email
+            email=email,
         )
         email_reset.save()
 
@@ -81,18 +104,23 @@ def email_reset_request(request):
         message = """
 Здравствуйте, уважаемый пользователь!
 Для подтверждения e-mail перейдите по ссылке: https://op.itmo.ru/api/email/confirm/{}
-        
+
 С уважением,
 команда Конструктора ОП
-        """.format(email_reset.key)
+        """.format(
+            email_reset.key
+        )
         recipient_list = [email]
         print(recipient_list)
-        mail_sender(topic=subject, text=message, emails=recipient_list, users=[request.user])
+        mail_sender(
+            topic=subject, text=message, emails=recipient_list, users=[request.user]
+        )
         return Response({"message": "success"}, status=status.HTTP_200_OK)
     else:
         return Response({"error": "empty mail"}, 404)
 
 
+@extend_schema(request=None, responses=None)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def email_reset_confirm(request):
@@ -105,7 +133,9 @@ def email_reset_confirm(request):
 
         if email_reset.timestamp < timezone.now() - timedelta(minutes=30):
             # expired
-            return Response({"error": "email reset key is expired! Try fresh after some hours."})
+            return Response(
+                {"error": "email reset key is expired! Try fresh after some hours."}
+            )
         else:
             # seting up the email
             user = email_reset.user
@@ -118,7 +148,8 @@ def email_reset_confirm(request):
         return Response({"error": "Invalid key"})
 
 
-@api_view(['GET'])
+@extend_schema(request=None, responses=None)
+@api_view(["GET"])
 @permission_classes((AllowAny,))
 def CustomConfirmEmailView(request, key):
     try:
@@ -128,13 +159,13 @@ def CustomConfirmEmailView(request, key):
         email_reset.status = True
         email_reset.save()
     except EmailReset.DoesNotExist:
-        return redirect("{}email-confirm-success".format(settings.URL_FRONT))
+        return redirect(f"{settings.URL_FRONT}email-confirm-success")
 
     if email_reset.timestamp < timezone.now() - timedelta(minutes=30):
-        return redirect("{}email-confirm-error".format(settings.URL_FRONT))
+        return redirect(f"{settings.URL_FRONT}email-confirm-error")
     else:
         user = email_reset.user
         user.email = email_reset.email
         user.save()
-        #email_reset.delete()
-        return redirect("{}".format(settings.URL_FRONT))
+        # email_reset.delete()
+        return redirect(f"{settings.URL_FRONT}")

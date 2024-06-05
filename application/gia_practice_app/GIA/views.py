@@ -2,9 +2,16 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAdminUser
 
 from gia_practice_app.GIA.models import GIA, GIABaseTemplate, CriteriaVKR
-from gia_practice_app.GIA.serializers import GIASerializer, GIABaseTemplateSerializer, CriteriaVKRSerializer, \
-    GIAPrimitiveSerializer
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly
+from gia_practice_app.GIA.serializers import (
+    CriteriaVKRSerializer,
+    GIABaseTemplateSerializer,
+    GIAPrimitiveSerializer,
+    GIASerializer,
+)
+from workprogramsapp.permissions import (
+    IsOwnerOrDodWorkerOrReadOnly,
+    IsRpdDeveloperOrReadOnly,
+)
 
 
 class GIASet(viewsets.ModelViewSet):
@@ -13,10 +20,16 @@ class GIASet(viewsets.ModelViewSet):
     serializer_class = GIASerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
-    search_fields = ["discipline_code", "title", "id", 'editors__first_name', 'editors__last_name']
+    search_fields = [
+        "discipline_code",
+        "title",
+        "id",
+        "editors__first_name",
+        "editors__last_name",
+    ]
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == "list":
             return GIAPrimitiveSerializer
         return GIASerializer
 

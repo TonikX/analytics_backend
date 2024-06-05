@@ -99,11 +99,11 @@
          */
         function getComputedStyle(element, prop) {
             var computedElementStyle;
-            
+
             if (element.currentStyle) {
                 return element.currentStyle[prop];
             }
-            
+
             if (window.getComputedStyle) {
                 computedElementStyle = window.getComputedStyle(element, null);
                 if (computedElementStyle) {

@@ -1,51 +1,55 @@
-# Библиотеки для сариализации
-from rest_framework import serializers, viewsets
+from rest_framework import serializers
 
-# Модели данных
-
-from .models import IndividualImplementationAcademicPlan, WorkProgramInWorkProgramChangeInDisciplineBlockModule,\
-    DisciplineBlockModuleInDisciplineBlock, ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule
-from workprogramsapp.models import ImplementationAcademicPlan
-
-# Сериализаторы
-
-from workprogramsapp.serializers import AcademicPlanSerializer, FieldOfStudyImplementationSerializer, AcademicPlanInImplementationSerializer, AcademicPlanForRepresentationSerializer
 from dataprocessing.serializers import userProfileSerializer
-
-from django.db import transaction
-from rest_framework.response import Response
+from workprogramsapp.individualization.models import (
+    DisciplineBlockModuleInDisciplineBlock,
+    ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule,
+    IndividualImplementationAcademicPlan,
+    WorkProgramInWorkProgramChangeInDisciplineBlockModule,
+)
+from workprogramsapp.models import ImplementationAcademicPlan
+from workprogramsapp.serializers import (
+    AcademicPlanInImplementationSerializer,
+    AcademicPlanSerializer,
+    FieldOfStudyImplementationSerializer,
+)
 
 
 class ImplementationAcademicPlanSerializerIndividual(serializers.ModelSerializer):
     academic_plan = AcademicPlanSerializer()
-    field_of_study = FieldOfStudyImplementationSerializer(many = True)
-    #user = userProfileSerializer()
+    field_of_study = FieldOfStudyImplementationSerializer(many=True)
+    # user = userProfileSerializer()
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id','academic_plan', 'field_of_study', 'year']
+        fields = ["id", "academic_plan", "field_of_study", "year"]
 
 
 class ShortImplementationAcademicPlanSerializer(serializers.ModelSerializer):
     academic_plan = AcademicPlanInImplementationSerializer()
     field_of_study = FieldOfStudyImplementationSerializer()
-    #user = userProfileSerializer()
+    # user = userProfileSerializer()
 
     class Meta:
         model = ImplementationAcademicPlan
-        fields = ['id','academic_plan', 'field_of_study', 'year']
+        fields = ["id", "academic_plan", "field_of_study", "year"]
 
 
-class WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
-    """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+class WorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
+    serializers.ModelSerializer
+):
+    """Сериализатор вывода группы профессиональных компетенций."""
 
     class Meta:
         model = WorkProgramInWorkProgramChangeInDisciplineBlockModule
         fields = "__all__"
 
 
-class CreateWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
-    """Сериализатор создания и редактирования группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+class CreateWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
+    serializers.ModelSerializer
+):
+    """Сериализатор создания и редактирования группы профессиональных
+    компетенций."""
 
     class Meta:
         model = WorkProgramInWorkProgramChangeInDisciplineBlockModule
@@ -53,11 +57,10 @@ class CreateWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(seri
 
 
 class IndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
-    """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+    """Сериализатор вывода группы профессиональных компетенций."""
 
     implementation_of_academic_plan = ImplementationAcademicPlanSerializerIndividual()
     user = userProfileSerializer()
-
 
     class Meta:
         model = IndividualImplementationAcademicPlan
@@ -65,7 +68,7 @@ class IndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer
 
 
 class ShortIndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
-    """Сериализатор вывода группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+    """Сериализатор вывода группы профессиональных компетенций."""
 
     implementation_of_academic_plan = ImplementationAcademicPlanSerializerIndividual()
     user = userProfileSerializer()
@@ -76,7 +79,8 @@ class ShortIndividualImplementationAcademicPlanSerializer(serializers.ModelSeria
 
 
 class CreateIndividualImplementationAcademicPlanSerializer(serializers.ModelSerializer):
-    """Сериализатор создания и редактирования группы профессиональных куомпетенций в общей характеристике образовтаельной программы"""
+    """Сериализатор создания и редактирования группы профессиональных
+    компетенций."""
 
     class Meta:
         model = IndividualImplementationAcademicPlan
@@ -84,15 +88,16 @@ class CreateIndividualImplementationAcademicPlanSerializer(serializers.ModelSeri
 
 
 class DisciplineBlockModuleInDisciplineBlockSerializer(serializers.ModelSerializer):
-    """Сериализатор для работы с выбор модуля в блоке учебного плана"""
+    """Сериализатор для работы с выбором модуля в блоке учебного плана."""
 
     class Meta:
         model = DisciplineBlockModuleInDisciplineBlock
         fields = "__all__"
 
 
-class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(serializers.ModelSerializer):
-    """Сериализатор для работы с выбор модуля в блоке учебного плана"""
+class ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModuleSerializer(
+    serializers.ModelSerializer
+):
 
     class Meta:
         model = ElectiveWorkProgramInWorkProgramChangeInDisciplineBlockModule

@@ -1,1 +1,1 @@
-default_app_config = 'workprogramsapp.apps.WorkprogramsappConfig'
+default_app_config = "workprogramsapp.apps.WorkprogramsappConfig"

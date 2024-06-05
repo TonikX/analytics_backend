@@ -11,7 +11,7 @@ import { rootState } from '../../../store/reducers'
 export const Requirements: React.FC = () => {
   const classes = useStyles()
   const reqs = useSelector((state: rootState) => getRequirements(state))
-  
+
   return (
     <div>
       <Typography className={classes.title}>Требования</Typography>

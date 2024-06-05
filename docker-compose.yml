@@ -1,60 +1,52 @@
-version: '3'
+name: op_itmo
 
 services:
-    db:
-        image: postgres
-        ports:
-            - "5435:5432"
-        environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
-            - POSTGRES_DB=analytics_db
-        volumes:
-            - ./dbs/postgres-data:/var/lib/postgresql
-    cache:
-        image: memcached
-        privileged: true
-        ports:
-            - "11211:11211"
-        entrypoint:
-            - memcached
-            - -m 64
-    web:
-        container_name: analytics_web
-        build: ./application
-        command: bash -c "python manage.py runserver 0.0.0.0:8000";
-        #            python manage.py makemigrations --noinput  && python manage.py makemigrations dataprocessing && python manage.py makemigrations workprogramsapp &&
-        #            python manage.py migrate dataprocessing && python manage.py migrate workprogramsapp &
-        #            python manage.py makemigrations --merge --noinput" --fake-initial; -
-        #            python manage.py makemigrations --noinput  &&
-        #            python manage.py migrate --noinput &&
+  db:
+    env_file:
+      - ./application/.env
+    image: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./dbs/postgres-data:/var/lib/postgresql
 
-        volumes:
-             - ./application:/application
-        ports:
-            - "8003:8000"
-        restart: always
-        depends_on:
-            - db
-            - cache
+  cache:
+    env_file:
+      - ./application/.env
+    image: memcached
+    privileged: true
+    ports:
+      - "11211:11211"
+    entrypoint:
+      - memcached
+      - -m 64
 
-    frontend:
-        stdin_open: true
-        tty: true
-        container_name: analytics_frontend
-        build:
-            context: ./frontend
-            dockerfile: Dockerfile
-        volumes:
-            - ./frontend:/app
-            - /app/node_modules
-        ports:
-            - "3003:3000"
-        environment:
-            - REACT_APP_API_HOST=${BACKEND_URL_FOR_REACT}
-            - REACT_APP_API_SCHEMA=${REACT_APP_API_SCHEMA}
-            - REACT_APP_API_PORT=${REACT_APP_API_PORT}
-            - PORT=${PORT}
+  backend:
+    env_file:
+      - ./application/.env
+    container_name: backend
+    build:
+      context: ./application
+      dockerfile: Dockerfile
+    volumes:
+      - ./application:/application
+    ports:
+      - "8003:8000"
+    restart: always
+    depends_on:
+      - db
+      - cache
 
-volumes:
-    node-modules:
+  frontend:
+    env_file:
+      - ./frontend/.env
+    stdin_open: true
+    tty: true
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - "3003:3000"

@@ -1,17 +1,8 @@
-# Библиотеки для сариализации
-from rest_framework import serializers, viewsets
+from rest_framework import serializers
 
-# Модели данных
-
-from .models import FeedbackRecord
-
-# Сериализаторы
-
-from workprogramsapp.serializers import WorkProgramInFieldOfStudyShortSerializer
 from dataprocessing.serializers import userProfileSerializer
-
-from django.db import transaction
-from rest_framework.response import Response
+from workprogramsapp.serializers import WorkProgramInFieldOfStudyShortSerializer
+from .models import FeedbackRecord
 
 
 class FeedbackRecordSerializer(serializers.ModelSerializer):

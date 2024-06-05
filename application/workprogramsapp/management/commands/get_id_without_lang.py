@@ -17,7 +17,3 @@ class Command(BaseCommand):
                 if changeblock.practice.all():
                     if not changeblock.practice.all()[0].language:
                         practice_ids.append(changeblock.practice.all()[0].id)
-        print("wp: ", set(wp_ids))
-        print("")
-        print("")
-        print("practice: ", set(practice_ids))

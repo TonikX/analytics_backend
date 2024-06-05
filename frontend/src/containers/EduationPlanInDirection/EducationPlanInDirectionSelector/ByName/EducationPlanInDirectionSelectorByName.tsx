@@ -32,7 +32,7 @@ class EducationPlanInDirectionSelector extends React.PureComponent<EducationPlan
                             changeItem={handleChange}
                             value={value}
                             valueLabel={''}
-                            className={classNames({[classes.marginBottom30]: !noMargin, 
+                            className={classNames({[classes.marginBottom30]: !noMargin,
                                 [className]: className})}
                             isReset={isReset}
             />

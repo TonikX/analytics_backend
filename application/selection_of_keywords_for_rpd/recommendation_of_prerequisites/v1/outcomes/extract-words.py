@@ -18,18 +18,28 @@ else:
 
 # nltk.download()
 
-raw_data = pd.read_table('../../data/descriptions.tsv')
-raw_data.columns = ['id', 'description']
+raw_data = pd.read_table("../../data/descriptions.tsv")
+raw_data.columns = ["id", "description"]
 raw_data.dropna()
 
 russian_stopwords = stopwords.words("russian")
-rpd_stopwords = ["студент", "дисциплина", "курс", "программа", "цель", "метод", "область", "знание", "принцип",
-                 "результат"]
+rpd_stopwords = [
+    "студент",
+    "дисциплина",
+    "курс",
+    "программа",
+    "цель",
+    "метод",
+    "область",
+    "знание",
+    "принцип",
+    "результат",
+]
 
 morph = pymorphy2.MorphAnalyzer()
 
-raw_data2 = pd.read_table('../../data/entities_with_domain.tsv')
-raw_data2.columns = ['id', 'entity_name', 'domain_id']
+raw_data2 = pd.read_table("../../data/entities_with_domain.tsv")
+raw_data2.columns = ["id", "entity_name", "domain_id"]
 raw_data2 = raw_data2.reset_index()
 
 punctuation = r"""!"#$%&'()«»*+,-./:;<=>?@[\]^_`{|}~"""
@@ -40,7 +50,7 @@ def normalize(word):
 
 
 def extract_text(item):
-    name = item['name']
+    name = item["name"]
     return name.lower()
 
 
@@ -50,18 +60,18 @@ domain_entities_strings = {}
 
 def prepare_dicts():
     for ind in raw_data2.index:
-        entity_name = raw_data2['entity_name'][ind]
-        entity_id = raw_data2['id'][ind]
-        domain_id = +raw_data2['domain_id'][ind]
+        entity_name = raw_data2["entity_name"][ind]
+        entity_id = raw_data2["id"][ind]
+        domain_id = +raw_data2["domain_id"][ind]
 
         if domain_entities.get(domain_id) is not None:
-            domain_entities[domain_id].append({'name': entity_name, 'id': entity_id})
+            domain_entities[domain_id].append({"name": entity_name, "id": entity_id})
         else:
-            domain_entities[domain_id] = [{'name': entity_name, 'id': entity_id}]
+            domain_entities[domain_id] = [{"name": entity_name, "id": entity_id}]
 
     for domain_id in domain_entities:
         domain_arr = map(extract_text, domain_entities[domain_id])
-        domain_text = ' '.join(domain_arr)
+        domain_text = " ".join(domain_arr)
         domain_entities_strings[domain_id] = domain_text
 
 
@@ -92,21 +102,26 @@ def give_recommendations_by_domain(array):
 
     # Берем две ведущие предметные области и рекомендуем по ним соответственно
     # Здесь 0 индекс — айдишник предметной области, 1 — количество попаданий
-    ratio = math.floor(array[0][1] * num_of_recommendations / (array[0][1] + array[1][1]))
+    ratio = math.floor(
+        array[0][1] * num_of_recommendations / (array[0][1] + array[1][1])
+    )
 
     first_subject_area = domain_entities[array[0][0]]
     second_subject_area = domain_entities[array[1][0]]
 
-    return np.append(get_k_random_from_array(first_subject_area, ratio), get_k_random_from_array(second_subject_area, num_of_recommendations - ratio))
+    return np.append(
+        get_k_random_from_array(first_subject_area, ratio),
+        get_k_random_from_array(second_subject_area, num_of_recommendations - ratio),
+    )
 
 
 def search_for_domain(words):
     domain_map = {}
     for word in words:
-        pattern = r'{}'.format(word)
+        pattern = rf"{word}"
         for domain in domain_entities_strings:
             current = domain_entities_strings[domain]
-            target = u'{}'.format(current)
+            target = f"{current}"
             score = len(re.findall(pattern, target))
             if score > 0:
                 if domain_map.get(domain) is not None:
@@ -127,15 +142,19 @@ def recommend(text):
     without_sw = []
     for token in normalized:
         # Стоп-слова РПД можно еще дополнить
-        if token not in russian_stopwords and token not in rpd_stopwords and token not in punctuation:
+        if (
+            token not in russian_stopwords
+            and token not in rpd_stopwords
+            and token not in punctuation
+        ):
             without_sw.append(token)
 
     nouns = []
     for token, pos in pos_tag(without_sw):
-        if pos.startswith('N'):
+        if pos.startswith("N"):
             nouns.append(token)
 
-    print('-------')
+    print("-------")
     # print(nouns)
     print(search_for_domain(nouns))
 
@@ -149,5 +168,6 @@ recommend(raw_data.description[N])
 def recommend_bulk():
     for text in raw_data.description:
         recommend(text)
+
 
 # recommend_bulk()

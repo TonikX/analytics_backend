@@ -20,7 +20,7 @@
 
 **Code** : `200 OK`
 
-**Content** : 
+**Content** :
 ```json
 "sources": [
         {

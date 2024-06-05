@@ -19,5 +19,3 @@ export interface SectionsProps extends WithStyles<typeof styles> {
     semesterCount: number;
     implementationFormat: ImplementationFormatsEnum;
 }
-
-

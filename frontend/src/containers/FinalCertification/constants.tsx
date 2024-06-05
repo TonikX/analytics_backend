@@ -153,4 +153,3 @@ export const STEPS = [
         component: <DisabledPeopleInfo/>,
     },
 ];
-

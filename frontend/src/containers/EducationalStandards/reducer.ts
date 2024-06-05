@@ -81,4 +81,3 @@ export const reducer = createReducer(initialState, {
     [actions.changeSorting.type]: changeSorting,
     [actions.setEducationalStandard.type]: setEducationalStandard,
 });
-

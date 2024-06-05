@@ -40,7 +40,7 @@ class Results extends React.PureComponent<ResultsProps> {
         //@ts-ignore
         const {classes} = this.props;
         const {resultsList, isCanEdit} = this.props;
-        
+
         return (
             <div className={classes.root}>
                 <div className={classNames(classes.header, classes.item)}>

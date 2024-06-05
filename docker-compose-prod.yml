@@ -1,47 +1,39 @@
-version: '3'
-
 services:
-    db:
-        container_name: analytics_db_prod
-        image: postgres
-        ports:
-            - "6435:5432"
-        environment:
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-            - POSTGRES_DB=${POSTGRES_DB}
-        volumes:
-            - ./dbs/postgres-data-prod:/var/lib/postgresql
-    backend:
-        container_name: analytics_backend_prod
-        build:
-            context: ./application
-            dockerfile: Dockerfile-prod
-        command: bash -c "sleep 3 && pip uninstall -y python3-openid &&
-            pip uninstall -y social-auth-app-django &&
-            pip install django-rest-framework-social-oauth2 &&
-            python manage.py makemigrations --noinput &&
-            python manage.py migrate --noinput &&
-            python manage.py collectstatic --noinput &&
-            gunicorn analytics_project.wsgi -b 0.0.0.0:8001 --workers 2";
-        volumes:
-             - ./application:/application
-        expose:
-            - 8000
-        restart: always
-        links:
-            - db
-    nginx:
-        image: nginx:latest
-        container_name: analytics_nginx_prod
-        ports:
-            - "80:80"
-        volumes:
-            - ./application/media:/backend/src/media
-            - ./application/static-backend:/backend/src/static-backend
-            - ./frontend/build:/frontend/src
-            - ./nginx:/etc/nginx/conf.d
-        depends_on:
-            - backend
+  db:
+    env_file:
+      - ./application/.env
+    container_name: analytics_db_prod
+    image: postgres
+    ports:
+      - "6435:5432"
+    volumes:
+      - ./dbs/postgres-data-prod:/var/lib/postgresql
+
+  backend:
+    env_file:
+      - ./application/.env
+    container_name: analytics_backend_prod
+    build:
+      context: ./application
+      dockerfile: Dockerfile-prod
+    volumes:
+      - ./application:/application
+    restart: always
+    links:
+      - db
+
+  nginx:
+    image: nginx:latest
+    container_name: analytics_nginx_prod
+    ports:
+      - "80:80"
+    volumes:
+      - ./application/media:/backend/src/media
+      - ./application/static-backend:/backend/src/static-backend
+      - ./frontend/build:/frontend/src
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - backend
+
 volumes:
-    postgres_data:
+  postgres_data:

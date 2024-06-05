@@ -4,16 +4,14 @@ import os
 from django.core.management import BaseCommand
 
 from gia_practice_app.Practice.models import ZunPractice
-from workprogramsapp.models import AcademicPlan, Zun, WorkProgramInFieldOfStudy, DisciplineBlockModule, \
-    PracticeInFieldOfStudy
-from workprogramsapp.serializers import ZunForManyCreateSerializer
+from workprogramsapp.models import Zun, PracticeInFieldOfStudy
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
         dirname = os.path.dirname(__file__)
-        filename = os.path.join(dirname, 'files/RESTORED_ZUNS_PRACTICE.json')
+        filename = os.path.join(dirname, "files/RESTORED_ZUNS_PRACTICE.json")
         f = open(filename)
         data = json.load(f)
         skipped_counter = 0
@@ -22,12 +20,14 @@ class Command(BaseCommand):
         restored_counter = 0
         more_than_one_fs_count = 0
         for restored_data in data:
-            prac_in_fss = PracticeInFieldOfStudy.objects.filter(practice=restored_data["practice_id"],
-                                                                 work_program_change_in_discipline_block_module__discipline_block_module__id=
-                                                                 restored_data["module_id"]).distinct()
+            prac_in_fss = PracticeInFieldOfStudy.objects.filter(
+                practice=restored_data["practice_id"],
+                work_program_change_in_discipline_block_module__discipline_block_module__id=restored_data[
+                    "module_id"
+                ],
+            ).distinct()
             restored_counter += 1
             if prac_in_fss.count() == 0:
-                print(prac_in_fss)
                 continue
 
             if prac_in_fss.count() > 1:
@@ -50,8 +50,9 @@ class Command(BaseCommand):
 
             zuns = ZunPractice.objects.filter(practice_in_fs=prac_in_fs)
             zuns_fs_list = [zun.id for zun in zuns]
-            if prac_in_fs.id == restored_data["prac_in_fs_id"] and set(zuns_fs_list) == set(restored_data["zuns"]):
-                #print("skipped")
+            if prac_in_fs.id == restored_data["prac_in_fs_id"] and set(
+                zuns_fs_list
+            ) == set(restored_data["zuns"]):
                 skipped_counter += 1
                 continue
             else:
@@ -60,13 +61,8 @@ class Command(BaseCommand):
                         try:
                             zun_to_connect = ZunPractice.objects.get(id=zun_id)
                         except Zun.DoesNotExist:
-                            #print(zun_id)
                             not_exisisted_zuns += 1
                             continue
                         zun_to_connect.wp_in_fs = prac_in_fs
                         zun_to_connect.save()
                         recreated_counter += 1
-                        #print(zun_to_connect, wp_in_fs)
-        print(
-            f"records: {recreated_counter}, skipped: {skipped_counter}, more than one wp in fs {more_than_one_fs_count}"
-            f", not_existed_zuns: {not_exisisted_zuns}, finded_fos: {restored_counter}")

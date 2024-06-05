@@ -17,6 +17,6 @@ export const getNoSelectedProfessions = (state: rootState) => {
   const professions = getProfessions(state)
   const selectedProfessions = getSelectedProfessions(state)
 
-  return professions.filter((p: ProfessionType) => 
+  return professions.filter((p: ProfessionType) =>
     !selectedProfessions.some((i: ProfessionType) => i.id === p.id))
 }

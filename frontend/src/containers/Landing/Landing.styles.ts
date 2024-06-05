@@ -342,7 +342,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    
+
   },
   footerText: {
     color: '#dfdfdf',

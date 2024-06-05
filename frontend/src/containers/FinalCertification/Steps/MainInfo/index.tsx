@@ -60,7 +60,7 @@ class MainInfo extends React.Component<MainInfoProps> {
 
     deleteEditor = (userId: number) => () => {
         const {editors} = this.props.fields;
-    
+
         this.props.actions.saveField({
           field: CertificationFields.EDITORS,
           value: editors.reduce((editors: Array<number>, user: UserType) => {
@@ -81,7 +81,7 @@ class MainInfo extends React.Component<MainInfoProps> {
             user.value
           ]
         });
-    
+
         this.setState({
           addEditorsMode: false
         });

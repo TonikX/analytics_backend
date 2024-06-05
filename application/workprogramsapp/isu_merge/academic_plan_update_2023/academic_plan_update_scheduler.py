@@ -1,8 +1,11 @@
+import datetime
 import time
 
 from apscheduler.schedulers.background import BackgroundScheduler
-import datetime
-from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_processor import AcademicPlanUpdateProcessor
+
+from workprogramsapp.isu_merge.academic_plan_update_2023.academic_plan_update_processor import (
+    AcademicPlanUpdateProcessor,
+)
 from workprogramsapp.models import AcademicPlanUpdateSchedulerConfiguration
 
 
@@ -15,20 +18,23 @@ class AcademicPlanUpdateScheduler:
 
     def start_job(self):
         self.scheduler.add_job(
-            self.invoke_update_plans_job,
-            'interval',
-            hours=self.interval
+            self.invoke_update_plans_job, "interval", hours=self.interval
         )
         try:
             self.scheduler.start()
-        except:
+        except Exception:
             pass
 
     @staticmethod
     def job_allowed(configuration, now):
-        return configuration.execution_hours == now.hour \
-               and configuration.updated_timestamp is None \
-               or (now - datetime.datetime.fromtimestamp(configuration.updated_timestamp)).days >= configuration.days_interval
+        return (
+            configuration.execution_hours == now.hour
+            and configuration.updated_timestamp is None
+            or (
+                now - datetime.datetime.fromtimestamp(configuration.updated_timestamp)
+            ).days
+            >= configuration.days_interval
+        )
 
     def invoke_update_plans_job(self):
         queryset = AcademicPlanUpdateSchedulerConfiguration.objects.all()

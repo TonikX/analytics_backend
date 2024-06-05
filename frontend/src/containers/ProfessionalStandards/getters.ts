@@ -40,5 +40,3 @@ export const getSortingField = (state: rootState) => get(getSorting(state), fiel
 export const getSortingMode = (state: rootState) => get(getSorting(state), fields.SORTING_MODE, Types.ASC);
 
 export const getProfStandard = (state: rootState) => get(getStateData(state), fields.PROFESSIONAL_STANDARD, {});
-
-

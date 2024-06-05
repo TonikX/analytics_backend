@@ -1,5 +1,3 @@
-from typing import Union
-
 from django.core.mail import send_mail
 from django.db.models import QuerySet
 
@@ -8,9 +6,10 @@ from analytics_project.settings import env
 from workprogramsapp.notifications.emails.models import SentMail
 
 
-def mail_sender(topic: str, text: str, emails: list, users: QuerySet) -> Union[SentMail, None]:
-    print(emails)
-    if env('EMAIL_ENABLE') == "True":
+def mail_sender(
+    topic: str, text: str, emails: list, users: QuerySet
+) -> SentMail | None:
+    if env("EMAIL_ENABLE"):
         send_mail(
             topic,
             text,

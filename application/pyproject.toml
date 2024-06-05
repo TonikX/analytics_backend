@@ -1,0 +1,76 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "analytics_backend"
+version = "2.0.0"
+requires-python = "==3.11"
+dependencies = [
+    "APScheduler==3.10.4",
+    "Django==5.0.4",
+    "deepdiff==7.0.1",
+    "django-cachalot==2.6.2",
+    "django-clone==5.3.3",
+    "django-cors-headers==4.3.1",
+    "django-cors-middleware==1.5.0",
+    "django-cte==1.3.2",
+    "django-environ==0.11.2",
+    "django-filter==24.2",
+    "django-rest-swagger==2.2.0",
+    "django-summernote==0.8.20.0",
+    "django-super-deduper==0.1.4",
+    "django-tables2==2.7.0",
+    "django-templated-mail==1.1.1",
+    "djangorestframework-jsonapi==7.0.0",
+    "djangorestframework-simplejwt==5.3.1",
+    "djangorestframework==3.15.1",
+    "djoser==2.2.2",
+    "docxtpl==0.17.0",
+    "drf-spectacular[sidecar]==0.27.2",
+    "gunicorn==22.0.0",
+    "html2text==2024.2.26",
+    "numpy==1.26.4",
+    "oauth2==1.9.0.post1",
+    "openpyxl==3.1.2",
+    "pandas==2.2.2",
+    "psycopg2-binary==2.9.9",
+    "pymemcache==4.0.0",
+    "pyproject-parser==0.11.0",
+    "python-docx==1.1.2",
+    "requests==2.31.0",
+    "sentry-sdk==2.0.1",
+    "uvicorn==0.29.0",
+    "whitenoise==6.6.0",
+]
+description = "Удобный конструктор для быстрого создания образовательных программ, инструмент для сопровождения и планирования учебного процесса"
+keywords = ["education", "analytics", "work program", "academic plan"]
+classifiers = [
+    "Programming Language :: Python"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "django-debug-toolbar",
+    "django-extensions",
+    "flake8",
+    "mypy",
+    "pip-tools",
+    "pre-commit",
+    "pytest",
+    "ruff",
+    "tox",
+]
+
+[project.urls]
+Homepage = "https://op.itmo.ru/"
+Documentation = "https://tonikx.github.io/analytics_backend/"
+Repository = "https://github.com/TonikX/analytics_backend.git"
+"Bug Tracker" = "https://github.com/TonikX/analytics_backend/issues"
+
+[tool.pip-tools.compile]
+rebuild = true
+strip-extras = true
+upgrade = true
+verbose = true

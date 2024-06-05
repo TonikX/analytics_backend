@@ -19,7 +19,7 @@
 
 **Code** : `200 OK`
 
-**Content** : 
+**Content** :
 ```json
 "results": [
         {
@@ -71,7 +71,7 @@
 
 **Code** : `200 OK`
 
-**Content** : 
+**Content** :
 ```json
 {
     "id": 12011,
@@ -118,14 +118,14 @@
  **main_author **: `Главный автор`<br />
  **bib_reference **: `Сгенерированная библ. ссылка `<br />
  **description **: `Описание (используется в старых объектах)`<br />
- 
+
 
 
 ## Success Responses
 
 **Code** : `201 OK`
 
-**Content** : 
+**Content** :
 ```json
 {
     "id": 12011,

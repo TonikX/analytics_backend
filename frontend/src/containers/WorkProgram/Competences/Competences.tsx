@@ -113,7 +113,7 @@ export default React.memo(() => {
       {
         value: desciplineBlock?.id,
         label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
-                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title}
                   (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
                  `,
       }
@@ -133,7 +133,7 @@ export default React.memo(() => {
         {
           value: academicPlan?.id,
           label: `Направление: ${academicPlan?.academic_plan_in_field_of_study[0]?.field_of_study[0]?.title}
-                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title} 
+                  / ОП: ${academicPlan?.academic_plan_in_field_of_study[0]?.title}
                   (${academicPlan?.academic_plan_in_field_of_study[0]?.year})
                  `,
         }

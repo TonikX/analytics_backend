@@ -31,7 +31,7 @@ export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ pr
     const index = searchedProfessions.indexOf(profession)
 
     selectProfession(profession)
-  
+
     // необходимо чтобы избежать подергивание списка
     const afterRows = searchedProfessions.filter((profession: ProfessionType) => searchedProfessions.indexOf(profession) >= index )
     const afterRowsIndexes = afterRows.map((profession: ProfessionType) => searchedProfessions.indexOf(profession))
@@ -42,7 +42,7 @@ export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ pr
     cache.clearAll()
   }
 
-  const searchedProfessions = useMemo((): Array<ProfessionType> => 
+  const searchedProfessions = useMemo((): Array<ProfessionType> =>
     matchSorter(professions, searchQuery, {keys: ['title']}), [searchQuery, professions])
 
   const rowRenderer = ({key, parent, index, style}: any) => {
@@ -54,7 +54,7 @@ export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ pr
         rowIndex={index}
         parent={parent}
       >
-        <ProfessionItem 
+        <ProfessionItem
           style={style}
           mode={selectListModes.SELECT}
           selectProfession={addProfession}
@@ -83,14 +83,14 @@ export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ pr
   return (
     <div className={classes.professionsLists}>
       <div className={classes.allProfessionsList}>
-        <TextField 
+        <TextField
           onChange={handleChangeSearch}
           label="Поиск"
         />
         <AutoSizer>
           {({height, width}: any): React.ReactElement => (
             <div style={{height: height - 80, width}}>
-              <Scrollbars 
+              <Scrollbars
                 height={height - 80}
                 width={width}
                 onScroll={handleScroll}
@@ -114,7 +114,7 @@ export const ProfessionsSelectList: React.FC<ProfessionsSelectListProps> = ({ pr
         <AutoSizer>
           {({height, width}: any): React.ReactElement => (
             <div style={{height, width}}>
-              <Scrollbars 
+              <Scrollbars
                 height={height}
                 width={width}
               >

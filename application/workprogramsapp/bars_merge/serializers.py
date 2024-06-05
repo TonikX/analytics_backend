@@ -1,12 +1,17 @@
-import json
 from ast import literal_eval
+from typing import Any
 
 from rest_framework import serializers
 
-from workprogramsapp.bars_merge.models import BarsEPAssociate, BarsWorkProgramsAssociate, HistoryOfSendingToBars
-from workprogramsapp.models import WorkProgram
-from workprogramsapp.serializers import FieldOfStudySerializer, WorkProgramShortForExperiseSerializer, \
-    ImplementationAcademicPlanSerializer
+from workprogramsapp.bars_merge.models import (
+    BarsEPAssociate,
+    BarsWorkProgramsAssociate,
+    HistoryOfSendingToBars,
+)
+from workprogramsapp.serializers import (
+    WorkProgramShortForExperiseSerializer,
+    ImplementationAcademicPlanSerializer,
+)
 
 
 class BarsEPAssociateSerializer(serializers.ModelSerializer):
@@ -28,7 +33,7 @@ class BarsWorkProgramsAssociateSerializer(serializers.ModelSerializer):
 class HistoryOfSendingBarsSerializer(serializers.ModelSerializer):
     json_request_format = serializers.SerializerMethodField()
 
-    def get_json_request_format(self, obj):
+    def get_json_request_format(self, obj) -> Any:
         return literal_eval(obj.request_text)
 
     """def to_representation(self, value):
@@ -38,4 +43,10 @@ class HistoryOfSendingBarsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HistoryOfSendingToBars
-        fields = ("work_program", "date_of_sending", "request_status", "json_request_format", "request_response")
+        fields = (
+            "work_program",
+            "date_of_sending",
+            "request_status",
+            "json_request_format",
+            "request_response",
+        )

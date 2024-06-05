@@ -190,7 +190,7 @@ const addQualificationErrors = (state: rootState, errors: string[]) => {
     if (qualification === ALL_LEVELS_QUALIFICATION || qualification === BACHELOR_QUALIFICATION) {
         // bars must be on
         if (!isBarsOn) {
-            errors.push(`Если уровень образовательной программы "${specializationObject[BACHELOR_QUALIFICATION]}" 
+            errors.push(`Если уровень образовательной программы "${specializationObject[BACHELOR_QUALIFICATION]}"
             или "${specializationObject[ALL_LEVELS_QUALIFICATION]}", то дисциплина должна реализовываться в БаРС`);
         }
     }

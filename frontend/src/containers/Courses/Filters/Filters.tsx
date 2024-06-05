@@ -26,20 +26,20 @@ export const Filters: React.FC = () => {
   const filters: filteringType = useSelector((state: rootState) => getFilters(state))
   const lists = {
     langs: languageArray,
-    prepDirectionsNumbers: fieldsOfStudyNumbers.map((fieldOfStudy: FieldOfStudyType) => 
-      ({ 
-          label: fieldOfStudy[FieldOfStudyFields.NUMBER], 
-          value: fieldOfStudy[FieldOfStudyFields.NUMBER] 
+    prepDirectionsNumbers: fieldsOfStudyNumbers.map((fieldOfStudy: FieldOfStudyType) =>
+      ({
+          label: fieldOfStudy[FieldOfStudyFields.NUMBER],
+          value: fieldOfStudy[FieldOfStudyFields.NUMBER]
       })),
-    prepDirectionsTitles: fieldsOfStudyTitles.map((fieldOfStudy: FieldOfStudyType) => 
-      ({ 
-          label: fieldOfStudy[FieldOfStudyFields.TITLE], 
+    prepDirectionsTitles: fieldsOfStudyTitles.map((fieldOfStudy: FieldOfStudyType) =>
+      ({
+          label: fieldOfStudy[FieldOfStudyFields.TITLE],
           value: fieldOfStudy[FieldOfStudyFields.TITLE],
       })),
     authors: institutions.map((institution: InstitutionType) => ({ label: institution[InstitutionFields.TITLE], value: institution[InstitutionFields.TITLE] })),
     platforms: platforms.map((platform: PlatformType) => ({ label: platform[PlatformFields.TITLE], value: platform[PlatformFields.TITLE] }))
   }
-  
+
   const handleFilter = (field: string, value: string): void => {
     isReset && setIsReset(false)
     dispatch(actions.changeFiltering({
@@ -50,7 +50,7 @@ export const Filters: React.FC = () => {
       fieldOfStudyTitle: field === filterFields.FILTERING_FIELD_OF_STUDY_TITLE ? value : filters[filterFields.FILTERING_FIELD_OF_STUDY_TITLE],
     }))
   }
-  
+
   const resetFilters = (): void => {
     setIsReset(true)
     dispatch(actions.changeFiltering({
@@ -86,8 +86,8 @@ export const Filters: React.FC = () => {
   return (
     <div className={classes.root}>
       <div className={classes.fieldsWrapper}>
-        <SearchSelector 
-          label='Язык курса' 
+        <SearchSelector
+          label='Язык курса'
           changeSearchText={() => {}}
           list={lists.langs}
           changeItem={(value: string) => handleFilter(filterFields.FILTERING_LANGUAGE, value)}
@@ -96,7 +96,7 @@ export const Filters: React.FC = () => {
           isReset={isReset}
         />
         <SearchSelector
-          label='Платформа' 
+          label='Платформа'
           changeSearchText={handleChangePlatformsSearchText}
           list={lists.platforms}
           changeItem={(value: string) => handleFilter(filterFields.FILTERING_PLATFORM, value)}
@@ -104,9 +104,9 @@ export const Filters: React.FC = () => {
           valueLabel={''}
           isReset={isReset}
         />
-        
-        <SearchSelector 
-          label='Автор курса (правообл.)' 
+
+        <SearchSelector
+          label='Автор курса (правообл.)'
           changeSearchText={handleChangeInstitutionsSearchText}
           list={lists.authors}
           changeItem={(value: string) => handleFilter(filterFields.FILTERING_INSTITUTION, value)}
@@ -114,8 +114,8 @@ export const Filters: React.FC = () => {
           valueLabel={''}
           isReset={isReset}
         />
-        <SearchSelector 
-          label='Номер направления' 
+        <SearchSelector
+          label='Номер направления'
           changeSearchText={handleChangeFieldOfStudyNumberSearchText}
           list={lists.prepDirectionsNumbers}
           changeItem={(value: string) => handleFilter(filterFields.FILTERING_FIELD_OF_STUDY_NUMBER, value)}
@@ -123,8 +123,8 @@ export const Filters: React.FC = () => {
           valueLabel={''}
           isReset={isReset}
         />
-        <SearchSelector 
-          label='Направление' 
+        <SearchSelector
+          label='Направление'
           changeSearchText={handleChangeFieldOfStudyTitleSearchText}
           list={lists.prepDirectionsTitles}
           changeItem={(value: string) => handleFilter(filterFields.FILTERING_FIELD_OF_STUDY_TITLE, value)}
@@ -135,7 +135,7 @@ export const Filters: React.FC = () => {
       <div className={classes.btnsWrapper}>
         <Button
           color="primary"
-          variant="outlined" 
+          variant="outlined"
           className={cn(classes.btn, classes.resetBtn)}
           onClick={resetFilters}
         >
@@ -143,7 +143,7 @@ export const Filters: React.FC = () => {
         </Button>
         <Button
           color="primary"
-          variant="contained" 
+          variant="contained"
           className={cn(classes.btn, classes.filterBtn)}
           onClick={() => dispatch(actions.getCourses())}
         >

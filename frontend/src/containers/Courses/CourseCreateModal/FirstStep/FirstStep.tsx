@@ -17,7 +17,7 @@ export const FirstStep: React.FC<FirstStepProps> = ({ saveField, course }) => {
   const [urlIsFocused, setUrlIsFocused] = useState(false)
 
   const checkCourseUrl = urlIsFocused || course[CourseFields.COURSE_URL].length === 0 || checkUrl(course[CourseFields.COURSE_URL]);
- 
+
   const courseUrlFieldFocus = () => {
     setUrlIsFocused(true)
   };
@@ -27,7 +27,7 @@ export const FirstStep: React.FC<FirstStepProps> = ({ saveField, course }) => {
   };
   return (
     <DialogContent style={{overflow: 'hidden'}}>
-      <TextField 
+      <TextField
         label="Название курса *"
         onChange={saveField(CourseFields.TITLE)}
         variant="outlined"
@@ -38,7 +38,7 @@ export const FirstStep: React.FC<FirstStepProps> = ({ saveField, course }) => {
             shrink: true,
         }}
       />
-      <TextField 
+      <TextField
         label="Ссылка на онлайн-курс на сайте Платформы *"
         onChange={saveField(CourseFields.COURSE_URL)}
         variant="outlined"
@@ -53,7 +53,7 @@ export const FirstStep: React.FC<FirstStepProps> = ({ saveField, course }) => {
         onBlur={courseUrlFieldBlur}
       />
       <div className={classes.inputAddWrapper}>
-        <TextField 
+        <TextField
           label="Платформа *"
           //onChange={saveField(CourseFields.PLATFORM)}
           variant="outlined"
@@ -72,7 +72,7 @@ export const FirstStep: React.FC<FirstStepProps> = ({ saveField, course }) => {
         </Fab>
       </div>
       <div className={classes.inputAddWrapper}>
-        <TextField 
+        <TextField
           label="Правообладатель *"
           //onChange={saveField(CourseFields.PLATFORM)}
           variant="outlined"
@@ -90,7 +90,7 @@ export const FirstStep: React.FC<FirstStepProps> = ({ saveField, course }) => {
           <AddIcon/>
         </Fab>
       </div>
-      <TextField 
+      <TextField
         label="Язык онлайн-курса"
         //onChange={saveField(CourseFields.PLATFORM)}
         variant="outlined"

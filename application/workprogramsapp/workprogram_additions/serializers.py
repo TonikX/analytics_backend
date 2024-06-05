@@ -1,22 +1,23 @@
-# Библиотеки для сариализации
 from rest_framework import serializers
 
-# Другие сериализаторы
 from dataprocessing.serializers import userProfileSerializer, ItemSerializer
-from workprogramsapp.models import Indicator, Competence, OutcomesOfWorkProgram, PrerequisitesOfWorkProgram
-# Модели данных
-from .models import AdditionalMaterial, StructuralUnit, UserStructuralUnit, UniversityPartner
-from ..models import WorkProgram
-
-"""
-Материалы тем
-"""
+from workprogramsapp.models import (
+    Competence,
+    Indicator,
+    OutcomesOfWorkProgram,
+    PrerequisitesOfWorkProgram,
+)
+from workprogramsapp.models import WorkProgram
+from workprogramsapp.workprogram_additions.models import (
+    AdditionalMaterial,
+    StructuralUnit,
+    UniversityPartner,
+    UserStructuralUnit,
+)
 
 
 class AdditionalMaterialSerializer(serializers.ModelSerializer):
-    """
-    Дополнительный материал в теме РПД
-    """
+    """Просмотр дополнительного материал в теме РПД."""
 
     class Meta:
         model = AdditionalMaterial
@@ -24,9 +25,7 @@ class AdditionalMaterialSerializer(serializers.ModelSerializer):
 
 
 class CreateAdditionalMaterialSerializer(serializers.ModelSerializer):
-    """
-    Дополнительный материал в теме РПД
-    """
+    """Создание дополнительного материала в теме РПД."""
 
     class Meta:
         model = AdditionalMaterial
@@ -34,9 +33,7 @@ class CreateAdditionalMaterialSerializer(serializers.ModelSerializer):
 
 
 class CreateStructuralUnitSerializer(serializers.ModelSerializer):
-    """
-    Cериализатор создания подразделения разработчика РПД
-    """
+    """Сериализатор создания подразделения разработчика РПД."""
 
     class Meta:
         model = StructuralUnit
@@ -44,9 +41,8 @@ class CreateStructuralUnitSerializer(serializers.ModelSerializer):
 
 
 class UserStructuralUnitSerializer(serializers.ModelSerializer):
-    """
-    Cериализатор работника в подразделении
-    """
+    """Сериализатор работника в подразделении."""
+
     user = userProfileSerializer()
 
     class Meta:
@@ -55,9 +51,7 @@ class UserStructuralUnitSerializer(serializers.ModelSerializer):
 
 
 class CreateUserStructuralUnitSerializer(serializers.ModelSerializer):
-    """
-    Cериализатор создания работника в подразделении
-    """
+    """Сериализатор создания работника в подразделении."""
 
     class Meta:
         model = UserStructuralUnit
@@ -65,10 +59,9 @@ class CreateUserStructuralUnitSerializer(serializers.ModelSerializer):
 
 
 class StructuralUnitSerializer(serializers.ModelSerializer):
+    """Сериализатор подразделения разработчика РПД."""
+
     user_in_structural_unit = UserStructuralUnitSerializer(many=True)
-    """
-    Cериализатор подразделения разработчика РПД
-    """
 
     class Meta:
         model = StructuralUnit
@@ -76,9 +69,7 @@ class StructuralUnitSerializer(serializers.ModelSerializer):
 
 
 class ShortStructuralUnitSerializer(serializers.ModelSerializer):
-    """
-    Cериализатор подразделения разработчика РПД
-    """
+    """Сериализатор подразделения разработчика РПД."""
 
     class Meta:
         model = StructuralUnit
@@ -86,9 +77,7 @@ class ShortStructuralUnitSerializer(serializers.ModelSerializer):
 
 
 class ShortUniversityPartnerSerializer(serializers.ModelSerializer):
-    """
-    Cериализатор университета партена
-    """
+    """Сериализатор университета-партнера."""
 
     class Meta:
         model = UniversityPartner
@@ -96,28 +85,29 @@ class ShortUniversityPartnerSerializer(serializers.ModelSerializer):
 
 
 class IndicatorSerializerAdd(serializers.ModelSerializer):
-    """Сериализатор Индикаторов"""
+    """Сериализатор индикаторов."""
 
     class Meta:
         model = Indicator
-        fields = ['id', 'number', 'name', 'competence']
+        fields = ["id", "number", "name", "competence"]
 
 
 class CompetenceSerializer(serializers.ModelSerializer):
-    """Сериализатор Компетенций"""
+    """Сериализатор компетенций."""
 
     class Meta:
         model = Competence
-        fields = ['id', 'number', 'name']
+        fields = ["id", "number", "name"]
 
 
 class CompetenceFullSerializer(serializers.ModelSerializer):
-    """Сериализатор Компетенций"""
+    """Сериализатор компетенций."""
+
     indicator_in_competencse = IndicatorSerializerAdd(many=True)
 
     class Meta:
         model = Competence
-        fields = ['id', 'number', 'name', 'indicator_in_competencse']
+        fields = ["id", "number", "name", "indicator_in_competencse"]
 
 
 class IndicatorListSerializer(serializers.ModelSerializer):
@@ -125,36 +115,41 @@ class IndicatorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Indicator
-        fields = ['id', 'number', 'name', 'competence']
+        fields = ["id", "number", "name", "competence"]
 
 
 class OutcomesOfWorkProgramInWorkProgramSerializerAdd(serializers.ModelSerializer):
-    """Сериализатор вывода результата обучения для вывода результата в рабочей программе"""
+    """Сериализатор вывода результата обучения для вывода результата в рабочей
+    программе."""
+
     # item_name  = serializers.ReadOnlyField(source='item.name')
     # item_id  = serializers.ReadOnlyField(source='item.id')
     item = ItemSerializer()
 
     class Meta:
         model = OutcomesOfWorkProgram
-        fields = ['item', 'masterylevel']
-        extra_kwargs = {
-            'evaluation_tool': {'required': False}
-        }
+        fields = ["item", "masterylevel"]
+        extra_kwargs = {"evaluation_tool": {"required": False}}
 
 
 class PrerequisitesOfWorkProgramSerializerAdd(serializers.ModelSerializer):
-    """Сериализатор создания пререквизита обучения"""
+    """Сериализатор создания пререквизита обучения."""
+
     item = ItemSerializer()
+
     class Meta:
         model = PrerequisitesOfWorkProgram
-        fields = ['item', 'masterylevel']
+        fields = ["item", "masterylevel"]
 
 
 class WorkProgramItemsPrerequisitesSerializer(serializers.ModelSerializer):
-    prerequisites = PrerequisitesOfWorkProgramSerializerAdd(source='prerequisitesofworkprogram_set',
-                                                               many=True)
-    outcomes = OutcomesOfWorkProgramInWorkProgramSerializerAdd(source='outcomesofworkprogram_set', many=True)
+    prerequisites = PrerequisitesOfWorkProgramSerializerAdd(
+        source="prerequisitesofworkprogram_set", many=True
+    )
+    outcomes = OutcomesOfWorkProgramInWorkProgramSerializerAdd(
+        source="outcomesofworkprogram_set", many=True
+    )
 
     class Meta:
         model = WorkProgram
-        fields = ['id', 'title', 'discipline_code', 'prerequisites', 'outcomes']
+        fields = ["id", "title", "discipline_code", "prerequisites", "outcomes"]
