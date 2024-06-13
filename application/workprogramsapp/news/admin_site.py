@@ -1,7 +1,5 @@
 from django.contrib.admin import AdminSite
 from django.contrib import admin
-from django.db import models
-from markdownx.widgets import AdminMarkdownxWidget
 
 from workprogramsapp.news.models import NewsArticle
 
