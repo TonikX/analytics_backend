@@ -1,7 +1,9 @@
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
+from analytics_project import settings
 from .educational_program.views import DepartmentCreateAPIView, DepartmentListAPIView, DepartmentDetailsView, \
     DepartmentDestroyView, DepartmentUpdateView, academic_plan_all_ids_by_year
 from .expertise.views import ExpertiseCommentCreateView, UserExpertiseCreateView, UserExpertiseListView, \
@@ -330,6 +332,12 @@ urlpatterns = [
     url(r'^', include('gia_practice_app.Practice.urls')),
     url(r'^', include('workprogramsapp.bibliographic_reference.urls')),
     url(r'^', include('workprogramsapp.disciplineblockmodules.urls')),
+    url(r'^', include('workprogramsapp.news.urls')),
+    url(r'mdeditor/', include('mdeditor.urls'))
+
 
 
 ]
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
