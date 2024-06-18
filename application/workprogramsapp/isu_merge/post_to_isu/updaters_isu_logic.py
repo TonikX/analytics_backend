@@ -219,7 +219,8 @@ def post_wp_to_isu(token, wp, ap_id) -> tuple:
             order_dict["work_types"].append(generate_contents(order=order, volume=practice_list[order], type_id=3))
         if sro_list[order] != 0:
             fake_sro = 36 * ze[order] - lecture_list[order] - lab_list[order] - practice_list[order] - cons_list[order]
-            order_dict["work_types"].append(generate_contents(order=order, volume=fake_sro, type_id=4))
+            if fake_sro != 0:
+                order_dict["work_types"].append(generate_contents(order=order, volume=fake_sro, type_id=4))
         if cons_list[order] != 0:
             order_dict["work_types"].append(generate_contents(order=order, volume=cons_list[order], type_id=12))
         if order_dict["work_types"]:
