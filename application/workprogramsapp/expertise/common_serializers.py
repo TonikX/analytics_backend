@@ -9,4 +9,5 @@ class ShortExpertiseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Expertise
+        ref_name = "ShortExpertiseSerializerCommon"
         fields = ['id', 'expertse_users_in_rpd', 'expertise_status']
