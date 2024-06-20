@@ -6,8 +6,8 @@ from .models import Domain, Items, Relation
 from .models import User
 
 UserAdmin.fieldsets += ('Custom fields set', {'fields': (
-'isu_number', 'is_rpd_developer', 'is_expertise_master', 'expertise_status_notification',
-'expertise_comments_notification')}),
+    'isu_number', 'is_rpd_developer', 'is_expertise_master', 'expertise_status_notification',
+    'expertise_comments_notification', 'unread_news', 'do_news_notification')}),
 admin.site.register(User, UserAdmin)
 
 
