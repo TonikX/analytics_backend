@@ -38,7 +38,8 @@ def generate_response(url, headers, body, obj_name, obj_id, ap_id=None):
         except:
             return None, response.json()["error_code"], response.json()
     else:
-        raise ValueError
+        raise Exception("send error", response)
+
         return None, response.json()["error_code"], response.json()
 
 
@@ -218,7 +219,8 @@ def post_wp_to_isu(token, wp, ap_id) -> tuple:
             order_dict["work_types"].append(generate_contents(order=order, volume=practice_list[order], type_id=3))
         if sro_list[order] != 0:
             fake_sro = 36 * ze[order] - lecture_list[order] - lab_list[order] - practice_list[order] - cons_list[order]
-            order_dict["work_types"].append(generate_contents(order=order, volume=fake_sro, type_id=4))
+            if fake_sro !=0:
+                order_dict["work_types"].append(generate_contents(order=order, volume=fake_sro, type_id=4))
         if cons_list[order] != 0:
             order_dict["work_types"].append(generate_contents(order=order, volume=cons_list[order], type_id=12))
         if order_dict["work_types"]:
@@ -274,8 +276,6 @@ def post_module_to_isu(token, module, parent_id, block, ap_id):
     module_dict["rules_id"] = rules_ids[module.selection_rule]
     if module.selection_parametr:
         module_dict["params"] = [int(el) for el in module.selection_parametr.split(", ")]
-    elif module.selection_rule == "any_quantity":
-        module_dict["params"] = None
     else:
         module_dict["params"] = []
     module_dict["rpd_module_id"] = module.id
