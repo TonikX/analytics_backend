@@ -505,19 +505,15 @@ class OutcomesOfWorkProgramDestroyView(generics.DestroyAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def delete(self, request, *args, **kwargs):
-        try:
-            obj = OutcomesOfWorkProgram.objects.get(pk=kwargs['pk'])
+        obj = OutcomesOfWorkProgram.objects.get(pk=kwargs['pk'])
 
-            # изменяем значение value для item
-            item = Items.objects.get(name=obj.item)
-            value = item.value
-            item.value = int(value) - 1
-            item.save()
+        # изменяем значение value для item
+        item = obj.item
+        value = item.value
+        item.value = int(value) - 1
+        item.save()
 
-            return self.destroy(request, *args, **kwargs)
-        except:
-            return self.destroy(request, *args, **kwargs)
-
+        return self.destroy(request, *args, **kwargs)
 
 class OutcomesOfWorkProgramUpdateView(generics.UpdateAPIView):
     queryset = OutcomesOfWorkProgram.objects.all()
@@ -627,18 +623,15 @@ class PrerequisitesOfWorkProgramDestroyView(generics.DestroyAPIView):
     permission_classes = [IsRpdDeveloperOrReadOnly]
 
     def delete(self, request, *args, **kwargs):
-        try:
-            obj = PrerequisitesOfWorkProgram.objects.get(pk=kwargs['pk'])
+        obj = PrerequisitesOfWorkProgram.objects.get(pk=kwargs['pk'])
 
-            # изменяем значение value для item
-            item = Items.objects.get(name=obj.item)
-            value = item.value
-            item.value = int(value) - 1
-            item.save()
+        # изменяем значение value для item
+        item = obj.item
+        value = item.value
+        item.value = int(value) - 1
+        item.save()
 
-            return self.destroy(request, *args, **kwargs)
-        except:
-            return Response(status=400)
+        return self.destroy(request, *args, **kwargs)
 
 
 class PrerequisitesOfWorkProgramUpdateView(generics.UpdateAPIView):

@@ -159,7 +159,7 @@ def render_context(context, **kwargs):
             if ev_tool not in evaluation_tools:
                 evaluation_tools.append(ev_tool)
         for j in i['topics']:
-            topics_list.append(j['description'])
+            topics_list.append(j['description'].replace("<", "").replace(">", ""))
             if j['url_online_course'] is None:
                 pass
             else:
@@ -364,8 +364,6 @@ def render_context(context, **kwargs):
     template_context['extra_points'] = context['extra_points']
     template_context['discipline_section'] = context['discipline_sections']
     template_context['bars'] = context["bars"]
-    print('bib', template_context['bibliographic_reference'])
-    print(semester)
     return template_context, filename
     # , evaluation_tools_pdf_docs
 
