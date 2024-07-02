@@ -158,7 +158,7 @@ const ContentByAcademicPlan = (
                 const indicators = ownCompetences.find(it => it.id === sourceCompetence.id)?.zuns.map(it => {
                     return {
                         label: `${it.indicator.number} ${it.indicator.name}`,
-                        value: it.id,
+                        value: it.indicator.id,
                     }
                 }) || [];
                 setIndicators(indicators);
