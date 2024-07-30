@@ -36,7 +36,7 @@ from .models import WorkProgram, OutcomesOfWorkProgram, PrerequisitesOfWorkProgr
 from .notifications.models import UserNotification
 # Права доступа
 from .permissions import IsOwnerOrReadOnly, IsRpdDeveloperOrReadOnly, IsDisciplineBlockModuleEditor, \
-    IsOwnerOrDodWorkerOrReadOnly, IsAcademicPlanDeveloper, IsBlockModuleEditor
+    IsOwnerOrDodWorkerOrReadOnly, IsAcademicPlanDeveloper, IsBlockModuleEditor, IsWPBlocked
 from .serializers import AcademicPlanSerializer, ImplementationAcademicPlanSerializer, \
     ImplementationAcademicPlanCreateSerializer, AcademicPlanCreateSerializer, \
     WorkProgramChangeInDisciplineBlockModuleSerializer, DisciplineBlockModuleSerializer, \
@@ -58,6 +58,7 @@ from .serializers import IndicatorSerializer, CompetenceSerializer, OutcomesOfWo
 from .serializers import OutcomesOfWorkProgramCreateSerializer, СertificationEvaluationToolCreateSerializer
 from .serializers import TopicSerializer, SectionSerializer, TopicCreateSerializer
 from .serializers import WorkProgramSerializer, WorkProgramEditorsUpdateSerializer
+from .settings_singleton.models import BlockSettings
 from .workprogram_additions.models import StructuralUnit, UserStructuralUnit
 
 """"Удалены старые views с использованием джанго рендеринга"""
@@ -653,7 +654,7 @@ class WorkProgramCreateAPIView(generics.CreateAPIView):
     """
     serializer_class = WorkProgramCreateSerializer
     queryset = WorkProgram.objects.all()
-    permission_classes = [IsRpdDeveloperOrReadOnly]
+    permission_classes = [IsRpdDeveloperOrReadOnly & IsWPBlocked]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user, editors=[self.request.user])
@@ -806,7 +807,8 @@ class WorkProgramDetailsView(generics.RetrieveAPIView):
             else:
                 newdata.update({"can_edit": False, "expertise_status": False})
             newdata.update({"use_chat_with_id_expertise": None})
-
+        if BlockSettings.get_singleton().is_wp_blocked:
+            newdata.update({"can_edit": False})
         try:
             ue = expertise.expertse_users_in_rpd.filter(expert=request.user)
             ue_save_obj = None

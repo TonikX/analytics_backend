@@ -3,6 +3,7 @@ from rest_framework import permissions
 from workprogramsapp.expertise.models import UserExpertise, Expertise
 from workprogramsapp.folders_ans_statistic.models import Folder, WorkProgramInFolder, \
     AcademicPlanInFolder, DisciplineBlockModuleInFolder, IndividualImplementationAcademicPlanInFolder
+from workprogramsapp.settings_singleton.models import BlockSettings
 from workprogramsapp.workprogram_additions.models import UserStructuralUnit
 from workprogramsapp.models import DisciplineBlockModule
 from dataprocessing.models import User
@@ -234,6 +235,21 @@ class IsBlockModuleEditor(permissions.BasePermission):
                 name="blockmodule_editor"):
             return True
         return request.user in obj.editors.all()
+
+
+class IsWPBlocked(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return not BlockSettings.get_singleton().is_wp_blocked
+
+
+class IsGIABlocked(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return not BlockSettings.get_singleton().is_gia_blocked
+
+
+class IsPracticeBlocked(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return not BlockSettings.get_singleton().is_gia_blocked
 
 
 class IsUniversalModule(permissions.BasePermission):
