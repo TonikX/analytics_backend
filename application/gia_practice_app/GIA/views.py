@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAdminUser
 from gia_practice_app.GIA.models import GIA, GIABaseTemplate, CriteriaVKR
 from gia_practice_app.GIA.serializers import GIASerializer, GIABaseTemplateSerializer, CriteriaVKRSerializer, \
     GIAPrimitiveSerializer
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly, IsGIABlocked
 
 
 class GIASet(viewsets.ModelViewSet):
@@ -12,7 +12,7 @@ class GIASet(viewsets.ModelViewSet):
     queryset = GIA.objects.all()
     serializer_class = GIASerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
+    permission_classes = [IsOwnerOrDodWorkerOrReadOnly & IsGIABlocked]
     search_fields = ["discipline_code", "title", "id", 'editors__first_name', 'editors__last_name']
 
     def get_serializer_class(self):

@@ -13,7 +13,7 @@ from gia_practice_app.Practice.serializers import PracticeSerializer, PracticeTe
     PracticePrimitiveSerializer, ItemInPracticeCreateSerializer, OutcomesInPracticeCreateSerializer, \
     PracticeInFieldOfStudyCreateSerializer, ZunPracticeForManyCreateSerializer, \
     PracticeInFieldOfStudyForCompeteceListSerializer
-from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly
+from workprogramsapp.permissions import IsRpdDeveloperOrReadOnly, IsOwnerOrDodWorkerOrReadOnly, IsPracticeBlocked
 from workprogramsapp.models import PracticeInFieldOfStudy, AcademicPlan
 
 
@@ -23,7 +23,7 @@ class PracticeSet(viewsets.ModelViewSet):
     serializer_class = PracticeSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     search_fields = ["discipline_code", "title", "id", 'editors__first_name', 'editors__last_name']
-    permission_classes = [IsOwnerOrDodWorkerOrReadOnly]
+    permission_classes = [IsOwnerOrDodWorkerOrReadOnly & IsPracticeBlocked]
 
     def get_serializer_class(self):
         if self.action == 'list':

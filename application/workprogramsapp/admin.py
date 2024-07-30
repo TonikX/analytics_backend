@@ -33,6 +33,7 @@ from .models import (
 )
 from .notifications.models import ExpertiseNotification, UserNotification, NotificationComments, EmailReset, \
     AcademicPlanUpdateNotification
+from .settings_singleton.models import BlockSettings
 from .workprogram_additions.models import AdditionalMaterial, StructuralUnit, UserStructuralUnit, UniversityPartner
 
 # from ckeditor_uploader.widgets import CKEditorUploadingWidget
@@ -191,3 +192,4 @@ class ModuleIsuAdmin(admin.ModelAdmin):
 
 
 admin.site.register(BugsLog)
+admin.site.register(BlockSettings)
