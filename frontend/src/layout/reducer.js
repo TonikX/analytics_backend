@@ -18,6 +18,7 @@ export const initialState = {
     [fields.NOTIFICATIONS_COUNT]: 0,
     [fields.MOCK_MENU]: [],
     [fields.SHOW_BUG_MODAL]: false,
+    [fields.NEWS]: [],
 };
 
 const fetchingTrue = (state, {payload}) => ({
@@ -87,6 +88,11 @@ const setUserNotificationsCount = (state, {payload}) => ({
     [fields.NOTIFICATIONS_COUNT]: payload,
 });
 
+const setNews = (state, {payload}) => ({
+    ...state,
+    [fields.NEWS]: payload,
+});
+
 const setAuthTrue = (state) => ({
     ...state,
     [fields.IS_AUTH]: true,
@@ -123,4 +129,5 @@ export const reducer = createReducer(initialState, {
     [actions.setUserData.type]: setUserData,
     [actions.setMockMenu.type]: setMockMenu,
     [actions.setUserNotificationsCount.type]: setUserNotificationsCount,
+    [actions.setNews.type]: setNews,
 });

@@ -132,10 +132,27 @@ const sendBug = createLogic({
   }
 });
 
+const getNews = createLogic({
+  type: actions.getNews.type,
+  latest: true,
+  process({getState, action}: any, dispatch, done) {
+    service.getNews()
+      .then((res) => {
+        dispatch(actions.setNews(res.data.results));
+      })
+      .catch((err) => {
+      })
+      .then(() => {
+        return done();
+      });
+  }
+});
+
 export default [
     getAllUsers,
     getUserGroups,
     refreshToken,
     getUserData,
-    sendBug
+    sendBug,
+    getNews,
 ];

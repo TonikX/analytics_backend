@@ -21,6 +21,7 @@ export const getUserGroups = (state: rootState): layoutState[fields.USER_GROUPS]
 export const getUserData = (state: rootState): layoutState[fields.USER_DATA] => get(getStateData(state), fields.USER_DATA, []);
 export const getNotificationCount = (state: rootState): layoutState[fields.NOTIFICATIONS_COUNT] => get(getStateData(state), fields.NOTIFICATIONS_COUNT, 0);
 export const getUsers = (state: rootState): layoutState[fields.USERS] => get(getStateData(state), fields.USERS, []);
+export const getNews = (state: rootState): any => get(getStateData(state), fields.NEWS, []);
 export const getUsersForSelector = (state: rootState): layoutState[fields.USERS] => getUsers(state).map((user: any): SelectorListType => ({
     //@ts-ignore
     value: user.id,

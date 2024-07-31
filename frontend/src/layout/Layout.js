@@ -29,6 +29,7 @@ import connect from './Layout.connect';
 import styles from './Layout.styles';
 
 import Scrollbars from "react-custom-scrollbars-2";
+import {NewsModal} from "../containers/NewsModal/NewsModal";
 
 const userService = UserService.factory();
 
@@ -126,8 +127,13 @@ class Layout extends React.Component {
                             </div>
                         </div>
 
-                        {isAuth && <AddToFolderModal />}
-                        {isAuth && <BugModal />}
+                        {isAuth && (
+                            <>
+                                <AddToFolderModal />
+                                <BugModal />
+                                <NewsModal />
+                            </>
+                        )}
                     </ThemeProvider>
                 </SnackbarProvider>
             </LocalizationProvider>
