@@ -244,12 +244,18 @@ class IsWPBlocked(permissions.BasePermission):
 
 class IsGIABlocked(permissions.BasePermission):
     def has_permission(self, request, view):
-        return not BlockSettings.get_singleton().is_gia_blocked
+        if view.action in ['create', 'update', 'partial_update', 'destroy']:
+            return not BlockSettings.get_singleton().is_gia_blocked
+        else:
+            return True
 
 
 class IsPracticeBlocked(permissions.BasePermission):
     def has_permission(self, request, view):
-        return not BlockSettings.get_singleton().is_gia_blocked
+        if view.action in ['create', 'update', 'partial_update', 'destroy']:
+            return not BlockSettings.get_singleton().is_practice_blocked
+        else:
+            return True
 
 
 class IsUniversalModule(permissions.BasePermission):
