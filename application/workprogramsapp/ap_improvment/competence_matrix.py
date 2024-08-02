@@ -116,7 +116,7 @@ def GetCompetenceMatrixCTE(request, gen_pk):
                                      "discipline_blocks_in_academic_plan": []}
         matrix_list.append(academic_plan_matrix_dict)
         for block in academic_plan.discipline_blocks_in_academic_plan.all():
-            if not ("1" in block.name or "2" in block.name):
+            if "3" in block.name:
                 continue
             block_dict = {"name": block.name, "modules_in_discipline_block": []}
             cte = With(None, "module_cte", False)

@@ -16,6 +16,8 @@ class User(AbstractUser):
     expertise_status_notification = models.BooleanField(default=False, blank=True, null=True)
     expertise_comments_notification = models.BooleanField(default=False, blank=True, null=True)
     structural_unit = models.ManyToManyField("workprogramsapp.StructuralUnit", through="workprogramsapp.UserStructuralUnit", blank=True, null=True )
+    unread_news = models.IntegerField(default=0, blank=True, null=True, verbose_name='Непрочтенные новости')
+    do_news_notification = models.BooleanField(default=False, blank=True, null=True)
 
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 

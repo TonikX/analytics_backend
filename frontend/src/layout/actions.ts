@@ -32,8 +32,13 @@ const setShowBugModalFalse = createAction('SET_SHOW_BUG_MODAL_FALSE');
 
 const sendBug = createAction('SET_BUG');
 
+const getNews = createAction('GET_NEWS');
+const setNews = createAction('SET_NEWS');
+
 const actions: GeneralActions = {
     setUserNotificationsCount,
+    getNews,
+    setNews,
     setShowBugModalTrue,
     setShowBugModalFalse,
     setMockMenu,

@@ -66,8 +66,6 @@ export const BugModal = () => {
     dispatch(actions.sendBug({title, description, selectedFile}));
   };
 
-  console.log(bugModalLocalStorage.getPageTransitions())
-
   return (
     <Dialog
       open={bugModal}

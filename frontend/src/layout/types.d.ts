@@ -18,6 +18,8 @@ export interface GeneralActions {
     setUserGroups: any;
     setMockMenu: any;
     setUserNotificationsCount: any;
+    setNews: any;
+    getNews: any;
     setShowBugModalTrue: any;
     setShowBugModalFalse: any;
     sendBug: any;
