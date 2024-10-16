@@ -10,6 +10,7 @@ import nastyaImage from './img/photo/nastya.jpg'
 import krygaImage from './img/photo/kryga.jpg'
 import annaImage from './img/photo/anna.jpg'
 import svetaImage from './img/photo/sveta.jpg'
+import alexImage from './img/photo/alex.jpg'
 
 export default [
   [{
@@ -34,16 +35,16 @@ export default [
     name: 'Никита Федоров',
   }, {
     role: 'Frontend разработчик',
+    image: alexImage,
+    name: 'Алексей Кузнецов',
+  }, {
+    role: 'Frontend разработчик',
     image: ilyaImage,
     name: 'Илья Егоров',
   }, {
     role: 'Backend разработчик',
     image: valeriaImage,
     name: 'Валерия Артамонова',
-  }, {
-    role: 'Backend разработчик',
-    image: annaImage,
-    name: 'Анна Арзуманян',
   }], [{
     role: 'Научный работник',
     image: krygaImage,
