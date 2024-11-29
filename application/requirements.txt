@@ -97,7 +97,7 @@ termcolor==1.1.0
 termtables==0.2.4
 tzlocal==5.0.1
 uritemplate==3.0.1
-urllib3==1.25.6
+urllib3==1.26.5
 wdc==0.4.12
 xlrd==1.2.0
 django-mdeditor==0.1.20
